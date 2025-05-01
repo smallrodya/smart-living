@@ -1,7 +1,20 @@
 'use client';
 import React, { useState, useRef, useEffect } from 'react';
+import Image from 'next/image';
 
-const categories = [
+interface SubCategory {
+  name: string;
+  links: string[];
+}
+
+interface Category {
+  name: string;
+  icon: string;
+  img: string;
+  sub: SubCategory[];
+}
+
+const categories: Category[] = [
   {
     name: 'BEDDING', icon: '🛏️', img: '/cat-bedding-main.jpg', sub: [
       {
