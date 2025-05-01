@@ -329,51 +329,6 @@ const CategoriesSection = () => {
               }
               @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
               @keyframes fadeInBg { from { opacity: 0; } to { opacity: 1; } }
-              @media (max-width: 768px) {
-                .categories-container {
-                  gap: 24px;
-                  padding: 12px 0;
-                  minHeight: 70px;
-                }
-                .category-button {
-                  width: 60px;
-                  height: 60px;
-                  fontSize: 12px;
-                }
-                .category-icon {
-                  fontSize: 22px;
-                  marginBottom: 5px;
-                }
-                .modal-content {
-                  minWidth: 90vw;
-                  maxWidth: 95vw;
-                  padding: 30px 20px 40px 20px;
-                }
-                .modal-image {
-                  width: 120px;
-                  height: 120px;
-                  marginBottom: 24px;
-                }
-                .sub-category-card {
-                  minWidth: 140px;
-                  maxWidth: 160px;
-                  padding: 15px 12px;
-                }
-                .sub-category-title {
-                  fontSize: 14px;
-                  marginBottom: 10px;
-                }
-                .sub-category-link {
-                  fontSize: 12px;
-                  padding: 7px 8px;
-                  marginBottom: 5px;
-                }
-                .modal-nav-button {
-                  width: 36px;
-                  height: 36px;
-                  fontSize: 18px;
-                }
-              }
             `}</style>
           </div>
         </div>

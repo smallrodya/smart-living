@@ -1,9 +1,26 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
+import MobileHeader from './MobileHeader';
 
 const Header = () => {
   const [searchQuery, setSearchQuery] = useState('');
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  if (isMobile) {
+    return <MobileHeader />;
+  }
 
   return (
     <header style={{ 
@@ -142,34 +159,6 @@ const Header = () => {
           </a>
         </div>
       </div>
-      <style>{`
-        @media (max-width: 768px) {
-          header {
-            height: 60px;
-          }
-          .header-content {
-            padding: 0 15px;
-          }
-          .logo {
-            width: 180px;
-            height: 36px;
-          }
-          .search-form {
-            display: none;
-          }
-          .header-buttons {
-            gap: 12px;
-          }
-          .header-button {
-            padding: 8px 12px;
-            fontSize: 14px;
-          }
-          .track-order-button {
-            padding: 8px 16px;
-            fontSize: 14px;
-          }
-        }
-      `}</style>
     </header>
   );
 };

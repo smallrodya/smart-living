@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 
 const images = [
@@ -16,160 +16,110 @@ const basketIcon = (
 const ReduceSpaceCarousel = () => {
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
   const [hoveredBtn, setHoveredBtn] = useState<number | null>(null);
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth <= 768);
-    };
-    
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
-
-  const cardStyles: React.CSSProperties = {
-    minWidth: isMobile ? '280px' : '300px',
-    maxWidth: isMobile ? '300px' : '320px',
-    background: '#fff',
-    borderRadius: isMobile ? '12px' : '16px',
-    boxShadow: hoveredCard !== null ? '0 8px 32px rgba(34,34,34,0.13)' : '0 2px 16px rgba(34,34,34,0.07)',
-    padding: 0,
-    position: 'relative',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    transition: 'box-shadow 0.22s cubic-bezier(.4,2,.6,1), transform 0.22s cubic-bezier(.4,2,.6,1)',
-    transform: hoveredCard !== null ? 'translateY(-6px) scale(1.03)' : 'none',
-    flex: '0 0 auto',
-  };
-
-  const imageContainerStyles: React.CSSProperties = {
-    width: '100%',
-    aspectRatio: '4/3',
-    overflow: 'hidden',
-    borderTopLeftRadius: isMobile ? '12px' : '16px',
-    borderTopRightRadius: isMobile ? '12px' : '16px'
-  };
-
-  const imageStyles: React.CSSProperties = {
-    width: '100%',
-    height: '100%',
-    objectFit: 'cover',
-    transition: 'filter 0.22s cubic-bezier(.4,2,.6,1), transform 0.22s cubic-bezier(.4,2,.6,1)',
-    filter: hoveredCard !== null ? 'brightness(0.97) saturate(1.08)' : 'none',
-    transform: hoveredCard !== null ? 'scale(1.03)' : 'none',
-    display: 'block',
-  };
-
-  const contentStyles: React.CSSProperties = {
-    padding: isMobile ? '10px 8px 8px 8px' : '14px 10px 10px 10px',
-    width: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center'
-  };
-
-  const titleStyles: React.CSSProperties = {
-    fontWeight: 600,
-    fontSize: isMobile ? '13px' : '15px',
-    marginBottom: isMobile ? '4px' : '6px',
-    textAlign: 'center',
-    letterSpacing: 0.1
-  };
-
-  const priceStyles: React.CSSProperties = {
-    color: '#e53935',
-    fontWeight: 700,
-    fontSize: isMobile ? '14px' : '16px',
-    marginBottom: isMobile ? '6px' : '8px'
-  };
-
-  const buttonStyles: React.CSSProperties = {
-    background: '#111',
-    color: '#fff',
-    border: 'none',
-    borderRadius: isMobile ? '7px' : '9px',
-    padding: isMobile ? '7px 0' : '9px 0',
-    fontWeight: 600,
-    fontSize: isMobile ? '12px' : '14px',
-    width: '100%',
-    marginTop: isMobile ? '5px' : '7px',
-    transition: 'background 0.18s',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 8,
-    letterSpacing: 0.1,
-    boxShadow: hoveredBtn !== null ? '0 2px 12px 0 rgba(34,34,34,0.10)' : 'none',
-  };
-
-  const discountStyles: React.CSSProperties = {
-    position: 'absolute',
-    top: isMobile ? '8px' : '10px',
-    left: isMobile ? '8px' : '10px',
-    background: '#e53935',
-    color: '#fff',
-    fontWeight: 700,
-    fontSize: isMobile ? '12px' : '14px',
-    borderRadius: '50%',
-    padding: isMobile ? '6px 8px' : '8px 10px',
-    letterSpacing: 0.1,
-    boxShadow: '0 1px 6px 0 rgba(229,57,53,0.10)',
-    width: isMobile ? '40px' : '47px',
-    height: isMobile ? '40px' : '47px',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center'
-  };
-
   return (
     <section style={{width: '100%', height: 'auto', margin: '0 auto 40px', padding: 0, textAlign: 'center'}}>
-      <h2 style={{fontSize: isMobile ? '22px' : '26px', fontWeight: 700, marginBottom: isMobile ? '16px' : '20px', letterSpacing: 0.2}}>REDUCE SPACE</h2>
+      <h2 style={{fontSize: 26, fontWeight: 700, marginBottom: 20, letterSpacing: 0.2}}>REDUCE SPACE</h2>
       <div style={{
         display: 'flex',
-        gap: isMobile ? '16px' : '32px',
+        gap: 32,
         overflowX: 'auto',
-        justifyContent: 'flex-start',
-        padding: isMobile ? '8px 12px' : '10px 0',
+        justifyContent: 'center',
+        padding: '10px 0',
         width: '100%',
         boxSizing: 'border-box',
-        scrollbarWidth: 'none',
-        msOverflowStyle: 'none',
-        WebkitOverflowScrolling: 'touch'
       }}>
         {images.map((item, i) => (
           <div
             key={i}
-            style={cardStyles}
+            style={{
+              minWidth: 300,
+              maxWidth: 320,
+              background: '#fff',
+              borderRadius: 16,
+              boxShadow: hoveredCard === i ? '0 8px 32px rgba(34,34,34,0.13)' : '0 2px 16px rgba(34,34,34,0.07)',
+              padding: 0,
+              position: 'relative',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              transition: 'box-shadow 0.22s cubic-bezier(.4,2,.6,1), transform 0.22s cubic-bezier(.4,2,.6,1)',
+              transform: hoveredCard === i ? 'translateY(-6px) scale(1.03)' : 'none',
+              flex: '0 0 auto',
+            }}
             onMouseEnter={() => setHoveredCard(i)}
             onMouseLeave={() => setHoveredCard(null)}
           >
-            <div style={imageContainerStyles}>
+            <div style={{width: '100%', aspectRatio: '4/3', overflow: 'hidden', borderTopLeftRadius: 16, borderTopRightRadius: 16}}>
               <Image
                 src={hoveredCard === i ? item.hoverSrc : item.src}
                 alt={item.title}
-                width={isMobile ? 280 : 320}
-                height={isMobile ? 210 : 240}
-                style={imageStyles}
+                width={320}
+                height={240}
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                  transition: 'filter 0.22s cubic-bezier(.4,2,.6,1), transform 0.22s cubic-bezier(.4,2,.6,1)',
+                  filter: hoveredCard === i ? 'brightness(0.97) saturate(1.08)' : 'none',
+                  transform: hoveredCard === i ? 'scale(1.03)' : 'none',
+                  display: 'block',
+                }}
               />
             </div>
-            <div style={contentStyles}>
-              <div style={titleStyles}>{item.title}</div>
-              <div style={priceStyles}>{item.price}</div>
+            <div style={{padding: '14px 10px 10px 10px', width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+              <div style={{fontWeight: 600, fontSize: 15, marginBottom: 6, textAlign: 'center', letterSpacing: 0.1}}>{item.title}</div>
+              <div style={{color: '#e53935', fontWeight: 700, fontSize: 16, marginBottom: 8}}>{item.price}</div>
               <button
-                style={buttonStyles}
+                style={{
+                  background: '#111',
+                  color: '#fff',
+                  border: 'none',
+                  borderRadius: 9,
+                  padding: '9px 0',
+                  fontWeight: 600,
+                  fontSize: 14,
+                  width: '100%',
+                  marginTop: 7,
+                  transition: 'background 0.18s',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: 8,
+                  letterSpacing: 0.1,
+                  boxShadow: hoveredBtn === i ? '0 2px 12px 0 rgba(34,34,34,0.10)' : 'none',
+                }}
                 onMouseEnter={() => setHoveredBtn(i)}
                 onMouseLeave={() => setHoveredBtn(null)}
               >
                 {hoveredBtn === i ? basketIcon : 'Add to basket'}
               </button>
             </div>
-            <span style={discountStyles}>{item.discount}</span>
+            <span style={{
+              position: 'absolute',
+              top: 10,
+              left: 10,
+              background: '#e53935',
+              color: '#fff',
+              fontWeight: 700,
+              fontSize: 14,
+              borderRadius: '50%',
+              padding: '8px 10px',
+              letterSpacing: 0.1,
+              boxShadow: '0 1px 6px 0 rgba(229,57,53,0.10)',
+              width: '47px',
+              height: '47px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}>{item.discount}</span>
           </div>
         ))}
       </div>
+      <style>{`
+        @media (max-width: 700px) {
+          .reduce-card { min-width: 85vw !important; max-width: 95vw !important; }
+        }
+      `}</style>
     </section>
   );
 };
