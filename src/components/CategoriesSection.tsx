@@ -167,9 +167,9 @@ const DesktopCategoriesSection = () => {
 
   const currentCat = openIdx !== null ? categories[openIdx] : null;
 
-  const handleCategoryClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleCategoryClick = (e: React.MouseEvent<HTMLButtonElement>, index: number) => {
     e.preventDefault();
-    setOpenIdx(openIdx === null ? 0 : null);
+    setOpenIdx(openIdx === index ? null : index);
   };
 
   return (
@@ -205,7 +205,7 @@ const DesktopCategoriesSection = () => {
               }}
               onMouseEnter={e => {e.currentTarget.style.background = '#f7f7f7'; e.currentTarget.style.color = '#111';}}
               onMouseLeave={e => {e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#222';}}
-              onClick={handleCategoryClick}
+              onClick={(e) => handleCategoryClick(e, categories.indexOf(cat))}
             >
               <span style={{fontSize: 28, marginBottom: 7, color: '#111', transition: 'color 0.18s'}}>{cat.icon}</span>
               <span style={{fontSize: 13, fontWeight: 600, textAlign: 'center', letterSpacing: 0.1, color: 'inherit', transition: 'color 0.18s'}}>{cat.name}</span>
