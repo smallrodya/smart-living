@@ -166,7 +166,7 @@ const CategoriesSection = () => {
 
   const currentCat = openIdx !== null ? categories[openIdx] : null;
 
-  const handleCategoryClick = (e: React.MouseEvent<HTMLDivElement>) => {
+  const handleCategoryClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     setOpenIdx(openIdx === null ? 0 : null);
   };
@@ -188,7 +188,7 @@ const CategoriesSection = () => {
         borderRadius: 0,
         boxShadow: 'none',
       }}>
-        {categories.map((cat, idx) => (
+        {categories.map((cat) => (
           <div key={cat.name} style={{flex: '0 0 auto', textAlign: 'center'}}>
             <button
               style={{
@@ -228,13 +228,27 @@ const CategoriesSection = () => {
               onMouseLeave={e => (e.currentTarget.style.color = '#bbb')}
             >×</button>
             {currentCat && (
-              <img src={currentCat.img} alt={currentCat.name} style={{width: 160, height: 160, objectFit: 'cover', borderRadius: 22, marginBottom: 32, background: '#f0f0f0', boxShadow: '0 6px 32px rgba(34,34,34,0.10)'}} />
+              <Image 
+                src={currentCat.img} 
+                alt={currentCat.name} 
+                width={160}
+                height={160}
+                style={{
+                  width: 160,
+                  height: 160,
+                  objectFit: 'cover',
+                  borderRadius: 22,
+                  marginBottom: 32,
+                  background: '#f0f0f0',
+                  boxShadow: '0 6px 32px rgba(34,34,34,0.10)'
+                }}
+              />
             )}
             {currentCat && (
               <div style={{
                 display: 'flex', flexWrap: 'wrap', gap: 32, width: '100%', justifyContent: 'center', alignItems: 'stretch',
               }}>
-                {currentCat.sub.map((sub: any) => (
+                {currentCat.sub.map((sub) => (
                   <div key={sub.name} style={{
                     display: 'flex', flexDirection: 'column', alignItems: 'center', minWidth: 180, maxWidth: 220, background: '#fff',
                     borderRadius: 18, boxShadow: '0 2px 16px 0 rgba(34,34,34,0.07)', padding: '22px 18px 18px 18px', margin: 0,
@@ -245,7 +259,7 @@ const CategoriesSection = () => {
                   >
                     <span style={{fontSize: 17, color: '#e53935', fontWeight: 700, marginBottom: 12, textAlign: 'center', width: '100%', letterSpacing: 0.3, textTransform: 'uppercase'}}>{sub.name}</span>
                     <ul style={{listStyle: 'none', padding: 0, margin: 0, width: '100%'}}>
-                      {sub.links && sub.links.map((link: string) => (
+                      {sub.links.map((link) => (
                         <li key={link} style={{
                           fontSize: 15, color: '#222', marginBottom: 7, cursor: 'pointer',
                           borderRadius: 8, padding: '9px 10px', transition: 'background 0.15s, color 0.15s', textAlign: 'center',
