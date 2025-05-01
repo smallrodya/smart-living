@@ -1,5 +1,6 @@
 'use client';
 import React, { useState } from 'react';
+import Image from 'next/image';
 
 const images = [
   { src: '/reduce1.jpg', hoverSrc: '/reduce1-hover.jpg', title: '2 in 1 Reclining Gravity Chair and Lay Flat Sun lounger- Dark Green', price: '£34.99', discount: '-65%' },
@@ -49,9 +50,11 @@ const ReduceSpaceCarousel = () => {
             onMouseLeave={() => setHoveredCard(null)}
           >
             <div style={{width: '100%', aspectRatio: '4/3', overflow: 'hidden', borderTopLeftRadius: 16, borderTopRightRadius: 16}}>
-              <img
+              <Image
                 src={hoveredCard === i ? item.hoverSrc : item.src}
                 alt={item.title}
+                width={320}
+                height={240}
                 style={{
                   width: '100%',
                   height: '100%',

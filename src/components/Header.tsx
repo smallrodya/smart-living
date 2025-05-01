@@ -1,5 +1,6 @@
 'use client';
 import React, { useState } from 'react';
+import Image from 'next/image';
 
 const Header = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -24,7 +25,13 @@ const Header = () => {
         padding: '0 24px' 
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '20px', flex: 1 }}>
-          <img src="/SmartLivingLogo.png" alt="Smart Living" style={{ height: '50px', maxWidth: '250px' }} />
+          <Image 
+            src="/SmartLivingLogo.png" 
+            alt="Smart Living" 
+            width={250}
+            height={50}
+            style={{ maxWidth: '250px' }}
+          />
           <form 
             role="search" 
             method="get" 

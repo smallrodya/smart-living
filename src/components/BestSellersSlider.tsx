@@ -1,5 +1,6 @@
 'use client';
 import React, { useState } from 'react';
+import Image from 'next/image';
 
 const products = [
   { id: 1, name: '3D Duvet Cover and Pillowcase Set – Black Panther', price: '£14.99 – £17.72', image: '/best1.jpg', hoverImage: '/best1.jpg' },
@@ -62,9 +63,11 @@ const BestSellersSlider = () => {
                 paddingTop: '100%',
                 overflow: 'hidden',
               }}>
-                <img
+                <Image
                   src={hoveredCard === product.id ? product.hoverImage : product.image}
                   alt={product.name}
+                  width={280}
+                  height={280}
                   style={{
                     position: 'absolute',
                     top: 0,

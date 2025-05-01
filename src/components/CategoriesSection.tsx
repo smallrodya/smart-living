@@ -153,6 +153,11 @@ const CategoriesSection = () => {
 
   const currentCat = openIdx !== null ? categories[openIdx] : null;
 
+  const handleCategoryClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setOpenIdx(openIdx === null ? 0 : null);
+  };
+
   return (
     <section id="categories" style={{width: '100%', margin: '0 auto 18px', padding: 0}}>
       <div style={{
@@ -186,7 +191,7 @@ const CategoriesSection = () => {
               }}
               onMouseEnter={e => {e.currentTarget.style.background = '#f7f7f7'; e.currentTarget.style.color = '#111';}}
               onMouseLeave={e => {e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#222';}}
-              onClick={() => setOpenIdx(openIdx === idx ? null : idx)}
+              onClick={handleCategoryClick}
             >
               <span style={{fontSize: 28, marginBottom: 7, color: '#111', transition: 'color 0.18s'}}>{cat.icon}</span>
               <span style={{fontSize: 13, fontWeight: 600, textAlign: 'center', letterSpacing: 0.1, color: 'inherit', transition: 'color 0.18s'}}>{cat.name}</span>
