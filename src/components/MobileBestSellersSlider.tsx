@@ -1,8 +1,6 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
-import MobileBestSellersSlider from './MobileBestSellersSlider';
-import MobileBottomMenu from './MobileBottomMenu';
 
 const products = [
   { id: 1, name: '3D Duvet Cover and Pillowcase Set – Black Panther', price: '£14.99 – £17.72', image: '/best1.jpg', hoverImage: '/best1.jpg' },
@@ -13,48 +11,54 @@ const products = [
   { id: 6, name: 'Reversible Polycotton Fern Rouched Duvet Cover', price: '£10.37 – £12.97', image: '/best6.jpg', hoverImage: '/best6-hover.jpg' },
 ];
 
-const DesktopBestSellersSlider = () => {
+const MobileBestSellersSlider = () => {
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
   const [hoveredBtn, setHoveredBtn] = useState<number | null>(null);
 
   return (
     <section style={{
       width: '100%',
-      padding: '60px 0',
+      padding: '40px 0',
       backgroundColor: '#f8f8f8',
       position: 'relative',
     }}>
       <div style={{
-        maxWidth: 1200,
+        maxWidth: '100%',
         margin: '0 auto',
-        padding: '0 20px',
+        padding: '0 16px',
       }}>
         <h2 style={{
-          fontSize: 32,
+          fontSize: 24,
           fontWeight: 700,
-          marginBottom: 40,
+          marginBottom: 24,
           textAlign: 'center',
           letterSpacing: 0.5,
           color: '#222',
         }}>BESTSELLERS</h2>
         
         <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-          gap: 30,
-          padding: '0 10px',
+          display: 'flex',
+          overflowX: 'auto',
+          gap: 16,
+          padding: '0 8px',
+          scrollbarWidth: 'none',
+          msOverflowStyle: 'none',
+          WebkitOverflowScrolling: 'touch',
         }}>
           {products.map((product) => (
             <div
               key={product.id}
               style={{
+                minWidth: 240,
+                maxWidth: 260,
                 background: '#fff',
-                borderRadius: 16,
+                borderRadius: 12,
                 overflow: 'hidden',
-                boxShadow: hoveredCard === product.id ? '0 12px 32px rgba(0,0,0,0.12)' : '0 4px 16px rgba(0,0,0,0.08)',
+                boxShadow: hoveredCard === product.id ? '0 8px 24px rgba(0,0,0,0.12)' : '0 2px 8px rgba(0,0,0,0.08)',
                 transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                transform: hoveredCard === product.id ? 'translateY(-8px)' : 'none',
+                transform: hoveredCard === product.id ? 'translateY(-4px)' : 'none',
                 position: 'relative',
+                flex: '0 0 auto',
               }}
               onMouseEnter={() => setHoveredCard(product.id)}
               onMouseLeave={() => setHoveredCard(null)}
@@ -68,8 +72,8 @@ const DesktopBestSellersSlider = () => {
                 <Image
                   src={hoveredCard === product.id ? product.hoverImage : product.image}
                   alt={product.name}
-                  width={280}
-                  height={280}
+                  width={260}
+                  height={260}
                   style={{
                     position: 'absolute',
                     top: 0,
@@ -84,37 +88,38 @@ const DesktopBestSellersSlider = () => {
               </div>
               
               <div style={{
-                padding: '20px',
+                padding: '12px 8px',
                 textAlign: 'center',
               }}>
                 <h3 style={{
-                  fontSize: 18,
+                  fontSize: 14,
                   fontWeight: 600,
-                  marginBottom: 8,
+                  marginBottom: 6,
                   color: '#222',
                   letterSpacing: 0.2,
+                  lineHeight: 1.3,
                 }}>{product.name}</h3>
                 
                 <p style={{
-                  fontSize: 20,
+                  fontSize: 16,
                   fontWeight: 700,
                   color: '#e53935',
-                  marginBottom: 16,
+                  marginBottom: 12,
                 }}>{product.price}</p>
                 
                 <button
                   style={{
                     width: '100%',
-                    padding: '12px 0',
+                    padding: '8px 0',
                     background: hoveredBtn === product.id ? '#222' : '#111',
                     color: '#fff',
                     border: 'none',
-                    borderRadius: 8,
-                    fontSize: 16,
+                    borderRadius: 6,
+                    fontSize: 14,
                     fontWeight: 600,
                     cursor: 'pointer',
                     transition: 'all 0.2s ease',
-                    boxShadow: hoveredBtn === product.id ? '0 4px 12px rgba(0,0,0,0.15)' : 'none',
+                    boxShadow: hoveredBtn === product.id ? '0 2px 8px rgba(0,0,0,0.15)' : 'none',
                   }}
                   onMouseEnter={() => setHoveredBtn(product.id)}
                   onMouseLeave={() => setHoveredBtn(null)}
@@ -126,30 +131,13 @@ const DesktopBestSellersSlider = () => {
           ))}
         </div>
       </div>
+      <style jsx>{`
+        div::-webkit-scrollbar {
+          display: none;
+        }
+      `}</style>
     </section>
   );
 };
 
-const BestSellersSlider = () => {
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth <= 768);
-    };
-    
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
-
-  return (
-    <>
-      {isMobile ? <MobileBestSellersSlider /> : <DesktopBestSellersSlider />}
-      {isMobile && <MobileBottomMenu />}
-    </>
-  );
-};
-
-export default BestSellersSlider; 
+export default MobileBestSellersSlider; 

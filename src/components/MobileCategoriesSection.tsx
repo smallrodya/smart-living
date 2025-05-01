@@ -1,7 +1,6 @@
 'use client';
 import React, { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
-import MobileCategoriesSection from './MobileCategoriesSection';
 
 interface SubCategory {
   name: string;
@@ -142,7 +141,7 @@ const categories: Category[] = [
   },
 ];
 
-const DesktopCategoriesSection = () => {
+const MobileCategoriesSection = () => {
   const [openIdx, setOpenIdx] = useState<number | null>(null);
   const modalRef = useRef<HTMLDivElement>(null);
 
@@ -167,64 +166,107 @@ const DesktopCategoriesSection = () => {
 
   const currentCat = openIdx !== null ? categories[openIdx] : null;
 
-  const handleCategoryClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    setOpenIdx(openIdx === null ? 0 : null);
+  const handleCategoryClick = (index: number) => {
+    setOpenIdx(openIdx === null ? index : null);
   };
 
   return (
-    <section id="categories" style={{width: '100%', margin: '0 auto 18px', padding: 0}}>
+    <section id="categories" style={{width: '100%', margin: '0 auto 12px', padding: 0}}>
       <div style={{
         display: 'flex',
-        gap: 48,
+        gap: 12,
         overflowX: 'auto',
-        padding: '18px 0',
-        justifyContent: 'center',
+        padding: '10px 0',
+        justifyContent: 'flex-start',
         alignItems: 'center',
-        minHeight: 90,
+        minHeight: 55,
         scrollbarWidth: 'none',
         width: '100%',
         boxSizing: 'border-box',
         background: 'transparent',
         borderRadius: 0,
         boxShadow: 'none',
+        paddingLeft: 10,
+        paddingRight: 10
       }}>
-        {categories.map((cat) => (
+        {categories.map((cat, index) => (
           <div key={cat.name} style={{flex: '0 0 auto', textAlign: 'center'}}>
             <button
               style={{
-                display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+                display: 'flex', 
+                flexDirection: 'column', 
+                alignItems: 'center', 
+                justifyContent: 'center',
                 background: 'transparent',
                 border: 'none',
-                borderRadius: 12, width: 80, height: 80, cursor: 'pointer',
+                borderRadius: 8, 
+                width: 55, 
+                height: 55, 
+                cursor: 'pointer',
                 transition: 'color 0.18s, background 0.18s',
-                fontSize: 15, fontWeight: 500, color: '#222',
+                fontSize: 11, 
+                fontWeight: 500, 
+                color: '#222',
                 margin: 0,
                 outline: 'none',
                 boxShadow: 'none',
               }}
               onMouseEnter={e => {e.currentTarget.style.background = '#f7f7f7'; e.currentTarget.style.color = '#111';}}
               onMouseLeave={e => {e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#222';}}
-              onClick={handleCategoryClick}
+              onClick={() => handleCategoryClick(index)}
             >
-              <span style={{fontSize: 28, marginBottom: 7, color: '#111', transition: 'color 0.18s'}}>{cat.icon}</span>
-              <span style={{fontSize: 13, fontWeight: 600, textAlign: 'center', letterSpacing: 0.1, color: 'inherit', transition: 'color 0.18s'}}>{cat.name}</span>
+              <span style={{fontSize: 18, marginBottom: 3, color: '#111', transition: 'color 0.18s'}}>{cat.icon}</span>
+              <span style={{fontSize: 9, fontWeight: 600, textAlign: 'center', letterSpacing: 0.1, color: 'inherit', transition: 'color 0.18s'}}>{cat.name}</span>
             </button>
           </div>
         ))}
       </div>
       {openIdx !== null && currentCat && (
         <div style={{
-          position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', background: 'rgba(34,34,34,0.38)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', animation: 'fadeInBg .18s',
+          position: 'fixed', 
+          top: 0, 
+          left: 0, 
+          width: '100vw', 
+          height: '100vh', 
+          background: 'rgba(34,34,34,0.38)', 
+          zIndex: 1000, 
+          display: 'flex', 
+          alignItems: 'center', 
+          justifyContent: 'center', 
+          animation: 'fadeInBg .18s',
           backdropFilter: 'blur(2px)',
         }}>
           <div ref={modalRef} style={{
-            background: 'linear-gradient(135deg, #fff 80%, #f7f7fa 100%)', borderRadius: 28, boxShadow: '0 12px 48px 0 rgba(34,34,34,0.18)',
-            minWidth: 340, maxWidth: 820, padding: '44px 36px 56px 36px', zIndex: 1001, position: 'relative',
-            animation: 'fadeIn .22s cubic-bezier(.4,2,.6,1)', display: 'flex', flexDirection: 'column', alignItems: 'center',
+            background: 'linear-gradient(135deg, #fff 80%, #f7f7fa 100%)', 
+            borderRadius: 16, 
+            boxShadow: '0 12px 48px 0 rgba(34,34,34,0.18)',
+            width: '90vw', 
+            maxHeight: '80vh',
+            padding: '20px 16px 24px 16px', 
+            zIndex: 1001, 
+            position: 'relative',
+            animation: 'fadeIn .22s cubic-bezier(.4,2,.6,1)', 
+            display: 'flex', 
+            flexDirection: 'column', 
+            alignItems: 'center',
             border: '1.5px solid #ececec',
+            overflowY: 'auto'
           }}>
-            <button onClick={() => setOpenIdx(null)} style={{position: 'absolute', top: 18, right: 22, background: 'none', border: 'none', fontSize: 28, color: '#bbb', cursor: 'pointer', fontWeight: 700, lineHeight: 1, transition: 'color 0.18s'}} aria-label="Close"
+            <button onClick={() => setOpenIdx(null)} style={{
+              position: 'absolute', 
+              top: 12, 
+              right: 12, 
+              background: 'none', 
+              border: 'none', 
+              fontSize: 24, 
+              color: '#bbb', 
+              cursor: 'pointer', 
+              fontWeight: 700, 
+              lineHeight: 1, 
+              transition: 'color 0.18s',
+              padding: 4,
+              zIndex: 1002
+            }} aria-label="Close"
               onMouseEnter={e => (e.currentTarget.style.color = '#e53935')}
               onMouseLeave={e => (e.currentTarget.style.color = '#bbb')}
             >×</button>
@@ -232,14 +274,14 @@ const DesktopCategoriesSection = () => {
               <Image 
                 src={currentCat.img} 
                 alt={currentCat.name} 
-                width={160}
-                height={160}
+                width={100}
+                height={100}
                 style={{
-                  width: 160,
-                  height: 160,
+                  width: 100,
+                  height: 100,
                   objectFit: 'cover',
-                  borderRadius: 22,
-                  marginBottom: 32,
+                  borderRadius: 12,
+                  marginBottom: 16,
                   background: '#f0f0f0',
                   boxShadow: '0 6px 32px rgba(34,34,34,0.10)'
                 }}
@@ -247,23 +289,50 @@ const DesktopCategoriesSection = () => {
             )}
             {currentCat && (
               <div style={{
-                display: 'flex', flexWrap: 'wrap', gap: 32, width: '100%', justifyContent: 'center', alignItems: 'stretch',
+                display: 'flex', 
+                flexDirection: 'column', 
+                gap: 12, 
+                width: '100%', 
+                justifyContent: 'center', 
+                alignItems: 'stretch',
               }}>
                 {currentCat.sub.map((sub) => (
                   <div key={sub.name} style={{
-                    display: 'flex', flexDirection: 'column', alignItems: 'center', minWidth: 180, maxWidth: 220, background: '#fff',
-                    borderRadius: 18, boxShadow: '0 2px 16px 0 rgba(34,34,34,0.07)', padding: '22px 18px 18px 18px', margin: 0,
+                    display: 'flex', 
+                    flexDirection: 'column', 
+                    alignItems: 'center', 
+                    width: '100%', 
+                    background: '#fff',
+                    borderRadius: 10, 
+                    boxShadow: '0 2px 16px 0 rgba(34,34,34,0.07)', 
+                    padding: '12px 10px 10px 10px', 
+                    margin: 0,
                     transition: 'box-shadow 0.18s, transform 0.18s',
                   }}
                   onMouseEnter={e => {e.currentTarget.style.boxShadow = '0 8px 32px 0 rgba(229,57,53,0.10)'; e.currentTarget.style.transform = 'translateY(-4px) scale(1.03)';}}
                   onMouseLeave={e => {e.currentTarget.style.boxShadow = '0 2px 16px 0 rgba(34,34,34,0.07)'; e.currentTarget.style.transform = 'none';}}
                   >
-                    <span style={{fontSize: 17, color: '#e53935', fontWeight: 700, marginBottom: 12, textAlign: 'center', width: '100%', letterSpacing: 0.3, textTransform: 'uppercase'}}>{sub.name}</span>
+                    <span style={{
+                      fontSize: 14, 
+                      color: '#e53935', 
+                      fontWeight: 700, 
+                      marginBottom: 8, 
+                      textAlign: 'center', 
+                      width: '100%', 
+                      letterSpacing: 0.3, 
+                      textTransform: 'uppercase'
+                    }}>{sub.name}</span>
                     <ul style={{listStyle: 'none', padding: 0, margin: 0, width: '100%'}}>
                       {sub.links.map((link) => (
                         <li key={link} style={{
-                          fontSize: 15, color: '#222', marginBottom: 7, cursor: 'pointer',
-                          borderRadius: 8, padding: '9px 10px', transition: 'background 0.15s, color 0.15s', textAlign: 'center',
+                          fontSize: 12, 
+                          color: '#222', 
+                          marginBottom: 6, 
+                          cursor: 'pointer',
+                          borderRadius: 6, 
+                          padding: '6px 8px', 
+                          transition: 'background 0.15s, color 0.15s', 
+                          textAlign: 'center',
                           fontWeight: 500,
                         }}
                         onMouseEnter={e => {e.currentTarget.style.background = '#f7f7f7'; e.currentTarget.style.color = '#222';}}
@@ -275,7 +344,20 @@ const DesktopCategoriesSection = () => {
                 ))}
               </div>
             )}
-            <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 32, position: 'absolute', left: 0, right: 0, bottom: 18, zIndex: 1002}}>
+            <div style={{
+              display: 'flex', 
+              justifyContent: 'center', 
+              alignItems: 'center', 
+              gap: 16, 
+              position: 'sticky', 
+              bottom: 0, 
+              left: 0, 
+              right: 0, 
+              padding: '12px 0',
+              background: 'linear-gradient(to bottom, transparent, #fff 20%)',
+              marginTop: 12,
+              zIndex: 1002
+            }}>
               <button
                 onClick={() => setOpenIdx(openIdx > 0 ? openIdx - 1 : 0)}
                 disabled={openIdx === 0}
@@ -284,9 +366,9 @@ const DesktopCategoriesSection = () => {
                   color: '#fff',
                   border: 'none',
                   borderRadius: 50,
-                  width: 44,
-                  height: 44,
-                  fontSize: 22,
+                  width: 36,
+                  height: 36,
+                  fontSize: 18,
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -307,9 +389,9 @@ const DesktopCategoriesSection = () => {
                   color: '#fff',
                   border: 'none',
                   borderRadius: 50,
-                  width: 44,
-                  height: 44,
-                  fontSize: 22,
+                  width: 36,
+                  height: 36,
+                  fontSize: 18,
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -324,10 +406,6 @@ const DesktopCategoriesSection = () => {
               </button>
             </div>
             <style>{`
-              @media (max-width: 900px) {
-                .modal-categories-flex { flex-direction: column !important; gap: 18px !important; }
-                .modal-categories-card { min-width: 90vw !important; max-width: 98vw !important; }
-              }
               @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
               @keyframes fadeInBg { from { opacity: 0; } to { opacity: 1; } }
             `}</style>
@@ -338,21 +416,4 @@ const DesktopCategoriesSection = () => {
   );
 };
 
-const CategoriesSection = () => {
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth <= 768);
-    };
-    
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
-
-  return isMobile ? <MobileCategoriesSection /> : <DesktopCategoriesSection />;
-};
-
-export default CategoriesSection; 
+export default MobileCategoriesSection; 

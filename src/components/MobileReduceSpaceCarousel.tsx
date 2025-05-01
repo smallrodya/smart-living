@@ -1,7 +1,6 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
-import MobileReduceSpaceCarousel from './MobileReduceSpaceCarousel';
 
 const images = [
   { src: '/reduce1.jpg', hoverSrc: '/reduce1-hover.jpg', title: '2 in 1 Reclining Gravity Chair and Lay Flat Sun lounger- Dark Green', price: '£34.99', discount: '-65%' },
@@ -11,33 +10,38 @@ const images = [
 ];
 
 const basketIcon = (
-  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
 );
 
-const DesktopReduceSpaceCarousel = () => {
+const MobileReduceSpaceCarousel = () => {
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
   const [hoveredBtn, setHoveredBtn] = useState<number | null>(null);
 
   return (
-    <section style={{width: '100%', height: 'auto', margin: '0 auto 40px', padding: 0, textAlign: 'center'}}>
-      <h2 style={{fontSize: 26, fontWeight: 700, marginBottom: 20, letterSpacing: 0.2}}>REDUCE SPACE</h2>
+    <section style={{width: '100%', height: 'auto', margin: '0 auto 24px', padding: 0, textAlign: 'center'}}>
+      <h2 style={{fontSize: 20, fontWeight: 700, marginBottom: 16, letterSpacing: 0.2}}>REDUCE SPACE</h2>
       <div style={{
         display: 'flex',
-        gap: 32,
+        gap: 16,
         overflowX: 'auto',
-        justifyContent: 'center',
-        padding: '10px 0',
+        justifyContent: 'flex-start',
+        padding: '8px 0',
         width: '100%',
         boxSizing: 'border-box',
+        paddingLeft: 12,
+        paddingRight: 12,
+        scrollbarWidth: 'none',
+        msOverflowStyle: 'none',
+        WebkitOverflowScrolling: 'touch',
       }}>
         {images.map((item, i) => (
           <div
             key={i}
             style={{
-              minWidth: 300,
-              maxWidth: 320,
+              minWidth: 240,
+              maxWidth: 260,
               background: '#fff',
-              borderRadius: 16,
+              borderRadius: 12,
               boxShadow: hoveredCard === i ? '0 8px 32px rgba(34,34,34,0.13)' : '0 2px 16px rgba(34,34,34,0.07)',
               padding: 0,
               position: 'relative',
@@ -45,18 +49,18 @@ const DesktopReduceSpaceCarousel = () => {
               flexDirection: 'column',
               alignItems: 'center',
               transition: 'box-shadow 0.22s cubic-bezier(.4,2,.6,1), transform 0.22s cubic-bezier(.4,2,.6,1)',
-              transform: hoveredCard === i ? 'translateY(-6px) scale(1.03)' : 'none',
+              transform: hoveredCard === i ? 'translateY(-4px) scale(1.02)' : 'none',
               flex: '0 0 auto',
             }}
             onMouseEnter={() => setHoveredCard(i)}
             onMouseLeave={() => setHoveredCard(null)}
           >
-            <div style={{width: '100%', aspectRatio: '4/3', overflow: 'hidden', borderTopLeftRadius: 16, borderTopRightRadius: 16}}>
+            <div style={{width: '100%', aspectRatio: '4/3', overflow: 'hidden', borderTopLeftRadius: 12, borderTopRightRadius: 12}}>
               <Image
                 src={hoveredCard === i ? item.hoverSrc : item.src}
                 alt={item.title}
-                width={320}
-                height={240}
+                width={260}
+                height={195}
                 style={{
                   width: '100%',
                   height: '100%',
@@ -68,25 +72,25 @@ const DesktopReduceSpaceCarousel = () => {
                 }}
               />
             </div>
-            <div style={{padding: '14px 10px 10px 10px', width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-              <div style={{fontWeight: 600, fontSize: 15, marginBottom: 6, textAlign: 'center', letterSpacing: 0.1}}>{item.title}</div>
-              <div style={{color: '#e53935', fontWeight: 700, fontSize: 16, marginBottom: 8}}>{item.price}</div>
+            <div style={{padding: '10px 8px 8px 8px', width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+              <div style={{fontWeight: 600, fontSize: 13, marginBottom: 4, textAlign: 'center', letterSpacing: 0.1, lineHeight: 1.3}}>{item.title}</div>
+              <div style={{color: '#e53935', fontWeight: 700, fontSize: 14, marginBottom: 6}}>{item.price}</div>
               <button
                 style={{
                   background: '#111',
                   color: '#fff',
                   border: 'none',
-                  borderRadius: 9,
-                  padding: '9px 0',
+                  borderRadius: 8,
+                  padding: '7px 0',
                   fontWeight: 600,
-                  fontSize: 14,
+                  fontSize: 12,
                   width: '100%',
-                  marginTop: 7,
+                  marginTop: 4,
                   transition: 'background 0.18s',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  gap: 8,
+                  gap: 6,
                   letterSpacing: 0.1,
                   boxShadow: hoveredBtn === i ? '0 2px 12px 0 rgba(34,34,34,0.10)' : 'none',
                 }}
@@ -98,18 +102,18 @@ const DesktopReduceSpaceCarousel = () => {
             </div>
             <span style={{
               position: 'absolute',
-              top: 10,
-              left: 10,
+              top: 8,
+              left: 8,
               background: '#e53935',
               color: '#fff',
               fontWeight: 700,
-              fontSize: 14,
+              fontSize: 12,
               borderRadius: '50%',
-              padding: '8px 10px',
+              padding: '6px 8px',
               letterSpacing: 0.1,
               boxShadow: '0 1px 6px 0 rgba(229,57,53,0.10)',
-              width: '47px',
-              height: '47px',
+              width: '40px',
+              height: '40px',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center'
@@ -117,25 +121,13 @@ const DesktopReduceSpaceCarousel = () => {
           </div>
         ))}
       </div>
+      <style jsx>{`
+        div::-webkit-scrollbar {
+          display: none;
+        }
+      `}</style>
     </section>
   );
 };
 
-const ReduceSpaceCarousel = () => {
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth <= 768);
-    };
-    
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
-
-  return isMobile ? <MobileReduceSpaceCarousel /> : <DesktopReduceSpaceCarousel />;
-};
-
-export default ReduceSpaceCarousel; 
+export default MobileReduceSpaceCarousel; 
