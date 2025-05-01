@@ -142,6 +142,34 @@ const Header = () => {
           </a>
         </div>
       </div>
+      <style>{`
+        @media (max-width: 768px) {
+          header {
+            height: 60px;
+          }
+          .header-content {
+            padding: 0 15px;
+          }
+          .logo {
+            width: 180px;
+            height: 36px;
+          }
+          .search-form {
+            display: none;
+          }
+          .header-buttons {
+            gap: 12px;
+          }
+          .header-button {
+            padding: 8px 12px;
+            fontSize: 14px;
+          }
+          .track-order-button {
+            padding: 8px 16px;
+            fontSize: 14px;
+          }
+        }
+      `}</style>
     </header>
   );
 };

@@ -124,6 +124,42 @@ const BestSellersSlider = () => {
           ))}
         </div>
       </div>
+      <style>{`
+        @media (max-width: 768px) {
+          section {
+            padding: 30px 0;
+          }
+          h2 {
+            fontSize: 24px;
+            marginBottom: 24px;
+          }
+          .grid-container {
+            gridTemplateColumns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+            padding: 0 5px;
+          }
+          .product-card {
+            minWidth: 240px;
+            maxWidth: 100%;
+          }
+          .product-image {
+            paddingTop: 100%;
+          }
+          .product-info {
+            padding: 15px;
+          }
+          h3 {
+            fontSize: 16px;
+          }
+          .price {
+            fontSize: 18px;
+          }
+          button {
+            padding: 10px 0;
+            fontSize: 14px;
+          }
+        }
+      `}</style>
     </section>
   );
 };

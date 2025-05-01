@@ -17,6 +17,32 @@ const Footer = () => (
     <div style={{maxWidth: 1200, margin: '0 auto', textAlign: 'center', color: '#aaa', fontSize: 14, marginTop: 18}}>
       © {new Date().getFullYear()} Smart Living. Все права защищены.
     </div>
+    <style>{`
+      @media (max-width: 768px) {
+        footer {
+          padding: 32px 0 24px;
+          marginTop: 20px;
+        }
+        .footer-content {
+          flexDirection: column;
+          gap: 24px;
+          padding: 0 20px 20px;
+        }
+        .footer-logo {
+          fontSize: 20px;
+          marginBottom: 12px;
+        }
+        .footer-links {
+          fontSize: 14px;
+          gap: 6px;
+        }
+        .footer-bottom {
+          fontSize: 12px;
+          marginTop: 16px;
+          padding: 0 20px;
+        }
+      }
+    `}</style>
   </footer>
 );
 

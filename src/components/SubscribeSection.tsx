@@ -26,6 +26,37 @@ const SubscribeSection = () => {
           onMouseLeave={() => setHovered(false)}
         >Подписаться</button>
       </form>
+      <style>{`
+        @media (max-width: 768px) {
+          section {
+            maxWidth: 90vw;
+            margin: 30px auto;
+            padding: 30px 20px;
+          }
+          h2 {
+            fontSize: 20px;
+            marginBottom: 12px;
+          }
+          p {
+            marginBottom: 18px;
+            fontSize: 14px;
+          }
+          form {
+            flexDirection: column;
+            gap: 10px;
+          }
+          input {
+            width: 100%;
+            padding: 10px 15px;
+            fontSize: 14px;
+          }
+          button {
+            width: 100%;
+            padding: 10px 0;
+            fontSize: 14px;
+          }
+        }
+      `}</style>
     </section>
   );
 };

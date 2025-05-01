@@ -116,8 +116,46 @@ const ReduceSpaceCarousel = () => {
         ))}
       </div>
       <style>{`
-        @media (max-width: 700px) {
-          .reduce-card { min-width: 85vw !important; max-width: 95vw !important; }
+        @media (max-width: 768px) {
+          section {
+            marginBottom: 30px;
+          }
+          h2 {
+            fontSize: 22px;
+            marginBottom: 16px;
+          }
+          .carousel-container {
+            gap: 20px;
+            padding: 8px 0;
+          }
+          .product-card {
+            minWidth: 240px;
+            maxWidth: 260px;
+          }
+          .product-image {
+            aspectRatio: 4/3;
+          }
+          .product-info {
+            padding: 12px 8px 8px 8px;
+          }
+          .product-title {
+            fontSize: 13px;
+            marginBottom: 4px;
+          }
+          .product-price {
+            fontSize: 14px;
+            marginBottom: 6px;
+          }
+          .add-to-basket {
+            padding: 8px 0;
+            fontSize: 13px;
+          }
+          .discount-badge {
+            width: 40px;
+            height: 40px;
+            fontSize: 12px;
+            padding: 6px 8px;
+          }
         }
       `}</style>
     </section>

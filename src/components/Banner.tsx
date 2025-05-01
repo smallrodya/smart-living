@@ -27,6 +27,26 @@ const Banner = () => {
           onMouseLeave={() => setHovered(false)}
         >Go to Catalog</button>
       </div>
+      <style>{`
+        @media (max-width: 768px) {
+          section {
+            height: 500px;
+            marginTop: -10px;
+          }
+          h1 {
+            fontSize: 28px;
+            padding: 0 20px;
+          }
+          p {
+            fontSize: 16px;
+            padding: 0 20px;
+          }
+          button {
+            padding: 12px 28px;
+            fontSize: 16px;
+          }
+        }
+      `}</style>
     </section>
   );
 };
