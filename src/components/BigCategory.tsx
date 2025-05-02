@@ -58,6 +58,8 @@ const BigCategory = () => {
                   alt={category.name}
                   fill
                   className={styles.image}
+                  sizes="(max-width: 1200px) 33vw, (max-width: 900px) 50vw, 25vw"
+                  priority={index < 2}
                 />
               </div>
               <div className={styles.categoryInfo}>
@@ -72,6 +74,7 @@ const BigCategory = () => {
             onClick={prevPage} 
             disabled={currentIndex === 0} 
             className={styles.navButton}
+            aria-label="Previous categories"
           >
             ←
           </button>
@@ -79,6 +82,7 @@ const BigCategory = () => {
             onClick={nextPage} 
             disabled={currentIndex + itemsPerPage >= categories.length} 
             className={styles.navButton}
+            aria-label="Next categories"
           >
             →
           </button>

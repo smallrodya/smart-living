@@ -1,95 +1,145 @@
 .section {
   width: 100%;
   padding: 80px 0;
-  background: #f8f9fa;
+  background: #fafafa;
+  position: relative;
+  overflow: hidden;
 }
 
 .container {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0 40px;
+  position: relative;
 }
 
 .categoriesGrid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 30px;
-  margin-bottom: 40px;
+  gap: 32px;
+  margin-bottom: 48px;
 }
 
 .categoryCard {
   background: white;
-  border-radius: 12px;
+  border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  cursor: pointer;
 }
 
 .categoryCard:hover {
-  transform: translateY(-5px);
+  transform: translateY(-8px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
+}
+
+.categoryCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.02) 100%);
+  z-index: 1;
 }
 
 .imageContainer {
   position: relative;
   width: 100%;
-  height: 250px;
+  height: 280px;
+  background: #f5f5f5;
+  overflow: hidden;
 }
 
 .image {
   object-fit: cover;
-  border-radius: 12px 12px 0 0;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.categoryCard:hover .image {
+  transform: scale(1.05);
 }
 
 .categoryInfo {
-  padding: 20px;
+  padding: 24px;
   text-align: center;
+  position: relative;
+  z-index: 2;
 }
 
 .categoryName {
   font-size: 18px;
   font-weight: 600;
-  color: #333;
-  margin-bottom: 8px;
+  color: #1a1a1a;
+  margin-bottom: 12px;
+  line-height: 1.4;
+  letter-spacing: 0.2px;
 }
 
 .productCount {
   font-size: 14px;
   color: #666;
+  font-weight: 500;
+  letter-spacing: 0.3px;
 }
 
 .navigation {
   display: flex;
   justify-content: center;
-  gap: 20px;
+  gap: 24px;
+  margin-top: 40px;
 }
 
 .navButton {
-  width: 50px;
-  height: 50px;
+  width: 56px;
+  height: 56px;
   border-radius: 50%;
-  background: #0070f3;
-  color: white;
-  border: none;
-  font-size: 24px;
-  cursor: pointer;
+  background: white;
+  border: 1px solid rgba(0, 0, 0, 0.1);
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background-color 0.3s ease;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  color: #1a1a1a;
+  font-size: 24px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.navButton:hover {
+  background: #f8f8f8;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  transform: scale(1.05);
 }
 
 .navButton:disabled {
-  background: #ccc;
+  opacity: 0.5;
   cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
-.navButton:not(:disabled):hover {
-  background: #0051a2;
-}
-
-@media (max-width: 1024px) {
+@media (max-width: 1200px) {
   .categoriesGrid {
     grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+}
+
+@media (max-width: 900px) {
+  .categoriesGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .container {
+    padding: 0 24px;
+  }
+  
+  .imageContainer {
+    height: 240px;
   }
 }
 

@@ -31,7 +31,7 @@ const Banner = () => {
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: '40px',
-    marginTop: '-20px'
+    marginTop: '-100px'
   };
 
   const titleStyles: React.CSSProperties = {

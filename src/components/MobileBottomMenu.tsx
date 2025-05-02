@@ -17,6 +17,24 @@ const MobileBottomMenu = () => {
       alignItems: 'center',
       zIndex: 1000,
     }}>
+      <Link href="/category" style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        textDecoration: 'none',
+        color: '#222',
+        fontSize: 10,
+        gap: 4,
+      }}>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <rect x="3" y="3" width="7" height="7"/>
+          <rect x="14" y="3" width="7" height="7"/>
+          <rect x="14" y="14" width="7" height="7"/>
+          <rect x="3" y="14" width="7" height="7"/>
+        </svg>
+        <span>Category</span>
+      </Link>
+
       <Link href="/track-order" style={{
         display: 'flex',
         flexDirection: 'column',
