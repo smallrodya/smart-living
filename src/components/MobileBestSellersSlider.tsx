@@ -135,6 +135,12 @@ const MobileBestSellersSlider = () => {
         div::-webkit-scrollbar {
           display: none;
         }
+        @media (max-width: 768px) {
+          div {
+            minWidth: 200px;
+            maxWidth: 220px;
+          }
+        }
       `}</style>
     </section>
   );
