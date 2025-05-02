@@ -1,6 +1,7 @@
 'use client';
 
 import React from "react";
+import Image from 'next/image';
 
 const products = [
   { name: "Carved Rugs from £12.99", image: "Carved-Rug.jpg" },
@@ -32,7 +33,14 @@ const CircleImg = () => {
               transition: 'transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out',
               cursor: 'pointer'
             }} onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.05)'} onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}>
-              <img src={product.image} alt={product.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+                <Image
+                  src={`/${product.image}`}
+                  alt={product.name}
+                  fill
+                  style={{ objectFit: 'cover' }}
+                />
+              </div>
             </div>
             <p style={{ marginTop: '10px', fontSize: '16px', fontWeight: 600, color: '#333' }}>{product.name}</p>
           </div>
