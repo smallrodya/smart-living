@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from "react";
+import Image from "next/image";
 
 const categories = [
   { name: "KIDS COLLECTION", image: "Cids.jpg", productCount: 86 },
@@ -29,7 +30,6 @@ const categories = [
 const BigCategory = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const itemsPerPage = 4;
-  const totalPages = Math.ceil(categories.length / itemsPerPage);
 
   const nextPage = () => {
     if (currentIndex + itemsPerPage < categories.length) {
@@ -51,7 +51,7 @@ const BigCategory = () => {
         <div style={{ display: 'flex', gap: '20px' }}>
           {currentCategories.map((category, index) => (
             <div key={index} style={{ textAlign: 'center' }}>
-              <img src={category.image} alt={category.name} style={{ width: '300px', height: '300px', objectFit: 'cover', borderRadius: '8px' }} />
+              <Image src={category.image} alt={category.name} width={300} height={300} style={{ objectFit: 'cover', borderRadius: '8px' }} />
               <p style={{ marginTop: '10px', fontSize: '16px', fontWeight: 600, color: '#333' }}>{category.name}</p>
               <p style={{ marginTop: '5px', fontSize: '14px', color: '#666' }}>{category.productCount} products</p>
             </div>
