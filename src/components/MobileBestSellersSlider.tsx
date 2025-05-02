@@ -49,8 +49,8 @@ const MobileBestSellersSlider = () => {
             <div
               key={product.id}
               style={{
-                minWidth: 240,
-                maxWidth: 260,
+                minWidth: 200,
+                maxWidth: 220,
                 background: '#fff',
                 borderRadius: 12,
                 overflow: 'hidden',
@@ -72,8 +72,8 @@ const MobileBestSellersSlider = () => {
                 <Image
                   src={hoveredCard === product.id ? product.hoverImage : product.image}
                   alt={product.name}
-                  width={260}
-                  height={260}
+                  width={220}
+                  height={220}
                   style={{
                     position: 'absolute',
                     top: 0,

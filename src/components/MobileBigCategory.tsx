@@ -29,7 +29,7 @@ const categories = [
 
 const MobileBigCategory = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const itemsPerPage = 4;
+  const itemsPerPage = 2;
 
   const nextPage = () => {
     if (currentIndex + itemsPerPage < categories.length) {
@@ -46,27 +46,98 @@ const MobileBigCategory = () => {
   const currentCategories = categories.slice(currentIndex, currentIndex + itemsPerPage);
 
   return (
-    <section style={{ width: '100%', padding: '60px 0', background: '#fafbfc', display: 'none' }}>
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px' }}>
-        <div style={{ display: 'flex', gap: '20px' }}>
+    <section style={{ 
+      width: '100%', 
+      padding: '40px 0', 
+      background: '#fafbfc',
+      display: 'none'
+    }}>
+      <div style={{ 
+        display: 'flex', 
+        flexDirection: 'column', 
+        alignItems: 'center', 
+        gap: '16px',
+        padding: '0 12px'
+      }}>
+        <div style={{ 
+          display: 'flex', 
+          gap: '12px',
+          width: '100%',
+          justifyContent: 'center'
+        }}>
           {currentCategories.map((category, index) => (
-            <div key={index} style={{ textAlign: 'center' }}>
-              <div style={{ position: 'relative', width: '300px', height: '300px' }}>
+            <div key={index} style={{ 
+              textAlign: 'center',
+              width: 'calc(50% - 6px)'
+            }}>
+              <div style={{ 
+                position: 'relative', 
+                width: '100%',
+                aspectRatio: '1/1',
+                borderRadius: '8px',
+                overflow: 'hidden',
+                boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
+              }}>
                 <Image
                   src={`/${category.image}`}
                   alt={category.name}
                   fill
-                  style={{ objectFit: 'cover', borderRadius: '8px' }}
+                  style={{ 
+                    objectFit: 'cover',
+                    transition: 'transform 0.3s ease'
+                  }}
                 />
               </div>
-              <p style={{ marginTop: '10px', fontSize: '16px', fontWeight: 600, color: '#333' }}>{category.name}</p>
-              <p style={{ marginTop: '5px', fontSize: '14px', color: '#666' }}>{category.productCount} products</p>
+              <p style={{ 
+                marginTop: '8px', 
+                fontSize: '14px', 
+                fontWeight: 600, 
+                color: '#333',
+                lineHeight: '1.2'
+              }}>{category.name}</p>
+              <p style={{ 
+                marginTop: '4px', 
+                fontSize: '12px', 
+                color: '#666' 
+              }}>{category.productCount} products</p>
             </div>
           ))}
         </div>
-        <div style={{ display: 'flex', gap: '10px', marginTop: '20px' }}>
-          <button onClick={prevPage} disabled={currentIndex === 0} style={{ padding: '8px 16px', background: '#0070f3', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>←</button>
-          <button onClick={nextPage} disabled={currentIndex + itemsPerPage >= categories.length} style={{ padding: '8px 16px', background: '#0070f3', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>→</button>
+        <div style={{ 
+          display: 'flex', 
+          gap: '8px', 
+          marginTop: '16px'
+        }}>
+          <button 
+            onClick={prevPage} 
+            disabled={currentIndex === 0} 
+            style={{ 
+              padding: '8px 16px', 
+              background: currentIndex === 0 ? '#e0e0e0' : '#111', 
+              color: 'white', 
+              border: 'none', 
+              borderRadius: '6px', 
+              cursor: currentIndex === 0 ? 'default' : 'pointer',
+              fontSize: '14px',
+              fontWeight: 600,
+              transition: 'background 0.2s ease'
+            }}
+          >←</button>
+          <button 
+            onClick={nextPage} 
+            disabled={currentIndex + itemsPerPage >= categories.length} 
+            style={{ 
+              padding: '8px 16px', 
+              background: currentIndex + itemsPerPage >= categories.length ? '#e0e0e0' : '#111', 
+              color: 'white', 
+              border: 'none', 
+              borderRadius: '6px', 
+              cursor: currentIndex + itemsPerPage >= categories.length ? 'default' : 'pointer',
+              fontSize: '14px',
+              fontWeight: 600,
+              transition: 'background 0.2s ease'
+            }}
+          >→</button>
         </div>
       </div>
       <style jsx>{`

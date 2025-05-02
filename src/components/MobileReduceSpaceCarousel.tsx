@@ -3,8 +3,8 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 
 const images = [
-  { src: '/reduce1.jpg', hoverSrc: '/reduce1-hover.jpg', title: '2 in 1 Reclining Gravity Chair and Lay Flat Sun lounger- Dark Green', price: '£34.99', discount: '-65%' },
-  { src: '/reduce2.jpg', hoverSrc: '/reduce2-hover.jpg', title: '2 in 1 Reclining Gravity Chair and Lay Flat Sun lounger- Grey', price: '£34.90', discount: '-65%' },
+  { src: '/reduce1.jpg', hoverSrc: '/reduce1-hover.jpg', title: '2 in 1 Reclining Gravity Chair and Lay Flat Sun lounger', price: '£34.99', discount: '-65%' },
+  { src: '/reduce2.jpg', hoverSrc: '/reduce2-hover.jpg', title: '2 in 1 Reclining Gravity Chair and Lay Flat Sun lounger', price: '£34.90', discount: '-65%' },
   { src: '/reduce3.jpg', hoverSrc: '/reduce3-hover.jpg', title: 'Zero Gravity Chair with Cushion & Pillow – Black', price: '£60.99', discount: '-49%' },
   { src: '/reduce4.jpg', hoverSrc: '/reduce4-hover.jpg', title: 'Zero Gravity Chair with Cushion & Pillow – Grey', price: '£60.99', discount: '-49%' },
 ];
@@ -38,8 +38,8 @@ const MobileReduceSpaceCarousel = () => {
           <div
             key={i}
             style={{
-              minWidth: 240,
-              maxWidth: 260,
+              minWidth: 200,
+              maxWidth: 220,
               background: '#fff',
               borderRadius: 12,
               boxShadow: hoveredCard === i ? '0 8px 32px rgba(34,34,34,0.13)' : '0 2px 16px rgba(34,34,34,0.07)',
@@ -59,8 +59,8 @@ const MobileReduceSpaceCarousel = () => {
               <Image
                 src={hoveredCard === i ? item.hoverSrc : item.src}
                 alt={item.title}
-                width={260}
-                height={195}
+                width={220}
+                height={165}
                 style={{
                   width: '100%',
                   height: '100%',
