@@ -5,6 +5,7 @@ import ReduceSpaceCarousel from "../components/ReduceSpaceCarousel";
 import CircleImg from "../components/CircleImg";
 import BestSellersSlider from "../components/BestSellersSlider";
 import BigCategory from "../components/BigCategory";
+import MobileBigCategory from "../components/MobileBigCategory";
 import SubscribeSection from "../components/SubscribeSection";
 import Footer from "../components/Footer";
 
@@ -18,6 +19,7 @@ export default function Home() {
       <CircleImg />
       <BestSellersSlider />
       <BigCategory />
+      <MobileBigCategory />
       <SubscribeSection />
       <Footer />
     </>
