@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Image from 'next/image';
+import styles from './BigCategory.module.css';
 
 const categories = [
   { name: "KIDS COLLECTION", image: "Cids.jpg", productCount: 86 },
@@ -46,27 +47,41 @@ const BigCategory = () => {
   const currentCategories = categories.slice(currentIndex, currentIndex + itemsPerPage);
 
   return (
-    <section style={{ width: '100%', padding: '60px 0', background: '#fafbfc' }}>
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px' }}>
-        <div style={{ display: 'flex', gap: '20px' }}>
+    <section className={styles.section}>
+      <div className={styles.container}>
+        <div className={styles.categoriesGrid}>
           {currentCategories.map((category, index) => (
-            <div key={index} style={{ textAlign: 'center' }}>
-              <div style={{ position: 'relative', width: '300px', height: '300px' }}>
+            <div key={index} className={styles.categoryCard}>
+              <div className={styles.imageContainer}>
                 <Image
                   src={`/${category.image}`}
                   alt={category.name}
                   fill
-                  style={{ objectFit: 'cover', borderRadius: '8px' }}
+                  className={styles.image}
                 />
               </div>
-              <p style={{ marginTop: '10px', fontSize: '16px', fontWeight: 600, color: '#333' }}>{category.name}</p>
-              <p style={{ marginTop: '5px', fontSize: '14px', color: '#666' }}>{category.productCount} products</p>
+              <div className={styles.categoryInfo}>
+                <h3 className={styles.categoryName}>{category.name}</h3>
+                <p className={styles.productCount}>{category.productCount} products</p>
+              </div>
             </div>
           ))}
         </div>
-        <div style={{ display: 'flex', gap: '10px', marginTop: '20px' }}>
-          <button onClick={prevPage} disabled={currentIndex === 0} style={{ padding: '8px 16px', background: '#0070f3', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>←</button>
-          <button onClick={nextPage} disabled={currentIndex + itemsPerPage >= categories.length} style={{ padding: '8px 16px', background: '#0070f3', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>→</button>
+        <div className={styles.navigation}>
+          <button 
+            onClick={prevPage} 
+            disabled={currentIndex === 0} 
+            className={styles.navButton}
+          >
+            ←
+          </button>
+          <button 
+            onClick={nextPage} 
+            disabled={currentIndex + itemsPerPage >= categories.length} 
+            className={styles.navButton}
+          >
+            →
+          </button>
         </div>
       </div>
     </section>

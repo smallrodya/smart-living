@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import Image from 'next/image';
 
 const products = [
@@ -11,9 +11,54 @@ const products = [
   { id: 6, name: 'Reversible Polycotton Fern Rouched Duvet Cover', price: '£10.37 – £12.97', image: '/best6.jpg', hoverImage: '/best6-hover.jpg' },
 ];
 
+const arrowIcon = (
+  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M15 18l-6-6 6-6"/>
+  </svg>
+);
+
 const MobileBestSellersSlider = () => {
-  const [hoveredCard, setHoveredCard] = useState<number | null>(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
   const [hoveredBtn, setHoveredBtn] = useState<number | null>(null);
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
+  const [isHovered, setIsHovered] = useState(false);
+
+  const nextSlide = () => {
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % products.length);
+  };
+
+  const prevSlide = () => {
+    setCurrentIndex((prevIndex) => (prevIndex - 1 + products.length) % products.length);
+  };
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStart(e.touches[0].clientX);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.touches[0].clientX);
+  };
+
+  const handleTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > 50;
+    const isRightSwipe = distance < -50;
+
+    if (isLeftSwipe) {
+      nextSlide();
+    }
+    if (isRightSwipe) {
+      prevSlide();
+    }
+
+    setTouchStart(null);
+    setTouchEnd(null);
+  };
+
+  const currentProduct = products[currentIndex];
 
   return (
     <section style={{
@@ -26,6 +71,7 @@ const MobileBestSellersSlider = () => {
         maxWidth: '100%',
         margin: '0 auto',
         padding: '0 16px',
+        position: 'relative',
       }}>
         <h2 style={{
           fontSize: 24,
@@ -36,112 +82,171 @@ const MobileBestSellersSlider = () => {
           color: '#222',
         }}>BESTSELLERS</h2>
         
+        <div 
+          style={{
+            position: 'relative',
+            width: '100%',
+            padding: '0 40px',
+            boxSizing: 'border-box'
+          }}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+        >
+          <button
+            onClick={prevSlide}
+            style={{
+              position: 'absolute',
+              left: 8,
+              top: '50%',
+              transform: 'translateY(-50%)',
+              background: 'rgba(255, 255, 255, 0.7)',
+              border: 'none',
+              borderRadius: '50%',
+              width: 48,
+              height: 48,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              cursor: 'pointer',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+              zIndex: 2,
+              transition: 'background 0.3s ease'
+            }}
+            onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.9)'}
+            onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.7)'}
+          >
+            {arrowIcon}
+          </button>
+
+          <div
+            style={{
+              minWidth: 280,
+              maxWidth: 240,
+              background: '#fff',
+              borderRadius: 12,
+              overflow: 'hidden',
+              boxShadow: isHovered ? '0 8px 24px rgba(0,0,0,0.12)' : '0 2px 8px rgba(0,0,0,0.08)',
+              transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+              margin: '0 auto',
+              transform: isHovered ? 'translateY(-4px)' : 'none',
+            }}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+          >
+            <div style={{
+              position: 'relative',
+              width: '100%',
+              paddingTop: '100%',
+              overflow: 'hidden',
+            }}>
+              <Image
+                src={isHovered ? currentProduct.hoverImage : currentProduct.image}
+                alt={currentProduct.name}
+                width={300}
+                height={300}
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                  transition: 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                  transform: isHovered ? 'scale(1.05)' : 'scale(1)',
+                }}
+              />
+            </div>
+            
+            <div style={{
+              padding: '16px 12px',
+              textAlign: 'center',
+            }}>
+              <h3 style={{
+                fontSize: 15,
+                fontWeight: 600,
+                marginBottom: 8,
+                color: '#222',
+                letterSpacing: 0.2,
+                lineHeight: 1.4,
+              }}>{currentProduct.name}</h3>
+              
+              <p style={{
+                fontSize: 17,
+                fontWeight: 700,
+                color: '#e53935',
+                marginBottom: 16,
+              }}>{currentProduct.price}</p>
+              
+              <button
+                style={{
+                  width: '100%',
+                  padding: '10px 0',
+                  background: hoveredBtn === currentProduct.id ? '#222' : '#111',
+                  color: '#fff',
+                  border: 'none',
+                  borderRadius: 6,
+                  fontSize: 15,
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease',
+                  boxShadow: hoveredBtn === currentProduct.id ? '0 2px 8px rgba(0,0,0,0.15)' : 'none',
+                }}
+                onMouseEnter={() => setHoveredBtn(currentProduct.id)}
+                onMouseLeave={() => setHoveredBtn(null)}
+              >
+                Add to Cart
+              </button>
+            </div>
+          </div>
+
+          <button
+            onClick={nextSlide}
+            style={{
+              position: 'absolute',
+              right: 8,
+              top: '50%',
+              transform: 'translateY(-50%)',
+              background: 'rgba(255, 255, 255, 0.7)',
+              border: 'none',
+              borderRadius: '50%',
+              width: 48,
+              height: 48,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              cursor: 'pointer',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+              zIndex: 2,
+              transition: 'background 0.3s ease'
+            }}
+            onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.9)'}
+            onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.7)'}
+          >
+            <div style={{ transform: 'rotate(180deg)' }}>{arrowIcon}</div>
+          </button>
+        </div>
+
         <div style={{
           display: 'flex',
-          overflowX: 'auto',
-          gap: 16,
-          padding: '0 8px',
-          scrollbarWidth: 'none',
-          msOverflowStyle: 'none',
-          WebkitOverflowScrolling: 'touch',
+          justifyContent: 'center',
+          gap: 8,
+          marginTop: 20
         }}>
-          {products.map((product) => (
+          {products.map((_, index) => (
             <div
-              key={product.id}
+              key={index}
               style={{
-                minWidth: 200,
-                maxWidth: 220,
-                background: '#fff',
-                borderRadius: 12,
-                overflow: 'hidden',
-                boxShadow: hoveredCard === product.id ? '0 8px 24px rgba(0,0,0,0.12)' : '0 2px 8px rgba(0,0,0,0.08)',
-                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                transform: hoveredCard === product.id ? 'translateY(-4px)' : 'none',
-                position: 'relative',
-                flex: '0 0 auto',
+                width: 8,
+                height: 8,
+                borderRadius: '50%',
+                background: index === currentIndex ? '#222' : '#ddd',
+                transition: 'background 0.3s ease'
               }}
-              onMouseEnter={() => setHoveredCard(product.id)}
-              onMouseLeave={() => setHoveredCard(null)}
-            >
-              <div style={{
-                position: 'relative',
-                width: '100%',
-                paddingTop: '100%',
-                overflow: 'hidden',
-              }}>
-                <Image
-                  src={hoveredCard === product.id ? product.hoverImage : product.image}
-                  alt={product.name}
-                  width={220}
-                  height={220}
-                  style={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    width: '100%',
-                    height: '100%',
-                    objectFit: 'cover',
-                    transition: 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                    transform: hoveredCard === product.id ? 'scale(1.05)' : 'scale(1)',
-                  }}
-                />
-              </div>
-              
-              <div style={{
-                padding: '12px 8px',
-                textAlign: 'center',
-              }}>
-                <h3 style={{
-                  fontSize: 14,
-                  fontWeight: 600,
-                  marginBottom: 6,
-                  color: '#222',
-                  letterSpacing: 0.2,
-                  lineHeight: 1.3,
-                }}>{product.name}</h3>
-                
-                <p style={{
-                  fontSize: 16,
-                  fontWeight: 700,
-                  color: '#e53935',
-                  marginBottom: 12,
-                }}>{product.price}</p>
-                
-                <button
-                  style={{
-                    width: '100%',
-                    padding: '8px 0',
-                    background: hoveredBtn === product.id ? '#222' : '#111',
-                    color: '#fff',
-                    border: 'none',
-                    borderRadius: 6,
-                    fontSize: 14,
-                    fontWeight: 600,
-                    cursor: 'pointer',
-                    transition: 'all 0.2s ease',
-                    boxShadow: hoveredBtn === product.id ? '0 2px 8px rgba(0,0,0,0.15)' : 'none',
-                  }}
-                  onMouseEnter={() => setHoveredBtn(product.id)}
-                  onMouseLeave={() => setHoveredBtn(null)}
-                >
-                  Add to Cart
-                </button>
-              </div>
-            </div>
+            />
           ))}
         </div>
       </div>
-      <style jsx>{`
-        div::-webkit-scrollbar {
-          display: none;
-        }
-        @media (max-width: 768px) {
-          div {
-            minWidth: 200px;
-            maxWidth: 220px;
-          }
-        }
-      `}</style>
     </section>
   );
 };

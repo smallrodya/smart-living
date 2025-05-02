@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Image from 'next/image';
+import styles from './MobileBigCategory.module.css';
 
 const categories = [
   { name: "KIDS COLLECTION", image: "Cids.jpg", productCount: 86 },
@@ -29,124 +30,70 @@ const categories = [
 
 const MobileBigCategory = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const itemsPerPage = 2;
 
-  const nextPage = () => {
-    if (currentIndex + itemsPerPage < categories.length) {
-      setCurrentIndex(currentIndex + itemsPerPage);
-    }
+  const handleDotClick = (index: number) => {
+    setCurrentIndex(index);
   };
 
-  const prevPage = () => {
-    if (currentIndex - itemsPerPage >= 0) {
-      setCurrentIndex(currentIndex - itemsPerPage);
-    }
+  const nextCategory = () => {
+    setCurrentIndex((prevIndex) => 
+      prevIndex === categories.length - 1 ? 0 : prevIndex + 1
+    );
   };
 
-  const currentCategories = categories.slice(currentIndex, currentIndex + itemsPerPage);
+  const prevCategory = () => {
+    setCurrentIndex((prevIndex) => 
+      prevIndex === 0 ? categories.length - 1 : prevIndex - 1
+    );
+  };
+
+  const currentCategory = categories[currentIndex];
 
   return (
-    <section style={{ 
-      width: '100%', 
-      padding: '40px 0', 
-      background: '#fafbfc',
-      display: 'none'
-    }}>
-      <div style={{ 
-        display: 'flex', 
-        flexDirection: 'column', 
-        alignItems: 'center', 
-        gap: '16px',
-        padding: '0 12px'
-      }}>
-        <div style={{ 
-          display: 'flex', 
-          gap: '12px',
-          width: '100%',
-          justifyContent: 'center'
-        }}>
-          {currentCategories.map((category, index) => (
-            <div key={index} style={{ 
-              textAlign: 'center',
-              width: 'calc(50% - 6px)'
-            }}>
-              <div style={{ 
-                position: 'relative', 
-                width: '100%',
-                aspectRatio: '1/1',
-                borderRadius: '8px',
-                overflow: 'hidden',
-                boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
-              }}>
-                <Image
-                  src={`/${category.image}`}
-                  alt={category.name}
-                  fill
-                  style={{ 
-                    objectFit: 'cover',
-                    transition: 'transform 0.3s ease'
-                  }}
-                />
-              </div>
-              <p style={{ 
-                marginTop: '8px', 
-                fontSize: '14px', 
-                fontWeight: 600, 
-                color: '#333',
-                lineHeight: '1.2'
-              }}>{category.name}</p>
-              <p style={{ 
-                marginTop: '4px', 
-                fontSize: '12px', 
-                color: '#666' 
-              }}>{category.productCount} products</p>
-            </div>
+    <section className={styles.section}>
+      <div className={styles.container}>
+        <div className={styles.navigation}>
+          <button 
+            onClick={prevCategory}
+            className={styles.navButton}
+            aria-label="Previous category"
+          >
+            ←
+          </button>
+          <button 
+            onClick={nextCategory}
+            className={styles.navButton}
+            aria-label="Next category"
+          >
+            →
+          </button>
+        </div>
+        <div className={styles.categoryCard}>
+          <div className={styles.imageContainer}>
+            <Image
+              src={`/${currentCategory.image}`}
+              alt={currentCategory.name}
+              fill
+              className={styles.image}
+              priority
+            />
+          </div>
+          <div className={styles.categoryInfo}>
+            <h3 className={styles.categoryName}>{currentCategory.name}</h3>
+            <p className={styles.productCount}>{currentCategory.productCount} products</p>
+          </div>
+        </div>
+        <div className={styles.pagination}>
+          {categories.map((_, index) => (
+            <button
+              key={index}
+              className={`${styles.paginationDot} ${index === currentIndex ? styles.active : ''}`}
+              onClick={() => handleDotClick(index)}
+              aria-label={`Go to slide ${index + 1}`}
+            />
           ))}
         </div>
-        <div style={{ 
-          display: 'flex', 
-          gap: '8px', 
-          marginTop: '16px'
-        }}>
-          <button 
-            onClick={prevPage} 
-            disabled={currentIndex === 0} 
-            style={{ 
-              padding: '8px 16px', 
-              background: currentIndex === 0 ? '#e0e0e0' : '#111', 
-              color: 'white', 
-              border: 'none', 
-              borderRadius: '6px', 
-              cursor: currentIndex === 0 ? 'default' : 'pointer',
-              fontSize: '14px',
-              fontWeight: 600,
-              transition: 'background 0.2s ease'
-            }}
-          >←</button>
-          <button 
-            onClick={nextPage} 
-            disabled={currentIndex + itemsPerPage >= categories.length} 
-            style={{ 
-              padding: '8px 16px', 
-              background: currentIndex + itemsPerPage >= categories.length ? '#e0e0e0' : '#111', 
-              color: 'white', 
-              border: 'none', 
-              borderRadius: '6px', 
-              cursor: currentIndex + itemsPerPage >= categories.length ? 'default' : 'pointer',
-              fontSize: '14px',
-              fontWeight: 600,
-              transition: 'background 0.2s ease'
-            }}
-          >→</button>
-        </div>
       </div>
-      <style jsx>{`
-        @media (max-width: 768px) {
-          section {
-            display: block;
-          }
-        }
-      `}</style>
     </section>
   );
 };

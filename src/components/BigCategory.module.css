@@ -1,0 +1,100 @@
+.section {
+  width: 100%;
+  padding: 80px 0;
+  background: #f8f9fa;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.categoriesGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 30px;
+  margin-bottom: 40px;
+}
+
+.categoryCard {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.categoryCard:hover {
+  transform: translateY(-5px);
+}
+
+.imageContainer {
+  position: relative;
+  width: 100%;
+  height: 250px;
+}
+
+.image {
+  object-fit: cover;
+  border-radius: 12px 12px 0 0;
+}
+
+.categoryInfo {
+  padding: 20px;
+  text-align: center;
+}
+
+.categoryName {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.productCount {
+  font-size: 14px;
+  color: #666;
+}
+
+.navigation {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.navButton {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: #0070f3;
+  color: white;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease;
+}
+
+.navButton:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.navButton:not(:disabled):hover {
+  background: #0051a2;
+}
+
+@media (max-width: 1024px) {
+  .categoriesGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .section {
+    display: none;
+  }
+} 
