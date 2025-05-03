@@ -5,12 +5,12 @@ import MobileBestSellersSlider from './MobileBestSellersSlider';
 import MobileBottomMenu from './MobileBottomMenu';
 
 const products = [
-  { id: 1, name: '3D Duvet Cover and Pillowcase Set – Black Panther', price: '£14.99 – £17.72', image: '/best1.jpg', hoverImage: '/best1.jpg' },
-  { id: 2, name: 'Reversible Polycotton Elephant Mandala Duvet Cover', price: '£10.49 – £12.97', image: '/best2.jpg', hoverImage: '/best2-hover.jpg' },
-  { id: 3, name: 'Diamante 5pc Bed in a Bag – Chocolate', price: '£17.99 – £19.99', image: '/best3.jpg', hoverImage: '/best3.jpg' },
-  { id: 4, name: 'Hug N Snug Duvet Cover and Pillowcase Set – Blush Pink', price: '£26.49 – £33.99', image: '/best4.jpg', hoverImage: '/best4.jpg' },
-  { id: 5, name: 'Hug N Snug Duvet Cover and Pillowcase Set – Charcoal', price: '£26.49 – £33.99', image: '/best5.jpg', hoverImage: '/best5-hover.jpg' },
-  { id: 6, name: 'Reversible Polycotton Fern Rouched Duvet Cover', price: '£10.37 – £12.97', image: '/best6.jpg', hoverImage: '/best6-hover.jpg' },
+  { id: 1, name: '3D Duvet Cover and Pillowcase Set – Black Panther', price: '£14.99 – £17.72', image: '/best1.jpg', hoverImage: '/best1.jpg', discount: '-71%' },
+  { id: 2, name: 'Reversible Polycotton Elephant Mandala Duvet Cover', price: '£10.49 – £12.97', image: '/best2.jpg', hoverImage: '/best2-hover.jpg', discount: '-71%' },
+  { id: 3, name: 'Diamante 5pc Bed in a Bag – Chocolate', price: '£17.99 – £19.99', image: '/best3.jpg', hoverImage: '/best3.jpg', discount: '-56%' },
+  { id: 4, name: 'Hug N Snug Duvet Cover and Pillowcase Set – Blush Pink', price: '£26.49 – £33.99', image: '/best4.jpg', hoverImage: '/best4.jpg', discount: '-51%' },
+  { id: 5, name: 'Hug N Snug Duvet Cover and Pillowcase Set – Charcoal', price: '£26.49 – £33.99', image: '/best5.jpg', hoverImage: '/best5-hover.jpg', discount: '-51%' },
+  { id: 6, name: 'Reversible Polycotton Fern Rouched Duvet Cover', price: '£10.37 – £12.97', image: '/best6.jpg', hoverImage: '/best6-hover.jpg', discount: '-81%' },
 ];
 
 const DesktopBestSellersSlider = () => {
@@ -81,6 +81,46 @@ const DesktopBestSellersSlider = () => {
                     transform: hoveredCard === product.id ? 'scale(1.05)' : 'scale(1)',
                   }}
                 />
+                <div style={{
+                  position: 'absolute',
+                  top: 16,
+                  left: 16,
+                  background: '#e53935',
+                  color: '#fff',
+                  fontWeight: 700,
+                  fontSize: 14,
+                  borderRadius: '50%',
+                  padding: '8px 10px',
+                  letterSpacing: 0.1,
+                  boxShadow: '0 1px 6px 0 rgba(229,57,53,0.10)',
+                  width: '50px',
+                  height: '50px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}>
+                  HOT
+                </div>
+                <div style={{
+                  position: 'absolute',
+                  top: 74,
+                  left: 16,
+                  background: '#000',
+                  color: '#fff',
+                  fontWeight: 700,
+                  fontSize: 14,
+                  borderRadius: '50%',
+                  padding: '8px 10px',
+                  letterSpacing: 0.1,
+                  boxShadow: '0 1px 6px 0 rgba(0,0,0,0.10)',
+                  width: '50px',
+                  height: '50px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}>
+                  {product.discount}
+                </div>
               </div>
               
               <div style={{
@@ -135,7 +175,9 @@ const BestSellersSlider = () => {
 
   useEffect(() => {
     const checkMobile = () => {
-      setIsMobile(window.innerWidth <= 768);
+      if (typeof window !== 'undefined') {
+        setIsMobile(window.innerWidth <= 768);
+      }
     };
     
     checkMobile();

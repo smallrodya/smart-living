@@ -1,0 +1,9 @@
+.subscribeSection {
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 40px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 120px;
+} 

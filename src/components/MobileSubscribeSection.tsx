@@ -1,59 +1,44 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
-import styles from './SubscribeSection.module.css';
-import MobileSubscribeSection from './MobileSubscribeSection';
 
-const SubscribeSection = () => {
-  const [isMobile, setIsMobile] = useState(false);
+const MobileSubscribeSection = () => {
   const [hovered, setHovered] = useState(false);
-
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth <= 768);
-    };
-
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
-
-  if (isMobile) {
-    return <MobileSubscribeSection />;
-  }
-
   return (
-    <section id="subscribe" className={styles.subscribeSection}>
+    <section id="subscribe" style={{
+      width: '100%',
+      padding: '24px 16px',
+      display: 'flex',
+      flexDirection: 'column',
+      gap: '24px'
+    }}>
       <div style={{
         width: '100%',
-        maxWidth: 500,
         background: '#fff',
         borderRadius: 14,
-        padding: '40px 32px',
+        padding: '24px 16px',
         textAlign: 'left',
-        boxShadow: '0 2px 12px rgba(0,0,0,0.07)',
-        marginRight: 'auto'
+        boxShadow: '0 2px 12px rgba(0,0,0,0.07)'
       }}>
-        <h2 style={{fontSize: 22, fontWeight: 700, marginBottom: 14}}>Subscribe to News and Offers</h2>
-        <p style={{marginBottom: 22, color: '#444'}}>Be the first to know about discounts and new products!</p>
-        <form style={{display: 'flex', gap: 12}}>
+        <h2 style={{fontSize: 20, fontWeight: 700, marginBottom: 12}}>Subscribe to News and Offers</h2>
+        <p style={{marginBottom: 20, color: '#444', fontSize: 14}}>Be the first to know about discounts and new products!</p>
+        <form style={{display: 'flex', flexDirection: 'column', gap: 12}}>
           <input 
             type="email" 
             placeholder="Your email" 
             required 
             style={{
-              padding: '12px 18px',
+              padding: '12px 16px',
               borderRadius: 7,
               border: '1.5px solid #ccc',
               fontSize: 16,
-              flex: 1
+              width: '100%'
             }} 
           />
           <button
             type="submit"
             style={{
-              padding: '12px 28px',
+              padding: '12px 24px',
               borderRadius: 7,
               background: hovered ? '#222' : '#111',
               color: '#fff',
@@ -62,7 +47,7 @@ const SubscribeSection = () => {
               border: 'none',
               cursor: 'pointer',
               transition: 'background 0.18s',
-              whiteSpace: 'nowrap'
+              width: '100%'
             }}
             onMouseEnter={() => setHovered(true)}
             onMouseLeave={() => setHovered(false)}
@@ -71,23 +56,22 @@ const SubscribeSection = () => {
       </div>
 
       <div style={{
-        flex: 1,
+        width: '100%',
         background: '#fff',
         borderRadius: 14,
-        padding: 40,
-        boxShadow: '0 2px 12px rgba(0,0,0,0.07)',
-        marginLeft: 'auto'
+        padding: '24px 16px',
+        boxShadow: '0 2px 12px rgba(0,0,0,0.07)'
       }}>
-        <h2 style={{fontSize: 22, fontWeight: 700, marginBottom: 24}}>Payment Methods</h2>
+        <h2 style={{fontSize: 20, fontWeight: 700, marginBottom: 20}}>Payment Methods</h2>
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(100px, 1fr))',
-          gap: '20px',
+          gridTemplateColumns: 'repeat(3, 1fr)',
+          gap: '16px',
           alignItems: 'center'
         }}>
           <div style={{
             width: '100%',
-            height: '40px',
+            height: '32px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center'
@@ -95,14 +79,14 @@ const SubscribeSection = () => {
             <Image
               src="/Apple_Pay_logo.svg.png"
               alt="Apple Pay"
-              width={80}
-              height={32}
+              width={60}
+              height={24}
               style={{ objectFit: 'contain' }}
             />
           </div>
           <div style={{
             width: '100%',
-            height: '40px',
+            height: '32px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center'
@@ -110,14 +94,14 @@ const SubscribeSection = () => {
             <Image
               src="/Google_Pay_Logo.svg.png"
               alt="Google Pay"
-              width={80}
-              height={32}
+              width={60}
+              height={24}
               style={{ objectFit: 'contain' }}
             />
           </div>
           <div style={{
             width: '100%',
-            height: '40px',
+            height: '32px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center'
@@ -125,14 +109,14 @@ const SubscribeSection = () => {
             <Image
               src="/Mastercard-logo.svg.png"
               alt="Mastercard"
-              width={80}
-              height={32}
+              width={60}
+              height={24}
               style={{ objectFit: 'contain' }}
             />
           </div>
           <div style={{
             width: '100%',
-            height: '40px',
+            height: '32px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center'
@@ -140,14 +124,14 @@ const SubscribeSection = () => {
             <Image
               src="/Visa_2021.svg.png"
               alt="Visa"
-              width={80}
-              height={32}
+              width={60}
+              height={24}
               style={{ objectFit: 'contain' }}
             />
           </div>
           <div style={{
             width: '100%',
-            height: '40px',
+            height: '32px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center'
@@ -155,14 +139,14 @@ const SubscribeSection = () => {
             <Image
               src="/PayPal_logo.svg.png"
               alt="PayPal"
-              width={80}
-              height={32}
+              width={60}
+              height={24}
               style={{ objectFit: 'contain' }}
             />
           </div>
           <div style={{
             width: '100%',
-            height: '40px',
+            height: '32px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center'
@@ -170,8 +154,8 @@ const SubscribeSection = () => {
             <Image
               src="/Amazon_Pay_logo.svg.png"
               alt="Amazon Pay"
-              width={80}
-              height={32}
+              width={60}
+              height={24}
               style={{ objectFit: 'contain' }}
             />
           </div>
@@ -181,4 +165,4 @@ const SubscribeSection = () => {
   );
 };
 
-export default SubscribeSection; 
+export default MobileSubscribeSection; 

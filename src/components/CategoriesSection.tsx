@@ -197,7 +197,7 @@ const DesktopCategoriesSection = () => {
               {cat.name}
             </button>
           ))}
-        </div>
+          </div>
       </div>
 
       {openIdx !== null && currentCat && (
@@ -211,28 +211,28 @@ const DesktopCategoriesSection = () => {
               ×
             </button>
 
-            <Image
-              src={currentCat.img}
-              alt={currentCat.name}
+              <Image 
+                src={currentCat.img} 
+                alt={currentCat.name} 
               width={800}
               height={200}
               className={styles.categoryImage}
-            />
+              />
 
             <div className={styles.subcategoriesGrid}>
-              {currentCat.sub.map((sub) => (
+                {currentCat.sub.map((sub) => (
                 <div key={sub.name} className={styles.subcategoryCard}>
                   <h3 className={styles.subcategoryTitle}>{sub.name}</h3>
                   <div className={styles.subcategoryLinks}>
-                    {sub.links.map((link) => (
+                      {sub.links.map((link) => (
                       <div key={link} className={styles.subcategoryLink}>
                         {link}
                       </div>
-                    ))}
+                      ))}
                   </div>
-                </div>
-              ))}
-            </div>
+                  </div>
+                ))}
+              </div>
 
             <div className={styles.navigation}>
               <button
@@ -264,7 +264,9 @@ const CategoriesSection = () => {
 
   useEffect(() => {
     const checkMobile = () => {
-      setIsMobile(window.innerWidth <= 768);
+      if (typeof window !== 'undefined') {
+        setIsMobile(window.innerWidth <= 768);
+      }
     };
     
     checkMobile();
