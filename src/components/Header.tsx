@@ -118,7 +118,6 @@ const Header = () => {
               gap: '8px'
             }}
           >
-            <span>🛒</span>
             Basket
           </a>
           <a 
@@ -135,7 +134,6 @@ const Header = () => {
               gap: '8px'
             }}
           >
-            <span>❤️</span>
             Wishlist
           </a>
           <a 
@@ -154,7 +152,6 @@ const Header = () => {
               transition: 'all 0.3s ease'
             }}
           >
-            <span>🚛</span>
             Track Order
           </a>
         </div>
