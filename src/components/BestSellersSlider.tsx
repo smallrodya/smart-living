@@ -5,7 +5,14 @@ import MobileBestSellersSlider from './MobileBestSellersSlider';
 import MobileBottomMenu from './MobileBottomMenu';
 
 const products = [
-  { id: 1, name: '3D Duvet Cover and Pillowcase Set – Black Panther', price: '£14.99 – £17.72', image: '/best1.jpg', hoverImage: '/best1.jpg', discount: '-71%' },
+  {
+    id: 1,
+    name: 'Product 1',
+    price: 99.99,
+    image: '/images/product1.jpg',
+    hoverImage: '/images/product1-hover.jpg',
+    discount: 20
+  },
   { id: 2, name: 'Reversible Polycotton Elephant Mandala Duvet Cover', price: '£10.49 – £12.97', image: '/best2.jpg', hoverImage: '/best2-hover.jpg', discount: '-71%' },
   { id: 3, name: 'Diamante 5pc Bed in a Bag – Chocolate', price: '£17.99 – £19.99', image: '/best3.jpg', hoverImage: '/best3.jpg', discount: '-56%' },
   { id: 4, name: 'Hug N Snug Duvet Cover and Pillowcase Set – Blush Pink', price: '£26.49 – £33.99', image: '/best4.jpg', hoverImage: '/best4.jpg', discount: '-51%' },

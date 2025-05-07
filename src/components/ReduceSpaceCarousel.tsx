@@ -28,26 +28,17 @@ const DesktopReduceSpaceCarousel = () => {
   useEffect(() => {
     const savedWishlist = localStorage.getItem('wishlist');
     if (savedWishlist) {
-      const items = JSON.parse(savedWishlist);
-      setWishlist(items.map((item: any) => item.id));
+      setWishlist(JSON.parse(savedWishlist));
     }
   }, []);
 
-  const toggleWishlist = (index: number) => {
+  const toggleWishlist = (id: number) => {
     setWishlist(prev => {
-      const newWishlist = prev.includes(index) 
-        ? prev.filter(i => i !== index)
-        : [...prev, index];
+      const newWishlist = prev.includes(id) 
+        ? prev.filter(itemId => itemId !== id)
+        : [...prev, id];
       
-      // Сохраняем в localStorage
-      const wishlistItems = images
-        .filter((_, i) => newWishlist.includes(i))
-        .map((item, i) => ({
-          id: newWishlist[i],
-          ...item
-        }));
-      
-      localStorage.setItem('wishlist', JSON.stringify(wishlistItems));
+      localStorage.setItem('wishlist', JSON.stringify(newWishlist));
       return newWishlist;
     });
   };

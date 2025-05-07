@@ -3,7 +3,14 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 
 const products = [
-  { id: 1, name: '3D Duvet Cover and Pillowcase Set – Black Panther', price: '£14.99 – £17.72', image: '/best1.jpg', hoverImage: '/best1.jpg', discount: '-71%' },
+  {
+    id: 1,
+    name: 'Product 1',
+    price: 99.99,
+    image: '/images/product1.jpg',
+    hoverImage: '/images/product1-hover.jpg',
+    discount: 20
+  },
   { id: 2, name: 'Reversible Polycotton Elephant Mandala Duvet Cover', price: '£10.49 – £12.97', image: '/best2.jpg', hoverImage: '/best2-hover.jpg', discount: '-71%' },
   { id: 3, name: 'Diamante 5pc Bed in a Bag – Chocolate', price: '£17.99 – £19.99', image: '/best3.jpg', hoverImage: '/best3.jpg', discount: '-56%' },
   { id: 4, name: 'Hug N Snug Duvet Cover and Pillowcase Set – Blush Pink', price: '£26.49 – £33.99', image: '/best4.jpg', hoverImage: '/best4.jpg', discount: '-51%' },
@@ -29,35 +36,24 @@ const MobileBestSellersSlider = () => {
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
   const [isHovered, setIsHovered] = useState(false);
+  const [hoveredCard, setHoveredCard] = useState<number | null>(null);
+  const [hoveredButton, setHoveredButton] = useState<number | null>(null);
   const [wishlist, setWishlist] = useState<number[]>([]);
 
   useEffect(() => {
     const savedWishlist = localStorage.getItem('wishlist');
     if (savedWishlist) {
-      const items = JSON.parse(savedWishlist);
-      setWishlist(items.map((item: any) => item.id));
+      setWishlist(JSON.parse(savedWishlist));
     }
   }, []);
 
   const toggleWishlist = (id: number) => {
     setWishlist(prev => {
       const newWishlist = prev.includes(id) 
-        ? prev.filter(i => i !== id)
+        ? prev.filter(itemId => itemId !== id)
         : [...prev, id];
       
-      // Сохраняем в localStorage
-      const wishlistItems = products
-        .filter((_, i) => newWishlist.includes(i + 1))
-        .map((item) => ({
-          id: item.id,
-          src: item.image,
-          hoverSrc: item.hoverImage,
-          title: item.name,
-          price: item.price,
-          discount: item.discount
-        }));
-      
-      localStorage.setItem('wishlist', JSON.stringify(wishlistItems));
+      localStorage.setItem('wishlist', JSON.stringify(newWishlist));
       return newWishlist;
     });
   };

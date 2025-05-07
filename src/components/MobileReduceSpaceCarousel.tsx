@@ -25,38 +25,43 @@ const arrowIcon = (
   </svg>
 );
 
+const products = [
+  {
+    id: 1,
+    name: 'Product 1',
+    price: 99.99,
+    image: '/images/product1.jpg',
+    hoverImage: '/images/product1-hover.jpg',
+    discount: 20
+  },
+  // ... existing code ...
+];
+
 const MobileReduceSpaceCarousel = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [hoveredBtn, setHoveredBtn] = useState<number | null>(null);
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
   const [isHovered, setIsHovered] = useState(false);
+  const [hoveredCard, setHoveredCard] = useState<number | null>(null);
+  const [hoveredButton, setHoveredButton] = useState<number | null>(null);
   const [wishlist, setWishlist] = useState<number[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const savedWishlist = localStorage.getItem('wishlist');
     if (savedWishlist) {
-      const items = JSON.parse(savedWishlist);
-      setWishlist(items.map((item: any) => item.id));
+      setWishlist(JSON.parse(savedWishlist));
     }
   }, []);
 
-  const toggleWishlist = (index: number) => {
+  const toggleWishlist = (id: number) => {
     setWishlist(prev => {
-      const newWishlist = prev.includes(index) 
-        ? prev.filter(i => i !== index)
-        : [...prev, index];
+      const newWishlist = prev.includes(id) 
+        ? prev.filter(itemId => itemId !== id)
+        : [...prev, id];
       
-      // Сохраняем в localStorage
-      const wishlistItems = images
-        .filter((_, i) => newWishlist.includes(i))
-        .map((item, i) => ({
-          id: newWishlist[i],
-          ...item
-        }));
-      
-      localStorage.setItem('wishlist', JSON.stringify(wishlistItems));
+      localStorage.setItem('wishlist', JSON.stringify(newWishlist));
       return newWishlist;
     });
   };
