@@ -8,6 +8,7 @@ import BigCategory from "../components/BigCategory";
 import MobileBigCategory from "../components/MobileBigCategory";
 import SubscribeSection from "../components/SubscribeSection";
 import Footer from "../components/Footer";
+import CookieBanner from "../components/CookieBanner";
 
 export default function Home() {
   return (
@@ -22,6 +23,7 @@ export default function Home() {
       <MobileBigCategory />
       <SubscribeSection />
       <Footer />
+      <CookieBanner />
     </>
   );
 }

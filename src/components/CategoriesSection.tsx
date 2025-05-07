@@ -265,7 +265,7 @@ const CategoriesSection = () => {
   useEffect(() => {
     const checkMobile = () => {
       if (typeof window !== 'undefined') {
-        setIsMobile(window.innerWidth <= 768);
+      setIsMobile(window.innerWidth <= 768);
       }
     };
     

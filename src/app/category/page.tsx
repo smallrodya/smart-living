@@ -164,6 +164,11 @@ export default function CategoryPage() {
   return (
     <div className={styles.container}>
       <div className={styles.header}>
+        <Link href="/" className={styles.backButton}>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M19 12H5M12 19l-7-7 7-7"/>
+          </svg>
+        </Link>
         <h1>Categories</h1>
       </div>
       

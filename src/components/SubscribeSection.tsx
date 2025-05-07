@@ -35,8 +35,8 @@ const SubscribeSection = () => {
         boxShadow: '0 2px 12px rgba(0,0,0,0.07)',
         marginRight: 'auto'
       }}>
-        <h2 style={{fontSize: 22, fontWeight: 700, marginBottom: 14}}>Subscribe to News and Offers</h2>
-        <p style={{marginBottom: 22, color: '#444'}}>Be the first to know about discounts and new products!</p>
+      <h2 style={{fontSize: 22, fontWeight: 700, marginBottom: 14}}>Subscribe to News and Offers</h2>
+      <p style={{marginBottom: 22, color: '#444'}}>Be the first to know about discounts and new products!</p>
         <form style={{display: 'flex', gap: 12}}>
           <input 
             type="email" 
@@ -50,24 +50,24 @@ const SubscribeSection = () => {
               flex: 1
             }} 
           />
-          <button
-            type="submit"
-            style={{
-              padding: '12px 28px',
-              borderRadius: 7,
-              background: hovered ? '#222' : '#111',
-              color: '#fff',
-              fontWeight: 700,
-              fontSize: 16,
-              border: 'none',
-              cursor: 'pointer',
-              transition: 'background 0.18s',
+        <button
+          type="submit"
+          style={{
+            padding: '12px 28px',
+            borderRadius: 7,
+            background: hovered ? '#222' : '#111',
+            color: '#fff',
+            fontWeight: 700,
+            fontSize: 16,
+            border: 'none',
+            cursor: 'pointer',
+            transition: 'background 0.18s',
               whiteSpace: 'nowrap'
-            }}
-            onMouseEnter={() => setHovered(true)}
-            onMouseLeave={() => setHovered(false)}
-          >Subscribe</button>
-        </form>
+          }}
+          onMouseEnter={() => setHovered(true)}
+          onMouseLeave={() => setHovered(false)}
+        >Subscribe</button>
+      </form>
       </div>
 
       <div style={{
