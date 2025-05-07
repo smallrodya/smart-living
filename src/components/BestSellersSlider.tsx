@@ -60,7 +60,7 @@ const DesktopBestSellersSlider = () => {
       
       // Добавляем новые товары из текущей секции
       const newItems = products
-        .filter((_, i) => newWishlist.includes(`best_${i + 1}`))
+        .filter((_, index) => newWishlist.includes(`best_${index + 1}`))
         .map((item) => ({
           id: `best_${item.id}`,
           src: item.image,
