@@ -95,7 +95,7 @@ const DesktopBestSellersSlider = () => {
           gap: 30,
           padding: '0 10px',
         }}>
-          {products.map((product, i) => (
+          {products.map((product) => (
             <div
               key={product.id}
               style={{
