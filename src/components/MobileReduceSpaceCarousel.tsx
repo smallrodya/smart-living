@@ -25,43 +25,52 @@ const arrowIcon = (
   </svg>
 );
 
-const products = [
-  {
-    id: 1,
-    name: 'Product 1',
-    price: 99.99,
-    image: '/images/product1.jpg',
-    hoverImage: '/images/product1-hover.jpg',
-    discount: 20
-  },
-  // ... existing code ...
-];
-
 const MobileReduceSpaceCarousel = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [hoveredBtn, setHoveredBtn] = useState<number | null>(null);
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
   const [isHovered, setIsHovered] = useState(false);
-  const [hoveredCard, setHoveredCard] = useState<number | null>(null);
-  const [hoveredButton, setHoveredButton] = useState<number | null>(null);
-  const [wishlist, setWishlist] = useState<number[]>([]);
+  const [wishlist, setWishlist] = useState<string[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const savedWishlist = localStorage.getItem('wishlist');
     if (savedWishlist) {
-      setWishlist(JSON.parse(savedWishlist));
+      const items = JSON.parse(savedWishlist);
+      setWishlist(items.map((item: any) => item.id));
     }
   }, []);
 
   const toggleWishlist = (id: number) => {
     setWishlist(prev => {
-      const newWishlist = prev.includes(id) 
-        ? prev.filter(itemId => itemId !== id)
-        : [...prev, id];
+      const prefixedId = `reduce_${id}`;
+      const newWishlist = prev.includes(prefixedId) 
+        ? prev.filter(i => i !== prefixedId)
+        : [...prev, prefixedId];
       
-      localStorage.setItem('wishlist', JSON.stringify(newWishlist));
+      // Получаем существующие товары из localStorage
+      const existingItems = JSON.parse(localStorage.getItem('wishlist') || '[]');
+      
+      // Фильтруем существующие товары, удаляя текущий товар если он есть
+      const filteredItems = existingItems.filter((item: any) => !item.id.startsWith('reduce_'));
+      
+      // Добавляем новые товары из текущей секции
+      const newItems = images
+        .filter((_, i) => newWishlist.includes(`reduce_${i + 1}`))
+        .map((item, i) => ({
+          id: `reduce_${i + 1}`,
+          src: item.src,
+          hoverSrc: item.hoverSrc,
+          title: item.title,
+          price: item.price,
+          discount: item.discount
+        }));
+      
+      // Объединяем существующие и новые товары
+      const wishlistItems = [...filteredItems, ...newItems];
+      
+      localStorage.setItem('wishlist', JSON.stringify(wishlistItems));
       return newWishlist;
     });
   };
@@ -198,32 +207,32 @@ const MobileReduceSpaceCarousel = () => {
                 zIndex: 2,
                 boxShadow: '0 2px 12px rgba(0,0,0,0.15)',
                 transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                transform: wishlist.includes(currentIndex) ? 'scale(1.1)' : 'scale(1)',
+                transform: wishlist.includes(`reduce_${currentIndex}`) ? 'scale(1.1)' : 'scale(1)',
                 backdropFilter: 'blur(4px)',
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.transform = wishlist.includes(currentIndex) 
+                e.currentTarget.style.transform = wishlist.includes(`reduce_${currentIndex}`) 
                   ? 'scale(1.15)' 
                   : 'scale(1.05)';
                 e.currentTarget.style.boxShadow = '0 4px 16px rgba(0,0,0,0.2)';
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.transform = wishlist.includes(currentIndex) 
+                e.currentTarget.style.transform = wishlist.includes(`reduce_${currentIndex}`) 
                   ? 'scale(1.1)' 
                   : 'scale(1)';
                 e.currentTarget.style.boxShadow = '0 2px 12px rgba(0,0,0,0.15)';
               }}
             >
               <div style={{
-                color: wishlist.includes(currentIndex) ? '#e53935' : '#e53935',
+                color: wishlist.includes(`reduce_${currentIndex}`) ? '#e53935' : '#e53935',
                 transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                transform: wishlist.includes(currentIndex) ? 'scale(1.1)' : 'scale(1)',
+                transform: wishlist.includes(`reduce_${currentIndex}`) ? 'scale(1.1)' : 'scale(1)',
               }}>
                 <svg 
                   width="24" 
                   height="24" 
                   viewBox="0 0 24 24" 
-                  fill={wishlist.includes(currentIndex) ? '#e53935' : 'none'} 
+                  fill={wishlist.includes(`reduce_${currentIndex}`) ? '#e53935' : 'none'} 
                   stroke="#e53935" 
                   strokeWidth="2" 
                   strokeLinecap="round" 

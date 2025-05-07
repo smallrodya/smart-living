@@ -23,22 +23,37 @@ const heartIcon = (
 const DesktopReduceSpaceCarousel = () => {
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
   const [hoveredBtn, setHoveredBtn] = useState<number | null>(null);
-  const [wishlist, setWishlist] = useState<number[]>([]);
+  const [wishlist, setWishlist] = useState<string[]>([]);
 
   useEffect(() => {
     const savedWishlist = localStorage.getItem('wishlist');
     if (savedWishlist) {
-      setWishlist(JSON.parse(savedWishlist));
+      const items = JSON.parse(savedWishlist);
+      setWishlist(items.map((item: any) => item.id));
     }
   }, []);
 
   const toggleWishlist = (id: number) => {
     setWishlist(prev => {
-      const newWishlist = prev.includes(id) 
-        ? prev.filter(itemId => itemId !== id)
-        : [...prev, id];
+      const prefixedId = `reduce_${id}`;
+      const newWishlist = prev.includes(prefixedId) 
+        ? prev.filter(i => i !== prefixedId)
+        : [...prev, prefixedId];
       
-      localStorage.setItem('wishlist', JSON.stringify(newWishlist));
+      // Получаем существующие товары из localStorage
+      // Сохраняем в localStorage
+      const wishlistItems = images
+        .filter((_, i) => newWishlist.includes(`reduce_${i + 1}`))
+        .map((item, i) => ({
+          id: `reduce_${i + 1}`,
+          src: item.src,
+          hoverSrc: item.hoverSrc,
+          title: item.title,
+          price: item.price,
+          discount: item.discount
+        }));
+      
+      localStorage.setItem('wishlist', JSON.stringify(wishlistItems));
       return newWishlist;
     });
   };
@@ -95,32 +110,32 @@ const DesktopReduceSpaceCarousel = () => {
                   zIndex: 2,
                   boxShadow: '0 2px 12px rgba(0,0,0,0.15)',
                   transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                  transform: wishlist.includes(i) ? 'scale(1.1)' : 'scale(1)',
+                  transform: wishlist.includes(`reduce_${i}`) ? 'scale(1.1)' : 'scale(1)',
                   backdropFilter: 'blur(4px)',
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = wishlist.includes(i) 
+                  e.currentTarget.style.transform = wishlist.includes(`reduce_${i}`) 
                     ? 'scale(1.15)' 
                     : 'scale(1.05)';
                   e.currentTarget.style.boxShadow = '0 4px 16px rgba(0,0,0,0.2)';
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = wishlist.includes(i) 
+                  e.currentTarget.style.transform = wishlist.includes(`reduce_${i}`) 
                     ? 'scale(1.1)' 
                     : 'scale(1)';
                   e.currentTarget.style.boxShadow = '0 2px 12px rgba(0,0,0,0.15)';
                 }}
               >
                 <div style={{
-                  color: wishlist.includes(i) ? '#e53935' : '#e53935',
+                  color: wishlist.includes(`reduce_${i}`) ? '#e53935' : '#e53935',
                   transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                  transform: wishlist.includes(i) ? 'scale(1.1)' : 'scale(1)',
+                  transform: wishlist.includes(`reduce_${i}`) ? 'scale(1.1)' : 'scale(1)',
                 }}>
                   <svg 
                     width="24" 
                     height="24" 
                     viewBox="0 0 24 24" 
-                    fill={wishlist.includes(i) ? '#e53935' : 'none'} 
+                    fill={wishlist.includes(`reduce_${i}`) ? '#e53935' : 'none'} 
                     stroke="#e53935" 
                     strokeWidth="2" 
                     strokeLinecap="round" 
@@ -131,8 +146,8 @@ const DesktopReduceSpaceCarousel = () => {
                 </div>
               </button>
               <Image
-                src={hoveredCard === i ? item.hoverSrc : item.src}
-                alt={item.title}
+                src={hoveredCard === i ? images[i].hoverSrc : images[i].src}
+                alt={images[i].title}
                 width={320}
                 height={240}
                 style={{
@@ -147,8 +162,8 @@ const DesktopReduceSpaceCarousel = () => {
               />
             </div>
             <div style={{padding: '14px 10px 10px 10px', width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-              <div style={{fontWeight: 600, fontSize: 15, marginBottom: 6, textAlign: 'center', letterSpacing: 0.1}}>{item.title}</div>
-              <div style={{color: '#e53935', fontWeight: 700, fontSize: 16, marginBottom: 8}}>{item.price}</div>
+              <div style={{fontWeight: 600, fontSize: 15, marginBottom: 6, textAlign: 'center', letterSpacing: 0.1}}>{images[i].title}</div>
+              <div style={{color: '#e53935', fontWeight: 700, fontSize: 16, marginBottom: 8}}>{images[i].price}</div>
               <button
                 style={{
                   background: '#111',
@@ -191,7 +206,7 @@ const DesktopReduceSpaceCarousel = () => {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center'
-            }}>{item.discount}</span>
+            }}>{images[i].discount}</span>
           </div>
         ))}
       </div>
