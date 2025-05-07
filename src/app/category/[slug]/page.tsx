@@ -1,9 +1,7 @@
 import React from 'react';
 import styles from './page.module.css';
 import CategoryContent from './CategoryContent';
-import { PageProps } from '@/types/next';
 
-// Импортируем те же категории, что и на главной странице категорий
 const categories = [
   {
     name: 'BEDDING',
@@ -42,8 +40,16 @@ const categories = [
   // ... остальные категории
 ];
 
-export default function CategoryDetailPage({ params }: PageProps) {
-  const categoryName = params.slug?.toString().split('-').map(word => word.toUpperCase()).join(' ');
+interface PageParams {
+  slug: string;
+}
+
+export default async function CategoryDetailPage({
+  params,
+}: {
+  params: PageParams;
+}) {
+  const categoryName = params.slug.split('-').map(word => word.toUpperCase()).join(' ');
   const category = categories.find(cat => cat.name === categoryName);
 
   if (!category) {
@@ -56,5 +62,5 @@ export default function CategoryDetailPage({ params }: PageProps) {
     );
   }
 
-  return <CategoryContent category={category} slug={params.slug?.toString() || ''} />;
+  return <CategoryContent category={category} slug={params.slug} />;
 } 
