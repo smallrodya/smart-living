@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 
 const products = [
@@ -17,12 +17,50 @@ const arrowIcon = (
   </svg>
 );
 
+const heartIcon = (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#e53935" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+  </svg>
+);
+
 const MobileBestSellersSlider = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [hoveredBtn, setHoveredBtn] = useState<number | null>(null);
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
   const [isHovered, setIsHovered] = useState(false);
+  const [wishlist, setWishlist] = useState<number[]>([]);
+
+  useEffect(() => {
+    const savedWishlist = localStorage.getItem('wishlist');
+    if (savedWishlist) {
+      const items = JSON.parse(savedWishlist);
+      setWishlist(items.map((item: any) => item.id));
+    }
+  }, []);
+
+  const toggleWishlist = (id: number) => {
+    setWishlist(prev => {
+      const newWishlist = prev.includes(id) 
+        ? prev.filter(i => i !== id)
+        : [...prev, id];
+      
+      // Сохраняем в localStorage
+      const wishlistItems = products
+        .filter((_, i) => newWishlist.includes(i + 1))
+        .map((item) => ({
+          id: item.id,
+          src: item.image,
+          hoverSrc: item.hoverImage,
+          title: item.name,
+          price: item.price,
+          discount: item.discount
+        }));
+      
+      localStorage.setItem('wishlist', JSON.stringify(wishlistItems));
+      return newWishlist;
+    });
+  };
 
   const nextSlide = () => {
     setCurrentIndex((prevIndex) => (prevIndex + 1) % products.length);
@@ -156,6 +194,58 @@ const MobileBestSellersSlider = () => {
                   transform: isHovered ? 'scale(1.05)' : 'scale(1)',
                 }}
               />
+              <button
+                onClick={() => toggleWishlist(currentProduct.id)}
+                style={{
+                  position: 'absolute',
+                  top: 12,
+                  right: 12,
+                  background: 'rgba(255, 255, 255, 0.95)',
+                  border: 'none',
+                  borderRadius: '50%',
+                  width: 44,
+                  height: 44,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  cursor: 'pointer',
+                  boxShadow: '0 2px 12px rgba(0,0,0,0.15)',
+                  transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                  transform: wishlist.includes(currentProduct.id) ? 'scale(1.1)' : 'scale(1)',
+                  backdropFilter: 'blur(4px)',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = wishlist.includes(currentProduct.id) 
+                    ? 'scale(1.15)' 
+                    : 'scale(1.05)';
+                  e.currentTarget.style.boxShadow = '0 4px 16px rgba(0,0,0,0.2)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = wishlist.includes(currentProduct.id) 
+                    ? 'scale(1.1)' 
+                    : 'scale(1)';
+                  e.currentTarget.style.boxShadow = '0 2px 12px rgba(0,0,0,0.15)';
+                }}
+              >
+                <div style={{
+                  color: wishlist.includes(currentProduct.id) ? '#e53935' : '#e53935',
+                  transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                  transform: wishlist.includes(currentProduct.id) ? 'scale(1.1)' : 'scale(1)',
+                }}>
+                  <svg 
+                    width="24" 
+                    height="24" 
+                    viewBox="0 0 24 24" 
+                    fill={wishlist.includes(currentProduct.id) ? '#e53935' : 'none'} 
+                    stroke="#e53935" 
+                    strokeWidth="2" 
+                    strokeLinecap="round" 
+                    strokeLinejoin="round"
+                  >
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                  </svg>
+                </div>
+              </button>
               <div style={{
                 position: 'absolute',
                 top: 12,

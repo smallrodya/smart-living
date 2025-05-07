@@ -14,9 +14,43 @@ const basketIcon = (
   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
 );
 
+const heartIcon = (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+  </svg>
+);
+
 const DesktopReduceSpaceCarousel = () => {
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
   const [hoveredBtn, setHoveredBtn] = useState<number | null>(null);
+  const [wishlist, setWishlist] = useState<number[]>([]);
+
+  useEffect(() => {
+    const savedWishlist = localStorage.getItem('wishlist');
+    if (savedWishlist) {
+      const items = JSON.parse(savedWishlist);
+      setWishlist(items.map((item: any) => item.id));
+    }
+  }, []);
+
+  const toggleWishlist = (index: number) => {
+    setWishlist(prev => {
+      const newWishlist = prev.includes(index) 
+        ? prev.filter(i => i !== index)
+        : [...prev, index];
+      
+      // Сохраняем в localStorage
+      const wishlistItems = images
+        .filter((_, i) => newWishlist.includes(i))
+        .map((item, i) => ({
+          id: newWishlist[i],
+          ...item
+        }));
+      
+      localStorage.setItem('wishlist', JSON.stringify(wishlistItems));
+      return newWishlist;
+    });
+  };
 
   return (
     <section style={{width: '100%', height: 'auto', margin: '0 auto 40px', padding: 0, textAlign: 'center'}}>
@@ -51,7 +85,60 @@ const DesktopReduceSpaceCarousel = () => {
             onMouseEnter={() => setHoveredCard(i)}
             onMouseLeave={() => setHoveredCard(null)}
           >
-            <div style={{width: '100%', aspectRatio: '4/3', overflow: 'hidden', borderTopLeftRadius: 16, borderTopRightRadius: 16}}>
+            <div style={{width: '100%', aspectRatio: '4/3', overflow: 'hidden', borderTopLeftRadius: 16, borderTopRightRadius: 16, position: 'relative'}}>
+              <button
+                onClick={() => toggleWishlist(i)}
+                style={{
+                  position: 'absolute',
+                  top: 10,
+                  right: 10,
+                  background: 'rgba(255, 255, 255, 0.95)',
+                  border: 'none',
+                  borderRadius: '50%',
+                  width: 44,
+                  height: 44,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  cursor: 'pointer',
+                  zIndex: 2,
+                  boxShadow: '0 2px 12px rgba(0,0,0,0.15)',
+                  transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                  transform: wishlist.includes(i) ? 'scale(1.1)' : 'scale(1)',
+                  backdropFilter: 'blur(4px)',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = wishlist.includes(i) 
+                    ? 'scale(1.15)' 
+                    : 'scale(1.05)';
+                  e.currentTarget.style.boxShadow = '0 4px 16px rgba(0,0,0,0.2)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = wishlist.includes(i) 
+                    ? 'scale(1.1)' 
+                    : 'scale(1)';
+                  e.currentTarget.style.boxShadow = '0 2px 12px rgba(0,0,0,0.15)';
+                }}
+              >
+                <div style={{
+                  color: wishlist.includes(i) ? '#e53935' : '#e53935',
+                  transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                  transform: wishlist.includes(i) ? 'scale(1.1)' : 'scale(1)',
+                }}>
+                  <svg 
+                    width="24" 
+                    height="24" 
+                    viewBox="0 0 24 24" 
+                    fill={wishlist.includes(i) ? '#e53935' : 'none'} 
+                    stroke="#e53935" 
+                    strokeWidth="2" 
+                    strokeLinecap="round" 
+                    strokeLinejoin="round"
+                  >
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                  </svg>
+                </div>
+              </button>
               <Image
                 src={hoveredCard === i ? item.hoverSrc : item.src}
                 alt={item.title}
