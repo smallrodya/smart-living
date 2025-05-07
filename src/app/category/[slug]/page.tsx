@@ -44,12 +44,11 @@ const categories = [
   // ... остальные категории
 ];
 
-type Props = {
-  params: { slug: string }
-  searchParams: { [key: string]: string | string[] | undefined }
-}
-
-export default function CategoryDetailPage({ params }: Props) {
+export default function CategoryDetailPage({
+  params,
+}: {
+  params: { slug: string };
+}) {
   const router = useRouter();
   const categoryName = params.slug.split('-').map(word => word.toUpperCase()).join(' ');
   const category = categories.find(cat => cat.name === categoryName);
