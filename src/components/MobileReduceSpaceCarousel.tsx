@@ -2,6 +2,15 @@
 import React, { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
 
+interface WishlistItem {
+  id: string;
+  src: string;
+  hoverSrc: string;
+  title: string;
+  price: string;
+  discount: string;
+}
+
 const images = [
   { src: '/reduce1.jpg', hoverSrc: '/reduce1-hover.jpg', title: '2 in 1 Reclining Gravity Chair and Lay Flat Sun lounger- Dark Green', price: '£34.99', discount: '-65%' },
   { src: '/reduce2.jpg', hoverSrc: '/reduce2-hover.jpg', title: '2 in 1 Reclining Gravity Chair and Lay Flat Sun lounger- Grey', price: '£34.90', discount: '-65%' },
@@ -37,8 +46,8 @@ const MobileReduceSpaceCarousel = () => {
   useEffect(() => {
     const savedWishlist = localStorage.getItem('wishlist');
     if (savedWishlist) {
-      const items = JSON.parse(savedWishlist);
-      setWishlist(items.map((item: any) => item.id));
+      const items = JSON.parse(savedWishlist) as WishlistItem[];
+      setWishlist(items.map(item => item.id));
     }
   }, []);
 
@@ -50,10 +59,10 @@ const MobileReduceSpaceCarousel = () => {
         : [...prev, prefixedId];
       
       // Получаем существующие товары из localStorage
-      const existingItems = JSON.parse(localStorage.getItem('wishlist') || '[]');
+      const existingItems = JSON.parse(localStorage.getItem('wishlist') || '[]') as WishlistItem[];
       
       // Фильтруем существующие товары, удаляя текущий товар если он есть
-      const filteredItems = existingItems.filter((item: any) => !item.id.startsWith('reduce_'));
+      const filteredItems = existingItems.filter(item => !item.id.startsWith('reduce_'));
       
       // Добавляем новые товары из текущей секции
       const newItems = images

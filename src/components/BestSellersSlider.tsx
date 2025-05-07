@@ -4,6 +4,15 @@ import Image from 'next/image';
 import MobileBestSellersSlider from './MobileBestSellersSlider';
 import MobileBottomMenu from './MobileBottomMenu';
 
+interface WishlistItem {
+  id: string;
+  src: string;
+  hoverSrc: string;
+  title: string;
+  price: string;
+  discount: string;
+}
+
 const products = [
   { id: 1, name: '3D Duvet Cover and Pillowcase Set – Black Panther', price: '£14.99 – £17.72', image: '/best1.jpg', hoverImage: '/best1.jpg', discount: '-71%' },
   { id: 2, name: 'Reversible Polycotton Elephant Mandala Duvet Cover', price: '£10.49 – £12.97', image: '/best2.jpg', hoverImage: '/best2-hover.jpg', discount: '-71%' },
@@ -31,8 +40,8 @@ const DesktopBestSellersSlider = () => {
   useEffect(() => {
     const savedWishlist = localStorage.getItem('wishlist');
     if (savedWishlist) {
-      const items = JSON.parse(savedWishlist);
-      setWishlist(items.map((item: any) => item.id));
+      const items = JSON.parse(savedWishlist) as WishlistItem[];
+      setWishlist(items.map(item => item.id));
     }
   }, []);
 
@@ -44,10 +53,10 @@ const DesktopBestSellersSlider = () => {
         : [...prev, prefixedId];
       
       // Получаем существующие товары из localStorage
-      const existingItems = JSON.parse(localStorage.getItem('wishlist') || '[]');
+      const existingItems = JSON.parse(localStorage.getItem('wishlist') || '[]') as WishlistItem[];
       
       // Фильтруем существующие товары, удаляя текущий товар если он есть
-      const filteredItems = existingItems.filter((item: any) => !item.id.startsWith('best_'));
+      const filteredItems = existingItems.filter(item => !item.id.startsWith('best_'));
       
       // Добавляем новые товары из текущей секции
       const newItems = products
