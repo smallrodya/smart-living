@@ -44,7 +44,14 @@ const categories = [
   // ... остальные категории
 ];
 
-export default function CategoryDetailPage({ params }: { params: { slug: string } }) {
+interface PageProps {
+  params: {
+    slug: string;
+  };
+  searchParams: { [key: string]: string | string[] | undefined };
+}
+
+export default function CategoryDetailPage({ params }: PageProps) {
   const router = useRouter();
   const categoryName = params.slug.split('-').map(word => word.toUpperCase()).join(' ');
   const category = categories.find(cat => cat.name === categoryName);
