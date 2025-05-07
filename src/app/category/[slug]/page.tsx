@@ -1,8 +1,6 @@
-'use client';
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import styles from './page.module.css';
 
 // Импортируем те же категории, что и на главной странице категорий
@@ -49,7 +47,6 @@ export default function CategoryDetailPage({
 }: {
   params: { slug: string };
 }) {
-  const router = useRouter();
   const categoryName = params.slug.split('-').map(word => word.toUpperCase()).join(' ');
   const category = categories.find(cat => cat.name === categoryName);
 
@@ -57,9 +54,9 @@ export default function CategoryDetailPage({
     return (
       <div className={styles.container}>
         <div className={styles.header}>
-          <button onClick={() => router.back()} className={styles.backButton}>
+          <Link href="/category" className={styles.backButton}>
             ← Back
-          </button>
+          </Link>
           <h1>Category not found</h1>
         </div>
       </div>
@@ -69,9 +66,9 @@ export default function CategoryDetailPage({
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <button onClick={() => router.back()} className={styles.backButton}>
+        <Link href="/category" className={styles.backButton}>
           ← Back
-        </button>
+        </Link>
         <h1>{category.name}</h1>
       </div>
 
