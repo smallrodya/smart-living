@@ -47,9 +47,10 @@ interface PageParams {
 export default async function CategoryDetailPage({
   params,
 }: {
-  params: PageParams;
+  params: Promise<PageParams>;
 }) {
-  const categoryName = params.slug.split('-').map(word => word.toUpperCase()).join(' ');
+  const resolvedParams = await params;
+  const categoryName = resolvedParams.slug.split('-').map(word => word.toUpperCase()).join(' ');
   const category = categories.find(cat => cat.name === categoryName);
 
   if (!category) {
@@ -62,5 +63,5 @@ export default async function CategoryDetailPage({
     );
   }
 
-  return <CategoryContent category={category} slug={params.slug} />;
+  return <CategoryContent category={category} slug={resolvedParams.slug} />;
 } 
