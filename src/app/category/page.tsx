@@ -1,10 +1,21 @@
 'use client';
-import React from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import styles from './page.module.css';
+import styles from './category.module.css';
 
-const categories = [
+interface SubCategory {
+  name: string;
+  links: string[];
+}
+
+interface Category {
+  name: string;
+  img: string;
+  sub: SubCategory[];
+}
+
+const categories: Category[] = [
   {
     name: 'BEDDING',
     img: '/cat-bedding-main.jpg',
@@ -144,36 +155,61 @@ const categories = [
 ];
 
 export default function CategoryPage() {
+  const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
+
+  const toggleCategory = (categoryName: string) => {
+    setExpandedCategory(expandedCategory === categoryName ? null : categoryName);
+  };
+
   return (
     <div className={styles.container}>
       <div className={styles.header}>
         <h1>Categories</h1>
       </div>
       
-      <div className={styles.categoriesGrid}>
+      <div className={styles.categoriesList}>
         {categories.map((category) => (
-          <Link href={`/category/${category.name.toLowerCase().replace(/\s+/g, '-')}`} key={category.name} className={styles.categoryCard}>
-            <div className={styles.imageWrapper}>
-              <Image
-                src={category.img}
-                alt={category.name}
-                width={300}
-                height={200}
-                className={styles.categoryImage}
-              />
+          <div key={category.name} className={styles.categoryItem}>
+            <div 
+              className={styles.categoryHeader}
+              onClick={() => toggleCategory(category.name)}
+            >
+              <div className={styles.categoryImageWrapper}>
+                <Image
+                  src={category.img}
+                  alt={category.name}
+                  width={60}
+                  height={60}
+                  className={styles.categoryImage}
+                />
+              </div>
+              <span className={styles.categoryName}>{category.name}</span>
+              <span className={`${styles.arrow} ${expandedCategory === category.name ? styles.arrowUp : ''}`}>
+                ›
+              </span>
             </div>
-            <div className={styles.categoryInfo}>
-              <h2 className={styles.categoryName}>{category.name}</h2>
+            
+            {expandedCategory === category.name && (
               <div className={styles.subcategories}>
                 {category.sub.map((sub) => (
                   <div key={sub.name} className={styles.subcategory}>
-                    <span className={styles.subcategoryName}>{sub.name}</span>
-                    <span className={styles.arrow}>→</span>
+                    <h3 className={styles.subcategoryTitle}>{sub.name}</h3>
+                    <div className={styles.links}>
+                      {sub.links.map((link) => (
+                        <Link 
+                          key={link} 
+                          href={`/category/${category.name.toLowerCase()}/${link.toLowerCase().replace(/\s+/g, '-')}`}
+                          className={styles.link}
+                        >
+                          {link}
+                        </Link>
+                      ))}
+                    </div>
                   </div>
                 ))}
               </div>
-            </div>
-          </Link>
+            )}
+          </div>
         ))}
       </div>
     </div>
