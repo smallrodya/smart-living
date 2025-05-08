@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import CookieBanner from '@/components/CookieBanner';
+import { useRouter } from 'next/navigation';
 
 interface WishlistItem {
   id: number;
@@ -26,6 +27,7 @@ const WishlistPage = () => {
   const [hoveredItem, setHoveredItem] = useState<number | null>(null);
   const [hoveredButton, setHoveredButton] = useState<number | null>(null);
   const [isBackHovered, setIsBackHovered] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     const savedWishlist = localStorage.getItem('wishlist');
@@ -118,32 +120,46 @@ const WishlistPage = () => {
               marginBottom: '40px',
               gap: '24px'
             }}>
-              <Link 
-                href="/"
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  color: '#666',
-                  textDecoration: 'none',
-                  fontSize: '16px',
-                  fontWeight: 500,
-                  transition: 'all 0.3s ease',
-                  padding: '8px 16px',
-                  borderRadius: '8px',
-                  background: isBackHovered ? 'rgba(0,0,0,0.05)' : 'transparent'
-                }}
-                onMouseEnter={() => setIsBackHovered(true)}
-                onMouseLeave={() => setIsBackHovered(false)}
-              >
-                <div style={{
-                  transform: isBackHovered ? 'translateX(-4px)' : 'none',
-                  transition: 'transform 0.3s ease'
-                }}>
-                  {backArrow}
-                </div>
-                Back to Home
-              </Link>
+              <div style={{padding: '20px 12px 0 12px'}}>
+                <button
+                  onClick={() => router.push('/')}
+                  style={{
+                    background: '#fff',
+                    border: 'none',
+                    borderRadius: '50%',
+                    width: 40,
+                    height: 40,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    cursor: 'pointer',
+                    boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+                    transition: 'all 0.3s ease',
+                    marginBottom: 20
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = 'scale(1.05)';
+                    e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'scale(1)';
+                    e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.1)';
+                  }}
+                >
+                  <svg 
+                    width="24" 
+                    height="24" 
+                    viewBox="0 0 24 24" 
+                    fill="none" 
+                    stroke="#222" 
+                    strokeWidth="2" 
+                    strokeLinecap="round" 
+                    strokeLinejoin="round"
+                  >
+                    <path d="M19 12H5M12 19l-7-7 7-7"/>
+                  </svg>
+                </button>
+              </div>
               <div style={{
                 flex: 1,
                 display: 'flex',

@@ -1,6 +1,7 @@
 'use client';
 import React, { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 interface WishlistItem {
   id: string;
@@ -29,6 +30,7 @@ const arrowIcon = (
 );
 
 const MobileReduceSpaceCarousel = () => {
+  const router = useRouter();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [hoveredBtn, setHoveredBtn] = useState<number | null>(null);
   const [touchStart, setTouchStart] = useState<number | null>(null);
@@ -45,6 +47,18 @@ const MobileReduceSpaceCarousel = () => {
     }
   }, []);
 
+  const handleProductClick = () => {
+    if (currentIndex === 0) { // Dark Green chair
+      router.push('/product/2-in-1-reclining-gravity-chair-dark-green');
+    } else if (currentIndex === 1) { // Grey chair
+      router.push('/product/2-in-1-reclining-gravity-chair-grey');
+    } else if (currentIndex === 2) { // Black chair
+      router.push('/product/zero-gravity-chair-black');
+    } else if (currentIndex === 3) { // Grey Zero Gravity chair
+      router.push('/product/zero-gravity-chair-grey');
+    }
+  };
+
   const toggleWishlist = (id: number) => {
     setWishlist(prev => {
       const prefixedId = `reduce_${id}`;
@@ -52,29 +66,39 @@ const MobileReduceSpaceCarousel = () => {
         ? prev.filter(i => i !== prefixedId)
         : [...prev, prefixedId];
       
-      // Получаем существующие товары из localStorage
-      const existingItems = JSON.parse(localStorage.getItem('wishlist') || '[]') as WishlistItem[];
-      
-      // Фильтруем существующие товары, удаляя текущий товар если он есть
-      const filteredItems = existingItems.filter(item => !item.id.startsWith('reduce_'));
-      
-      // Добавляем новые товары из текущей секции
-      const newItems = images
-        .filter((_, i) => newWishlist.includes(`reduce_${i + 1}`))
-        .map((item, i) => ({
-          id: `reduce_${i + 1}`,
-          src: item.src,
-          hoverSrc: item.hoverSrc,
-          title: item.title,
-          price: item.price,
-          discount: item.discount
-        }));
-      
-      // Объединяем существующие и новые товары
-      const wishlistItems = [...filteredItems, ...newItems];
-      
-      localStorage.setItem('wishlist', JSON.stringify(wishlistItems));
-      return newWishlist;
+      try {
+        const existingItems = JSON.parse(localStorage.getItem('wishlist') || '[]');
+        // Ensure we have an array and filter out invalid items
+        const validItems = Array.isArray(existingItems) 
+          ? existingItems.filter(item => 
+              item && 
+              typeof item === 'object' && 
+              'id' in item && 
+              typeof item.id === 'string' && 
+              !item.id.startsWith('reduce_')
+            )
+          : [];
+        
+        // Create new items array only for items that are in the new wishlist
+        const newItems = images
+          .filter((_, i) => newWishlist.includes(`reduce_${i}`))
+          .map((item, i) => ({
+            id: `reduce_${i}`,
+            src: item.src,
+            hoverSrc: item.hoverSrc,
+            title: item.title,
+            price: item.price,
+            discount: item.discount
+          }));
+        
+        const wishlistItems = [...validItems, ...newItems];
+        localStorage.setItem('wishlist', JSON.stringify(wishlistItems));
+        return newWishlist;
+      } catch (error) {
+        console.error('Error handling wishlist:', error);
+        // If there's an error, just update the state without modifying localStorage
+        return newWishlist;
+      }
     });
   };
 
@@ -96,48 +120,35 @@ const MobileReduceSpaceCarousel = () => {
 
   const handleTouchEnd = () => {
     if (!touchStart || !touchEnd) return;
-    
     const distance = touchStart - touchEnd;
     const isLeftSwipe = distance > 50;
     const isRightSwipe = distance < -50;
-
     if (isLeftSwipe) {
       nextSlide();
     }
     if (isRightSwipe) {
       prevSlide();
     }
-
-    setTouchStart(null);
     setTouchEnd(null);
+    setTouchStart(null);
   };
 
   const currentItem = images[currentIndex];
 
   return (
-    <section style={{
-      width: '100%',
-      height: 'auto',
-      margin: '0 auto 24px',
-      padding: 0,
-      textAlign: 'center',
+    <div style={{
       position: 'relative',
+      width: '100%',
+      maxWidth: 600,
+      margin: '0 auto',
+      padding: '20px 0',
     }}>
-      <h2 style={{
-        fontSize: 20,
-        fontWeight: 700,
-        marginBottom: 16,
-        letterSpacing: 0.2,
-        color: '#222'
-      }}>REDUCE SPACE</h2>
-      
-      <div 
+      <div
         ref={containerRef}
         style={{
           position: 'relative',
           width: '100%',
           padding: '0 40px',
-          boxSizing: 'border-box'
         }}
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
@@ -147,24 +158,26 @@ const MobileReduceSpaceCarousel = () => {
           onClick={prevSlide}
           style={{
             position: 'absolute',
-            left: 8,
+            left: 0,
             top: '50%',
             transform: 'translateY(-50%)',
-            background: 'rgba(255, 255, 255, 0.7)',
+            background: 'none',
             border: 'none',
-            borderRadius: '50%',
-            width: 48,
-            height: 48,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
             cursor: 'pointer',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+            padding: 8,
             zIndex: 2,
-            transition: 'background 0.3s ease'
+            color: '#222',
+            opacity: 0.7,
+            transition: 'all 0.3s ease',
           }}
-          onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.9)'}
-          onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.7)'}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.opacity = '1';
+            e.currentTarget.style.transform = 'translateY(-50%) scale(1.1)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.opacity = '0.7';
+            e.currentTarget.style.transform = 'translateY(-50%) scale(1)';
+          }}
         >
           {arrowIcon}
         </button>
@@ -180,9 +193,11 @@ const MobileReduceSpaceCarousel = () => {
           alignItems: 'center',
           transition: 'all 0.3s ease',
           transform: isHovered ? 'translateY(-4px)' : 'none',
+          cursor: 'pointer',
         }}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
+        onClick={handleProductClick}
         >
           <div style={{
             width: '100%',
@@ -193,7 +208,10 @@ const MobileReduceSpaceCarousel = () => {
             position: 'relative'
           }}>
             <button
-              onClick={() => toggleWishlist(currentIndex)}
+              onClick={(e) => {
+                e.stopPropagation();
+                toggleWishlist(currentIndex);
+              }}
               style={{
                 position: 'absolute',
                 top: 8,
@@ -285,99 +303,83 @@ const MobileReduceSpaceCarousel = () => {
               marginBottom: 6
             }}>{currentItem.price}</div>
             
-            <button
-              style={{
-                background: '#111',
+            <div style={{
+              display: 'flex',
+              gap: 8,
+              alignItems: 'center'
+            }}>
+              <span style={{
+                background: '#e53935',
                 color: '#fff',
-                border: 'none',
-                borderRadius: 8,
-                padding: '7px 0',
-                fontWeight: 600,
+                padding: '2px 8px',
+                borderRadius: 12,
                 fontSize: 12,
-                width: '100%',
-                marginTop: 4,
-                transition: 'background 0.18s',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: 6,
-                letterSpacing: 0.1,
-                boxShadow: hoveredBtn === currentIndex ? '0 2px 12px 0 rgba(34,34,34,0.10)' : 'none',
-              }}
-              onMouseEnter={() => setHoveredBtn(currentIndex)}
-              onMouseLeave={() => setHoveredBtn(null)}
-            >
-              {hoveredBtn === currentIndex ? basketIcon : 'Add to basket'}
-            </button>
+                fontWeight: 600,
+              }}>
+                {currentItem.discount}
+              </span>
+              <button
+                style={{
+                  background: '#222',
+                  color: '#fff',
+                  border: 'none',
+                  borderRadius: 20,
+                  padding: '6px 12px',
+                  fontSize: 12,
+                  fontWeight: 600,
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 4,
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-1px)';
+                  e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.15)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow = 'none';
+                }}
+              >
+                {basketIcon}
+                Add to Basket
+              </button>
+            </div>
           </div>
-
-          <span style={{
-            position: 'absolute',
-            top: 8,
-            left: 8,
-            background: '#e53935',
-            color: '#fff',
-            fontWeight: 700,
-            fontSize: 12,
-            borderRadius: '50%',
-            padding: '6px 8px',
-            letterSpacing: 0.1,
-            boxShadow: '0 1px 6px 0 rgba(229,57,53,0.10)',
-            width: '40px',
-            height: '40px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center'
-          }}>{currentItem.discount}</span>
         </div>
 
         <button
           onClick={nextSlide}
           style={{
             position: 'absolute',
-            right: 8,
+            right: 0,
             top: '50%',
             transform: 'translateY(-50%)',
-            background: 'rgba(255, 255, 255, 0.7)',
+            background: 'none',
             border: 'none',
-            borderRadius: '50%',
-            width: 48,
-            height: 48,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
             cursor: 'pointer',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+            padding: 8,
             zIndex: 2,
-            transition: 'background 0.3s ease'
+            color: '#222',
+            opacity: 0.7,
+            transition: 'all 0.3s ease',
           }}
-          onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.9)'}
-          onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.7)'}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.opacity = '1';
+            e.currentTarget.style.transform = 'translateY(-50%) scale(1.1)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.opacity = '0.7';
+            e.currentTarget.style.transform = 'translateY(-50%) scale(1)';
+          }}
         >
-          <div style={{ transform: 'rotate(180deg)' }}>{arrowIcon}</div>
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M9 18l6-6-6-6"/>
+          </svg>
         </button>
       </div>
-
-      <div style={{
-        display: 'flex',
-        justifyContent: 'center',
-        gap: 8,
-        marginTop: 16
-      }}>
-        {images.map((_, index) => (
-          <div
-            key={index}
-            style={{
-              width: 8,
-              height: 8,
-              borderRadius: '50%',
-              background: index === currentIndex ? '#222' : '#ddd',
-              transition: 'background 0.3s ease'
-            }}
-          />
-        ))}
-      </div>
-    </section>
+    </div>
   );
 };
 

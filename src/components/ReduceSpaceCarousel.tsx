@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import MobileReduceSpaceCarousel from './MobileReduceSpaceCarousel';
+import { useRouter } from 'next/navigation';
 
 interface WishlistItem {
   id: string;
@@ -24,6 +25,7 @@ const basketIcon = (
 );
 
 const DesktopReduceSpaceCarousel = () => {
+  const router = useRouter();
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
   const [hoveredBtn, setHoveredBtn] = useState<number | null>(null);
   const [wishlist, setWishlist] = useState<string[]>([]);
@@ -36,6 +38,18 @@ const DesktopReduceSpaceCarousel = () => {
     }
   }, []);
 
+  const handleProductClick = (index: number) => {
+    if (index === 0) { // Index 0 corresponds to the Dark Green chair
+      router.push('/product/2-in-1-reclining-gravity-chair-dark-green');
+    } else if (index === 1) { // Index 1 corresponds to the Grey chair
+      router.push('/product/2-in-1-reclining-gravity-chair-grey');
+    } else if (index === 2) { // Index 2 corresponds to the Black chair
+      router.push('/product/zero-gravity-chair-black');
+    } else if (index === 3) { // Index 3 corresponds to the Grey Zero Gravity chair
+      router.push('/product/zero-gravity-chair-grey');
+    }
+  };
+
   const toggleWishlist = (id: number) => {
     setWishlist(prev => {
       const prefixedId = `reduce_${id}`;
@@ -43,21 +57,39 @@ const DesktopReduceSpaceCarousel = () => {
         ? prev.filter(i => i !== prefixedId)
         : [...prev, prefixedId];
       
-      // Получаем существующие товары из localStorage
-      // Сохраняем в localStorage
-      const wishlistItems = images
-        .filter((_, i) => newWishlist.includes(`reduce_${i + 1}`))
-        .map((item, i) => ({
-          id: `reduce_${i + 1}`,
-          src: item.src,
-          hoverSrc: item.hoverSrc,
-          title: item.title,
-          price: item.price,
-          discount: item.discount
-        }));
-      
-      localStorage.setItem('wishlist', JSON.stringify(wishlistItems));
-      return newWishlist;
+      try {
+        const existingItems = JSON.parse(localStorage.getItem('wishlist') || '[]');
+        // Ensure we have an array and filter out invalid items
+        const validItems = Array.isArray(existingItems) 
+          ? existingItems.filter(item => 
+              item && 
+              typeof item === 'object' && 
+              'id' in item && 
+              typeof item.id === 'string' && 
+              !item.id.startsWith('reduce_')
+            )
+          : [];
+        
+        // Create new items array only for items that are in the new wishlist
+        const newItems = images
+          .filter((_, i) => newWishlist.includes(`reduce_${i}`))
+          .map((item, i) => ({
+            id: `reduce_${i}`,
+            src: item.src,
+            hoverSrc: item.hoverSrc,
+            title: item.title,
+            price: item.price,
+            discount: item.discount
+          }));
+        
+        const wishlistItems = [...validItems, ...newItems];
+        localStorage.setItem('wishlist', JSON.stringify(wishlistItems));
+        return newWishlist;
+      } catch (error) {
+        console.error('Error handling wishlist:', error);
+        // If there's an error, just update the state without modifying localStorage
+        return newWishlist;
+      }
     });
   };
 
@@ -90,13 +122,18 @@ const DesktopReduceSpaceCarousel = () => {
               transition: 'box-shadow 0.22s cubic-bezier(.4,2,.6,1), transform 0.22s cubic-bezier(.4,2,.6,1)',
               transform: hoveredCard === i ? 'translateY(-6px) scale(1.03)' : 'none',
               flex: '0 0 auto',
+              cursor: 'pointer',
             }}
             onMouseEnter={() => setHoveredCard(i)}
             onMouseLeave={() => setHoveredCard(null)}
+            onClick={() => handleProductClick(i)}
           >
             <div style={{width: '100%', aspectRatio: '4/3', overflow: 'hidden', borderTopLeftRadius: 16, borderTopRightRadius: 16, position: 'relative'}}>
               <button
-                onClick={() => toggleWishlist(i)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  toggleWishlist(i);
+                }}
                 style={{
                   position: 'absolute',
                   top: 10,
@@ -168,6 +205,10 @@ const DesktopReduceSpaceCarousel = () => {
               <div style={{fontWeight: 600, fontSize: 15, marginBottom: 6, textAlign: 'center', letterSpacing: 0.1}}>{images[i].title}</div>
               <div style={{color: '#e53935', fontWeight: 700, fontSize: 16, marginBottom: 8}}>{images[i].price}</div>
               <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  // Add to basket logic here
+                }}
                 style={{
                   background: '#111',
                   color: '#fff',
