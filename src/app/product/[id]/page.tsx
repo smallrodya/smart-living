@@ -2,38 +2,31 @@ import ProductPage from '@/components/ProductPage';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
-interface PageProps {
-  params: {
-    id: string;
-  };
-}
-
-const Page = ({ params }: PageProps) => {
+export default function Page() {
   const product = {
-    title: '2 in 1 Reclining Gravity Chair and Lay Flat Sun lounger- Grey',
-    price: '£34.90',
+    title: '2 in 1 Reclining Gravity Chair and Lay Flat Sun lounger- Dark Green',
+    price: '£34.99',
     oldPrice: '£99.99',
     discount: '-65%',
     images: [
-      '/reduce2.jpg',
-      '/reduce2-hover.jpg',
-      '/reduce2-detail1.jpg',
+      '/reduce1.jpg',
+      '/reduce1-hover.jpg',
+      '/reduce1-detail1.jpg',
+      '/reduce1-detail2.jpg'
     ],
-    description: {
-      main: 'Experience ultimate comfort with our 2-in-1 Reclining Gravity Chair and Lay Flat Sun Lounger in elegant grey. This versatile piece of outdoor furniture combines the best of both worlds - a comfortable reclining chair and a flat sun lounger.',
-      features: [
-        'Adjustable reclining positions',
-        'Durable steel frame construction',
-        'Comfortable padded fabric',
-        'Easy to clean and maintain',
-        'Perfect for outdoor relaxation'
-      ]
-    },
-    additional: {
-      material: 'Steel frame with polyester fabric',
+    description: 'Experience ultimate comfort with our 2-in-1 Reclining Gravity Chair. This versatile chair transforms from a comfortable recliner to a fully flat sun lounger, perfect for both indoor and outdoor use.',
+    features: [
+      '2-in-1 design: Reclining chair and sun lounger in one',
+      'Durable steel frame construction',
+      'Comfortable reclining function',
+      'Easy to fold and store',
+      'Perfect for indoor and outdoor use'
+    ],
+    additionalInfo: {
+      material: 'Durable waterproof textline Fabric',
       dimensions: {
-        open: '200 x 65 x 45 cm',
-        folded: '100 x 65 x 15 cm'
+        open: '120 x 65 x 45 cm',
+        folded: '120 x 65 x 15 cm'
       }
     }
   };
@@ -45,6 +38,4 @@ const Page = ({ params }: PageProps) => {
       <Footer />
     </>
   );
-};
-
-export default Page; 
+} 

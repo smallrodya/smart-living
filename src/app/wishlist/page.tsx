@@ -26,7 +26,6 @@ const WishlistPage = () => {
   const [wishlistItems, setWishlistItems] = useState<WishlistItem[]>([]);
   const [hoveredItem, setHoveredItem] = useState<number | null>(null);
   const [hoveredButton, setHoveredButton] = useState<number | null>(null);
-  const [isBackHovered, setIsBackHovered] = useState(false);
   const router = useRouter();
 
   useEffect(() => {

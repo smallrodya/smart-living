@@ -32,7 +32,6 @@ const arrowIcon = (
 const MobileReduceSpaceCarousel = () => {
   const router = useRouter();
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [hoveredBtn, setHoveredBtn] = useState<number | null>(null);
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
   const [isHovered, setIsHovered] = useState(false);
