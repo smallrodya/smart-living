@@ -25,6 +25,7 @@ const products = [
 
 const DesktopBestSellersSlider = () => {
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
+  const [hoveredBtn, setHoveredBtn] = useState<number | null>(null);
   const [wishlist, setWishlist] = useState<string[]>([]);
   const router = useRouter();
 
@@ -241,11 +242,11 @@ const DesktopBestSellersSlider = () => {
                 <h3 
                   onClick={() => handleProductClick(product.id)}
                   style={{
-                  fontSize: 18,
-                  fontWeight: 600,
-                  marginBottom: 8,
-                  color: '#222',
-                  letterSpacing: 0.2,
+                    fontSize: 18,
+                    fontWeight: 600,
+                    marginBottom: 8,
+                    color: '#222',
+                    letterSpacing: 0.2,
                     cursor: 'pointer',
                   }}
                 >{product.name}</h3>

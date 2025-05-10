@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import MobileReduceSpaceCarousel from './MobileReduceSpaceCarousel';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link';
 
 interface WishlistItem {
   id: string;
@@ -30,7 +29,6 @@ const DesktopReduceSpaceCarousel = () => {
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
   const [hoveredBtn, setHoveredBtn] = useState<number | null>(null);
   const [wishlist, setWishlist] = useState<string[]>([]);
-  const [currentImageIndexes, setCurrentImageIndexes] = useState<{ [key: number]: number }>({});
 
   useEffect(() => {
     const savedWishlist = localStorage.getItem('wishlist');
@@ -93,13 +91,6 @@ const DesktopReduceSpaceCarousel = () => {
         return newWishlist;
       }
     });
-  };
-
-  const handleImageChange = (productId: number, index: number) => {
-    setCurrentImageIndexes(prev => ({
-      ...prev,
-      [productId]: index
-    }));
   };
 
   return (
