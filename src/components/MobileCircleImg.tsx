@@ -44,16 +44,16 @@ const MobileCircleImg = () => {
               borderRadius: '50%',
               overflow: 'hidden',
               boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
-            }}>
-              <Image
-                src={`/${product.image}`}
-                alt={product.name}
-                fill
+              }}>
+                <Image
+                  src={`/${product.image}`}
+                  alt={product.name}
+                  fill
                 style={{
                   objectFit: 'cover',
                   transition: 'transform 0.3s ease'
                 }}
-              />
+                />
             </div>
             {product.link ? (
               <Link href={product.link} style={{
@@ -72,7 +72,7 @@ const MobileCircleImg = () => {
                 textAlign: 'center',
                 marginTop: '12px',
                 color: '#222',
-                fontSize: '14px',
+              fontSize: '14px', 
                 fontWeight: 500
               }}>
                 {product.name}

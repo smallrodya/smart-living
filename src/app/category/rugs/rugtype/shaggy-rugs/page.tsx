@@ -231,6 +231,7 @@ const ShaggyRugsPage = () => {
   const [wishlist, setWishlist] = useState<string[]>([]);
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 200]);
   const [selectedColors, setSelectedColors] = useState<string[]>([]);
+  const [isFiltersOpen, setIsFiltersOpen] = useState(false);
   const router = useRouter();
 
   // Extract unique colors from products
@@ -412,18 +413,41 @@ const ShaggyRugsPage = () => {
             maxWidth: '800px',
             margin: '0 auto 50px'
           }}>
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '30px',
-              padding: '0 10px'
-            }}>
+            <div 
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '30px',
+                padding: '0 10px',
+                cursor: 'pointer'
+              }}
+              onClick={() => setIsFiltersOpen(!isFiltersOpen)}
+            >
               <h2 style={{
                 fontSize: '24px',
                 fontWeight: 600,
                 color: '#222',
-                margin: 0
-              }}>Filters</h2>
+                margin: 0,
+                display: 'flex',
+                alignItems: 'center',
+                gap: '10px'
+              }}>
+                Filters
+                <svg 
+                  width="20" 
+                  height="20" 
+                  viewBox="0 0 24 24" 
+                  fill="none" 
+                  stroke="currentColor" 
+                  strokeWidth="2"
+                  style={{
+                    transform: isFiltersOpen ? 'rotate(180deg)' : 'rotate(0deg)',
+                    transition: 'transform 0.3s ease'
+                  }}
+                >
+                  <path d="M6 9l6 6 6-6"/>
+                </svg>
+              </h2>
               <div style={{
                 height: '1px',
                 flex: 1,
@@ -431,137 +455,140 @@ const ShaggyRugsPage = () => {
               }} />
             </div>
 
-            <div style={{
-              display: 'flex',
-              gap: '30px',
-              flexWrap: 'wrap',
-              padding: '0 10px'
-            }}>
-              {/* Price Range Filter */}
+            {isFiltersOpen && (
               <div style={{
-                flex: '1',
-                minWidth: '300px'
+                display: 'flex',
+                gap: '30px',
+                flexWrap: 'wrap',
+                padding: '0 10px',
+                animation: 'slideDown 0.3s ease'
               }}>
+                {/* Price Range Filter */}
                 <div style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '12px',
-                  marginBottom: '20px'
+                  flex: '1',
+                  minWidth: '300px'
                 }}>
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
-                  </svg>
-                  <span style={{
-                    fontSize: '16px',
-                    fontWeight: 500,
-                    color: '#444'
-                  }}>Price Range</span>
-                </div>
-                <div style={{
-                  padding: '0 10px'
-                }}>
-                  <input
-                    type="range"
-                    min="0"
-                    max="200"
-                    value={priceRange[1]}
-                    onChange={(e) => setPriceRange([priceRange[0], parseInt(e.target.value)])}
-                    style={{
-                      width: '100%',
-                      height: '2px',
-                      WebkitAppearance: 'none',
-                      background: '#ddd',
-                      outline: 'none',
-                      marginBottom: '15px'
-                    }}
-                  />
                   <div style={{
                     display: 'flex',
-                    justifyContent: 'space-between',
                     alignItems: 'center',
-                    color: '#666',
-                    fontSize: '15px'
+                    gap: '12px',
+                    marginBottom: '20px'
                   }}>
-                    <span>£{priceRange[0]}</span>
-                    <span>£{priceRange[1]}</span>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                    </svg>
+                    <span style={{
+                      fontSize: '16px',
+                      fontWeight: 500,
+                      color: '#444'
+                    }}>Price Range</span>
+                  </div>
+                  <div style={{
+                    padding: '0 10px'
+                  }}>
+                    <input
+                      type="range"
+                      min="0"
+                      max="200"
+                      value={priceRange[1]}
+                      onChange={(e) => setPriceRange([priceRange[0], parseInt(e.target.value)])}
+                      style={{
+                        width: '100%',
+                        height: '2px',
+                        WebkitAppearance: 'none',
+                        background: '#ddd',
+                        outline: 'none',
+                        marginBottom: '15px'
+                      }}
+                    />
+                    <div style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      color: '#666',
+                      fontSize: '15px'
+                    }}>
+                      <span>£{priceRange[0]}</span>
+                      <span>£{priceRange[1]}</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Color Filter */}
+                <div style={{
+                  flex: '1',
+                  minWidth: '300px'
+                }}>
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '12px',
+                    marginBottom: '20px'
+                  }}>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>
+                    </svg>
+                    <span style={{
+                      fontSize: '16px',
+                      fontWeight: 500,
+                      color: '#444'
+                    }}>Colors</span>
+                  </div>
+                  <div style={{
+                    display: 'flex',
+                    flexWrap: 'wrap',
+                    gap: '8px'
+                  }}>
+                    {uniqueColors.map(color => (
+                      <button
+                        key={color}
+                        onClick={() => {
+                          setSelectedColors(prev =>
+                            prev.includes(color)
+                              ? prev.filter(c => c !== color)
+                              : [...prev, color]
+                          );
+                        }}
+                        style={{
+                          padding: '8px 16px',
+                          borderRadius: '6px',
+                          border: '1px solid',
+                          borderColor: selectedColors.includes(color) ? '#222' : '#eee',
+                          background: selectedColors.includes(color) ? '#222' : 'transparent',
+                          color: selectedColors.includes(color) ? '#fff' : '#444',
+                          cursor: 'pointer',
+                          transition: 'all 0.2s ease',
+                          fontSize: '14px',
+                          fontWeight: 500,
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '6px'
+                        }}
+                        onMouseEnter={(e) => {
+                          if (!selectedColors.includes(color)) {
+                            e.currentTarget.style.borderColor = '#222';
+                            e.currentTarget.style.color = '#222';
+                          }
+                        }}
+                        onMouseLeave={(e) => {
+                          if (!selectedColors.includes(color)) {
+                            e.currentTarget.style.borderColor = '#eee';
+                            e.currentTarget.style.color = '#444';
+                          }
+                        }}
+                      >
+                        {selectedColors.includes(color) && (
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <path d="M20 6L9 17l-5-5"/>
+                          </svg>
+                        )}
+                        {color}
+                      </button>
+                    ))}
                   </div>
                 </div>
               </div>
-
-              {/* Color Filter */}
-              <div style={{
-                flex: '1',
-                minWidth: '300px'
-              }}>
-                <div style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '12px',
-                  marginBottom: '20px'
-                }}>
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>
-                  </svg>
-                  <span style={{
-                    fontSize: '16px',
-                    fontWeight: 500,
-                    color: '#444'
-                  }}>Colors</span>
-                </div>
-                <div style={{
-                  display: 'flex',
-                  flexWrap: 'wrap',
-                  gap: '8px'
-                }}>
-                  {uniqueColors.map(color => (
-                    <button
-                      key={color}
-                      onClick={() => {
-                        setSelectedColors(prev =>
-                          prev.includes(color)
-                            ? prev.filter(c => c !== color)
-                            : [...prev, color]
-                        );
-                      }}
-                      style={{
-                        padding: '8px 16px',
-                        borderRadius: '6px',
-                        border: '1px solid',
-                        borderColor: selectedColors.includes(color) ? '#222' : '#eee',
-                        background: selectedColors.includes(color) ? '#222' : 'transparent',
-                        color: selectedColors.includes(color) ? '#fff' : '#444',
-                        cursor: 'pointer',
-                        transition: 'all 0.2s ease',
-                        fontSize: '14px',
-                        fontWeight: 500,
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '6px'
-                      }}
-                      onMouseEnter={(e) => {
-                        if (!selectedColors.includes(color)) {
-                          e.currentTarget.style.borderColor = '#222';
-                          e.currentTarget.style.color = '#222';
-                        }
-                      }}
-                      onMouseLeave={(e) => {
-                        if (!selectedColors.includes(color)) {
-                          e.currentTarget.style.borderColor = '#eee';
-                          e.currentTarget.style.color = '#444';
-                        }
-                      }}
-                    >
-                      {selectedColors.includes(color) && (
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                          <path d="M20 6L9 17l-5-5"/>
-                        </svg>
-                      )}
-                      {color}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </div>
+            )}
           </div>
 
           {/* Products Count */}
@@ -762,6 +789,18 @@ const ShaggyRugsPage = () => {
       </main>
       <Footer />
       <CookieBanner />
+      <style jsx global>{`
+        @keyframes slideDown {
+          from {
+            opacity: 0;
+            transform: translateY(-10px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+      `}</style>
     </>
   );
 };

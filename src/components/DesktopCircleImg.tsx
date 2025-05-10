@@ -81,12 +81,12 @@ const DesktopCircleImg = () => {
                 {product.name}
               </Link>
             ) : (
-              <p style={{ 
-                marginTop: '10px', 
-                fontSize: '16px', 
-                fontWeight: 600, 
-                color: '#333',
-                whiteSpace: 'nowrap'
+            <p style={{ 
+              marginTop: '10px', 
+              fontSize: '16px', 
+              fontWeight: 600, 
+              color: '#333',
+              whiteSpace: 'nowrap'
               }}>
                 {product.name}
               </p>

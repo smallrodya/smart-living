@@ -319,10 +319,10 @@ const MobileBestSellersSlider = () => {
                 onClick={() => handleProductClick(currentProduct.id)}
                 style={{
                   fontSize: 15,
-                  fontWeight: 600,
+                fontWeight: 600,
                   marginBottom: 8,
-                  color: '#222',
-                  letterSpacing: 0.2,
+                color: '#222',
+                letterSpacing: 0.2,
                   lineHeight: 1.4,
                   cursor: 'pointer',
                 }}

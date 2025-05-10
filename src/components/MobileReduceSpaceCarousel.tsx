@@ -351,7 +351,7 @@ const MobileReduceSpaceCarousel = () => {
           </svg>
         </button>
       </div>
-    </div>
+      </div>
   );
 };
 
