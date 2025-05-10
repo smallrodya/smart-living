@@ -474,9 +474,6 @@ const ShaggyRugsPage = () => {
                     gap: '12px',
                     marginBottom: '20px'
                   }}>
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
-                    </svg>
                     <span style={{
                       fontSize: '16px',
                       fontWeight: 500,
