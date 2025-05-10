@@ -241,11 +241,11 @@ const DesktopBestSellersSlider = () => {
                 <h3 
                   onClick={() => handleProductClick(product.id)}
                   style={{
-                    fontSize: 18,
-                    fontWeight: 600,
-                    marginBottom: 8,
-                    color: '#222',
-                    letterSpacing: 0.2,
+                  fontSize: 18,
+                  fontWeight: 600,
+                  marginBottom: 8,
+                  color: '#222',
+                  letterSpacing: 0.2,
                     cursor: 'pointer',
                   }}
                 >{product.name}</h3>
