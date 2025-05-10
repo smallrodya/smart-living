@@ -1,6 +1,7 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 interface WishlistItem {
   id: string;
@@ -12,8 +13,8 @@ interface WishlistItem {
 }
 
 const products = [
-  { id: 1, name: '3D Duvet Cover and Pillowcase Set – Black Panther', price: '£14.99 – £17.72', image: '/best1.jpg', hoverImage: '/best1.jpg', discount: '-71%' },
-  { id: 2, name: 'Reversible Polycotton Elephant Mandala Duvet Cover', price: '£10.49 – £12.97', image: '/best2.jpg', hoverImage: '/best2-hover.jpg', discount: '-71%' },
+  { id: 1, name: '3D Duvet Cover and Pillowcase Set – Black Panther', price: '£14.99', image: '/best1.jpg', hoverImage: '/best1.jpg', discount: '-71%' },
+  { id: 2, name: 'Reversible Polycotton Elephant Mandala Duvet Cover', price: '£14.99', image: '/best2.jpg', hoverImage: '/best2.jpg', discount: '-71%' },
   { id: 3, name: 'Diamante 5pc Bed in a Bag – Chocolate', price: '£17.99 – £19.99', image: '/best3.jpg', hoverImage: '/best3.jpg', discount: '-56%' },
   { id: 4, name: 'Hug N Snug Duvet Cover and Pillowcase Set – Blush Pink', price: '£26.49 – £33.99', image: '/best4.jpg', hoverImage: '/best4.jpg', discount: '-51%' },
   { id: 5, name: 'Hug N Snug Duvet Cover and Pillowcase Set – Charcoal', price: '£26.49 – £33.99', image: '/best5.jpg', hoverImage: '/best5-hover.jpg', discount: '-51%' },
@@ -21,7 +22,7 @@ const products = [
 ];
 
 const arrowIcon = (
-  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#222" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <path d="M15 18l-6-6 6-6"/>
   </svg>
 );
@@ -33,6 +34,7 @@ const MobileBestSellersSlider = () => {
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
   const [isHovered, setIsHovered] = useState(false);
   const [wishlist, setWishlist] = useState<string[]>([]);
+  const router = useRouter();
 
   useEffect(() => {
     const savedWishlist = localStorage.getItem('wishlist');
@@ -111,6 +113,10 @@ const MobileBestSellersSlider = () => {
 
   const currentProduct = products[currentIndex];
 
+  const handleProductClick = (id: number) => {
+    router.push(`/product/bestseller/${id}`);
+  };
+
   return (
     <section style={{
       width: '100%',
@@ -151,21 +157,20 @@ const MobileBestSellersSlider = () => {
               left: 8,
               top: '50%',
               transform: 'translateY(-50%)',
-              background: 'rgba(255, 255, 255, 0.7)',
+              background: 'none',
               border: 'none',
-              borderRadius: '50%',
               width: 48,
               height: 48,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               cursor: 'pointer',
-              boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
               zIndex: 2,
-              transition: 'background 0.3s ease'
+              transition: 'opacity 0.3s ease',
+              opacity: 0.7
             }}
-            onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.9)'}
-            onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.7)'}
+            onMouseEnter={(e) => e.currentTarget.style.opacity = '1'}
+            onMouseLeave={(e) => e.currentTarget.style.opacity = '0.7'}
           >
             {arrowIcon}
           </button>
@@ -181,9 +186,11 @@ const MobileBestSellersSlider = () => {
               transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
               margin: '0 auto',
               transform: isHovered ? 'translateY(-4px)' : 'none',
+              cursor: 'pointer',
             }}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
+            onClick={() => handleProductClick(currentProduct.id)}
           >
             <div style={{
               position: 'relative',
@@ -208,7 +215,10 @@ const MobileBestSellersSlider = () => {
                 }}
               />
               <button
-                onClick={() => toggleWishlist(currentProduct.id)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  toggleWishlist(currentProduct.id);
+                }}
                 style={{
                   position: 'absolute',
                   top: 12,
@@ -305,14 +315,18 @@ const MobileBestSellersSlider = () => {
               padding: '16px 12px',
               textAlign: 'center',
             }}>
-              <h3 style={{
-                fontSize: 15,
-                fontWeight: 600,
-                marginBottom: 8,
-                color: '#222',
-                letterSpacing: 0.2,
-                lineHeight: 1.4,
-              }}>{currentProduct.name}</h3>
+              <h3 
+                onClick={() => handleProductClick(currentProduct.id)}
+                style={{
+                  fontSize: 15,
+                  fontWeight: 600,
+                  marginBottom: 8,
+                  color: '#222',
+                  letterSpacing: 0.2,
+                  lineHeight: 1.4,
+                  cursor: 'pointer',
+                }}
+              >{currentProduct.name}</h3>
               
               <p style={{
                 fontSize: 17,
@@ -320,26 +334,6 @@ const MobileBestSellersSlider = () => {
                 color: '#e53935',
                 marginBottom: 16,
               }}>{currentProduct.price}</p>
-              
-              <button
-                style={{
-                  width: '100%',
-                  padding: '10px 0',
-                  background: hoveredBtn === currentProduct.id ? '#222' : '#111',
-                  color: '#fff',
-                  border: 'none',
-                  borderRadius: 6,
-                  fontSize: 15,
-                  fontWeight: 600,
-                  cursor: 'pointer',
-                  transition: 'all 0.2s ease',
-                  boxShadow: hoveredBtn === currentProduct.id ? '0 2px 8px rgba(0,0,0,0.15)' : 'none',
-                }}
-                onMouseEnter={() => setHoveredBtn(currentProduct.id)}
-                onMouseLeave={() => setHoveredBtn(null)}
-              >
-                Add to Cart
-              </button>
             </div>
           </div>
 
@@ -350,21 +344,20 @@ const MobileBestSellersSlider = () => {
               right: 8,
               top: '50%',
               transform: 'translateY(-50%)',
-              background: 'rgba(255, 255, 255, 0.7)',
+              background: 'none',
               border: 'none',
-              borderRadius: '50%',
               width: 48,
               height: 48,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               cursor: 'pointer',
-              boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
               zIndex: 2,
-              transition: 'background 0.3s ease'
+              transition: 'opacity 0.3s ease',
+              opacity: 0.7
             }}
-            onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.9)'}
-            onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.7)'}
+            onMouseEnter={(e) => e.currentTarget.style.opacity = '1'}
+            onMouseLeave={(e) => e.currentTarget.style.opacity = '0.7'}
           >
             <div style={{ transform: 'rotate(180deg)' }}>{arrowIcon}</div>
           </button>

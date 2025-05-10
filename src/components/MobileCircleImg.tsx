@@ -2,10 +2,11 @@
 
 import React from "react";
 import Image from 'next/image';
+import Link from 'next/link';
 
 const products = [
   { name: "Carved Rugs from £12.99", image: "Carved-Rug.jpg" },
-  { name: "Shaggy Rugs from £11.98", image: "Silver-Grey.jpg" },
+  { name: "Shaggy Rugs from £11.98", image: "Silver-Grey.jpg", link: "/category/rugs/rugtype/shaggy-rugs" },
   { name: "Non Slip Mats from £5.49", image: "TRELLIS-BROWN.jpg" },
   { name: "Duvet Covers from £9.99", image: "Adrianna.jpg" },
   { name: "Bed Linen from £4.49", image: "Fitted-Sheet.jpg" },
@@ -31,61 +32,55 @@ const MobileCircleImg = () => {
         padding: '0 20px'
       }}>
         {products.map((product, index) => (
-          <div 
-            key={index} 
-            style={{ 
-              textAlign: 'center',
-              width: 'calc(50% - 20px)',
-              animation: `fadeIn 0.5s ease-in-out ${index * 0.1}s forwards`,
-              opacity: 0
-            }}
-          >
+          <div key={index} style={{
+            width: 'calc(50% - 10px)',
+            position: 'relative',
+            cursor: 'pointer'
+          }}>
             <div style={{
               width: '100%',
-              maxWidth: '180px',
-              aspectRatio: '1/1',
+              paddingTop: '100%',
+              position: 'relative',
               borderRadius: '50%',
-              background: '#e0e0e0',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
               overflow: 'hidden',
-              boxShadow: '0 4px 24px rgba(0,0,0,0.06)',
-              transition: 'transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out',
-              cursor: 'pointer',
-              margin: '0 auto'
-            }} 
-            onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.05)'} 
-            onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}>
-              <div style={{ 
-                position: 'relative', 
-                width: '100%', 
-                height: '100%' 
-              }}>
-                <Image
-                  src={`/${product.image}`}
-                  alt={product.name}
-                  fill
-                  style={{ objectFit: 'cover' }}
-                />
-              </div>
+              boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+            }}>
+              <Image
+                src={`/${product.image}`}
+                alt={product.name}
+                fill
+                style={{
+                  objectFit: 'cover',
+                  transition: 'transform 0.3s ease'
+                }}
+              />
             </div>
-            <p style={{ 
-              marginTop: '10px', 
-              fontSize: '14px', 
-              fontWeight: 600, 
-              color: '#333',
-              lineHeight: '1.3'
-            }}>{product.name}</p>
+            {product.link ? (
+              <Link href={product.link} style={{
+                display: 'block',
+                textAlign: 'center',
+                marginTop: '12px',
+                color: '#222',
+                textDecoration: 'none',
+                fontSize: '14px',
+                fontWeight: 500
+              }}>
+                {product.name}
+              </Link>
+            ) : (
+              <div style={{
+                textAlign: 'center',
+                marginTop: '12px',
+                color: '#222',
+                fontSize: '14px',
+                fontWeight: 500
+              }}>
+                {product.name}
+              </div>
+            )}
           </div>
         ))}
       </div>
-      <style jsx>{`
-        @keyframes fadeIn {
-          from { opacity: 0; transform: translateY(20px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-      `}</style>
     </section>
   );
 };

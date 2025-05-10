@@ -258,7 +258,11 @@ const WishlistPage = () => {
                       fontWeight: 700,
                       fontSize: '14px',
                       borderRadius: '50%',
-                      padding: '8px 12px',
+                      width: '47px',
+                      height: '47px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
                       boxShadow: '0 2px 8px rgba(229,57,53,0.2)',
                       backdropFilter: 'blur(4px)'
                     }}>

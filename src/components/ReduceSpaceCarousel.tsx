@@ -204,34 +204,6 @@ const DesktopReduceSpaceCarousel = () => {
             <div style={{padding: '14px 10px 10px 10px', width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
               <div style={{fontWeight: 600, fontSize: 15, marginBottom: 6, textAlign: 'center', letterSpacing: 0.1}}>{images[i].title}</div>
               <div style={{color: '#e53935', fontWeight: 700, fontSize: 16, marginBottom: 8}}>{images[i].price}</div>
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  // Add to basket logic here
-                }}
-                style={{
-                  background: '#111',
-                  color: '#fff',
-                  border: 'none',
-                  borderRadius: 9,
-                  padding: '9px 0',
-                  fontWeight: 600,
-                  fontSize: 14,
-                  width: '100%',
-                  marginTop: 7,
-                  transition: 'background 0.18s',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: 8,
-                  letterSpacing: 0.1,
-                  boxShadow: hoveredBtn === i ? '0 2px 12px 0 rgba(34,34,34,0.10)' : 'none',
-                }}
-                onMouseEnter={() => setHoveredBtn(i)}
-                onMouseLeave={() => setHoveredBtn(null)}
-              >
-                {hoveredBtn === i ? basketIcon : 'Add to basket'}
-              </button>
             </div>
             <span style={{
               position: 'absolute',
@@ -242,14 +214,12 @@ const DesktopReduceSpaceCarousel = () => {
               fontWeight: 700,
               fontSize: 14,
               borderRadius: '50%',
-              padding: '8px 10px',
-              letterSpacing: 0.1,
-              boxShadow: '0 1px 6px 0 rgba(229,57,53,0.10)',
               width: '47px',
               height: '47px',
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'center'
+              justifyContent: 'center',
+              boxShadow: '0 1px 6px 0 rgba(229,57,53,0.10)',
             }}>{images[i].discount}</span>
           </div>
         ))}

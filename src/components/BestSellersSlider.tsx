@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import MobileBestSellersSlider from './MobileBestSellersSlider';
 import MobileBottomMenu from './MobileBottomMenu';
+import { useRouter } from 'next/navigation';
 
 interface WishlistItem {
   id: string;
@@ -14,8 +15,8 @@ interface WishlistItem {
 }
 
 const products = [
-  { id: 1, name: '3D Duvet Cover and Pillowcase Set – Black Panther', price: '£14.99 – £17.72', image: '/best1.jpg', hoverImage: '/best1.jpg', discount: '-71%' },
-  { id: 2, name: 'Reversible Polycotton Elephant Mandala Duvet Cover', price: '£10.49 – £12.97', image: '/best2.jpg', hoverImage: '/best2-hover.jpg', discount: '-71%' },
+  { id: 1, name: '3D Duvet Cover and Pillowcase Set – Black Panther', price: '£14.99 - £17.72', image: '/best1.jpg', hoverImage: '/best1.jpg', discount: '-71%' },
+  { id: 2, name: 'Reversible Polycotton Elephant Mandala Duvet Cover', price: '£10.37 - £12.97', image: '/best2.jpg', hoverImage: '/best2-hover.jpg', discount: '-71%' },
   { id: 3, name: 'Diamante 5pc Bed in a Bag – Chocolate', price: '£17.99 – £19.99', image: '/best3.jpg', hoverImage: '/best3.jpg', discount: '-56%' },
   { id: 4, name: 'Hug N Snug Duvet Cover and Pillowcase Set – Blush Pink', price: '£26.49 – £33.99', image: '/best4.jpg', hoverImage: '/best4.jpg', discount: '-51%' },
   { id: 5, name: 'Hug N Snug Duvet Cover and Pillowcase Set – Charcoal', price: '£26.49 – £33.99', image: '/best5.jpg', hoverImage: '/best5-hover.jpg', discount: '-51%' },
@@ -26,6 +27,7 @@ const DesktopBestSellersSlider = () => {
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
   const [hoveredBtn, setHoveredBtn] = useState<number | null>(null);
   const [wishlist, setWishlist] = useState<string[]>([]);
+  const router = useRouter();
 
   useEffect(() => {
     const savedWishlist = localStorage.getItem('wishlist');
@@ -66,6 +68,10 @@ const DesktopBestSellersSlider = () => {
       localStorage.setItem('wishlist', JSON.stringify(wishlistItems));
       return newWishlist;
     });
+  };
+
+  const handleProductClick = (id: number) => {
+    router.push(`/product/bestseller/${id}`);
   };
 
   return (
@@ -133,7 +139,10 @@ const DesktopBestSellersSlider = () => {
                   }}
                 />
                 <button
-                  onClick={() => toggleWishlist(product.id)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    toggleWishlist(product.id);
+                  }}
                   style={{
                     position: 'absolute',
                     top: 16,
@@ -230,13 +239,17 @@ const DesktopBestSellersSlider = () => {
                 padding: '20px',
                 textAlign: 'center',
               }}>
-                <h3 style={{
-                  fontSize: 18,
-                  fontWeight: 600,
-                  marginBottom: 8,
-                  color: '#222',
-                  letterSpacing: 0.2,
-                }}>{product.name}</h3>
+                <h3 
+                  onClick={() => handleProductClick(product.id)}
+                  style={{
+                    fontSize: 18,
+                    fontWeight: 600,
+                    marginBottom: 8,
+                    color: '#222',
+                    letterSpacing: 0.2,
+                    cursor: 'pointer',
+                  }}
+                >{product.name}</h3>
                 
                 <p style={{
                   fontSize: 20,
@@ -244,26 +257,6 @@ const DesktopBestSellersSlider = () => {
                   color: '#e53935',
                   marginBottom: 16,
                 }}>{product.price}</p>
-                
-                <button
-                  style={{
-                    width: '100%',
-                    padding: '12px 0',
-                    background: hoveredBtn === product.id ? '#222' : '#111',
-                    color: '#fff',
-                    border: 'none',
-                    borderRadius: 8,
-                    fontSize: 16,
-                    fontWeight: 600,
-                    cursor: 'pointer',
-                    transition: 'all 0.2s ease',
-                    boxShadow: hoveredBtn === product.id ? '0 4px 12px rgba(0,0,0,0.15)' : 'none',
-                  }}
-                  onMouseEnter={() => setHoveredBtn(product.id)}
-                  onMouseLeave={() => setHoveredBtn(null)}
-                >
-                  Add to Cart
-                </button>
               </div>
             </div>
           ))}

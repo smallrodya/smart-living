@@ -4,8 +4,10 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
 interface ProductDimensions {
-  open: string;
-  folded: string;
+  single: string;
+  double: string;
+  king: string;
+  superKing: string;
 }
 
 interface ProductDescription {
@@ -16,6 +18,14 @@ interface ProductDescription {
 interface ProductAdditional {
   material: string;
   dimensions: ProductDimensions;
+  washing: string;
+  note: string;
+  colors: string;
+}
+
+interface ProductSize {
+  id: string;
+  label: string;
 }
 
 interface Product {
@@ -26,13 +36,16 @@ interface Product {
   images: string[];
   description: ProductDescription;
   additional: ProductAdditional;
+  sizes: ProductSize[];
+  selectedSize: string;
+  onSizeChange: (size: string) => void;
 }
 
-interface ProductPageProps {
+interface ProductPageBestSellerProps {
   product: Product;
 }
 
-const ProductPage: React.FC<ProductPageProps> = ({ product }) => {
+const ProductPageBestSeller: React.FC<ProductPageBestSellerProps> = ({ product }) => {
   const router = useRouter();
   const [selectedImage, setSelectedImage] = useState(0);
   const [activeTab, setActiveTab] = useState('description');
@@ -270,60 +283,106 @@ const ProductPage: React.FC<ProductPageProps> = ({ product }) => {
 
         {/* Product Info */}
         <div style={{
-          display: 'flex',
-          flexDirection: 'column',
-          gap: isMobile ? 16 : 24,
+          background: '#fff',
+          borderRadius: 16,
+          padding: isMobile ? 16 : 24,
+          boxShadow: '0 4px 16px rgba(0,0,0,0.08)',
         }}>
-          <div>
-            <h1 style={{
-              fontSize: isMobile ? 24 : 32,
-              fontWeight: 700,
-              marginBottom: 16,
-              color: '#222',
-              lineHeight: 1.2,
-            }}>
-              {product.title}
-            </h1>
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 12,
-              marginBottom: 8,
-            }}>
-              <p style={{
-                fontSize: isMobile ? 20 : 24,
-                fontWeight: 700,
-                color: '#e53935',
-              }}>
-                {product.price}
-              </p>
-              <p style={{
-                fontSize: isMobile ? 16 : 18,
-                fontWeight: 500,
-                color: '#999',
-                textDecoration: 'line-through',
-              }}>
-                {product.oldPrice}
-              </p>
-            </div>
-          </div>
+          <h1 style={{
+            fontSize: isMobile ? 24 : 32,
+            fontWeight: 700,
+            marginBottom: 16,
+            color: '#222',
+            lineHeight: 1.2,
+          }}>
+            {product.title}
+          </h1>
 
           <div style={{
             display: 'flex',
-            gap: 16,
             alignItems: 'center',
-            flexDirection: isMobile ? 'column' : 'row',
+            gap: 12,
+            marginBottom: 24,
+          }}>
+            <span style={{
+              fontSize: isMobile ? 24 : 32,
+              fontWeight: 700,
+              color: '#e53935',
+            }}>
+              {product.price}
+            </span>
+            <span style={{
+              fontSize: isMobile ? 16 : 20,
+              color: '#666',
+              textDecoration: 'line-through',
+            }}>
+              {product.oldPrice}
+            </span>
+          </div>
+
+          {/* Size Selection */}
+          <div style={{ marginBottom: 24 }}>
+            <h3 style={{
+              fontSize: 16,
+              fontWeight: 600,
+              marginBottom: 12,
+              color: '#222',
+            }}>
+              Choose An Option
+            </h3>
+            <div style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 8,
+            }}>
+              {product.sizes.map((size) => (
+                <button
+                  key={size.id}
+                  onClick={() => product.onSizeChange(size.id)}
+                  style={{
+                    padding: '12px 16px',
+                    border: `2px solid ${product.selectedSize === size.id ? '#e53935' : '#ddd'}`,
+                    borderRadius: 8,
+                    background: product.selectedSize === size.id ? '#fff5f5' : '#fff',
+                    color: '#222',
+                    fontSize: 16,
+                    fontWeight: 500,
+                    cursor: 'pointer',
+                    transition: 'all 0.3s ease',
+                    textAlign: 'left',
+                  }}
+                  onMouseEnter={(e) => {
+                    if (product.selectedSize !== size.id) {
+                      e.currentTarget.style.borderColor = '#e53935';
+                      e.currentTarget.style.background = '#fff5f5';
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (product.selectedSize !== size.id) {
+                      e.currentTarget.style.borderColor = '#ddd';
+                      e.currentTarget.style.background = '#fff';
+                    }
+                  }}
+                >
+                  {size.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Quantity Selector */}
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 16,
+            marginBottom: 24,
           }}>
             <div style={{
               display: 'flex',
               alignItems: 'center',
-              background: '#fff',
-              borderRadius: 12,
-              padding: '2px',
-              boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
-              border: '1px solid #eee',
-              width: isMobile ? '100%' : 'fit-content',
-              justifyContent: 'center',
+              border: '1px solid #ddd',
+              borderRadius: 8,
+              overflow: 'hidden',
             }}>
               <button
                 onClick={() => handleQuantityChange(quantity - 1)}
@@ -331,40 +390,30 @@ const ProductPage: React.FC<ProductPageProps> = ({ product }) => {
                   width: 40,
                   height: 40,
                   border: 'none',
-                  background: 'transparent',
-                  fontSize: 24,
-                  fontWeight: 300,
+                  background: '#f5f5f5',
+                  color: '#222',
+                  fontSize: 18,
                   cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  transition: 'all 0.2s',
-                  borderRadius: '8px',
-                  color: quantity > 1 ? '#222' : '#ccc',
-                  padding: 0,
+                  transition: 'all 0.3s ease',
                 }}
                 onMouseEnter={(e) => {
-                  if (quantity > 1) {
-                    e.currentTarget.style.background = '#f8f8f8';
-                    e.currentTarget.style.color = '#e53935';
-                  }
+                  e.currentTarget.style.background = '#eee';
                 }}
                 onMouseLeave={(e) => {
-                  if (quantity > 1) {
-                    e.currentTarget.style.background = 'transparent';
-                    e.currentTarget.style.color = '#222';
-                  }
+                  e.currentTarget.style.background = '#f5f5f5';
                 }}
               >
-                −
+                -
               </button>
               <span style={{
                 width: 40,
-                textAlign: 'center',
-                fontSize: 18,
-                fontWeight: 600,
+                height: 40,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: 16,
+                fontWeight: 500,
                 color: '#222',
-                userSelect: 'none',
               }}>
                 {quantity}
               </span>
@@ -374,59 +423,33 @@ const ProductPage: React.FC<ProductPageProps> = ({ product }) => {
                   width: 40,
                   height: 40,
                   border: 'none',
-                  background: 'transparent',
-                  fontSize: 24,
-                  fontWeight: 300,
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  transition: 'all 0.2s',
-                  borderRadius: '8px',
+                  background: '#f5f5f5',
                   color: '#222',
-                  padding: 0,
+                  fontSize: 18,
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease',
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.background = '#f8f8f8';
-                  e.currentTarget.style.color = '#e53935';
+                  e.currentTarget.style.background = '#eee';
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.background = 'transparent';
-                  e.currentTarget.style.color = '#222';
+                  e.currentTarget.style.background = '#f5f5f5';
                 }}
               >
                 +
               </button>
             </div>
+          </div>
+
+          {/* Action Buttons */}
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 12,
+          }}>
             <button
               style={{
-                flex: 1,
-                padding: '16px 0',
-                background: '#222',
-                color: '#fff',
-                border: 'none',
-                borderRadius: 8,
-                fontSize: 16,
-                fontWeight: 600,
-                cursor: 'pointer',
-                transition: 'all 0.3s ease',
-                width: isMobile ? '100%' : 'auto',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'translateY(-2px)';
-                e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = 'translateY(0)';
-                e.currentTarget.style.boxShadow = 'none';
-              }}
-            >
-              Add to Basket
-            </button>
-            <button
-              style={{
-                flex: 1,
-                padding: '16px 0',
+                padding: '16px 24px',
                 background: '#e53935',
                 color: '#fff',
                 border: 'none',
@@ -435,148 +458,173 @@ const ProductPage: React.FC<ProductPageProps> = ({ product }) => {
                 fontWeight: 600,
                 cursor: 'pointer',
                 transition: 'all 0.3s ease',
-                width: isMobile ? '100%' : 'auto',
               }}
               onMouseEnter={(e) => {
+                e.currentTarget.style.background = '#d32f2f';
                 e.currentTarget.style.transform = 'translateY(-2px)';
-                e.currentTarget.style.boxShadow = '0 4px 12px rgba(229,57,53,0.2)';
               }}
               onMouseLeave={(e) => {
+                e.currentTarget.style.background = '#e53935';
                 e.currentTarget.style.transform = 'translateY(0)';
-                e.currentTarget.style.boxShadow = 'none';
+              }}
+            >
+              Add to Basket
+            </button>
+            <button
+              style={{
+                padding: '16px 24px',
+                background: '#fff',
+                color: '#e53935',
+                border: '2px solid #e53935',
+                borderRadius: 8,
+                fontSize: 16,
+                fontWeight: 600,
+                cursor: 'pointer',
+                transition: 'all 0.3s ease',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = '#fff5f5';
+                e.currentTarget.style.transform = 'translateY(-2px)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = '#fff';
+                e.currentTarget.style.transform = 'translateY(0)';
               }}
             >
               Buy Now
             </button>
           </div>
 
-          <div style={{
-            marginTop: 16,
-            padding: '16px',
-            background: '#f8f8f8',
-            borderRadius: 8,
-            fontSize: isMobile ? 13 : 14,
-            color: '#666',
-            lineHeight: 1.6,
-          }}>
-            {product.title.includes('Zero Gravity Chair with Cushion & Pillow – Black') ? (
-              <>
-                <p style={{ marginBottom: 8 }}>Reclining function : 90-166 Degree</p>
-                <p>It is ideal for those lazy days of summer</p>
-              </>
-            ) : (
-              <>
-                <p style={{ marginBottom: 8 }}>Reclines through many positions</p>
-                <p style={{ marginBottom: 8 }}>Three Level Adjustment</p>
-                <p>It is ideal for those lazy days of summer</p>
-              </>
-            )}
-          </div>
-
           {/* Tabs */}
           <div style={{
+            marginTop: 32,
             borderTop: '1px solid #eee',
-            marginTop: 24,
+            paddingTop: 24,
           }}>
             <div style={{
               display: 'flex',
-              gap: isMobile ? 16 : 32,
+              gap: 24,
               marginBottom: 24,
-              overflowX: isMobile ? 'auto' : 'visible',
-              WebkitOverflowScrolling: 'touch',
-              paddingBottom: isMobile ? 8 : 0,
+              borderBottom: '1px solid #eee',
             }}>
-              {['description', 'additional', 'shipping'].map((tab) => (
-                <button
-                  key={tab}
-                  onClick={() => setActiveTab(tab)}
-                  style={{
-                    padding: '12px 0',
-                    background: 'none',
-                    border: 'none',
-                    fontSize: isMobile ? 14 : 16,
-                    fontWeight: 600,
-                    color: activeTab === tab ? '#e53935' : '#666',
-                    cursor: 'pointer',
-                    position: 'relative',
-                    transition: 'all 0.3s ease',
-                    whiteSpace: 'nowrap',
-                  }}
-                >
-                  {tab.charAt(0).toUpperCase() + tab.slice(1)}
-                  {activeTab === tab && (
-                    <div style={{
-                      position: 'absolute',
-                      bottom: -1,
-                      left: 0,
-                      width: '100%',
-                      height: 2,
-                      background: '#e53935',
-                      transition: 'all 0.3s ease',
-                    }} />
-                  )}
-                </button>
-              ))}
+              <button
+                onClick={() => setActiveTab('description')}
+                style={{
+                  padding: '12px 0',
+                  background: 'none',
+                  border: 'none',
+                  color: activeTab === 'description' ? '#e53935' : '#666',
+                  fontSize: 16,
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                  borderBottom: activeTab === 'description' ? '2px solid #e53935' : 'none',
+                }}
+              >
+                Description
+              </button>
+              <button
+                onClick={() => setActiveTab('additional')}
+                style={{
+                  padding: '12px 0',
+                  background: 'none',
+                  border: 'none',
+                  color: activeTab === 'additional' ? '#e53935' : '#666',
+                  fontSize: 16,
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                  borderBottom: activeTab === 'additional' ? '2px solid #e53935' : 'none',
+                }}
+              >
+                Additional Information
+              </button>
+              <button
+                onClick={() => setActiveTab('shipping')}
+                style={{
+                  padding: '12px 0',
+                  background: 'none',
+                  border: 'none',
+                  color: activeTab === 'shipping' ? '#e53935' : '#666',
+                  fontSize: 16,
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                  borderBottom: activeTab === 'shipping' ? '2px solid #e53935' : 'none',
+                }}
+              >
+                Shipping
+              </button>
             </div>
 
-            <div style={{
-              padding: '20px 0',
-              color: '#666',
-              lineHeight: 1.6,
-              fontSize: isMobile ? 14 : 16,
-            }}>
-              {activeTab === 'description' && (
-                <div>
-                  <p>{product.description.main}</p>
+            {activeTab === 'description' && (
+              <div style={{
+                color: '#444',
+                fontSize: 16,
+                lineHeight: 1.6,
+                whiteSpace: 'pre-line',
+              }}>
+                {product.description.main}
+              </div>
+            )}
+
+            {activeTab === 'additional' && (
+              <div style={{
+                color: '#444',
+                fontSize: 16,
+                lineHeight: 1.6,
+              }}>
+                <div style={{ marginBottom: 16 }}>
+                  <strong>Material:</strong> {product.additional.material}
+                </div>
+                <div style={{ marginBottom: 16 }}>
+                  <strong>Colors:</strong> {product.additional.colors}
+                </div>
+                <div style={{ marginBottom: 16 }}>
+                  <strong>Dimensions:</strong>
+                  <div style={{ marginTop: 8, whiteSpace: 'pre-line' }}>
+                    {product.additional.dimensions[product.selectedSize as keyof ProductDimensions]}
+                  </div>
+                </div>
+                <div style={{ marginBottom: 16 }}>
+                  <strong>Washing Instructions:</strong> {product.additional.washing}
+                </div>
+                <div style={{ marginTop: 24, color: '#666', fontStyle: 'italic' }}>
+                  {product.additional.note}
+                </div>
+              </div>
+            )}
+
+            {activeTab === 'shipping' && (
+              <div style={{
+                color: '#444',
+                fontSize: 16,
+                lineHeight: 1.6,
+              }}>
+                <h3 style={{ fontSize: 18, fontWeight: 600, marginBottom: 16, color: '#222' }}>Free Mainland UK Delivery</h3>
+                <p style={{ marginBottom: 16 }}>We offer complimentary delivery on all orders within mainland UK — no minimum spend required.</p>
+
+                <h3 style={{ fontSize: 18, fontWeight: 600, marginBottom: 16, color: '#222' }}>Same-Day Dispatch</h3>
+                <p style={{ marginBottom: 16 }}>Orders placed by 8:00 AM (Monday to Friday) are dispatched the same day. Orders placed after this time, or during weekends and bank holidays, will be dispatched on the next working day.</p>
+
+                <h3 style={{ fontSize: 18, fontWeight: 600, marginBottom: 16, color: '#222' }}>Delivery Timeframes</h3>
+                <ul style={{ paddingLeft: 20, marginBottom: 16 }}>
+                  <li>Standard Delivery (Free): Estimated delivery within 2 to 5 working days.</li>
+                  <li>Express Delivery (Paid): Delivered on the next working day.</li>
+                </ul>
+
+                <h3 style={{ fontSize: 18, fontWeight: 600, marginBottom: 16, color: '#222' }}>Packaging Information</h3>
+                <p style={{ marginBottom: 16 }}>Your bedding set will be carefully packaged to ensure it arrives in perfect condition.</p>
+
+                <h3 style={{ fontSize: 18, fontWeight: 600, marginBottom: 16, color: '#222' }}>Order Tracking</h3>
+                <p style={{ marginBottom: 16 }}>A tracking link will be emailed to you once your order has been dispatched, so you can monitor your delivery status in real time.</p>
+
+                <h3 style={{ fontSize: 18, fontWeight: 600, marginBottom: 16, color: '#222' }}>Need Help?</h3>
+                <p style={{ marginBottom: 8 }}>If you experience any issues with your delivery, our customer service team is happy to assist.</p>
+                <p>
+                  📧 Email: <a href="mailto:support@smart-living.co.uk" style={{ color: '#e53935', textDecoration: 'none' }}>support@smart-living.co.uk</a>
                   <br />
-                  <p>Features:</p>
-                  <ul style={{ paddingLeft: 20, marginTop: 8 }}>
-                    {product.description.features.map((feature, index) => (
-                      <li key={index}>{feature}</li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-              {activeTab === 'additional' && (
-                <div>
-                  <p>Product Specifications:</p>
-                  <ul style={{ paddingLeft: 20, marginTop: 8 }}>
-                    <li>Material: {product.additional.material}</li>
-                    <li>Dimensions (Open): {product.additional.dimensions.open}</li>
-                    <li>Dimensions (Folded): {product.additional.dimensions.folded}</li>
-                  </ul>
-                </div>
-              )}
-              {activeTab === 'shipping' && (
-                <div>
-                  <h3 style={{ fontSize: isMobile ? 16 : 18, fontWeight: 600, marginBottom: 16, color: '#222' }}>Free Mainland UK Delivery</h3>
-                  <p style={{ marginBottom: 16 }}>We offer complimentary delivery on all orders within mainland UK — no minimum spend required.</p>
-
-                  <h3 style={{ fontSize: isMobile ? 16 : 18, fontWeight: 600, marginBottom: 16, color: '#222' }}>Same-Day Dispatch</h3>
-                  <p style={{ marginBottom: 16 }}>Orders placed by 8:00 AM (Monday to Friday) are dispatched the same day. Orders placed after this time, or during weekends and bank holidays, will be dispatched on the next working day.</p>
-
-                  <h3 style={{ fontSize: isMobile ? 16 : 18, fontWeight: 600, marginBottom: 16, color: '#222' }}>Delivery Timeframes</h3>
-                  <ul style={{ paddingLeft: 20, marginBottom: 16 }}>
-                    <li>Standard Delivery (Free): Estimated delivery within 2 to 5 working days.</li>
-                    <li>Express Delivery (Paid): Delivered on the next working day.</li>
-                  </ul>
-
-                  <h3 style={{ fontSize: isMobile ? 16 : 18, fontWeight: 600, marginBottom: 16, color: '#222' }}>Packaging Information</h3>
-                  <p style={{ marginBottom: 16 }}>Please note: Due to courier requirements, larger rugs may be shipped folded rather than rolled. This does not impact the quality or performance of the product.</p>
-
-                  <h3 style={{ fontSize: isMobile ? 16 : 18, fontWeight: 600, marginBottom: 16, color: '#222' }}>Order Tracking</h3>
-                  <p style={{ marginBottom: 16 }}>A tracking link will be emailed to you once your order has been dispatched, so you can monitor your delivery status in real time.</p>
-
-                  <h3 style={{ fontSize: isMobile ? 16 : 18, fontWeight: 600, marginBottom: 16, color: '#222' }}>Need Help?</h3>
-                  <p style={{ marginBottom: 8 }}>If you experience any issues with your delivery, our customer service team is happy to assist.</p>
-                  <p>
-                    📧 Email: <a href="mailto:support@smart-living.co.uk" style={{ color: '#e53935', textDecoration: 'none' }}>support@smart-living.co.uk</a>
-                    <br />
-                    📞 Phone: <a href="tel:01384521170" style={{ color: '#e53935', textDecoration: 'none' }}>01384 521170</a>
-                  </p>
-                </div>
-              )}
-            </div>
+                  📞 Phone: <a href="tel:01384521170" style={{ color: '#e53935', textDecoration: 'none' }}>01384 521170</a>
+                </p>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -584,4 +632,4 @@ const ProductPage: React.FC<ProductPageProps> = ({ product }) => {
   );
 };
 
-export default ProductPage; 
+export default ProductPageBestSeller; 

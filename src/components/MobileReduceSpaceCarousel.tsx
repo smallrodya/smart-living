@@ -142,7 +142,7 @@ const MobileReduceSpaceCarousel = () => {
       margin: '0 auto',
       padding: '20px 0',
     }}>
-      <div
+      <div 
         ref={containerRef}
         style={{
           position: 'relative',
@@ -262,6 +262,23 @@ const MobileReduceSpaceCarousel = () => {
                 </svg>
               </div>
             </button>
+            <span style={{
+              position: 'absolute',
+              top: 8,
+              left: 8,
+              background: '#e53935',
+              color: '#fff',
+              fontWeight: 700,
+              fontSize: 14,
+              borderRadius: '50%',
+              width: '40px',
+              height: '40px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              boxShadow: '0 1px 6px 0 rgba(229,57,53,0.10)',
+              zIndex: 2
+            }}>{currentItem.discount}</span>
             <Image
               src={isHovered ? currentItem.hoverSrc : currentItem.src}
               alt={currentItem.title}
@@ -301,50 +318,6 @@ const MobileReduceSpaceCarousel = () => {
               fontSize: 14,
               marginBottom: 6
             }}>{currentItem.price}</div>
-            
-            <div style={{
-              display: 'flex',
-              gap: 8,
-              alignItems: 'center'
-            }}>
-              <span style={{
-                background: '#e53935',
-                color: '#fff',
-                padding: '2px 8px',
-                borderRadius: 12,
-                fontSize: 12,
-                fontWeight: 600,
-              }}>
-                {currentItem.discount}
-              </span>
-              <button
-                style={{
-                  background: '#222',
-                  color: '#fff',
-                  border: 'none',
-                  borderRadius: 20,
-                  padding: '6px 12px',
-                  fontSize: 12,
-                  fontWeight: 600,
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 4,
-                  cursor: 'pointer',
-                  transition: 'all 0.3s ease',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = 'translateY(-1px)';
-                  e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.15)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = 'translateY(0)';
-                  e.currentTarget.style.boxShadow = 'none';
-                }}
-              >
-                {basketIcon}
-                Add to Basket
-              </button>
-            </div>
           </div>
         </div>
 
