@@ -35,6 +35,7 @@ const MobileBestSellersSlider = () => {
   const [isHovered, setIsHovered] = useState(false);
   const [wishlist, setWishlist] = useState<string[]>([]);
   const router = useRouter();
+  const [currentImageIndexes, setCurrentImageIndexes] = useState<{ [key: number]: number }>({});
 
   useEffect(() => {
     const savedWishlist = localStorage.getItem('wishlist');
@@ -115,6 +116,13 @@ const MobileBestSellersSlider = () => {
 
   const handleProductClick = (id: number) => {
     router.push(`/product/bestseller/${id}`);
+  };
+
+  const handleImageChange = (productId: number, index: number) => {
+    setCurrentImageIndexes(prev => ({
+      ...prev,
+      [productId]: index
+    }));
   };
 
   return (

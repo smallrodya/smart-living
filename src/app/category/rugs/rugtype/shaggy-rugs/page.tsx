@@ -9,7 +9,7 @@ import { useRouter } from 'next/navigation';
 interface Product {
   id: number;
   name: string;
-  price: string;
+  price: number;
   image: string;
   hoverImage: string;
   discount: string;
@@ -22,7 +22,7 @@ const products: Product[] = [
   { 
     id: 1, 
     name: 'Shaggy Rug – Aubergine', 
-    price: '£14.43 – £106.74', 
+    price: 14.43, 
     image: '/shaggy1.jpg', 
     hoverImage: '/shaggy1-hover.jpg', 
     discount: '-60%',
@@ -31,7 +31,7 @@ const products: Product[] = [
   { 
     id: 2, 
     name: 'Shaggy Rug – Black', 
-    price: '£14.43 – £106.74', 
+    price: 14.43, 
     image: '/shaggy2.jpg', 
     hoverImage: '/shaggy2-hover.jpg', 
     discount: '-60%',
@@ -40,7 +40,7 @@ const products: Product[] = [
   { 
     id: 3, 
     name: 'Shaggy Rug – Brown', 
-    price: '£14.43 – £106.74', 
+    price: 14.43, 
     image: '/shaggy3.jpg', 
     hoverImage: '/shaggy3-hover.jpg', 
     discount: '-60%',
@@ -50,7 +50,7 @@ const products: Product[] = [
   { 
     id: 4, 
     name: 'Shaggy Rug – Cream', 
-    price: '£14.43 – £106.74', 
+    price: 14.43, 
     image: '/shaggy4.jpg', 
     hoverImage: '/shaggy4-hover.jpg', 
     discount: '-60%',
@@ -60,7 +60,7 @@ const products: Product[] = [
   { 
     id: 5, 
     name: 'Shaggy Rug – Dark Beige', 
-    price: '£14.43 – £106.74', 
+    price: 14.43, 
     image: '/shaggy5.jpg', 
     hoverImage: '/shaggy5-hover.jpg', 
     discount: '-60%',
@@ -69,7 +69,7 @@ const products: Product[] = [
   { 
     id: 6, 
     name: 'Shaggy Rug – Dark Grey', 
-    price: '£14.43 – £106.74', 
+    price: 14.43, 
     image: '/shaggy6.jpg', 
     hoverImage: '/shaggy6-hover.jpg', 
     discount: '-60%',
@@ -78,7 +78,7 @@ const products: Product[] = [
   { 
     id: 7, 
     name: 'Shaggy Rug – Duck Egg', 
-    price: '£14.43 – £106.74', 
+    price: 14.43, 
     image: '/shaggy7.jpg', 
     hoverImage: '/shaggy7-hover.jpg', 
     discount: '-60%',
@@ -87,7 +87,7 @@ const products: Product[] = [
   { 
     id: 8, 
     name: 'Shaggy Rug – Dusky Pink', 
-    price: '£14.43 – £106.74', 
+    price: 14.43, 
     image: '/shaggy8.jpg', 
     hoverImage: '/shaggy8-hover.jpg', 
     discount: '-60%',
@@ -97,7 +97,7 @@ const products: Product[] = [
   { 
     id: 9, 
     name: 'Shaggy Rug – Emerald', 
-    price: '£14.43 – £106.74', 
+    price: 14.43, 
     image: '/shaggy9.jpg', 
     hoverImage: '/shaggy9-hover.jpg', 
     discount: '-60%',
@@ -107,7 +107,7 @@ const products: Product[] = [
   { 
     id: 10, 
     name: 'Shaggy Rug – Green', 
-    price: '£14.43 – £106.74', 
+    price: 14.43, 
     image: '/shaggy10.jpg', 
     hoverImage: '/shaggy10-hover.jpg', 
     discount: '-60%',
@@ -116,7 +116,7 @@ const products: Product[] = [
   { 
     id: 11, 
     name: 'Shaggy Rug – Ink', 
-    price: '£14.43 – £106.74', 
+    price: 14.43, 
     image: '/shaggy11.jpg', 
     hoverImage: '/shaggy11-hover.jpg', 
     discount: '-60%',
@@ -125,7 +125,7 @@ const products: Product[] = [
   { 
     id: 12, 
     name: 'Shaggy Rug – Latte', 
-    price: '£14.43 – £106.74', 
+    price: 14.43, 
     image: '/shaggy12.jpg', 
     hoverImage: '/shaggy12-hover.jpg', 
     discount: '-60%',
@@ -134,7 +134,7 @@ const products: Product[] = [
   { 
     id: 13, 
     name: 'Shaggy Rug – Light Beige', 
-    price: '£14.43 – £106.74', 
+    price: 14.43, 
     image: '/shaggy13.jpg', 
     hoverImage: '/shaggy13-hover.jpg', 
     discount: '-60%',
@@ -143,7 +143,7 @@ const products: Product[] = [
   { 
     id: 14, 
     name: 'Shaggy Rug – Mauve', 
-    price: '£14.43 – £106.74', 
+    price: 14.43, 
     image: '/shaggy14.jpg', 
     hoverImage: '/shaggy14-hover.jpg', 
     discount: '-60%',
@@ -152,7 +152,7 @@ const products: Product[] = [
   { 
     id: 15, 
     name: 'Shaggy Rug – Oatmeal', 
-    price: '£14.43 – £106.74', 
+    price: 14.43, 
     image: '/shaggy15.jpg', 
     hoverImage: '/shaggy15-hover.jpg', 
     discount: '-60%',
@@ -161,7 +161,7 @@ const products: Product[] = [
   { 
     id: 16, 
     name: 'Shaggy Rug – Ochre', 
-    price: '£14.43 – £106.74', 
+    price: 14.43, 
     image: '/shaggy16.jpg', 
     hoverImage: '/shaggy16-hover.jpg', 
     discount: '-60%',
@@ -170,7 +170,7 @@ const products: Product[] = [
   { 
     id: 17, 
     name: 'Shaggy Rug – Orange', 
-    price: '£14.43 – £106.74', 
+    price: 14.43, 
     image: '/shaggy17.jpg', 
     hoverImage: '/shaggy17-hover.jpg', 
     discount: '-60%',
@@ -179,7 +179,7 @@ const products: Product[] = [
   { 
     id: 18, 
     name: 'Shaggy Rug – Red', 
-    price: '£14.43 – £106.74', 
+    price: 14.43, 
     image: '/shaggy18.jpg', 
     hoverImage: '/shaggy18-hover.jpg', 
     discount: '-60%',
@@ -188,7 +188,7 @@ const products: Product[] = [
   { 
     id: 19, 
     name: 'Shaggy Rug – Silver/Grey', 
-    price: '£14.43 – £106.74', 
+    price: 14.43, 
     image: '/shaggy19.jpg', 
     hoverImage: '/shaggy19-hover.jpg', 
     discount: '-60%',
@@ -198,7 +198,7 @@ const products: Product[] = [
   { 
     id: 20, 
     name: 'Shaggy Rug – Soft Lilac', 
-    price: '£14.43 – £106.74', 
+    price: 14.43, 
     image: '/shaggy20.jpg', 
     hoverImage: '/shaggy20-hover.jpg', 
     isSoldOut: true,
@@ -208,7 +208,7 @@ const products: Product[] = [
   { 
     id: 21, 
     name: 'Shaggy Rug – Teal', 
-    price: '£14.43 – £106.74', 
+    price: 14.43, 
     image: '/shaggy21.jpg', 
     hoverImage: '/shaggy21-hover.jpg', 
     discount: '-60%',
@@ -217,7 +217,7 @@ const products: Product[] = [
   { 
     id: 22, 
     name: 'Shaggy Rug – Terracotta', 
-    price: '£14.43 – £106.74', 
+    price: 14.43, 
     image: '/shaggy22.jpg', 
     hoverImage: '/shaggy22-hover.jpg', 
     discount: '-60%',
@@ -239,7 +239,7 @@ const ShaggyRugsPage = () => {
   // Filter products based on price and color
   const filteredProducts = products.filter(product => {
     const [minPrice, maxPrice] = priceRange;
-    const price = parseFloat(product.price.split('£')[1].split('–')[0].trim());
+    const price = product.price;
     const colorMatch = selectedColors.length === 0 || selectedColors.includes(product.color);
     return price >= minPrice && price <= maxPrice && colorMatch;
   });
