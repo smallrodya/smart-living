@@ -29,13 +29,11 @@ const arrowIcon = (
 
 const MobileBestSellersSlider = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [hoveredBtn, setHoveredBtn] = useState<number | null>(null);
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
   const [isHovered, setIsHovered] = useState(false);
   const [wishlist, setWishlist] = useState<string[]>([]);
   const router = useRouter();
-  const [currentImageIndexes, setCurrentImageIndexes] = useState<{ [key: number]: number }>({});
 
   useEffect(() => {
     const savedWishlist = localStorage.getItem('wishlist');
@@ -116,13 +114,6 @@ const MobileBestSellersSlider = () => {
 
   const handleProductClick = (id: number) => {
     router.push(`/product/bestseller/${id}`);
-  };
-
-  const handleImageChange = (productId: number, index: number) => {
-    setCurrentImageIndexes(prev => ({
-      ...prev,
-      [productId]: index
-    }));
   };
 
   return (

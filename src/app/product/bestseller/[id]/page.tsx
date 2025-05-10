@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import ProductPageBestSeller from '@/components/ProductPageBestSeller';
 
-export default function ProductPage({ params }: { params: { id: string } }) {
+export default function ProductPage() {
   const [selectedSize, setSelectedSize] = useState('single');
 
   const product = {

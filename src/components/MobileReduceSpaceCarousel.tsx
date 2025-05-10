@@ -33,7 +33,6 @@ const MobileReduceSpaceCarousel = () => {
   const [isHovered, setIsHovered] = useState(false);
   const [wishlist, setWishlist] = useState<string[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
-  const [currentImageIndexes, setCurrentImageIndexes] = useState<{ [key: number]: number }>({});
 
   useEffect(() => {
     const savedWishlist = localStorage.getItem('wishlist');
@@ -130,13 +129,6 @@ const MobileReduceSpaceCarousel = () => {
   };
 
   const currentItem = images[currentIndex];
-
-  const handleImageChange = (productId: number, index: number) => {
-    setCurrentImageIndexes(prev => ({
-      ...prev,
-      [productId]: index
-    }));
-  };
 
   return (
     <div style={{

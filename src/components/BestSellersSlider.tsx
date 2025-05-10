@@ -25,7 +25,6 @@ const products = [
 
 const DesktopBestSellersSlider = () => {
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
-  const [hoveredBtn, setHoveredBtn] = useState<number | null>(null);
   const [wishlist, setWishlist] = useState<string[]>([]);
   const router = useRouter();
 

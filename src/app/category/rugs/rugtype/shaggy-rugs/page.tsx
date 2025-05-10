@@ -18,6 +18,15 @@ interface Product {
   color: string;
 }
 
+interface WishlistItem {
+  id: string;
+  src: string;
+  hoverSrc: string;
+  title: string;
+  price: number;
+  discount: string;
+}
+
 const products: Product[] = [
   { 
     id: 1, 
@@ -247,8 +256,8 @@ const ShaggyRugsPage = () => {
   useEffect(() => {
     const savedWishlist = localStorage.getItem('wishlist');
     if (savedWishlist) {
-      const items = JSON.parse(savedWishlist);
-      setWishlist(items.map((item: any) => item.id));
+      const items = JSON.parse(savedWishlist) as WishlistItem[];
+      setWishlist(items.map(item => item.id));
     }
   }, []);
 
