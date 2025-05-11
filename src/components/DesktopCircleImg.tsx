@@ -5,7 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 const products = [
-  { name: "Carved Rugs from £12.99", image: "Carved-Rug.jpg" },
+  { name: "Carved Rugs from £12.99", image: "Carved-Rug.jpg", link: "/category/rugs/rugtype/carved-rugs" },
   { name: "Shaggy Rugs from £11.98", image: "Silver-Grey.jpg", link: "/category/rugs/rugtype/shaggy-rugs" },
   { name: "Non Slip Mats from £5.49", image: "TRELLIS-BROWN.jpg" },
   { name: "Duvet Covers from £9.99", image: "Adrianna.jpg" },
