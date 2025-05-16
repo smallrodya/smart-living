@@ -52,7 +52,7 @@ const MobileBigCategory = () => {
   return (
     <section className={styles.section}>
       <div className={styles.container}>
-        <h2 className={styles.sectionTitle}>ALL CATEGORY</h2>
+        <h2 className={styles.sectionTitle}>All CATEGORIES</h2>
         <div className={styles.navigation}>
           <button 
             onClick={prevCategory}
