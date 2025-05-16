@@ -5,8 +5,8 @@ import Image from 'next/image';
 import styles from './BigCategory.module.css';
 
 const categories = [
-  { name: "KIDS COLLECTION", image: "Cids.jpg", productCount: 86 },
-  { name: "SHOP CIDS COLLECTION BY TYPE", image: "cids2.jpg", productCount: 76 },
+  { name: "KIDS COLLECTION", image: "CIDS.jpg", productCount: 86 },
+  { name: "SHOP KIDS COLLECTION BY TYPE", image: "cids2.jpg", productCount: 76 },
   { name: "5 PC BED IN A BAG", image: "BEDABAG.jpg", productCount: 11 },
   { name: "CLEARANCE SALE", image: "CLEARANCESALE.JPG", productCount: 96 },
   { name: "SHOP DUVET SET BY COLOUR", image: "SHOP.jpg", productCount: 428 },
@@ -49,7 +49,7 @@ const BigCategory = () => {
   return (
     <section className={styles.section}>
       <div className={styles.container}>
-        <h2 className={styles.sectionTitle}>ALL CATEGORY</h2>
+        <h2 className={styles.sectionTitle}>All CATEGORIES</h2>
         <div className={styles.categoriesGrid}>
           {currentCategories.map((category, index) => (
             <div key={index} className={styles.categoryCard}>
