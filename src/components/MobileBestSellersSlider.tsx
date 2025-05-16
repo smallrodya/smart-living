@@ -144,7 +144,8 @@ const MobileBestSellersSlider = () => {
             position: 'relative',
             width: '100%',
             padding: '0 40px',
-            boxSizing: 'border-box'
+            boxSizing: 'border-box',
+            marginBottom: 40,
           }}
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}

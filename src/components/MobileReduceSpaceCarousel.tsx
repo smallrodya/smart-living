@@ -148,6 +148,7 @@ const MobileReduceSpaceCarousel = () => {
           position: 'relative',
           width: '100%',
           padding: '0 40px',
+          marginBottom: 40,
         }}
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
@@ -351,7 +352,102 @@ const MobileReduceSpaceCarousel = () => {
           </svg>
         </button>
       </div>
+
+      {/* Text blocks section */}
+      <div style={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 16,
+        padding: '20px 16px',
+        borderTop: '1px solid #eee',
+        marginTop: 20,
+      }}>
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: 4,
+        }}>
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#222" strokeWidth="1.5">
+            <path d="M20 7h-3V4H7v3H4v14h16V7zM7 7h10M12 12v6M9 12v6M15 12v6"/>
+          </svg>
+          <span style={{ 
+            fontSize: 14, 
+            fontWeight: 600, 
+            color: '#222',
+          }}>FREE SHIPPING</span>
+          <span style={{ 
+            fontSize: 12, 
+            color: '#666', 
+            textAlign: 'center',
+          }}>All over the UK</span>
+        </div>
+
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: 4,
+        }}>
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#222" strokeWidth="1.5">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+          <span style={{ 
+            fontSize: 14, 
+            fontWeight: 600, 
+            color: '#222',
+          }}>FREE RETURNS</span>
+          <span style={{ 
+            fontSize: 12, 
+            color: '#666', 
+            textAlign: 'center',
+          }}>30-days free return policy.</span>
+        </div>
+
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: 4,
+        }}>
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#222" strokeWidth="1.5">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+          </svg>
+          <span style={{ 
+            fontSize: 14, 
+            fontWeight: 600, 
+            color: '#222',
+          }}>SECURED PAYMENTS</span>
+          <span style={{ 
+            fontSize: 12, 
+            color: '#666', 
+            textAlign: 'center',
+          }}>We accept all credit cards.</span>
+        </div>
+
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: 4,
+        }}>
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#222" strokeWidth="1.5">
+            <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+          </svg>
+          <span style={{ 
+            fontSize: 14, 
+            fontWeight: 600, 
+            color: '#222',
+          }}>24/7 HELP CENTER</span>
+          <span style={{ 
+            fontSize: 12, 
+            color: '#666', 
+            textAlign: 'center',
+          }}>Dedicated 24/7 support</span>
+        </div>
       </div>
+    </div>
   );
 };
 
