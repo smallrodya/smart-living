@@ -335,46 +335,6 @@ const DesktopBestSellersSlider = () => {
                   color: '#e53935',
                   marginBottom: 16,
                 }}>{product.price}</p>
-
-                <div style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: '8px',
-                  alignItems: 'center'
-                }}>
-                  {Object.entries(product.sizes).map(([size, available]) => (
-                    <div
-                      key={size}
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '8px',
-                        fontSize: '14px',
-                        color: available ? '#444' : '#999'
-                      }}
-                    >
-                      <svg
-                        width="16"
-                        height="16"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke={available ? '#222' : '#999'}
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        {available ? (
-                          <path d="M20 6L9 17l-5-5"/>
-                        ) : (
-                          <path d="M18 6L6 18M6 6l12 12"/>
-                        )}
-                      </svg>
-                      {size === 'single' && 'Single (135cm x 200cm)'}
-                      {size === 'double' && 'Double (200cm x 200cm)'}
-                      {size === 'king' && 'King (220cm x 235cm)'}
-                    </div>
-                  ))}
-                </div>
               </div>
             </div>
           ))}

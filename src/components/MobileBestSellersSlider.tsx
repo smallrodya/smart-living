@@ -414,50 +414,6 @@ const MobileBestSellersSlider = () => {
               fontSize: 14,
               marginBottom: 6
             }}>{currentProduct.price}</div>
-
-            <div style={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '4px',
-              alignItems: 'center',
-              width: '100%',
-              padding: '0 8px'
-            }}>
-              {Object.entries(currentProduct.sizes).map(([size, available]) => (
-                <div
-                  key={size}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '6px',
-                    fontSize: '12px',
-                    color: available ? '#444' : '#999',
-                    width: '100%',
-                    justifyContent: 'center'
-                  }}
-                >
-                  <svg
-                    width="14"
-                    height="14"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke={available ? '#222' : '#999'}
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    {available ? (
-                      <path d="M20 6L9 17l-5-5"/>
-                    ) : (
-                      <path d="M18 6L6 18M6 6l12 12"/>
-                    )}
-                  </svg>
-                  {size === 'single' && 'Single (135cm x 200cm)'}
-                  {size === 'double' && 'Double (200cm x 200cm)'}
-                  {size === 'king' && 'King (220cm x 235cm)'}
-                </div>
-              ))}
-            </div>
           </div>
         </div>
 
