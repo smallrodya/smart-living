@@ -22,7 +22,7 @@ const categories: Category[] = [
       {
         name: 'DUVET SET',
         links: [
-          { label: 'Shop Duvet Set by Type', href: '/categories/bedding/duvet-type' },
+          { label: 'Shop Duvet Set by Type', href: '/shop-duvet-set-by-type' },
           { label: 'Shop Duvet Set by Colour', href: '/categories/bedding/duvet-colour' },
           { label: 'Shop Duvet Set under £10', href: '/categories/bedding/under-10' },
           { label: 'Clearance', href: '/categories/bedding/clearance' },

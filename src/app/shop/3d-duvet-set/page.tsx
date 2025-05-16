@@ -17,398 +17,288 @@ interface Product {
   isSoldOut?: boolean;
   color: string;
   sizes: {
-    size1: boolean; // 60cm X 110cm
-    size2: boolean; // 60cm X 220cm
-    size3: boolean; // 80cm X 150cm
-    size4: boolean; // 120cm X 170cm
-    size5: boolean; // 160cm X 230cm
-    size6: boolean; // 200cm X 290cm
+    single: boolean;
+    double: boolean;
+    king: boolean;
   };
 }
 
 const products: Product[] = [
   { 
     id: 1, 
-    name: 'Shaggy Rug – Aubergine', 
-    price: '£14.43 – £106.74', 
-    image: '/shaggy1.jpg', 
-    hoverImage: '/shaggy1-hover.jpg', 
-    discount: '-60%',
-    color: 'Aubergine',
+    name: '3D Duvet Cover and Pillowcase Set – Bear', 
+    price: '£14.99 – £17.72', 
+    image: '/3d-bear.jpg', 
+    hoverImage: '/3d-bear-hover.jpg', 
+    discount: '-71%',
+    color: 'Bear',
     sizes: {
-      size1: true,
-      size2: true,
-      size3: true,
-      size4: true,
-      size5: true,
-      size6: true
+      single: true,
+      double: true,
+      king: true
     }
   },
   { 
     id: 2, 
-    name: 'Shaggy Rug – Black', 
-    price: '£14.43 – £106.74', 
-    image: '/shaggy2.jpg', 
-    hoverImage: '/shaggy2-hover.jpg', 
-    discount: '-60%',
-    color: 'Black',
+    name: '3D Duvet Cover and Pillowcase Set – Black Panther', 
+    price: '£14.99 – £17.72', 
+    image: '/SHOP3DUVET.jpg', 
+    hoverImage: '/SHOP3DUVET.jpg', 
+    discount: '-71%',
+    isHot: true,
+    color: 'Black Panther',
     sizes: {
-      size1: true,
-      size2: true,
-      size3: true,
-      size4: true,
-      size5: true,
-      size6: true
+      single: true,
+      double: true,
+      king: true
     }
   },
   { 
     id: 3, 
-    name: 'Shaggy Rug – Brown', 
-    price: '£14.43 – £106.74', 
-    image: '/shaggy3.jpg', 
-    hoverImage: '/shaggy3-hover.jpg', 
-    discount: '-60%',
-    isSoldOut: false,
-    color: 'Brown',
+    name: '3D Duvet Cover and Pillowcase Set – Bulldog', 
+    price: '£14.99 – £17.72', 
+    image: '/3d-bulldog.jpg', 
+    hoverImage: '/3d-bulldog.jpg', 
+    discount: '-71%',
+    isSoldOut: true,
+    color: 'Bulldog',
     sizes: {
-      size1: false,
-      size2: false,
-      size3: false,
-      size4: false,
-      size5: false,
-      size6: false
+      single: false,
+      double: false,
+      king: false
     }
   },
   { 
     id: 4, 
-    name: 'Shaggy Rug – Cream', 
-    price: '£14.43 – £106.74', 
-    image: '/shaggy4.jpg', 
-    hoverImage: '/shaggy4-hover.jpg', 
-    discount: '-60%',
-    isSoldOut: true,
-    color: 'Cream',
+    name: '3D Duvet Cover and Pillowcase Set – Cat', 
+    price: '£14.99 – £17.72', 
+    image: '/3d-cat.jpg', 
+    hoverImage: '/3d-cat.jpg', 
+    discount: '-71%',
+    color: 'Cat',
     sizes: {
-      size1: false,
-      size2: false,
-      size3: false,
-      size4: false,
-      size5: false,
-      size6: false
+      single: true,
+      double: true,
+      king: true
     }
   },
   { 
     id: 5, 
-    name: 'Shaggy Rug – Dark Beige', 
-    price: '£14.43 – £106.74', 
-    image: '/shaggy5.jpg', 
-    hoverImage: '/shaggy5-hover.jpg', 
-    discount: '-60%',
-    color: 'Dark Beige',
+    name: '3D Duvet Cover and Pillowcase Set – Husky', 
+    price: '£14.99 – £17.72', 
+    image: '/3d-husky.jpg', 
+    hoverImage: '/3d-husky.jpg', 
+    discount: '-71%',
+    color: 'Husky',
     sizes: {
-      size1: true,
-      size2: true,
-      size3: true,
-      size4: true,
-      size5: true,
-      size6: true
+      single: true,
+      double: true,
+      king: true
     }
   },
   { 
     id: 6, 
-    name: 'Shaggy Rug – Dark Grey', 
-    price: '£14.43 – £106.74', 
-    image: '/shaggy6.jpg', 
-    hoverImage: '/shaggy6-hover.jpg', 
-    discount: '-60%',
-    color: 'Dark Grey',
+    name: '3D Duvet Cover and Pillowcase Set – Leopard', 
+    price: '£14.99 – £17.72', 
+    image: '/3d-leopard.jpg', 
+    hoverImage: '/3d-leopard.jpg', 
+    discount: '-71%',
+    color: 'Leopard',
     sizes: {
-      size1: true,
-      size2: true,
-      size3: true,
-      size4: true,
-      size5: true,
-      size6: true
+      single: true,
+      double: true,
+      king: true
     }
   },
   { 
     id: 7, 
-    name: 'Shaggy Rug – Duck Egg', 
-    price: '£14.43 – £106.74', 
-    image: '/shaggy7.jpg', 
-    hoverImage: '/shaggy7-hover.jpg', 
-    discount: '-60%',
-    color: 'Duck Egg',
+    name: '3D Duvet Cover and Pillowcase Set – Lion', 
+    price: '£14.99 – £17.72', 
+    image: '/3d-lion.jpg', 
+    hoverImage: '/3d-lion.jpg', 
+    discount: '-71%',
+    color: 'Lion',
     sizes: {
-      size1: true,
-      size2: true,
-      size3: true,
-      size4: true,
-      size5: true,
-      size6: true
+      single: true,
+      double: true,
+      king: true
     }
   },
   { 
     id: 8, 
-    name: 'Shaggy Rug – Dusky Pink', 
-    price: '£14.43 – £106.74', 
-    image: '/shaggy8.jpg', 
-    hoverImage: '/shaggy8-hover.jpg', 
-    discount: '-60%',
-    color: 'Dusky Pink',
+    name: '3D Duvet Cover and Pillowcase Set – Penguin', 
+    price: '£14.99 – £17.72', 
+    image: '/3d-penguin.jpg', 
+    hoverImage: '/3d-penguin.jpg', 
+    discount: '-71%',
+    isSoldOut: true,
+    color: 'Penguin',
     sizes: {
-      size1: true,
-      size2: true,
-      size3: true,
-      size4: true,
-      size5: true,
-      size6: true
+      single: false,
+      double: false,
+      king: false
     }
   },
   { 
     id: 9, 
-    name: 'Shaggy Rug – Emerald', 
-    price: '£14.43 – £106.74', 
-    image: '/shaggy9.jpg', 
-    hoverImage: '/shaggy9-hover.jpg', 
-    discount: '-60%',
-    isHot: true,
-    color: 'Emerald',
+    name: '3D Duvet Cover and Pillowcase Set – Polar Bear', 
+    price: '£14.99 – £17.72', 
+    image: '/3d-polar-bear.jpg', 
+    hoverImage: '/3d-polar-bear.jpg', 
+    discount: '-71%',
+    isSoldOut: true,
+    color: 'Polar Bear',
     sizes: {
-      size1: true,
-      size2: true,
-      size3: true,
-      size4: true,
-      size5: true,
-      size6: true
+      single: false,
+      double: false,
+      king: false
     }
   },
   { 
     id: 10, 
-    name: 'Shaggy Rug – Green', 
-    price: '£14.43 – £106.74', 
-    image: '/shaggy10.jpg', 
-    hoverImage: '/shaggy10-hover.jpg', 
-    discount: '-60%',
-    color: 'Green',
+    name: '3D Duvet Cover and Pillowcase Set – Pug', 
+    price: '£14.99 – £17.72', 
+    image: '/3d-pug.jpg', 
+    hoverImage: '/3d-pug.jpg', 
+    discount: '-71%',
+    color: 'Pug',
     sizes: {
-      size1: true,
-      size2: true,
-      size3: true,
-      size4: true,
-      size5: true,
-      size6: true
+      single: true,
+      double: true,
+      king: true
     }
   },
   { 
     id: 11, 
-    name: 'Shaggy Rug – Ink', 
-    price: '£14.43 – £106.74', 
-    image: '/shaggy11.jpg', 
-    hoverImage: '/shaggy11-hover.jpg', 
-    discount: '-60%',
-    color: 'Ink',
+    name: '3D Duvet Cover and Pillowcase Set – Stallion', 
+    price: '£14.99 – £17.72', 
+    image: '/3d-stallion.jpg', 
+    hoverImage: '/3d-stallion.jpg', 
+    discount: '-71%',
+    color: 'Stallion',
     sizes: {
-      size1: true,
-      size2: true,
-      size3: true,
-      size4: true,
-      size5: true,
-      size6: true
+      single: true,
+      double: true,
+      king: true
     }
   },
   { 
     id: 12, 
-    name: 'Shaggy Rug – Latte', 
-    price: '£14.43 – £106.74', 
-    image: '/shaggy12.jpg', 
-    hoverImage: '/shaggy12-hover.jpg', 
-    discount: '-60%',
-    color: 'Latte',
+    name: '3D Duvet Cover and Pillowcase Set – Sweet Pug', 
+    price: '£14.99 – £17.72', 
+    image: '/3d-sweet-pug.jpg', 
+    hoverImage: '/3d-sweet-pug.jpg', 
+    discount: '-71%',
+    color: 'Sweet Pug',
     sizes: {
-      size1: true,
-      size2: true,
-      size3: true,
-      size4: true,
-      size5: true,
-      size6: true
+      single: true,
+      double: true,
+      king: true
     }
   },
   { 
     id: 13, 
-    name: 'Shaggy Rug – Light Beige', 
-    price: '£14.43 – £106.74', 
-    image: '/shaggy13.jpg', 
-    hoverImage: '/shaggy13-hover.jpg', 
-    discount: '-60%',
-    color: 'Light Beige',
+    name: '3D Duvet Cover and Pillowcase Set – Tiger', 
+    price: '£14.99 – £17.72', 
+    image: '/3d-tiger.jpg', 
+    hoverImage: '/3d-tiger.jpg', 
+    discount: '-71%',
+    color: 'Tiger',
     sizes: {
-      size1: true,
-      size2: true,
-      size3: true,
-      size4: true,
-      size5: true,
-      size6: true
+      single: true,
+      double: true,
+      king: true
     }
   },
   { 
     id: 14, 
-    name: 'Shaggy Rug – Mauve', 
-    price: '£14.43 – £106.74', 
-    image: '/shaggy14.jpg', 
-    hoverImage: '/shaggy14-hover.jpg', 
-    discount: '-60%',
-    color: 'Mauve',
+    name: '3D Duvet Cover and Pillowcase Set – Tiger Face Brown', 
+    price: '£14.99 – £17.72', 
+    image: '/3d-tiger-face-brown.jpg', 
+    hoverImage: '/3d-tiger-face-brown.jpg', 
+    discount: '-71%',
+    isSoldOut: true,
+    color: 'Tiger Face Brown',
     sizes: {
-      size1: true,
-      size2: true,
-      size3: true,
-      size4: true,
-      size5: true,
-      size6: true
+      single: false,
+      double: false,
+      king: false
     }
   },
   { 
     id: 15, 
-    name: 'Shaggy Rug – Oatmeal', 
-    price: '£14.43 – £106.74', 
-    image: '/shaggy15.jpg', 
-    hoverImage: '/shaggy15-hover.jpg', 
-    discount: '-60%',
-    color: 'Oatmeal',
+    name: '3D Duvet Cover and Pillowcase Set – Tiger Face White', 
+    price: '£14.99 – £17.72', 
+    image: '/3d-tiger-face-white.jpg', 
+    hoverImage: '/3d-tiger-face-white.jpg', 
+    discount: '-71%',
+    isSoldOut: true,
+    color: 'Tiger Face White',
     sizes: {
-      size1: true,
-      size2: true,
-      size3: true,
-      size4: true,
-      size5: true,
-      size6: true
+      single: false,
+      double: false,
+      king: false
     }
   },
   { 
     id: 16, 
-    name: 'Shaggy Rug – Ochre', 
-    price: '£14.43 – £106.74', 
-    image: '/shaggy16.jpg', 
-    hoverImage: '/shaggy16-hover.jpg', 
-    discount: '-60%',
-    color: 'Ochre',
+    name: '3D Duvet Cover and Pillowcase Set – White Tiger', 
+    price: '£14.99 – £17.72', 
+    image: '/3d-white-tiger.jpg', 
+    hoverImage: '/3d-white-tiger.jpg', 
+    discount: '-71%',
+    color: 'White Tiger',
     sizes: {
-      size1: true,
-      size2: true,
-      size3: true,
-      size4: true,
-      size5: true,
-      size6: true
+      single: true,
+      double: true,
+      king: true
     }
   },
   { 
     id: 17, 
-    name: 'Shaggy Rug – Orange', 
-    price: '£14.43 – £106.74', 
-    image: '/shaggy17.jpg', 
-    hoverImage: '/shaggy17-hover.jpg', 
-    discount: '-60%',
-    color: 'Orange',
+    name: '3D Duvet Cover and Pillowcase Set – Wolf', 
+    price: '£14.99 – £17.72', 
+    image: '/3d-wolf.jpg', 
+    hoverImage: '/3d-wolf.jpg', 
+    discount: '-72%',
+    color: 'Wolf',
     sizes: {
-      size1: true,
-      size2: true,
-      size3: true,
-      size4: true,
-      size5: true,
-      size6: true
+      single: true,
+      double: true,
+      king: true
     }
   },
   { 
     id: 18, 
-    name: 'Shaggy Rug – Red', 
-    price: '£14.43 – £106.74', 
-    image: '/shaggy18.jpg', 
-    hoverImage: '/shaggy18-hover.jpg', 
-    discount: '-60%',
-    color: 'Red',
+    name: '3D Geo Luxury Lurex Jacquard Cuff Panel Duvet Cover With Pillowcases – Grey', 
+    price: '£14.70 – £19.89', 
+    image: '/3d-geo-grey.jpg', 
+    hoverImage: '/3d-geo-grey.jpg', 
+    discount: '-72%',
+    color: 'Grey',
     sizes: {
-      size1: true,
-      size2: true,
-      size3: true,
-      size4: true,
-      size5: true,
-      size6: true
+      single: true,
+      double: true,
+      king: true
     }
   },
   { 
     id: 19, 
-    name: 'Shaggy Rug – Silver/Grey', 
-    price: '£14.43 – £106.74', 
-    image: '/shaggy19.jpg', 
-    hoverImage: '/shaggy19-hover.jpg', 
-    discount: '-60%',
-    isHot: true,
-    color: 'Silver/Grey',
+    name: '3D Geo Luxury Lurex Jacquard Cuff Panel Duvet Cover With Pillowcases – White', 
+    price: '£14.70 – £19.89', 
+    image: '/3d-geo-white.jpg', 
+    hoverImage: '/3d-geo-white.jpg', 
+    discount: '-72%',
+    color: 'White',
     sizes: {
-      size1: true,
-      size2: true,
-      size3: true,
-      size4: true,
-      size5: true,
-      size6: true
-    }
-  },
-  { 
-    id: 20, 
-    name: 'Shaggy Rug – Soft Lilac', 
-    price: '£14.43 – £106.74', 
-    image: '/shaggy20.jpg', 
-    hoverImage: '/shaggy20-hover.jpg', 
-    isSoldOut: true,
-    discount: '-60%',
-    color: 'Soft Lilac',
-    sizes: {
-      size1: false,
-      size2: false,
-      size3: false,
-      size4: false,
-      size5: false,
-      size6: false
-    }
-  },
-  { 
-    id: 21, 
-    name: 'Shaggy Rug – Teal', 
-    price: '£14.43 – £106.74', 
-    image: '/shaggy21.jpg', 
-    hoverImage: '/shaggy21-hover.jpg', 
-    discount: '-60%',
-    color: 'Teal',
-    sizes: {
-      size1: true,
-      size2: true,
-      size3: true,
-      size4: true,
-      size5: true,
-      size6: true
-    }
-  },
-  { 
-    id: 22, 
-    name: 'Shaggy Rug – Terracotta', 
-    price: '£14.43 – £106.74', 
-    image: '/shaggy22.jpg', 
-    hoverImage: '/shaggy22-hover.jpg', 
-    discount: '-60%',
-    color: 'Terracotta',
-    sizes: {
-      size1: true,
-      size2: true,
-      size3: true,
-      size4: true,
-      size5: true,
-      size6: true
+      single: true,
+      double: true,
+      king: true
     }
   }
 ];
 
-const ShaggyRugsPage = () => {
+const ThreeDDuvetSetPage = () => {
   const [hoveredItem, setHoveredItem] = useState<number | null>(null);
   const [hoveredButton, setHoveredButton] = useState<number | null>(null);
   const [wishlist, setWishlist] = useState<string[]>([]);
@@ -426,14 +316,7 @@ const ShaggyRugsPage = () => {
     const [minPrice, maxPrice] = priceRange;
     const price = parseFloat(product.price.split('£')[1].split('–')[0].trim());
     const colorMatch = selectedColors.length === 0 || selectedColors.includes(product.color);
-    const sizeMatch = selectedSizes.length === 0 || selectedSizes.some(size => 
-      size === 'size1' ? product.sizes.size1 :
-      size === 'size2' ? product.sizes.size2 :
-      size === 'size3' ? product.sizes.size3 :
-      size === 'size4' ? product.sizes.size4 :
-      size === 'size5' ? product.sizes.size5 :
-      size === 'size6' ? product.sizes.size6 : false
-    );
+    const sizeMatch = selectedSizes.length === 0 || selectedSizes.some(size => product.sizes[size as keyof typeof product.sizes]);
     return price >= minPrice && price <= maxPrice && colorMatch && sizeMatch;
   });
 
@@ -447,7 +330,7 @@ const ShaggyRugsPage = () => {
 
   const toggleWishlist = (id: number) => {
     setWishlist(prev => {
-      const prefixedId = `shaggy_${id}`;
+      const prefixedId = `3d_${id}`;
       const newWishlist = prev.includes(prefixedId) 
         ? prev.filter(i => i !== prefixedId)
         : [...prev, prefixedId];
@@ -460,23 +343,30 @@ const ShaggyRugsPage = () => {
               typeof item === 'object' && 
               'id' in item && 
               typeof item.id === 'string' && 
-              !item.id.startsWith('shaggy_')
+              !item.id.startsWith('3d_')
             )
           : [];
         
-        const newItems = products
-          .filter((_, i) => newWishlist.includes(`shaggy_${i + 1}`))
-          .map((item) => ({
-            id: `shaggy_${item.id}`,
-            src: item.image,
-            hoverSrc: item.hoverImage,
-            title: item.name,
-            price: item.price,
-            discount: item.discount
-          }));
+        const product = products.find(p => p.id === id);
+        if (product) {
+          const newItem = {
+            id: prefixedId,
+            name: product.name,
+            price: product.price,
+            image: product.image,
+            hoverImage: product.hoverImage,
+            discount: product.discount,
+            color: product.color,
+            sizes: product.sizes
+          };
+          
+          const wishlistItems = newWishlist.includes(prefixedId)
+            ? [...validItems, newItem]
+            : validItems.filter(item => item.id !== prefixedId);
+          
+          localStorage.setItem('wishlist', JSON.stringify(wishlistItems));
+        }
         
-        const wishlistItems = [...validItems, ...newItems];
-        localStorage.setItem('wishlist', JSON.stringify(wishlistItems));
         return newWishlist;
       } catch (error) {
         console.error('Error handling wishlist:', error);
@@ -497,8 +387,8 @@ const ShaggyRugsPage = () => {
           marginBottom: '60px'
         }}>
           <Image
-            src="/category-banner.jpg"
-            alt="Shaggy Rugs Category"
+            src="/Cats-Copy.jpg"
+            alt="3D Duvet Sets Category"
             fill
             style={{
               objectFit: 'cover',
@@ -523,7 +413,7 @@ const ShaggyRugsPage = () => {
               zIndex: 10
             }}>
               <button
-                onClick={() => router.push('/')}
+                onClick={() => router.push('/shop-duvet-set-by-type')}
                 style={{
                   background: 'rgba(255, 255, 255, 0.9)',
                   border: 'none',
@@ -573,7 +463,7 @@ const ShaggyRugsPage = () => {
                 textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
                 lineHeight: '1.2',
                 marginBottom: '20px'
-              }}>Shaggy Rugs</h1>
+              }}>3D Duvet Sets</h1>
               <p style={{
                 color: '#fff',
                 fontSize: '24px',
@@ -583,7 +473,7 @@ const ShaggyRugsPage = () => {
                 margin: '0 auto',
                 lineHeight: '1.5'
               }}>
-                Discover our collection of luxurious shaggy rugs, perfect for adding warmth and texture to any space
+                Discover our collection of premium 3D duvet sets, perfect for creating a cozy and stylish bedroom
               </p>
             </div>
           </div>
@@ -789,7 +679,7 @@ const ShaggyRugsPage = () => {
                     marginBottom: '20px'
                   }}>
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                      <path d="M3 6h18M3 12h18M3 18h18"/>
                     </svg>
                     <span style={{
                       fontSize: '16px',
@@ -803,12 +693,9 @@ const ShaggyRugsPage = () => {
                     gap: '8px'
                   }}>
                     {[
-                      { id: 'size1', label: '60cm X 110cm (2ft X 3.5ft)' },
-                      { id: 'size2', label: '60cm X 220cm (2ft X 7.2ft)' },
-                      { id: 'size3', label: '80cm X 150cm (2.6ft X 5ft)' },
-                      { id: 'size4', label: '120cm X 170cm (4ft X 5.5ft)' },
-                      { id: 'size5', label: '160cm X 230cm (5.2ft X 7.5ft)' },
-                      { id: 'size6', label: '200cm X 290cm (6.5ft X 9.5ft)' }
+                      { id: 'single', label: 'Single (135cm x 200cm)' },
+                      { id: 'double', label: 'Double (200cm x 200cm)' },
+                      { id: 'king', label: 'King (220cm x 235cm)' }
                     ].map(size => (
                       <button
                         key={size.id}
@@ -820,8 +707,8 @@ const ShaggyRugsPage = () => {
                           );
                         }}
                         style={{
-                          padding: '8px 16px',
-                          borderRadius: '6px',
+                          padding: '12px 16px',
+                          borderRadius: '8px',
                           border: '1px solid',
                           borderColor: selectedSizes.includes(size.id) ? '#222' : '#eee',
                           background: selectedSizes.includes(size.id) ? '#222' : 'transparent',
@@ -832,8 +719,9 @@ const ShaggyRugsPage = () => {
                           fontWeight: 500,
                           display: 'flex',
                           alignItems: 'center',
-                          gap: '6px',
-                          textAlign: 'left'
+                          gap: '8px',
+                          textAlign: 'left',
+                          width: '100%'
                         }}
                         onMouseEnter={(e) => {
                           if (!selectedSizes.includes(size.id)) {
@@ -937,7 +825,7 @@ const ShaggyRugsPage = () => {
                       cursor: 'pointer',
                       boxShadow: '0 2px 12px rgba(0,0,0,0.15)',
                       transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                      transform: wishlist.includes(`shaggy_${product.id}`) ? 'scale(1.1)' : 'scale(1)',
+                      transform: wishlist.includes(`3d_${product.id}`) ? 'scale(1.1)' : 'scale(1)',
                       backdropFilter: 'blur(4px)'
                     }}
                     onMouseEnter={() => setHoveredButton(product.id)}
@@ -947,13 +835,56 @@ const ShaggyRugsPage = () => {
                       width="24"
                       height="24"
                       viewBox="0 0 24 24"
-                      fill={wishlist.includes(`shaggy_${product.id}`) ? '#e53935' : 'none'}
+                      fill={wishlist.includes(`3d_${product.id}`) ? '#e53935' : 'none'}
                       stroke="#e53935"
                       strokeWidth="2"
                       strokeLinecap="round"
                       strokeLinejoin="round"
                     >
                       <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                    </svg>
+                  </button>
+                  <button
+                    onClick={() => {/* Add to cart functionality */}}
+                    style={{
+                      position: 'absolute',
+                      top: '64px',
+                      right: '12px',
+                      background: 'rgba(255, 255, 255, 0.95)',
+                      border: 'none',
+                      borderRadius: '50%',
+                      width: '44px',
+                      height: '44px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      cursor: 'pointer',
+                      boxShadow: '0 2px 12px rgba(0,0,0,0.15)',
+                      transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                      backdropFilter: 'blur(4px)'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.transform = 'scale(1.1)';
+                      e.currentTarget.style.boxShadow = '0 4px 16px rgba(0,0,0,0.2)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.transform = 'scale(1)';
+                      e.currentTarget.style.boxShadow = '0 2px 12px rgba(0,0,0,0.15)';
+                    }}
+                  >
+                    <svg
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="#000"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <circle cx="9" cy="21" r="1"/>
+                      <circle cx="20" cy="21" r="1"/>
+                      <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
                     </svg>
                   </button>
                   <span style={{
@@ -1030,86 +961,47 @@ const ShaggyRugsPage = () => {
                     color: '#e53935',
                     fontWeight: 700,
                     fontSize: '20px',
-                    marginBottom: '20px'
+                    marginBottom: '12px'
                   }}>{product.price}</div>
                   <div style={{
                     display: 'flex',
-                    flexWrap: 'wrap',
+                    flexDirection: 'column',
                     gap: '8px',
-                    marginBottom: '12px'
+                    marginBottom: '20px'
                   }}>
                     {Object.entries(product.sizes).map(([size, available]) => (
-                      <span
+                      <div
                         key={size}
                         style={{
-                          padding: '4px 8px',
-                          borderRadius: '4px',
-                          fontSize: '12px',
-                          fontWeight: 500,
-                          background: available ? '#f5f5f5' : '#eee',
-                          color: available ? '#444' : '#999',
                           display: 'flex',
                           alignItems: 'center',
-                          gap: '4px'
+                          gap: '8px',
+                          fontSize: '14px',
+                          color: available ? '#444' : '#999'
                         }}
                       >
-                        {available ? (
-                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <svg
+                          width="16"
+                          height="16"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke={available ? '#222' : '#999'}
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          {available ? (
                             <path d="M20 6L9 17l-5-5"/>
-                          </svg>
-                        ) : (
-                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          ) : (
                             <path d="M18 6L6 18M6 6l12 12"/>
-                          </svg>
-                        )}
-                        {size === 'size1' && '60x110cm'}
-                        {size === 'size2' && '60x220cm'}
-                        {size === 'size3' && '80x150cm'}
-                        {size === 'size4' && '120x170cm'}
-                        {size === 'size5' && '160x230cm'}
-                        {size === 'size6' && '200x290cm'}
-                      </span>
+                          )}
+                        </svg>
+                        {size === 'single' && 'Single (135cm x 200cm)'}
+                        {size === 'double' && 'Double (200cm x 200cm)'}
+                        {size === 'king' && 'King (220cm x 235cm)'}
+                      </div>
                     ))}
                   </div>
-                  {!product.isSoldOut && (
-                    <button
-                      onClick={() => {/* Add to basket logic */}}
-                      style={{
-                        position: 'absolute',
-                        top: '64px',
-                        right: '12px',
-                        background: 'rgba(255, 255, 255, 0.95)',
-                        border: 'none',
-                        borderRadius: '50%',
-                        width: '44px',
-                        height: '44px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        cursor: 'pointer',
-                        boxShadow: '0 2px 12px rgba(0,0,0,0.15)',
-                        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                        backdropFilter: 'blur(4px)'
-                      }}
-                      onMouseEnter={() => setHoveredButton(product.id)}
-                      onMouseLeave={() => setHoveredButton(null)}
-                    >
-                      <svg
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="#000"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <circle cx="9" cy="21" r="1"/>
-                        <circle cx="20" cy="21" r="1"/>
-                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
-                      </svg>
-                    </button>
-                  )}
                 </div>
               </div>
             ))}
@@ -1134,4 +1026,4 @@ const ShaggyRugsPage = () => {
   );
 };
 
-export default ShaggyRugsPage; 
+export default ThreeDDuvetSetPage; 

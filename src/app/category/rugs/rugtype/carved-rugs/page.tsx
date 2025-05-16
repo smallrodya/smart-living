@@ -16,6 +16,12 @@ interface Product {
   isHot?: boolean;
   isSoldOut?: boolean;
   color: string;
+  sizes: {
+    size1: boolean; // 60cm X 220cm
+    size2: boolean; // 120cm X 170cm
+    size3: boolean; // 160cm X 230cm
+    size4: boolean; // 200cm X 290cm
+  };
 }
 
 const products: Product[] = [
@@ -27,7 +33,13 @@ const products: Product[] = [
     hoverImage: '/carved1-hover.jpg', 
     discount: '-91%',
     isSoldOut: true,
-    color: 'Beige Brown'
+    color: 'Beige Brown',
+    sizes: {
+      size1: false,
+      size2: false,
+      size3: false,
+      size4: false
+    }
   },
   { 
     id: 2, 
@@ -37,7 +49,13 @@ const products: Product[] = [
     hoverImage: '/carved2-hover.jpg', 
     discount: '-91%',
     isSoldOut: true,
-    color: 'Brown Beige'
+    color: 'Brown Beige',
+    sizes: {
+      size1: false,
+      size2: false,
+      size3: false,
+      size4: false
+    }
   },
   { 
     id: 3, 
@@ -47,7 +65,13 @@ const products: Product[] = [
     hoverImage: '/carved3-hover.jpg', 
     discount: '-91%',
     isSoldOut: true,
-    color: 'Beige Black'
+    color: 'Beige Black',
+    sizes: {
+      size1: false,
+      size2: false,
+      size3: false,
+      size4: false
+    }
   },
   { 
     id: 4, 
@@ -57,7 +81,13 @@ const products: Product[] = [
     hoverImage: '/carved4-hover.jpg', 
     discount: '-91%',
     isSoldOut: true,
-    color: 'Beige Red'
+    color: 'Beige Red',
+    sizes: {
+      size1: false,
+      size2: false,
+      size3: false,
+      size4: false
+    }
   },
   { 
     id: 5, 
@@ -67,7 +97,13 @@ const products: Product[] = [
     hoverImage: '/carved5-hover.jpg', 
     discount: '-91%',
     isSoldOut: true,
-    color: 'Brown Beige'
+    color: 'Brown Beige',
+    sizes: {
+      size1: false,
+      size2: false,
+      size3: false,
+      size4: false
+    }
   },
   { 
     id: 6, 
@@ -77,7 +113,13 @@ const products: Product[] = [
     hoverImage: '/carved6-hover.jpg', 
     discount: '-49%',
     isSoldOut: true,
-    color: 'Grey Black'
+    color: 'Grey Black',
+    sizes: {
+      size1: false,
+      size2: false,
+      size3: false,
+      size4: false
+    }
   },
   { 
     id: 7, 
@@ -86,7 +128,13 @@ const products: Product[] = [
     image: '/carved7.jpg', 
     hoverImage: '/carved7-hover.jpg', 
     discount: '-56%',
-    color: 'Onyx Aqua'
+    color: 'Onyx Aqua',
+    sizes: {
+      size1: true,
+      size2: true,
+      size3: true,
+      size4: true
+    }
   },
   { 
     id: 8, 
@@ -95,7 +143,13 @@ const products: Product[] = [
     image: '/carved8.jpg', 
     hoverImage: '/carved8-hover.jpg', 
     discount: '-56%',
-    color: 'Onyx Beige'
+    color: 'Onyx Beige',
+    sizes: {
+      size1: true,
+      size2: true,
+      size3: true,
+      size4: true
+    }
   },
   { 
     id: 9, 
@@ -104,7 +158,13 @@ const products: Product[] = [
     image: '/carved9.jpg', 
     hoverImage: '/carved9-hover.jpg', 
     discount: '-56%',
-    color: 'Onyx Gold'
+    color: 'Onyx Gold',
+    sizes: {
+      size1: true,
+      size2: true,
+      size3: true,
+      size4: true
+    }
   },
   { 
     id: 10, 
@@ -113,7 +173,13 @@ const products: Product[] = [
     image: '/carved10.jpg', 
     hoverImage: '/carved10-hover.jpg', 
     discount: '-56%',
-    color: 'Onyx Pink'
+    color: 'Onyx Pink',
+    sizes: {
+      size1: true,
+      size2: true,
+      size3: true,
+      size4: true
+    }
   },
   { 
     id: 11, 
@@ -122,7 +188,13 @@ const products: Product[] = [
     image: '/carved11.jpg', 
     hoverImage: '/carved11-hover.jpg', 
     discount: '-56%',
-    color: 'Onyx Silver'
+    color: 'Onyx Silver',
+    sizes: {
+      size1: true,
+      size2: true,
+      size3: true,
+      size4: true
+    }
   },
   { 
     id: 12, 
@@ -131,7 +203,13 @@ const products: Product[] = [
     image: '/carved12.jpg', 
     hoverImage: '/carved12-hover.jpg', 
     discount: '-56%',
-    color: 'Aqua'
+    color: 'Aqua',
+    sizes: {
+      size1: true,
+      size2: true,
+      size3: true,
+      size4: true
+    }
   },
   { 
     id: 13, 
@@ -140,7 +218,13 @@ const products: Product[] = [
     image: '/carved13.jpg', 
     hoverImage: '/carved13-hover.jpg', 
     discount: '-56%',
-    color: 'Beige'
+    color: 'Beige',
+    sizes: {
+      size1: true,
+      size2: true,
+      size3: true,
+      size4: true
+    }
   },
   { 
     id: 14, 
@@ -149,7 +233,13 @@ const products: Product[] = [
     image: '/carved14.jpg', 
     hoverImage: '/carved14-hover.jpg', 
     discount: '-56%',
-    color: 'Gold'
+    color: 'Gold',
+    sizes: {
+      size1: true,
+      size2: true,
+      size3: true,
+      size4: true
+    }
   },
   { 
     id: 15, 
@@ -158,7 +248,13 @@ const products: Product[] = [
     image: '/carved15.jpg', 
     hoverImage: '/carved15-hover.jpg', 
     discount: '-56%',
-    color: 'Navy'
+    color: 'Navy',
+    sizes: {
+      size1: true,
+      size2: true,
+      size3: true,
+      size4: true
+    }
   },
   { 
     id: 16, 
@@ -167,7 +263,13 @@ const products: Product[] = [
     image: '/carved16.jpg', 
     hoverImage: '/carved16-hover.jpg', 
     discount: '-56%',
-    color: 'Pink'
+    color: 'Pink',
+    sizes: {
+      size1: true,
+      size2: true,
+      size3: true,
+      size4: true
+    }
   },
   { 
     id: 17, 
@@ -176,7 +278,13 @@ const products: Product[] = [
     image: '/carved17.jpg', 
     hoverImage: '/carved17-hover.jpg', 
     discount: '-56%',
-    color: 'Silver'
+    color: 'Silver',
+    sizes: {
+      size1: true,
+      size2: true,
+      size3: true,
+      size4: true
+    }
   },
   { 
     id: 18, 
@@ -185,7 +293,13 @@ const products: Product[] = [
     image: '/carved18.jpg', 
     hoverImage: '/carved18-hover.jpg', 
     discount: '-56%',
-    color: 'Aqua'
+    color: 'Aqua',
+    sizes: {
+      size1: true,
+      size2: true,
+      size3: true,
+      size4: true
+    }
   },
   { 
     id: 19, 
@@ -194,7 +308,13 @@ const products: Product[] = [
     image: '/carved19.jpg', 
     hoverImage: '/carved19-hover.jpg', 
     discount: '-56%',
-    color: 'Beige'
+    color: 'Beige',
+    sizes: {
+      size1: true,
+      size2: true,
+      size3: true,
+      size4: true
+    }
   },
   { 
     id: 20, 
@@ -203,7 +323,13 @@ const products: Product[] = [
     image: '/carved20.jpg', 
     hoverImage: '/carved20-hover.jpg', 
     discount: '-56%',
-    color: 'Pink'
+    color: 'Pink',
+    sizes: {
+      size1: true,
+      size2: true,
+      size3: true,
+      size4: true
+    }
   },
   { 
     id: 21, 
@@ -212,7 +338,13 @@ const products: Product[] = [
     image: '/carved21.jpg', 
     hoverImage: '/carved21-hover.jpg', 
     discount: '-56%',
-    color: 'Aqua'
+    color: 'Aqua',
+    sizes: {
+      size1: true,
+      size2: true,
+      size3: true,
+      size4: true
+    }
   },
   { 
     id: 22, 
@@ -221,7 +353,13 @@ const products: Product[] = [
     image: '/carved22.jpg', 
     hoverImage: '/carved22-hover.jpg', 
     discount: '-56%',
-    color: 'Beige'
+    color: 'Beige',
+    sizes: {
+      size1: true,
+      size2: true,
+      size3: true,
+      size4: true
+    }
   },
   { 
     id: 23, 
@@ -230,7 +368,13 @@ const products: Product[] = [
     image: '/carved23.jpg', 
     hoverImage: '/carved23-hover.jpg', 
     discount: '-56%',
-    color: 'Pink'
+    color: 'Pink',
+    sizes: {
+      size1: true,
+      size2: true,
+      size3: true,
+      size4: true
+    }
   },
   { 
     id: 24, 
@@ -239,7 +383,13 @@ const products: Product[] = [
     image: '/carved24.jpg', 
     hoverImage: '/carved24-hover.jpg', 
     discount: '-56%',
-    color: 'Silver'
+    color: 'Silver',
+    sizes: {
+      size1: true,
+      size2: true,
+      size3: true,
+      size4: true
+    }
   },
   { 
     id: 25, 
@@ -249,7 +399,13 @@ const products: Product[] = [
     hoverImage: '/carved25-hover.jpg', 
     discount: '-62%',
     isHot: true,
-    color: 'Beige Brown'
+    color: 'Beige Brown',
+    sizes: {
+      size1: true,
+      size2: true,
+      size3: true,
+      size4: true
+    }
   },
   { 
     id: 26, 
@@ -258,7 +414,13 @@ const products: Product[] = [
     image: '/carved26.jpg', 
     hoverImage: '/carved26-hover.jpg', 
     discount: '-62%',
-    color: 'Beige Red'
+    color: 'Beige Red',
+    sizes: {
+      size1: true,
+      size2: true,
+      size3: true,
+      size4: true
+    }
   },
   { 
     id: 27, 
@@ -267,7 +429,13 @@ const products: Product[] = [
     image: '/carved27.jpg', 
     hoverImage: '/carved27-hover.jpg', 
     discount: '-62%',
-    color: 'Black Grey'
+    color: 'Black Grey',
+    sizes: {
+      size1: true,
+      size2: true,
+      size3: true,
+      size4: true
+    }
   },
   { 
     id: 28, 
@@ -276,7 +444,13 @@ const products: Product[] = [
     image: '/carved28.jpg', 
     hoverImage: '/carved28-hover.jpg', 
     discount: '-62%',
-    color: 'Black Purple'
+    color: 'Black Purple',
+    sizes: {
+      size1: true,
+      size2: true,
+      size3: true,
+      size4: true
+    }
   },
   { 
     id: 29, 
@@ -285,7 +459,13 @@ const products: Product[] = [
     image: '/carved29.jpg', 
     hoverImage: '/carved29-hover.jpg', 
     discount: '-62%',
-    color: 'Black Red'
+    color: 'Black Red',
+    sizes: {
+      size1: true,
+      size2: true,
+      size3: true,
+      size4: true
+    }
   },
   { 
     id: 30, 
@@ -294,7 +474,13 @@ const products: Product[] = [
     image: '/carved30.jpg', 
     hoverImage: '/carved30-hover.jpg', 
     discount: '-62%',
-    color: 'Black Teal'
+    color: 'Black Teal',
+    sizes: {
+      size1: true,
+      size2: true,
+      size3: true,
+      size4: true
+    }
   },
   { 
     id: 31, 
@@ -303,7 +489,13 @@ const products: Product[] = [
     image: '/carved31.jpg', 
     hoverImage: '/carved31-hover.jpg', 
     discount: '-62%',
-    color: 'Black White'
+    color: 'Black White',
+    sizes: {
+      size1: true,
+      size2: true,
+      size3: true,
+      size4: true
+    }
   },
   { 
     id: 32, 
@@ -312,7 +504,13 @@ const products: Product[] = [
     image: '/carved32.jpg', 
     hoverImage: '/carved32-hover.jpg', 
     discount: '-62%',
-    color: 'Brown Beige'
+    color: 'Brown Beige',
+    sizes: {
+      size1: true,
+      size2: true,
+      size3: true,
+      size4: true
+    }
   },
   { 
     id: 33, 
@@ -321,7 +519,13 @@ const products: Product[] = [
     image: '/carved33.jpg', 
     hoverImage: '/carved33-hover.jpg', 
     discount: '-62%',
-    color: 'Brown Green'
+    color: 'Brown Green',
+    sizes: {
+      size1: true,
+      size2: true,
+      size3: true,
+      size4: true
+    }
   },
   { 
     id: 34, 
@@ -330,7 +534,13 @@ const products: Product[] = [
     image: '/carved34.jpg', 
     hoverImage: '/carved34-hover.jpg', 
     discount: '-62%',
-    color: 'Brown Red'
+    color: 'Brown Red',
+    sizes: {
+      size1: true,
+      size2: true,
+      size3: true,
+      size4: true
+    }
   },
   { 
     id: 35, 
@@ -339,7 +549,13 @@ const products: Product[] = [
     image: '/carved35.jpg', 
     hoverImage: '/carved35-hover.jpg', 
     discount: '-62%',
-    color: 'Grey Red'
+    color: 'Grey Red',
+    sizes: {
+      size1: true,
+      size2: true,
+      size3: true,
+      size4: true
+    }
   },
   { 
     id: 36, 
@@ -348,7 +564,13 @@ const products: Product[] = [
     image: '/carved36.jpg', 
     hoverImage: '/carved36-hover.jpg', 
     discount: '-62%',
-    color: 'Red Black'
+    color: 'Red Black',
+    sizes: {
+      size1: true,
+      size2: true,
+      size3: true,
+      size4: true
+    }
   },
   { 
     id: 37, 
@@ -357,7 +579,13 @@ const products: Product[] = [
     image: '/carved37.jpg', 
     hoverImage: '/carved37-hover.jpg', 
     discount: '-63%',
-    color: 'Circle Black'
+    color: 'Circle Black',
+    sizes: {
+      size1: true,
+      size2: true,
+      size3: true,
+      size4: true
+    }
   },
   { 
     id: 38, 
@@ -366,7 +594,13 @@ const products: Product[] = [
     image: '/carved38.jpg', 
     hoverImage: '/carved38-hover.jpg', 
     discount: '-63%',
-    color: 'Circles Bright'
+    color: 'Circles Bright',
+    sizes: {
+      size1: true,
+      size2: true,
+      size3: true,
+      size4: true
+    }
   },
   { 
     id: 39, 
@@ -375,7 +609,13 @@ const products: Product[] = [
     image: '/carved39.jpg', 
     hoverImage: '/carved39-hover.jpg', 
     discount: '-63%',
-    color: 'Cube'
+    color: 'Cube',
+    sizes: {
+      size1: true,
+      size2: true,
+      size3: true,
+      size4: true
+    }
   },
   { 
     id: 40, 
@@ -384,7 +624,13 @@ const products: Product[] = [
     image: '/carved40.jpg', 
     hoverImage: '/carved40-hover.jpg', 
     discount: '-63%',
-    color: 'Diamond'
+    color: 'Diamond',
+    sizes: {
+      size1: true,
+      size2: true,
+      size3: true,
+      size4: true
+    }
   },
   { 
     id: 41, 
@@ -393,7 +639,13 @@ const products: Product[] = [
     image: '/carved41.jpg', 
     hoverImage: '/carved41-hover.jpg', 
     discount: '-63%',
-    color: 'Geo Play'
+    color: 'Geo Play',
+    sizes: {
+      size1: true,
+      size2: true,
+      size3: true,
+      size4: true
+    }
   },
   { 
     id: 42, 
@@ -402,7 +654,13 @@ const products: Product[] = [
     image: '/carved42.jpg', 
     hoverImage: '/carved42-hover.jpg', 
     discount: '-63%',
-    color: 'Geometric Triangle'
+    color: 'Geometric Triangle',
+    sizes: {
+      size1: true,
+      size2: true,
+      size3: true,
+      size4: true
+    }
   },
   { 
     id: 43, 
@@ -412,7 +670,13 @@ const products: Product[] = [
     hoverImage: '/carved43-hover.jpg', 
     discount: '-63%',
     isSoldOut: true,
-    color: 'Groove'
+    color: 'Groove',
+    sizes: {
+      size1: false,
+      size2: false,
+      size3: false,
+      size4: false
+    }
   },
   { 
     id: 44, 
@@ -421,7 +685,13 @@ const products: Product[] = [
     image: '/carved44.jpg', 
     hoverImage: '/carved44-hover.jpg', 
     discount: '-63%',
-    color: 'Hexagon'
+    color: 'Hexagon',
+    sizes: {
+      size1: true,
+      size2: true,
+      size3: true,
+      size4: true
+    }
   },
   { 
     id: 45, 
@@ -430,7 +700,13 @@ const products: Product[] = [
     image: '/carved45.jpg', 
     hoverImage: '/carved45-hover.jpg', 
     discount: '-63%',
-    color: 'Jazz'
+    color: 'Jazz',
+    sizes: {
+      size1: true,
+      size2: true,
+      size3: true,
+      size4: true
+    }
   },
   { 
     id: 46, 
@@ -439,7 +715,13 @@ const products: Product[] = [
     image: '/carved46.jpg', 
     hoverImage: '/carved46-hover.jpg', 
     discount: '-63%',
-    color: 'Moonlight'
+    color: 'Moonlight',
+    sizes: {
+      size1: true,
+      size2: true,
+      size3: true,
+      size4: true
+    }
   },
   { 
     id: 47, 
@@ -448,7 +730,13 @@ const products: Product[] = [
     image: '/carved47.jpg', 
     hoverImage: '/carved47-hover.jpg', 
     discount: '-63%',
-    color: 'Rectangles'
+    color: 'Rectangles',
+    sizes: {
+      size1: true,
+      size2: true,
+      size3: true,
+      size4: true
+    }
   },
   { 
     id: 48, 
@@ -457,7 +745,13 @@ const products: Product[] = [
     image: '/carved48.jpg', 
     hoverImage: '/carved48-hover.jpg', 
     discount: '-63%',
-    color: 'Scales'
+    color: 'Scales',
+    sizes: {
+      size1: true,
+      size2: true,
+      size3: true,
+      size4: true
+    }
   },
   { 
     id: 49, 
@@ -466,7 +760,13 @@ const products: Product[] = [
     image: '/carved49.jpg', 
     hoverImage: '/carved49-hover.jpg', 
     discount: '-63%',
-    color: 'Splash'
+    color: 'Splash',
+    sizes: {
+      size1: true,
+      size2: true,
+      size3: true,
+      size4: true
+    }
   },
   { 
     id: 50, 
@@ -475,7 +775,13 @@ const products: Product[] = [
     image: '/carved50.jpg', 
     hoverImage: '/carved50-hover.jpg', 
     discount: '-63%',
-    color: 'Squares Bright'
+    color: 'Squares Bright',
+    sizes: {
+      size1: true,
+      size2: true,
+      size3: true,
+      size4: true
+    }
   },
   { 
     id: 51, 
@@ -484,7 +790,13 @@ const products: Product[] = [
     image: '/carved51.jpg', 
     hoverImage: '/carved51-hover.jpg', 
     discount: '-63%',
-    color: 'Stripes'
+    color: 'Stripes',
+    sizes: {
+      size1: true,
+      size2: true,
+      size3: true,
+      size4: true
+    }
   },
   { 
     id: 52, 
@@ -493,7 +805,13 @@ const products: Product[] = [
     image: '/carved52.jpg', 
     hoverImage: '/carved52-hover.jpg', 
     discount: '-56%',
-    color: 'Black'
+    color: 'Black',
+    sizes: {
+      size1: true,
+      size2: true,
+      size3: true,
+      size4: true
+    }
   },
   { 
     id: 53, 
@@ -502,7 +820,13 @@ const products: Product[] = [
     image: '/carved53.jpg', 
     hoverImage: '/carved53-hover.jpg', 
     discount: '-56%',
-    color: 'Grey'
+    color: 'Grey',
+    sizes: {
+      size1: true,
+      size2: true,
+      size3: true,
+      size4: true
+    }
   },
   { 
     id: 54, 
@@ -511,7 +835,13 @@ const products: Product[] = [
     image: '/carved54.jpg', 
     hoverImage: '/carved54-hover.jpg', 
     discount: '-56%',
-    color: 'Stone'
+    color: 'Stone',
+    sizes: {
+      size1: true,
+      size2: true,
+      size3: true,
+      size4: true
+    }
   },
   { 
     id: 55, 
@@ -520,7 +850,13 @@ const products: Product[] = [
     image: '/carved55.jpg', 
     hoverImage: '/carved55-hover.jpg', 
     discount: '-56%',
-    color: 'Black'
+    color: 'Black',
+    sizes: {
+      size1: true,
+      size2: true,
+      size3: true,
+      size4: true
+    }
   },
   { 
     id: 56, 
@@ -529,7 +865,13 @@ const products: Product[] = [
     image: '/carved56.jpg', 
     hoverImage: '/carved56-hover.jpg', 
     discount: '-56%',
-    color: 'Grey'
+    color: 'Grey',
+    sizes: {
+      size1: true,
+      size2: true,
+      size3: true,
+      size4: true
+    }
   },
   { 
     id: 57, 
@@ -538,7 +880,13 @@ const products: Product[] = [
     image: '/carved57.jpg', 
     hoverImage: '/carved57-hover.jpg', 
     discount: '-56%',
-    color: 'Stone'
+    color: 'Stone',
+    sizes: {
+      size1: true,
+      size2: true,
+      size3: true,
+      size4: true
+    }
   },
   { 
     id: 58, 
@@ -547,7 +895,13 @@ const products: Product[] = [
     image: '/carved58.jpg', 
     hoverImage: '/carved58-hover.jpg', 
     discount: '-56%',
-    color: 'Black'
+    color: 'Black',
+    sizes: {
+      size1: true,
+      size2: true,
+      size3: true,
+      size4: true
+    }
   },
   { 
     id: 59, 
@@ -556,7 +910,13 @@ const products: Product[] = [
     image: '/carved59.jpg', 
     hoverImage: '/carved59-hover.jpg', 
     discount: '-56%',
-    color: 'Grey'
+    color: 'Grey',
+    sizes: {
+      size1: true,
+      size2: true,
+      size3: true,
+      size4: true
+    }
   },
   { 
     id: 60, 
@@ -565,7 +925,13 @@ const products: Product[] = [
     image: '/carved60.jpg', 
     hoverImage: '/carved60-hover.jpg', 
     discount: '-56%',
-    color: 'Stone'
+    color: 'Stone',
+    sizes: {
+      size1: true,
+      size2: true,
+      size3: true,
+      size4: true
+    }
   },
   { 
     id: 61, 
@@ -574,7 +940,13 @@ const products: Product[] = [
     image: '/carved61.jpg', 
     hoverImage: '/carved61-hover.jpg', 
     discount: '-56%',
-    color: 'Black'
+    color: 'Black',
+    sizes: {
+      size1: true,
+      size2: true,
+      size3: true,
+      size4: true
+    }
   },
   { 
     id: 62, 
@@ -583,7 +955,13 @@ const products: Product[] = [
     image: '/carved62.jpg', 
     hoverImage: '/carved62-hover.jpg', 
     discount: '-56%',
-    color: 'Grey'
+    color: 'Grey',
+    sizes: {
+      size1: true,
+      size2: true,
+      size3: true,
+      size4: true
+    }
   },
   { 
     id: 63, 
@@ -592,7 +970,13 @@ const products: Product[] = [
     image: '/carved63.jpg', 
     hoverImage: '/carved63-hover.jpg', 
     discount: '-56%',
-    color: 'Stone'
+    color: 'Stone',
+    sizes: {
+      size1: true,
+      size2: true,
+      size3: true,
+      size4: true
+    }
   },
   { 
     id: 64, 
@@ -601,7 +985,13 @@ const products: Product[] = [
     image: '/carved64.jpg', 
     hoverImage: '/carved64-hover.jpg', 
     discount: '-56%',
-    color: 'Black'
+    color: 'Black',
+    sizes: {
+      size1: true,
+      size2: true,
+      size3: true,
+      size4: true
+    }
   },
   { 
     id: 65, 
@@ -610,7 +1000,13 @@ const products: Product[] = [
     image: '/carved65.jpg', 
     hoverImage: '/carved65-hover.jpg', 
     discount: '-56%',
-    color: 'Grey'
+    color: 'Grey',
+    sizes: {
+      size1: true,
+      size2: true,
+      size3: true,
+      size4: true
+    }
   },
   { 
     id: 66, 
@@ -619,7 +1015,13 @@ const products: Product[] = [
     image: '/carved66.jpg', 
     hoverImage: '/carved66-hover.jpg', 
     discount: '-56%',
-    color: 'Stone'
+    color: 'Stone',
+    sizes: {
+      size1: true,
+      size2: true,
+      size3: true,
+      size4: true
+    }
   },
   { 
     id: 67, 
@@ -628,7 +1030,13 @@ const products: Product[] = [
     image: '/carved67.jpg', 
     hoverImage: '/carved67-hover.jpg', 
     discount: '-43%',
-    color: 'Beige Brown'
+    color: 'Beige Brown',
+    sizes: {
+      size1: true,
+      size2: true,
+      size3: true,
+      size4: true
+    }
   },
   { 
     id: 68, 
@@ -638,7 +1046,13 @@ const products: Product[] = [
     hoverImage: '/carved68-hover.jpg', 
     discount: '-43%',
     isSoldOut: true,
-    color: 'Beige Red'
+    color: 'Beige Red',
+    sizes: {
+      size1: false,
+      size2: false,
+      size3: false,
+      size4: false
+    }
   },
   { 
     id: 69, 
@@ -648,7 +1062,13 @@ const products: Product[] = [
     hoverImage: '/carved69-hover.jpg', 
     discount: '-43%',
     isSoldOut: true,
-    color: 'Black Grey'
+    color: 'Black Grey',
+    sizes: {
+      size1: false,
+      size2: false,
+      size3: false,
+      size4: false
+    }
   },
   { 
     id: 70, 
@@ -657,7 +1077,13 @@ const products: Product[] = [
     image: '/carved70.jpg', 
     hoverImage: '/carved70-hover.jpg', 
     discount: '-43%',
-    color: 'Black Red'
+    color: 'Black Red',
+    sizes: {
+      size1: true,
+      size2: true,
+      size3: true,
+      size4: true
+    }
   },
   { 
     id: 71, 
@@ -666,7 +1092,13 @@ const products: Product[] = [
     image: '/carved71.jpg', 
     hoverImage: '/carved71-hover.jpg', 
     discount: '-43%',
-    color: 'Black Teal'
+    color: 'Black Teal',
+    sizes: {
+      size1: true,
+      size2: true,
+      size3: true,
+      size4: true
+    }
   },
   { 
     id: 72, 
@@ -676,7 +1108,13 @@ const products: Product[] = [
     hoverImage: '/carved72-hover.jpg', 
     discount: '-43%',
     isSoldOut: true,
-    color: 'Brown Beige'
+    color: 'Brown Beige',
+    sizes: {
+      size1: false,
+      size2: false,
+      size3: false,
+      size4: false
+    }
   },
   { 
     id: 73, 
@@ -685,7 +1123,13 @@ const products: Product[] = [
     image: '/carved73.jpg', 
     hoverImage: '/carved73-hover.jpg', 
     discount: '-43%',
-    color: 'Brown Red'
+    color: 'Brown Red',
+    sizes: {
+      size1: true,
+      size2: true,
+      size3: true,
+      size4: true
+    }
   },
   { 
     id: 74, 
@@ -695,7 +1139,13 @@ const products: Product[] = [
     hoverImage: '/carved74-hover.jpg', 
     discount: '-43%',
     isSoldOut: true,
-    color: 'Dark Grey'
+    color: 'Dark Grey',
+    sizes: {
+      size1: false,
+      size2: false,
+      size3: false,
+      size4: false
+    }
   },
   { 
     id: 75, 
@@ -704,7 +1154,13 @@ const products: Product[] = [
     image: '/carved75.jpg', 
     hoverImage: '/carved75-hover.jpg', 
     discount: '-43%',
-    color: 'Dark Grey Blue'
+    color: 'Dark Grey Blue',
+    sizes: {
+      size1: true,
+      size2: true,
+      size3: true,
+      size4: true
+    }
   },
   { 
     id: 76, 
@@ -714,7 +1170,13 @@ const products: Product[] = [
     hoverImage: '/carved76-hover.jpg', 
     discount: '-43%',
     isSoldOut: true,
-    color: 'Grey Black'
+    color: 'Grey Black',
+    sizes: {
+      size1: false,
+      size2: false,
+      size3: false,
+      size4: false
+    }
   },
   { 
     id: 77, 
@@ -723,7 +1185,13 @@ const products: Product[] = [
     image: '/carved77.jpg', 
     hoverImage: '/carved77-hover.jpg', 
     discount: '-43%',
-    color: 'Grey Ochre'
+    color: 'Grey Ochre',
+    sizes: {
+      size1: true,
+      size2: true,
+      size3: true,
+      size4: true
+    }
   },
   { 
     id: 78, 
@@ -732,7 +1200,13 @@ const products: Product[] = [
     image: '/carved78.jpg', 
     hoverImage: '/carved78-hover.jpg', 
     discount: '-70%',
-    color: 'Purple Grey'
+    color: 'Purple Grey',
+    sizes: {
+      size1: true,
+      size2: true,
+      size3: true,
+      size4: true
+    }
   }
 ];
 
@@ -742,6 +1216,7 @@ const CarvedRugsPage = () => {
   const [wishlist, setWishlist] = useState<string[]>([]);
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 200]);
   const [selectedColors, setSelectedColors] = useState<string[]>([]);
+  const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
   const router = useRouter();
 
@@ -1004,6 +1479,7 @@ const CarvedRugsPage = () => {
                         width: '100%',
                         height: '2px',
                         WebkitAppearance: 'none',
+                        appearance: 'none',
                         background: '#ddd',
                         outline: 'none',
                         marginBottom: '15px'
@@ -1091,6 +1567,86 @@ const CarvedRugsPage = () => {
                           </svg>
                         )}
                         {color}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Size Filter */}
+                <div style={{
+                  flex: '1',
+                  minWidth: '300px'
+                }}>
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '12px',
+                    marginBottom: '20px'
+                  }}>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                    </svg>
+                    <span style={{
+                      fontSize: '16px',
+                      fontWeight: 500,
+                      color: '#444'
+                    }}>Sizes</span>
+                  </div>
+                  <div style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '8px'
+                  }}>
+                    {[
+                      { id: 'size1', label: '60cm X 220cm (2ft X 7.2ft)' },
+                      { id: 'size2', label: '120cm X 170cm (4ft X 5.5ft)' },
+                      { id: 'size3', label: '160cm X 230cm (5.2ft X 7.5ft)' },
+                      { id: 'size4', label: '200cm X 290cm (6.5ft X 9.5ft)' }
+                    ].map(size => (
+                      <button
+                        key={size.id}
+                        onClick={() => {
+                          setSelectedSizes(prev =>
+                            prev.includes(size.id)
+                              ? prev.filter(s => s !== size.id)
+                              : [...prev, size.id]
+                          );
+                        }}
+                        style={{
+                          padding: '8px 16px',
+                          borderRadius: '6px',
+                          border: '1px solid',
+                          borderColor: selectedSizes.includes(size.id) ? '#222' : '#eee',
+                          background: selectedSizes.includes(size.id) ? '#222' : 'transparent',
+                          color: selectedSizes.includes(size.id) ? '#fff' : '#444',
+                          cursor: 'pointer',
+                          transition: 'all 0.2s ease',
+                          fontSize: '14px',
+                          fontWeight: 500,
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '6px',
+                          textAlign: 'left'
+                        }}
+                        onMouseEnter={(e) => {
+                          if (!selectedSizes.includes(size.id)) {
+                            e.currentTarget.style.borderColor = '#222';
+                            e.currentTarget.style.color = '#222';
+                          }
+                        }}
+                        onMouseLeave={(e) => {
+                          if (!selectedSizes.includes(size.id)) {
+                            e.currentTarget.style.borderColor = '#eee';
+                            e.currentTarget.style.color = '#444';
+                          }
+                        }}
+                      >
+                        {selectedSizes.includes(size.id) && (
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <path d="M20 6L9 17l-5-5"/>
+                          </svg>
+                        )}
+                        {size.label}
                       </button>
                     ))}
                   </div>
@@ -1193,6 +1749,43 @@ const CarvedRugsPage = () => {
                       <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
                     </svg>
                   </button>
+                  <button
+                    onClick={() => {/* Add to basket logic */}}
+                    style={{
+                      position: 'absolute',
+                      top: '64px',
+                      right: '12px',
+                      background: 'rgba(255, 255, 255, 0.95)',
+                      border: 'none',
+                      borderRadius: '50%',
+                      width: '44px',
+                      height: '44px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      cursor: 'pointer',
+                      boxShadow: '0 2px 12px rgba(0,0,0,0.15)',
+                      transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                      backdropFilter: 'blur(4px)'
+                    }}
+                    onMouseEnter={() => setHoveredButton(product.id)}
+                    onMouseLeave={() => setHoveredButton(null)}
+                  >
+                    <svg
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="#000"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <circle cx="9" cy="21" r="1"/>
+                      <circle cx="20" cy="21" r="1"/>
+                      <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+                    </svg>
+                  </button>
                   <span style={{
                     position: 'absolute',
                     top: '12px',
@@ -1267,28 +1860,45 @@ const CarvedRugsPage = () => {
                     color: '#e53935',
                     fontWeight: 700,
                     fontSize: '20px',
-                    marginBottom: '20px'
+                    marginBottom: '12px'
                   }}>{product.price}</div>
-                  <button 
-                    style={{
-                      background: '#111',
-                      color: '#fff',
-                      border: 'none',
-                      borderRadius: '12px',
-                      padding: '14px 0',
-                      width: '100%',
-                      fontWeight: 600,
-                      fontSize: '15px',
-                      cursor: 'pointer',
-                      transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                      boxShadow: '0 2px 12px rgba(0,0,0,0.1)',
-                      transform: hoveredButton === product.id ? 'translateY(-2px)' : 'none'
-                    }}
-                    onMouseEnter={() => setHoveredButton(product.id)}
-                    onMouseLeave={() => setHoveredButton(null)}
-                  >
-                    Add to basket
-                  </button>
+                  <div style={{
+                    display: 'flex',
+                    flexWrap: 'wrap',
+                    gap: '8px',
+                    marginBottom: '12px'
+                  }}>
+                    {Object.entries(product.sizes).map(([size, available]) => (
+                      <span
+                        key={size}
+                        style={{
+                          padding: '4px 8px',
+                          borderRadius: '4px',
+                          fontSize: '12px',
+                          fontWeight: 500,
+                          background: available ? '#f5f5f5' : '#eee',
+                          color: available ? '#444' : '#999',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '4px'
+                        }}
+                      >
+                        {available ? (
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <path d="M20 6L9 17l-5-5"/>
+                          </svg>
+                        ) : (
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <path d="M18 6L6 18M6 6l12 12"/>
+                          </svg>
+                        )}
+                        {size === 'size1' && '60x220cm'}
+                        {size === 'size2' && '120x170cm'}
+                        {size === 'size3' && '160x230cm'}
+                        {size === 'size4' && '200x290cm'}
+                      </span>
+                    ))}
+                  </div>
                 </div>
               </div>
             ))}

@@ -1,0 +1,359 @@
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  background: linear-gradient(to bottom, #f8f9fa, #ffffff);
+  min-height: 100vh;
+}
+
+.categoryImage {
+  width: 100%;
+  height: 700px;
+  position: relative;
+  margin-bottom: 60px;
+}
+
+.categoryImageOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.5));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.backButton {
+  position: absolute;
+  top: 40px;
+  left: 40px;
+  z-index: 10;
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  transition: all 0.3s ease;
+  backdrop-filter: blur(4px);
+}
+
+.backButton:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+}
+
+.title {
+  color: #fff;
+  font-size: 72px;
+  font-weight: 700;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+  line-height: 1.2;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.description {
+  color: #fff;
+  font-size: 24px;
+  font-weight: 400;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.filtersSection {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-bottom: 50px;
+  max-width: 800px;
+  margin: 0 auto 50px;
+}
+
+.filtersHeader {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  padding: 0 10px;
+  cursor: pointer;
+}
+
+.filtersTitle {
+  font-size: 24px;
+  font-weight: 600;
+  color: #222;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.filtersDivider {
+  height: 1px;
+  flex: 1;
+  background: linear-gradient(to right, #eee, transparent);
+}
+
+.filtersContent {
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap;
+  padding: 0 10px;
+  animation: slideDown 0.3s ease;
+}
+
+.filterGroup {
+  flex: 1;
+  min-width: 300px;
+}
+
+.filterGroupHeader {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.filterGroupTitle {
+  font-size: 16px;
+  font-weight: 500;
+  color: #444;
+}
+
+.priceRange {
+  padding: 0 10px;
+}
+
+.priceRange input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 4px;
+  background: #eee;
+  border-radius: 2px;
+  outline: none;
+}
+
+.priceRangeLabels {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #666;
+  font-size: 15px;
+}
+
+.colorsList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.colorButton {
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: 1px solid;
+  border-color: #eee;
+  background: transparent;
+  color: #444;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 14px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.colorButton:hover {
+  border-color: #222;
+  color: #222;
+}
+
+.colorButton.selected {
+  border-color: #222;
+  background: #222;
+  color: #fff;
+}
+
+.productsCount {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+  padding: 0 10px;
+  max-width: 800px;
+  margin: 0 auto 40px;
+}
+
+.productsCountText {
+  font-size: 16px;
+  color: #666;
+  font-weight: 500;
+}
+
+.productsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 32px;
+}
+
+.productCard {
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 2px 16px rgba(34,34,34,0.07);
+  overflow: hidden;
+  position: relative;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.productCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 32px rgba(34,34,34,0.12);
+}
+
+.productImage {
+  width: 100%;
+  aspect-ratio: 4/3;
+  position: relative;
+  overflow: hidden;
+}
+
+.productImage img {
+  object-fit: cover;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.productCard:hover .productImage img {
+  transform: scale(1.05);
+}
+
+.wishlistButton {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(255, 255, 255, 0.95);
+  border: none;
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(4px);
+}
+
+.wishlistButton:hover {
+  transform: scale(1.1);
+}
+
+.discountBadge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: #e53935;
+  color: #fff;
+  font-weight: 700;
+  font-size: 14px;
+  border-radius: 50%;
+  width: 47px;
+  height: 47px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(229,57,53,0.2);
+  backdrop-filter: blur(4px);
+}
+
+.hotBadge {
+  position: absolute;
+  top: 67px;
+  left: 12px;
+  background: #000;
+  color: #fff;
+  font-weight: 700;
+  font-size: 14px;
+  border-radius: 50%;
+  width: 47px;
+  height: 47px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  backdrop-filter: blur(4px);
+}
+
+.soldOutOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 18px;
+  font-weight: 600;
+  backdrop-filter: blur(2px);
+}
+
+.productInfo {
+  padding: 20px;
+}
+
+.productName {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #222;
+  line-height: 1.4;
+}
+
+.productPrice {
+  color: #e53935;
+  font-weight: 700;
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+
+.addToBasketButton {
+  background: #111;
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  padding: 14px 0;
+  width: 100%;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+}
+
+.addToBasketButton:hover {
+  transform: translateY(-2px);
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+} 

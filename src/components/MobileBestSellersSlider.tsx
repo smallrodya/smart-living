@@ -10,15 +10,92 @@ interface WishlistItem {
   title: string;
   price: string;
   discount: string;
+  sizes?: {
+    single: boolean;
+    double: boolean;
+    king: boolean;
+  };
 }
 
 const products = [
-  { id: 1, name: '3D Duvet Cover and Pillowcase Set – Black Panther', price: '£14.99 - £17.72', image: '/best1.jpg', hoverImage: '/best1.jpg', discount: '-71%' },
-  { id: 2, name: 'Reversible Polycotton Elephant Mandala Duvet Cover', price: '£14.99 - £17.72', image: '/best2.jpg', hoverImage: '/best2.jpg', discount: '-71%' },
-  { id: 3, name: 'Diamante 5pc Bed in a Bag – Chocolate', price: '£17.99 – £19.99', image: '/best3.jpg', hoverImage: '/best3.jpg', discount: '-56%' },
-  { id: 4, name: 'Hug N Snug Duvet Cover and Pillowcase Set – Blush Pink', price: '£26.49 – £33.99', image: '/best4.jpg', hoverImage: '/best4.jpg', discount: '-51%' },
-  { id: 5, name: 'Hug N Snug Duvet Cover and Pillowcase Set – Charcoal', price: '£26.49 – £33.99', image: '/best5.jpg', hoverImage: '/best5-hover.jpg', discount: '-51%' },
-  { id: 6, name: 'Reversible Polycotton Fern Rouched Duvet Cover', price: '£10.37 – £12.97', image: '/best6.jpg', hoverImage: '/best6-hover.jpg', discount: '-81%' },
+  { 
+    id: 1, 
+    name: '3D Duvet Cover and Pillowcase Set – Black Panther', 
+    price: '£14.99 - £17.72', 
+    image: '/best1.jpg', 
+    hoverImage: '/best1.jpg', 
+    discount: '-71%',
+    sizes: {
+      single: true,
+      double: true,
+      king: true
+    }
+  },
+  { 
+    id: 2, 
+    name: 'Reversible Polycotton Elephant Mandala Duvet Cover', 
+    price: '£14.99 - £17.72', 
+    image: '/best2.jpg', 
+    hoverImage: '/best2.jpg', 
+    discount: '-71%',
+    sizes: {
+      single: true,
+      double: true,
+      king: true
+    }
+  },
+  { 
+    id: 3, 
+    name: 'Diamante 5pc Bed in a Bag – Chocolate', 
+    price: '£17.99 – £19.99', 
+    image: '/best3.jpg', 
+    hoverImage: '/best3.jpg', 
+    discount: '-56%',
+    sizes: {
+      single: true,
+      double: true,
+      king: true
+    }
+  },
+  { 
+    id: 4, 
+    name: 'Hug N Snug Duvet Cover and Pillowcase Set – Blush Pink', 
+    price: '£26.49 – £33.99', 
+    image: '/best4.jpg', 
+    hoverImage: '/best4.jpg', 
+    discount: '-51%',
+    sizes: {
+      single: true,
+      double: true,
+      king: true
+    }
+  },
+  { 
+    id: 5, 
+    name: 'Hug N Snug Duvet Cover and Pillowcase Set – Charcoal', 
+    price: '£26.49 – £33.99', 
+    image: '/best5.jpg', 
+    hoverImage: '/best5-hover.jpg', 
+    discount: '-51%',
+    sizes: {
+      single: true,
+      double: true,
+      king: true
+    }
+  },
+  { 
+    id: 6, 
+    name: 'Reversible Polycotton Fern Rouched Duvet Cover', 
+    price: '£10.37 – £12.97', 
+    image: '/best6.jpg', 
+    hoverImage: '/best6-hover.jpg', 
+    discount: '-81%',
+    sizes: {
+      single: true,
+      double: true,
+      king: true
+    }
+  },
 ];
 
 const arrowIcon = (
@@ -73,7 +150,8 @@ const MobileBestSellersSlider = () => {
             hoverSrc: item.hoverImage,
             title: item.name,
             price: item.price,
-            discount: item.discount
+            discount: item.discount,
+            sizes: item.sizes
           }));
         
         const wishlistItems = [...validItems, ...newItems];
@@ -336,6 +414,50 @@ const MobileBestSellersSlider = () => {
               fontSize: 14,
               marginBottom: 6
             }}>{currentProduct.price}</div>
+
+            <div style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '4px',
+              alignItems: 'center',
+              width: '100%',
+              padding: '0 8px'
+            }}>
+              {Object.entries(currentProduct.sizes).map(([size, available]) => (
+                <div
+                  key={size}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    fontSize: '12px',
+                    color: available ? '#444' : '#999',
+                    width: '100%',
+                    justifyContent: 'center'
+                  }}
+                >
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke={available ? '#222' : '#999'}
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    {available ? (
+                      <path d="M20 6L9 17l-5-5"/>
+                    ) : (
+                      <path d="M18 6L6 18M6 6l12 12"/>
+                    )}
+                  </svg>
+                  {size === 'single' && 'Single (135cm x 200cm)'}
+                  {size === 'double' && 'Double (200cm x 200cm)'}
+                  {size === 'king' && 'King (220cm x 235cm)'}
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 
