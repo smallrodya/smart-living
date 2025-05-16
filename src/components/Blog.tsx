@@ -48,36 +48,36 @@ export default function Blog() {
   const next = () => setCurrent((c) => (c === blogPosts.length - 1 ? 0 : c + 1));
 
   return (
-    <section style={{ padding: '60px 0', background: '#fafbfc' }}>
+  <section style={{ padding: '60px 0', background: '#fafbfc' }}>
       <div style={{ maxWidth: 700, margin: '0 auto', padding: '0 24px', position: 'relative' }}>
         <h2 style={{ fontSize: 36, fontWeight: 800, marginBottom: 18, letterSpacing: 0.2, textAlign: 'center' }}>Smart Living Blog</h2>
         <p style={{ color: '#444', marginBottom: 44, fontSize: 20, maxWidth: 600, textAlign: 'center', marginLeft: 'auto', marginRight: 'auto' }}>
           Tips, trends, and inspiration for a cozy and stylish home. Everything about bedding, rugs, throws, and more!
-        </p>
-        <div style={{
-          background: '#fff',
+      </p>
+      <div style={{
+            background: '#fff',
           borderRadius: 20,
           boxShadow: '0 6px 32px rgba(0,0,0,0.08)',
-          overflow: 'hidden',
-          display: 'flex',
-          flexDirection: 'column',
+            overflow: 'hidden',
+            display: 'flex',
+            flexDirection: 'column',
           minHeight: 420,
           position: 'relative',
           transition: 'box-shadow 0.22s, transform 0.22s',
-        }}>
+          }}>
           <img src={post.image} alt={post.title} style={{ width: '100%', height: 210, objectFit: 'cover', transition: 'transform 0.22s' }} />
           <div style={{ padding: 28, flex: 1, display: 'flex', flexDirection: 'column' }}>
             <span style={{ color: '#888', fontSize: 15, marginBottom: 10 }}>{new Date(post.date).toLocaleDateString('en-GB', { year: 'numeric', month: 'short', day: 'numeric' })}</span>
             <h3 style={{ fontSize: 22, fontWeight: 700, margin: '0 0 14px 0', color: '#1a1a1a', lineHeight: 1.3 }}>{post.title}</h3>
             <p style={{ color: '#444', fontSize: 16, marginBottom: 20, flex: 1 }}>{post.excerpt}</p>
-            <Link href={`/blog/${post.slug}`} style={{
-              color: '#fff',
+              <Link href={`/blog/${post.slug}`} style={{
+                color: '#fff',
               background: 'linear-gradient(90deg, #1a1a1a 60%, #444 100%)',
               borderRadius: 10,
               padding: '12px 32px',
-              textDecoration: 'none',
+                textDecoration: 'none',
               fontWeight: 700,
-              alignSelf: 'flex-start',
+                alignSelf: 'flex-start',
               fontSize: 16,
               boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
               transition: 'background 0.18s, transform 0.18s',
@@ -134,7 +134,7 @@ export default function Blog() {
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#222" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M9 6l6 6-6 6"/></svg>
           </button>
         </div>
-      </div>
-    </section>
-  );
+    </div>
+  </section>
+);
 }

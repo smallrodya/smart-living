@@ -9,6 +9,7 @@ import SubscribeSection from "../components/SubscribeSection";
 import Footer from "../components/Footer";
 import CookieBanner from "../components/CookieBanner";
 import Blog from "../components/Blog";
+import ThrowAndCurtainSection from "../components/ThrowAndCurtainSection";
 export default function Home() {
   return (
     <>
@@ -16,6 +17,7 @@ export default function Home() {
       <CategoriesSection />
       <Banner />
       <ReduceSpaceCarousel />
+      <ThrowAndCurtainSection />
       <BestSellersSlider />
       <BigCategory />
       <MobileBigCategory />

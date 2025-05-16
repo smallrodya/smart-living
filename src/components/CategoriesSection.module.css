@@ -208,7 +208,7 @@
   .subcategoriesGrid {
     grid-template-columns: 1fr;
   }
-}
+} 
 
 .menuBar {
   width: 100%;

@@ -22,10 +22,7 @@ export default function Page({ params }: PageProps) {
     images: [
       '/best5.jpg',
       '/best5-hover.jpg',
-      '/best5-hover2.jpg',
       '/best5-hover3.jpg',
-      '/best5-hover4.jpg',
-      '/best5-hover5.jpg',
     ],
     currentImageIndex,
     onImageChange: setCurrentImageIndex,

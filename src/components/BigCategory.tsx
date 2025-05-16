@@ -49,6 +49,7 @@ const BigCategory = () => {
   return (
     <section className={styles.section}>
       <div className={styles.container}>
+        <h2 className={styles.sectionTitle}>ALL CATEGORY</h2>
         <div className={styles.categoriesGrid}>
           {currentCategories.map((category, index) => (
             <div key={index} className={styles.categoryCard}>

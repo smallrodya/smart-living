@@ -210,7 +210,7 @@ const CategoriesSection = () => {
       <ul className={styles.menuList} role="menubar">
         {categories.map((cat, idx) => (
           <li
-            key={cat.name}
+              key={cat.name}
             className={styles.menuItem + (hoveredIdx === idx && dropdownOpen ? ' ' + styles.active : '')}
             onMouseEnter={() => handleMouseEnter(idx)}
             onMouseLeave={handleMouseLeave}
@@ -230,17 +230,17 @@ const CategoriesSection = () => {
                     <div key={sub.name} className={styles.dropdownCol}>
                       <div className={styles.dropdownColTitle}>{sub.name}</div>
                       <ul className={styles.dropdownLinks}>
-                        {sub.links.map((link) => (
+                      {sub.links.map((link) => (
                           <li key={link.label} className={styles.dropdownLink}>
                             <a href={link.href} tabIndex={0}>{link.label}</a>
                           </li>
                         ))}
                       </ul>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
+                      </div>
+                      ))}
+          </div>
+        </div>
+      )}
           </li>
         ))}
       </ul>

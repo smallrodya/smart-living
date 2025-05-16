@@ -21,11 +21,6 @@ export default function Page({ params }: PageProps) {
     discount: '-56%',
     images: [
       '/best3.jpg',
-      '/best3-hover.jpg',
-      '/best3-hover2.jpg',
-      '/best3-hover3.jpg',
-      '/best3-hover4.jpg',
-      '/best3-hover5.jpg',
     ],
     currentImageIndex,
     onImageChange: setCurrentImageIndex,
