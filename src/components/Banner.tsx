@@ -32,7 +32,7 @@ const Banner = () => {
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: '40px',
-    marginTop: '-100px'
+    marginTop: '-0px'
   };
 
   return (

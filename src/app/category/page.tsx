@@ -28,6 +28,7 @@ const categories: Category[] = [
           'Shop Duvet Set under £10',
           'Clearance',
           'Shop All',
+          'Duvet Covers from £9.99',
         ],
       },
       {
@@ -46,6 +47,18 @@ const categories: Category[] = [
           'Shop by Colour',
           'Shop by Material',
           'Shop All',
+        ],
+      },
+      {
+        name: 'BED LINEN',
+        links: [
+          'Bed Linen from £4.49',
+        ],
+      },
+      {
+        name: 'TEDDY SETS',
+        links: [
+          'Teddy Sets from £11.99',
         ],
       },
     ],
@@ -70,6 +83,9 @@ const categories: Category[] = [
           'Shop Rugs by Colour',
           'Shop Rugs from £10.99',
           'Shop All',
+          'Carved Rugs from £12.99',
+          'Shaggy Rugs from £11.98',
+          'Non Slip Mats from £5.49',
         ],
       },
     ],
@@ -84,6 +100,7 @@ const categories: Category[] = [
           'Shop Towels by Design',
           'Shop Towel by Colour',
           'Shop All',
+          'Towel Bales From £8.99',
         ],
       },
       {
@@ -92,6 +109,7 @@ const categories: Category[] = [
           'Shop Throw by Type',
           'Shop Throw by Colour',
           'Shop All',
+          'Throws from £11.99',
         ],
       },
     ],
@@ -102,7 +120,9 @@ const categories: Category[] = [
     sub: [
       {
         name: 'CHAIRS',
-        links: ['Shop all'],
+        links: [
+          'Shop all',
+        ],
       },
     ],
   },
@@ -126,11 +146,19 @@ const categories: Category[] = [
     sub: [
       {
         name: 'MEN',
-        links: ['Hoodie', 'Sweatshirt'],
+        links: [
+          'Hoodie',
+          'Sweatshirt',
+        ],
       },
       {
         name: 'WOMEN',
-        links: ['Denim', 'Jersey', 'Jogger', 'Lounge & Nightwear'],
+        links: [
+          'Denim',
+          'Jersey',
+          'Jogger',
+          'Lounge & Nightwear',
+        ],
       },
     ],
   },
@@ -140,15 +168,21 @@ const categories: Category[] = [
     sub: [
       {
         name: 'BOOTIES',
-        links: ['Shop All'],
+        links: [
+          'Shop All',
+        ],
       },
       {
         name: 'SLIPPERS',
-        links: ['Shop All'],
+        links: [
+          'Shop All',
+        ],
       },
       {
         name: 'SOCKS',
-        links: ['Shop all'],
+        links: [
+          'Shop all',
+        ],
       },
     ],
   },

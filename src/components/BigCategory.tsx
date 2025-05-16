@@ -76,7 +76,7 @@ const BigCategory = () => {
             className={styles.navButton}
             aria-label="Previous categories"
           >
-            ←
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#222" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
           </button>
           <button 
             onClick={nextPage} 
@@ -84,7 +84,7 @@ const BigCategory = () => {
             className={styles.navButton}
             aria-label="Next categories"
           >
-            →
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#222" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M9 6l6 6-6 6"/></svg>
           </button>
         </div>
       </div>

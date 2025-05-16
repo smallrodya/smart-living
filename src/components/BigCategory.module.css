@@ -98,28 +98,47 @@
   height: 56px;
   border-radius: 50%;
   background: white;
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  border: 1.5px solid rgba(0, 0, 0, 0.13);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: box-shadow 0.22s, background 0.22s, border 0.22s, transform 0.18s;
   color: #1a1a1a;
   font-size: 24px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.07);
+  outline: none;
+  position: relative;
 }
 
-.navButton:hover {
-  background: #f8f8f8;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-  transform: scale(1.05);
+.navButton svg {
+  display: block;
+  width: 32px;
+  height: 32px;
+  stroke: #222;
+  transition: stroke 0.18s;
+}
+
+.navButton:hover:not(:disabled),
+.navButton:focus-visible:not(:disabled) {
+  background: #f5f5f5;
+  border-color: #222;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.13);
+  transform: scale(1.08);
+}
+
+.navButton:active:not(:disabled) {
+  background: #ececec;
+  border-color: #888;
+  transform: scale(0.97);
 }
 
 .navButton:disabled {
-  opacity: 0.5;
+  opacity: 0.45;
   cursor: not-allowed;
   transform: none;
   box-shadow: none;
+  border-color: #eee;
 }
 
 @media (max-width: 1200px) {

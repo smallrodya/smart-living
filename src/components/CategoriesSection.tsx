@@ -1,12 +1,11 @@
 'use client';
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import Image from 'next/image';
 import styles from './CategoriesSection.module.css';
-import MobileCategoriesSection from './MobileCategoriesSection';
 
 interface SubCategory {
   name: string;
-  links: string[];
+  links: { label: string; href: string }[];
 }
 
 interface Category {
@@ -23,29 +22,42 @@ const categories: Category[] = [
       {
         name: 'DUVET SET',
         links: [
-          'Shop Duvet Set by Type',
-          'Shop Duvet Set by Colour',
-          'Shop Duvet Set under £10',
-          'Clearance',
-          'Shop All',
+          { label: 'Shop Duvet Set by Type', href: '/categories/bedding/duvet-type' },
+          { label: 'Shop Duvet Set by Colour', href: '/categories/bedding/duvet-colour' },
+          { label: 'Shop Duvet Set under £10', href: '/categories/bedding/under-10' },
+          { label: 'Clearance', href: '/categories/bedding/clearance' },
+          { label: 'Shop All', href: '/categories/bedding' },
+          { label: 'Duvet Covers from £9.99', href: '/category/duvet-covers' },
         ],
       },
       {
         name: 'BED SHEETS',
         links: [
-          'Shop by Sheet Type',
-          'Shop by Sheet Colour',
-          'Shop from £4.49',
-          'Shop All',
+          { label: 'Shop by Sheet Type', href: '/categories/bedding/sheet-type' },
+          { label: 'Shop by Sheet Colour', href: '/categories/bedding/sheet-colour' },
+          { label: 'Shop from £4.49', href: '/categories/bedding/from-4.49' },
+          { label: 'Shop All', href: '/categories/bedding' },
         ],
       },
       {
         name: 'KIDS COLLECTION',
         links: [
-          'Kids collection by type',
-          'Shop by Colour',
-          'Shop by Material',
-          'Shop All',
+          { label: 'Kids collection by type', href: '/categories/bedding/kids-collection' },
+          { label: 'Shop by Colour', href: '/categories/bedding/kids-colour' },
+          { label: 'Shop by Material', href: '/categories/bedding/kids-material' },
+          { label: 'Shop All', href: '/categories/bedding' },
+        ],
+      },
+      {
+        name: 'BED LINEN',
+        links: [
+          { label: 'Bed Linen from £4.49', href: '/category/bed-linen' },
+        ],
+      },
+      {
+        name: 'TEDDY SETS',
+        links: [
+          { label: 'Teddy Sets from £11.99', href: '/category/teddy-sets' },
         ],
       },
     ],
@@ -57,19 +69,22 @@ const categories: Category[] = [
       {
         name: 'MATS',
         links: [
-          'Shop Mats by Colour',
-          'Shop Mats by Design',
-          'Shop Mats from £5.49',
-          'Shop All',
+          { label: 'Shop Mats by Colour', href: '/categories/rugs-mats/mats-colour' },
+          { label: 'Shop Mats by Design', href: '/categories/rugs-mats/mats-design' },
+          { label: 'Shop Mats from £5.49', href: '/categories/rugs-mats/mats-from-5.49' },
+          { label: 'Shop All', href: '/categories/rugs-mats' },
         ],
       },
       {
         name: 'RUGS',
         links: [
-          'Shop Rugs by Type',
-          'Shop Rugs by Colour',
-          'Shop Rugs from £10.99',
-          'Shop All',
+          { label: 'Shop Rugs by Type', href: '/categories/rugs-mats/rugs-type' },
+          { label: 'Shop Rugs by Colour', href: '/categories/rugs-mats/rugs-colour' },
+          { label: 'Shop Rugs from £10.99', href: '/categories/rugs-mats/rugs-from-10.99' },
+          { label: 'Shop All', href: '/categories/rugs-mats' },
+          { label: 'Carved Rugs from £12.99', href: '/category/rugs/rugtype/carved-rugs' },
+          { label: 'Shaggy Rugs from £11.98', href: '/category/rugs/rugtype/shaggy-rugs' },
+          { label: 'Non Slip Mats from £5.49', href: '/category/rugs/rugtype/non-slip-mats' },
         ],
       },
     ],
@@ -81,17 +96,19 @@ const categories: Category[] = [
       {
         name: 'TOWELS',
         links: [
-          'Shop Towels by Design',
-          'Shop Towel by Colour',
-          'Shop All',
+          { label: 'Shop Towels by Design', href: '/categories/throws-towels/towels-design' },
+          { label: 'Shop Towel by Colour', href: '/categories/throws-towels/towel-colour' },
+          { label: 'Shop All', href: '/categories/throws-towels' },
+          { label: 'Towel Bales From £8.99', href: '/category/towels' },
         ],
       },
       {
         name: 'THROWS',
         links: [
-          'Shop Throw by Type',
-          'Shop Throw by Colour',
-          'Shop All',
+          { label: 'Shop Throw by Type', href: '/categories/throws-towels/throw-type' },
+          { label: 'Shop Throw by Colour', href: '/categories/throws-towels/throw-colour' },
+          { label: 'Shop All', href: '/categories/throws-towels' },
+          { label: 'Throws from £11.99', href: '/category/throws' },
         ],
       },
     ],
@@ -102,7 +119,9 @@ const categories: Category[] = [
     sub: [
       {
         name: 'CHAIRS',
-        links: ['Shop all'],
+        links: [
+          { label: 'Shop all', href: '/categories/outdoor/chairs' },
+        ],
       },
     ],
   },
@@ -113,9 +132,9 @@ const categories: Category[] = [
       {
         name: 'CURTAINS',
         links: [
-          'Shop by Curtain Type',
-          'Shop by Curtain Colour',
-          'Shop All',
+          { label: 'Shop by Curtain Type', href: '/categories/curtains/curtain-type' },
+          { label: 'Shop by Curtain Colour', href: '/categories/curtains/curtain-colour' },
+          { label: 'Shop All', href: '/categories/curtains' },
         ],
       },
     ],
@@ -126,11 +145,19 @@ const categories: Category[] = [
     sub: [
       {
         name: 'MEN',
-        links: ['Hoodie', 'Sweatshirt'],
+        links: [
+          { label: 'Hoodie', href: '/categories/clothing/men/hoodie' },
+          { label: 'Sweatshirt', href: '/categories/clothing/men/sweatshirt' },
+        ],
       },
       {
         name: 'WOMEN',
-        links: ['Denim', 'Jersey', 'Jogger', 'Lounge & Nightwear'],
+        links: [
+          { label: 'Denim', href: '/categories/clothing/women/denim' },
+          { label: 'Jersey', href: '/categories/clothing/women/jersey' },
+          { label: 'Jogger', href: '/categories/clothing/women/jogger' },
+          { label: 'Lounge & Nightwear', href: '/categories/clothing/women/lounge-nightwear' },
+        ],
       },
     ],
   },
@@ -140,142 +167,85 @@ const categories: Category[] = [
     sub: [
       {
         name: 'BOOTIES',
-        links: ['Shop All'],
+        links: [
+          { label: 'Shop All', href: '/categories/footwear/booties' },
+        ],
       },
       {
         name: 'SLIPPERS',
-        links: ['Shop All'],
+        links: [
+          { label: 'Shop All', href: '/categories/footwear/slippers' },
+        ],
       },
       {
         name: 'SOCKS',
-        links: ['Shop all'],
+        links: [
+          { label: 'Shop all', href: '/categories/footwear/socks' },
+        ],
       },
     ],
   },
 ];
 
-const DesktopCategoriesSection = () => {
-  const [openIdx, setOpenIdx] = useState<number | null>(null);
-  const modalRef = useRef<HTMLDivElement>(null);
+const CategoriesSection = () => {
+  const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const closeTimeout = useRef<NodeJS.Timeout | null>(null);
 
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
-        setOpenIdx(null);
-      }
-    }
-    if (openIdx !== null) {
-      document.body.style.overflow = 'hidden';
-      document.addEventListener('mousedown', handleClickOutside);
-    } else {
-      document.body.style.overflow = '';
-      document.removeEventListener('mousedown', handleClickOutside);
-    }
-    return () => {
-      document.body.style.overflow = '';
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [openIdx]);
+  const handleMouseEnter = (idx: number) => {
+    if (closeTimeout.current) clearTimeout(closeTimeout.current);
+    setHoveredIdx(idx);
+    setDropdownOpen(true);
+  };
 
-  const currentCat = openIdx !== null ? categories[openIdx] : null;
-
-  const handleCategoryClick = (e: React.MouseEvent<HTMLButtonElement>, index: number) => {
-    e.preventDefault();
-    setOpenIdx(openIdx === index ? null : index);
+  const handleMouseLeave = () => {
+    closeTimeout.current = setTimeout(() => {
+      setDropdownOpen(false);
+      setHoveredIdx(null);
+    }, 180); // задержка закрытия
   };
 
   return (
-    <section className={styles.section}>
-      <div className={styles.container}>
-        <div className={styles.categoriesList}>
-          {categories.map((cat, index) => (
-            <button
-              key={cat.name}
-              className={`${styles.categoryButton} ${openIdx === index ? styles.active : ''}`}
-              onClick={(e) => handleCategoryClick(e, index)}
-            >
-              {cat.name}
-            </button>
-          ))}
-          </div>
-      </div>
-
-      {openIdx !== null && currentCat && (
-        <div className={styles.modalOverlay}>
-          <div ref={modalRef} className={styles.modalContent}>
-            <button
-              className={styles.closeButton}
-              onClick={() => setOpenIdx(null)}
-              aria-label="Close"
-            >
-              ×
-            </button>
-
-              <Image 
-                src={currentCat.img} 
-                alt={currentCat.name} 
-              width={800}
-              height={200}
-              className={styles.categoryImage}
-              />
-
-            <div className={styles.subcategoriesGrid}>
-                {currentCat.sub.map((sub) => (
-                <div key={sub.name} className={styles.subcategoryCard}>
-                  <h3 className={styles.subcategoryTitle}>{sub.name}</h3>
-                  <div className={styles.subcategoryLinks}>
-                      {sub.links.map((link) => (
-                      <div key={link} className={styles.subcategoryLink}>
-                        {link}
-                      </div>
-                      ))}
-                  </div>
-                  </div>
-                ))}
+    <nav className={styles.menuBar} aria-label="Main categories">
+      <ul className={styles.menuList} role="menubar">
+        {categories.map((cat, idx) => (
+          <li
+            key={cat.name}
+            className={styles.menuItem + (hoveredIdx === idx && dropdownOpen ? ' ' + styles.active : '')}
+            onMouseEnter={() => handleMouseEnter(idx)}
+            onMouseLeave={handleMouseLeave}
+            tabIndex={0}
+            aria-haspopup="true"
+            aria-expanded={hoveredIdx === idx && dropdownOpen}
+            role="menuitem"
+          >
+            <span className={styles.menuTitle}>{cat.name}</span>
+            {hoveredIdx === idx && dropdownOpen && (
+              <div className={styles.dropdown} role="menu">
+                {/* <div className={styles.dropdownImageWrap}>
+                  <Image src={cat.img} alt={cat.name} width={180} height={80} className={styles.dropdownImage} />
+                </div> */}
+                <div className={styles.dropdownContent}>
+                  {cat.sub.map((sub) => (
+                    <div key={sub.name} className={styles.dropdownCol}>
+                      <div className={styles.dropdownColTitle}>{sub.name}</div>
+                      <ul className={styles.dropdownLinks}>
+                        {sub.links.map((link) => (
+                          <li key={link.label} className={styles.dropdownLink}>
+                            <a href={link.href} tabIndex={0}>{link.label}</a>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
               </div>
-
-            <div className={styles.navigation}>
-              <button
-                onClick={() => setOpenIdx(openIdx > 0 ? openIdx - 1 : 0)}
-                disabled={openIdx === 0}
-                className={styles.navButton}
-                aria-label="Previous category"
-              >
-                ←
-              </button>
-              <button
-                onClick={() => setOpenIdx(openIdx < categories.length - 1 ? openIdx + 1 : openIdx)}
-                disabled={openIdx === categories.length - 1}
-                className={styles.navButton}
-                aria-label="Next category"
-              >
-                →
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-    </section>
+            )}
+          </li>
+        ))}
+      </ul>
+    </nav>
   );
-};
-
-const CategoriesSection = () => {
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const checkMobile = () => {
-      if (typeof window !== 'undefined') {
-      setIsMobile(window.innerWidth <= 768);
-      }
-    };
-    
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
-
-  return isMobile ? <MobileCategoriesSection /> : <DesktopCategoriesSection />;
 };
 
 export default CategoriesSection; 

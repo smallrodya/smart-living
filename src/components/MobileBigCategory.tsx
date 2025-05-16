@@ -58,14 +58,14 @@ const MobileBigCategory = () => {
             className={styles.navButton}
             aria-label="Previous category"
           >
-            ←
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#222" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
           </button>
           <button 
             onClick={nextCategory}
             className={styles.navButton}
             aria-label="Next category"
           >
-            →
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#222" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M9 6l6 6-6 6"/></svg>
           </button>
         </div>
         <div className={styles.categoryCard}>
