@@ -4,7 +4,7 @@ import json
 import time
 
 def parse_premium_duvet_sets():
-    base_url = "https://smart-living.co.uk/category/bedding/shopbytype/printed-duvet-set-bedding/"
+    base_url = "https://smart-living.co.uk/category/bedding/shopbytype/premium-duvet-set-bedding/"
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
     }
@@ -87,14 +87,14 @@ def parse_premium_duvet_sets():
             break
     
     # Сохраняем результаты в JSON файл
-    with open('printed_duvet_products.json', 'w', encoding='utf-8') as f:
+    with open('premium_duvet_products.json', 'w', encoding='utf-8') as f:
         json.dump(products, f, ensure_ascii=False, indent=2)
         
     print(f"\nВсего спарсено товаров: {len(products)}")
-    print("Результаты сохранены в файл printed_duvet_products.json")
+    print("Результаты сохранены в файл premium_duvet_products.json")
     
-    if len(products) != 150:
-        print(f"\nВНИМАНИЕ: Спарсено {len(products)} товаров вместо ожидаемых 150!")
+    if len(products) != 155:
+        print(f"\nВНИМАНИЕ: Спарсено {len(products)} товаров вместо ожидаемых 155!")
         print("Возможно, некоторые товары не были найдены или сайт изменился.")
 
 if __name__ == "__main__":

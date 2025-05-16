@@ -30,6 +30,18 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
+  async rewrites() {
+    return [
+      {
+        source: '/category/bedding/shop-duvet-set-by-type',
+        destination: '/shop-duvet-set-by-type',
+      },
+      {
+        source: '/category/:path*/shop-duvet-set-by-type',
+        destination: '/shop-duvet-set-by-type',
+      }
+    ];
+  },
 };
 
 module.exports = nextConfig; 

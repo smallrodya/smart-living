@@ -21,6 +21,7 @@ interface WishlistItem {
     single: boolean;
     double: boolean;
     king: boolean;
+    superKing?: boolean;
   };
 }
 
@@ -348,6 +349,7 @@ const WishlistPage = () => {
                             {size === 'single' && 'Single (135cm x 200cm)'}
                             {size === 'double' && 'Double (200cm x 200cm)'}
                             {size === 'king' && 'King (220cm x 235cm)'}
+                            {size === 'superKing' && 'Super King (220cm x 260cm)'}
                           </div>
                         ))}
                       </div>

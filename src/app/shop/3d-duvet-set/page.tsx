@@ -320,59 +320,68 @@ const ThreeDDuvetSetPage = () => {
     return price >= minPrice && price <= maxPrice && colorMatch && sizeMatch;
   });
 
+  const isInWishlist = (productId: number) => {
+    try {
+      const savedWishlist = localStorage.getItem('wishlist');
+      if (savedWishlist) {
+        const items = JSON.parse(savedWishlist);
+        return Array.isArray(items) && items.some(item => item.id === `3d_${productId}`);
+      }
+    } catch (error) {
+      console.error('Error checking wishlist:', error);
+    }
+    return false;
+  };
+
   useEffect(() => {
     const savedWishlist = localStorage.getItem('wishlist');
     if (savedWishlist) {
-      const items = JSON.parse(savedWishlist);
-      setWishlist(items.map((item: any) => item.id));
+      try {
+        const items = JSON.parse(savedWishlist);
+        if (Array.isArray(items)) {
+          setWishlist(items.map((item: any) => item.id));
+        }
+      } catch (error) {
+        console.error('Error parsing wishlist:', error);
+        setWishlist([]);
+      }
     }
   }, []);
 
   const toggleWishlist = (id: number) => {
-    setWishlist(prev => {
+    try {
       const prefixedId = `3d_${id}`;
-      const newWishlist = prev.includes(prefixedId) 
-        ? prev.filter(i => i !== prefixedId)
-        : [...prev, prefixedId];
+      const savedWishlist = localStorage.getItem('wishlist');
+      const existingItems = savedWishlist ? JSON.parse(savedWishlist) : [];
       
-      try {
-        const existingItems = JSON.parse(localStorage.getItem('wishlist') || '[]');
-        const validItems = Array.isArray(existingItems) 
-          ? existingItems.filter(item => 
-              item && 
-              typeof item === 'object' && 
-              'id' in item && 
-              typeof item.id === 'string' && 
-              !item.id.startsWith('3d_')
-            )
-          : [];
-        
-        const product = products.find(p => p.id === id);
-        if (product) {
-          const newItem = {
-            id: prefixedId,
-            name: product.name,
-            price: product.price,
-            image: product.image,
-            hoverImage: product.hoverImage,
-            discount: product.discount,
-            color: product.color,
-            sizes: product.sizes
-          };
-          
-          const wishlistItems = newWishlist.includes(prefixedId)
-            ? [...validItems, newItem]
-            : validItems.filter(item => item.id !== prefixedId);
-          
-          localStorage.setItem('wishlist', JSON.stringify(wishlistItems));
-        }
-        
-        return newWishlist;
-      } catch (error) {
-        console.error('Error handling wishlist:', error);
-        return newWishlist;
+      if (!Array.isArray(existingItems)) {
+        throw new Error('Invalid wishlist format');
       }
-    });
+
+      const product = products.find(p => p.id === id);
+      if (!product) return;
+
+      const newItem = {
+        id: prefixedId,
+        name: product.name,
+        price: product.price,
+        image: product.image,
+        hoverImage: product.hoverImage,
+        discount: product.discount,
+        color: product.color,
+        sizes: product.sizes
+      };
+
+      const isCurrentlyInWishlist = existingItems.some(item => item.id === prefixedId);
+      const updatedItems = isCurrentlyInWishlist
+        ? existingItems.filter(item => item.id !== prefixedId)
+        : [...existingItems, newItem];
+
+      localStorage.setItem('wishlist', JSON.stringify(updatedItems));
+      setWishlist(updatedItems.map(item => item.id));
+    } catch (error) {
+      console.error('Error toggling wishlist:', error);
+    }
   };
 
   return (
@@ -825,7 +834,7 @@ const ThreeDDuvetSetPage = () => {
                       cursor: 'pointer',
                       boxShadow: '0 2px 12px rgba(0,0,0,0.15)',
                       transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                      transform: wishlist.includes(`3d_${product.id}`) ? 'scale(1.1)' : 'scale(1)',
+                      transform: isInWishlist(product.id) ? 'scale(1.1)' : 'scale(1)',
                       backdropFilter: 'blur(4px)'
                     }}
                     onMouseEnter={() => setHoveredButton(product.id)}
@@ -835,7 +844,7 @@ const ThreeDDuvetSetPage = () => {
                       width="24"
                       height="24"
                       viewBox="0 0 24 24"
-                      fill={wishlist.includes(`3d_${product.id}`) ? '#e53935' : 'none'}
+                      fill={isInWishlist(product.id) ? '#e53935' : 'none'}
                       stroke="#e53935"
                       strokeWidth="2"
                       strokeLinecap="round"

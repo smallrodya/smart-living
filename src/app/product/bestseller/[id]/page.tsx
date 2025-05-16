@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ProductPageBestSeller from '@/components/ProductPageBestSeller';
+import MobileBottomMenu from '@/components/MobileBottomMenu';
+
 
 interface PageProps {
   params: {

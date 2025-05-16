@@ -35,10 +35,10 @@ const products: Product[] = [
     isSoldOut: true,
     color: 'Grey',
     sizes: {
-      single: true,
-      double: true,
-      king: true,
-      superKing: true
+      single: false,
+      double: false,
+      king: false,
+      superKing: false
     }
   },
   {
@@ -51,10 +51,10 @@ const products: Product[] = [
     isSoldOut: true,
     color: 'Pink',
     sizes: {
-      single: true,
-      double: true,
-      king: true,
-      superKing: true
+      single: false,
+      double: false,
+      king: false,
+      superKing: false
     }
   },
   {
@@ -67,10 +67,10 @@ const products: Product[] = [
     isSoldOut: true,
     color: 'Purple',
     sizes: {
-      single: true,
-      double: true,
-      king: true,
-      superKing: true
+      single: false,
+      double: false,
+      king: false,
+      superKing: false
     }
   },
   {
@@ -99,10 +99,10 @@ const products: Product[] = [
     isSoldOut: true,
     color: 'Pink',
     sizes: {
-      single: true,
-      double: true,
-      king: true,
-      superKing: true
+      single: false,
+      double: false,
+      king: false,
+      superKing: false
     }
   },
   {
@@ -179,10 +179,10 @@ const products: Product[] = [
     isSoldOut: true,
     color: 'Green',
     sizes: {
-      single: true,
-      double: true,
-      king: true,
-      superKing: true
+      single: false,
+      double: false,
+      king: false,
+      superKing: false
     }
   },
   {
@@ -211,10 +211,10 @@ const products: Product[] = [
     isSoldOut: true,
     color: 'Ochre',
     sizes: {
-      single: true,
-      double: true,
-      king: true,
-      superKing: true
+      single: false,
+      double: false,
+      king: false,
+      superKing: false
     }
   },
   {
@@ -781,13 +781,14 @@ const products: Product[] = [
     price: "£39.99 – £49.99",
     image: '/printed-duvet50.jpg',
     hoverImage: '/printed-duvet50-hover.jpg',
-    discount: '-50%',
+    discount: "",
+    isSoldOut: true,
     color: 'Red',
     sizes: {
-      single: true,
-      double: true,
-      king: true,
-      superKing: true
+      single: false,
+      double: false,
+      king: false,
+      superKing: false
     }
   },
   {
@@ -796,13 +797,14 @@ const products: Product[] = [
     price: "£44.99 – £49.99",
     image: '/printed-duvet51.jpg',
     hoverImage: '/printed-duvet51-hover.jpg',
-    discount: '-52%',
+    discount: "",
+    isSoldOut: true,
     color: 'Red',
     sizes: {
-      single: true,
-      double: true,
-      king: true,
-      superKing: true
+      single: false,
+      double: false,
+      king: false,
+      superKing: false
     }
   },
   {
@@ -811,7 +813,8 @@ const products: Product[] = [
     price: "£41.99",
     image: '/printed-duvet52.jpg',
     hoverImage: '/printed-duvet52-hover.jpg',
-    discount: '-55%',
+    discount: "",
+    isSoldOut: false,
     color: 'Ivory',
     sizes: {
       single: true,
@@ -826,7 +829,8 @@ const products: Product[] = [
     price: "£9.51 – £12.10",
     image: '/printed-duvet53.jpg',
     hoverImage: '/printed-duvet53-hover.jpg',
-    discount: '-58%',
+    discount: "-83%",
+    isSoldOut: false,
     color: 'Multi',
     sizes: {
       single: true,
@@ -841,7 +845,8 @@ const products: Product[] = [
     price: "£9.51 – £12.10",
     image: '/printed-duvet54.jpg',
     hoverImage: '/printed-duvet54-hover.jpg',
-    discount: '-60%',
+    discount: "-83%",
+    isSoldOut: false,
     color: 'Multi',
     sizes: {
       single: true,
@@ -856,7 +861,8 @@ const products: Product[] = [
     price: "£8.64 – £9.51",
     image: '/printed-duvet55.jpg',
     hoverImage: '/printed-duvet55-hover.jpg',
-    discount: '-62%',
+    discount: "-76%",
+    isSoldOut: false,
     color: 'Lilac',
     sizes: {
       single: true,
@@ -871,7 +877,8 @@ const products: Product[] = [
     price: "£14.70 – £19.02",
     image: '/printed-duvet56.jpg',
     hoverImage: '/printed-duvet56-hover.jpg',
-    discount: '-65%',
+    discount: "-73%",
+    isSoldOut: false,
     color: 'Blush Pink',
     sizes: {
       single: true,
@@ -886,7 +893,8 @@ const products: Product[] = [
     price: "£14.70 – £19.02",
     image: '/printed-duvet57.jpg',
     hoverImage: '/printed-duvet57-hover.jpg',
-    discount: '-68%',
+    discount: "-73%",
+    isSoldOut: false,
     color: 'Green',
     sizes: {
       single: true,
@@ -901,7 +909,8 @@ const products: Product[] = [
     price: "£33.99 Original price was: £33.99.£14.70Current price is: £14.70.",
     image: '/printed-duvet58.jpg',
     hoverImage: '/printed-duvet58-hover.jpg',
-    discount: '-70%',
+    discount: "-57%",
+    isSoldOut: false,
     color: 'Blue',
     sizes: {
       single: true,
@@ -916,7 +925,8 @@ const products: Product[] = [
     price: "£33.99 Original price was: £33.99.£14.70Current price is: £14.70.",
     image: '/printed-duvet59.jpg',
     hoverImage: '/printed-duvet59-hover.jpg',
-    discount: '-72%',
+    discount: "-57%",
+    isSoldOut: false,
     color: 'Mustard',
     sizes: {
       single: true,
@@ -931,7 +941,8 @@ const products: Product[] = [
     price: "£33.99 Original price was: £33.99.£14.70Current price is: £14.70.",
     image: '/printed-duvet60.jpg',
     hoverImage: '/printed-duvet60-hover.jpg',
-    discount: '-75%',
+    discount: "-57%",
+    isSoldOut: false,
     color: 'Green',
     sizes: {
       single: true,
@@ -946,7 +957,8 @@ const products: Product[] = [
     price: "£9.51 – £10.37",
     image: '/printed-duvet61.jpg',
     hoverImage: '/printed-duvet61-hover.jpg',
-    discount: '-78%',
+    discount: "-74%",
+    isSoldOut: false,
     color: 'Natural',
     sizes: {
       single: true,
@@ -961,7 +973,8 @@ const products: Product[] = [
     price: "£8.64 – £8.99",
     image: '/printed-duvet62.jpg',
     hoverImage: '/printed-duvet62-hover.jpg',
-    discount: '-80%',
+    discount: "-78%",
+    isSoldOut: false,
     color: 'Charcoal',
     sizes: {
       single: true,
@@ -976,7 +989,8 @@ const products: Product[] = [
     price: "£9.51 – £11.24",
     image: '/printed-duvet63.jpg',
     hoverImage: '/printed-duvet63-hover.jpg',
-    discount: '-82%',
+    discount: "-75%",
+    isSoldOut: false,
     color: 'Green',
     sizes: {
       single: true,
@@ -991,7 +1005,8 @@ const products: Product[] = [
     price: "£9.51 – £12.10",
     image: '/printed-duvet64.jpg',
     hoverImage: '/printed-duvet64-hover.jpg',
-    discount: '-85%',
+    discount: "-83%",
+    isSoldOut: false,
     color: 'Multi',
     sizes: {
       single: true,
@@ -1006,7 +1021,8 @@ const products: Product[] = [
     price: "£8.64 – £10.37",
     image: '/printed-duvet65.jpg',
     hoverImage: '/printed-duvet65-hover.jpg',
-    discount: '-88%',
+    discount: "-77%",
+    isSoldOut: false,
     color: 'Charcoal',
     sizes: {
       single: true,
@@ -1021,7 +1037,8 @@ const products: Product[] = [
     price: "£9.51 – £12.97",
     image: '/printed-duvet66.jpg',
     hoverImage: '/printed-duvet66-hover.jpg',
-    discount: '-90%',
+    discount: "-81%",
+    isSoldOut: false,
     color: 'Multi',
     sizes: {
       single: true,
@@ -1036,7 +1053,8 @@ const products: Product[] = [
     price: "£9.51 – £12.10",
     image: '/printed-duvet67.jpg',
     hoverImage: '/printed-duvet67-hover.jpg',
-    discount: '-92%',
+    discount: "-83%",
+    isSoldOut: false,
     color: 'Multi',
     sizes: {
       single: true,
@@ -1051,13 +1069,14 @@ const products: Product[] = [
     price: "£33.99 Original price was: £33.99.£9.59Current price is: £9.59.",
     image: '/printed-duvet68.jpg',
     hoverImage: '/printed-duvet68-hover.jpg',
-    discount: '-94%',
+    discount: "-72%",
+    isSoldOut: true,
     color: 'Green',
     sizes: {
-      single: true,
-      double: true,
-      king: true,
-      superKing: true
+      single: false,
+      double: false,
+      king: false,
+      superKing: false
     }
   },
   {
@@ -1066,7 +1085,8 @@ const products: Product[] = [
     price: "£9.51 – £12.10",
     image: '/printed-duvet69.jpg',
     hoverImage: '/printed-duvet69-hover.jpg',
-    discount: '-96%',
+    discount: "-83%",
+    isSoldOut: false,
     color: 'Multi',
     sizes: {
       single: true,
@@ -1081,7 +1101,8 @@ const products: Product[] = [
     price: "£14.70 – £19.02",
     image: '/printed-duvet70.jpg',
     hoverImage: '/printed-duvet70-hover.jpg',
-    discount: '-98%',
+    discount: "-58%",
+    isSoldOut: false,
     color: 'Multi',
     sizes: {
       single: true,
@@ -1096,7 +1117,8 @@ const products: Product[] = [
     price: "£9.51 – £12.10",
     image: '/printed-duvet71.jpg',
     hoverImage: '/printed-duvet71-hover.jpg',
-    discount: '-40%',
+    discount: "-73%",
+    isSoldOut: false,
     color: 'Multi',
     sizes: {
       single: true,
@@ -1111,7 +1133,8 @@ const products: Product[] = [
     price: "£8.64 – £10.37",
     image: '/printed-duvet72.jpg',
     hoverImage: '/printed-duvet72-hover.jpg',
-    discount: '-42%',
+    discount: "-77%",
+    isSoldOut: false,
     color: 'Multi',
     sizes: {
       single: true,
@@ -1126,7 +1149,8 @@ const products: Product[] = [
     price: "£39.99 – £49.99",
     image: '/printed-duvet73.jpg',
     hoverImage: '/printed-duvet73-hover.jpg',
-    discount: '-45%',
+    discount: "",
+    isSoldOut: false,
     color: 'Multi',
     sizes: {
       single: true,
@@ -1141,7 +1165,8 @@ const products: Product[] = [
     price: "£39.99 – £49.99",
     image: '/printed-duvet74.jpg',
     hoverImage: '/printed-duvet74-hover.jpg',
-    discount: '-48%',
+    discount: "",
+    isSoldOut: false,
     color: 'Multi',
     sizes: {
       single: true,
@@ -1156,7 +1181,8 @@ const products: Product[] = [
     price: "£39.99 – £49.99",
     image: '/printed-duvet75.jpg',
     hoverImage: '/printed-duvet75-hover.jpg',
-    discount: '-50%',
+    discount: "",
+    isSoldOut: false,
     color: 'Multi',
     sizes: {
       single: true,
@@ -1171,13 +1197,14 @@ const products: Product[] = [
     price: "£9.51 – £19.02",
     image: '/printed-duvet76.jpg',
     hoverImage: '/printed-duvet76-hover.jpg',
-    discount: '-52%',
+    discount: "-73%",
+    isSoldOut: true,
     color: 'Multi',
     sizes: {
-      single: true,
-      double: true,
-      king: true,
-      superKing: true
+      single: false,
+      double: false,
+      king: false,
+      superKing: false
     }
   },
   {
@@ -1186,7 +1213,8 @@ const products: Product[] = [
     price: "£14.70 – £19.02",
     image: '/printed-duvet77.jpg',
     hoverImage: '/printed-duvet77-hover.jpg',
-    discount: '-55%',
+    discount: "-58%",
+    isSoldOut: false,
     color: 'Multi',
     sizes: {
       single: true,
@@ -1201,7 +1229,8 @@ const products: Product[] = [
     price: "£9.51 – £19.02",
     image: '/printed-duvet78.jpg',
     hoverImage: '/printed-duvet78-hover.jpg',
-    discount: '-58%',
+    discount: "-73%",
+    isSoldOut: false,
     color: 'Multi',
     sizes: {
       single: true,
@@ -1216,7 +1245,8 @@ const products: Product[] = [
     price: "£39.99 – £49.99",
     image: '/printed-duvet79.jpg',
     hoverImage: '/printed-duvet79-hover.jpg',
-    discount: '-60%',
+    discount: "",
+    isSoldOut: false,
     color: 'Multi',
     sizes: {
       single: true,
@@ -1231,7 +1261,8 @@ const products: Product[] = [
     price: "£39.99 – £49.99",
     image: '/printed-duvet80.jpg',
     hoverImage: '/printed-duvet80-hover.jpg',
-    discount: '-62%',
+    discount: "",
+    isSoldOut: false,
     color: 'Multi',
     sizes: {
       single: true,
@@ -1246,7 +1277,8 @@ const products: Product[] = [
     price: "£39.99 – £49.99",
     image: '/printed-duvet81.jpg',
     hoverImage: '/printed-duvet81-hover.jpg',
-    discount: '-65%',
+    discount: "",
+    isSoldOut: false,
     color: 'Multi',
     sizes: {
       single: true,
@@ -1261,7 +1293,8 @@ const products: Product[] = [
     price: "£9.51 – £12.10",
     image: '/printed-duvet82.jpg',
     hoverImage: '/printed-duvet82-hover.jpg',
-    discount: '-68%',
+    discount: "-73%",
+    isSoldOut: false,
     color: 'Green',
     sizes: {
       single: true,
@@ -1276,7 +1309,8 @@ const products: Product[] = [
     price: "£9.51 – £12.10",
     image: '/printed-duvet83.jpg',
     hoverImage: '/printed-duvet83-hover.jpg',
-    discount: '-70%',
+    discount: "-73%",
+    isSoldOut: false,
     color: 'Navy',
     sizes: {
       single: true,
@@ -1291,7 +1325,8 @@ const products: Product[] = [
     price: "£14.70 – £18.16",
     image: '/printed-duvet84.jpg',
     hoverImage: '/printed-duvet84-hover.jpg',
-    discount: '-72%',
+    discount: "-58%",
+    isSoldOut: false,
     color: 'Black/White',
     sizes: {
       single: true,
@@ -1306,7 +1341,8 @@ const products: Product[] = [
     price: "£13.83 – £18.16",
     image: '/printed-duvet85.jpg',
     hoverImage: '/printed-duvet85-hover.jpg',
-    discount: '-75%',
+    discount: "-65%",
+    isSoldOut: false,
     color: 'Charcoal/Grey',
     sizes: {
       single: true,
@@ -1321,7 +1357,8 @@ const products: Product[] = [
     price: "£13.83 – £18.16",
     image: '/printed-duvet86.jpg',
     hoverImage: '/printed-duvet86-hover.jpg',
-    discount: '-78%',
+    discount: "-65%",
+    isSoldOut: false,
     color: 'Ochre/Grey',
     sizes: {
       single: true,
@@ -1336,7 +1373,8 @@ const products: Product[] = [
     price: "£13.83 – £18.16",
     image: '/printed-duvet87.jpg',
     hoverImage: '/printed-duvet87-hover.jpg',
-    discount: '-80%',
+    discount: "-65%",
+    isSoldOut: false,
     color: 'Pink',
     sizes: {
       single: true,
@@ -1351,7 +1389,8 @@ const products: Product[] = [
     price: "£13.83 – £18.16",
     image: '/printed-duvet88.jpg',
     hoverImage: '/printed-duvet88-hover.jpg',
-    discount: '-82%',
+    discount: "-65%",
+    isSoldOut: false,
     color: 'Purple/Grey',
     sizes: {
       single: true,
@@ -1366,7 +1405,8 @@ const products: Product[] = [
     price: "£13.83 – £18.16",
     image: '/printed-duvet89.jpg',
     hoverImage: '/printed-duvet89-hover.jpg',
-    discount: '-85%',
+    discount: "-65%",
+    isSoldOut: false,
     color: 'Black/White',
     sizes: {
       single: true,
@@ -1381,7 +1421,8 @@ const products: Product[] = [
     price: "£13.83 – £18.16",
     image: '/printed-duvet90.jpg',
     hoverImage: '/printed-duvet90-hover.jpg',
-    discount: '-88%',
+    discount: "-65%",
+    isSoldOut: false,
     color: 'Blue',
     sizes: {
       single: true,
@@ -1396,7 +1437,8 @@ const products: Product[] = [
     price: "£13.83 – £18.16",
     image: '/printed-duvet91.jpg',
     hoverImage: '/printed-duvet91-hover.jpg',
-    discount: '-90%',
+    discount: "-65%",
+    isSoldOut: false,
     color: 'Blush Pink',
     sizes: {
       single: true,
@@ -1411,7 +1453,8 @@ const products: Product[] = [
     price: "£13.49 – £39.99",
     image: '/printed-duvet92.jpg',
     hoverImage: '/printed-duvet92-hover.jpg',
-    discount: '-92%',
+    discount: "-65%",
+    isSoldOut: false,
     color: 'Teal',
     sizes: {
       single: true,
@@ -1426,7 +1469,8 @@ const products: Product[] = [
     price: "£13.83 – £18.16",
     image: '/printed-duvet93.jpg',
     hoverImage: '/printed-duvet93-hover.jpg',
-    discount: '-94%',
+    discount: "-65%",
+    isSoldOut: false,
     color: 'Aubergine',
     sizes: {
       single: true,
@@ -1441,7 +1485,8 @@ const products: Product[] = [
     price: "£13.83 – £18.16",
     image: '/printed-duvet94.jpg',
     hoverImage: '/printed-duvet94-hover.jpg',
-    discount: '-96%',
+    discount: "-65%",
+    isSoldOut: false,
     color: 'Blush Pink',
     sizes: {
       single: true,
@@ -1456,7 +1501,8 @@ const products: Product[] = [
     price: "£13.83 – £18.16",
     image: '/printed-duvet95.jpg',
     hoverImage: '/printed-duvet95-hover.jpg',
-    discount: '-98%',
+    discount: "-65%",
+    isSoldOut: false,
     color: 'Red',
     sizes: {
       single: true,
@@ -1471,7 +1517,8 @@ const products: Product[] = [
     price: "£13.83 – £18.16",
     image: '/printed-duvet96.jpg',
     hoverImage: '/printed-duvet96-hover.jpg',
-    discount: '-40%',
+    discount: "-65%",
+    isSoldOut: false,
     color: 'Yellow',
     sizes: {
       single: true,
@@ -1486,7 +1533,8 @@ const products: Product[] = [
     price: "£15.99 – £23.99",
     image: '/printed-duvet97.jpg',
     hoverImage: '/printed-duvet97-hover.jpg',
-    discount: '-42%',
+    discount: "-65%",
+    isSoldOut: false,
     color: 'Blush Pink',
     sizes: {
       single: true,
@@ -1501,7 +1549,8 @@ const products: Product[] = [
     price: "£13.83 – £20.75",
     image: '/printed-duvet98.jpg',
     hoverImage: '/printed-duvet98-hover.jpg',
-    discount: '-45%',
+    discount: "-65%",
+    isSoldOut: false,
     color: 'Blush Pink',
     sizes: {
       single: true,
@@ -1516,7 +1565,8 @@ const products: Product[] = [
     price: "£44.99 Original price was: £44.99.£16.99Current price is: £16.99.",
     image: '/printed-duvet99.jpg',
     hoverImage: '/printed-duvet99-hover.jpg',
-    discount: '-48%',
+    discount: "-65%",
+    isSoldOut: false,
     color: 'Multi',
     sizes: {
       single: true,
@@ -1531,7 +1581,8 @@ const products: Product[] = [
     price: "£13.83 – £20.75",
     image: '/printed-duvet100.jpg',
     hoverImage: '/printed-duvet100-hover.jpg',
-    discount: '-50%',
+    discount: "-65%",
+    isSoldOut: false,
     color: 'Blush Pink',
     sizes: {
       single: true,
@@ -1546,7 +1597,8 @@ const products: Product[] = [
     price: "£13.83 – £20.75",
     image: '/printed-duvet101.jpg',
     hoverImage: '/printed-duvet101-hover.jpg',
-    discount: '-52%',
+    discount: "-65%",
+    isSoldOut: false,
     color: 'Grey',
     sizes: {
       single: true,
@@ -1561,7 +1613,8 @@ const products: Product[] = [
     price: "£13.83 – £20.75",
     image: '/printed-duvet102.jpg',
     hoverImage: '/printed-duvet102-hover.jpg',
-    discount: '-55%',
+    discount: "-65%",
+    isSoldOut: false,
     color: 'Multi',
     sizes: {
       single: true,
@@ -1576,7 +1629,8 @@ const products: Product[] = [
     price: "£13.83 – £20.75",
     image: '/printed-duvet103.jpg',
     hoverImage: '/printed-duvet103-hover.jpg',
-    discount: '-58%',
+    discount: "-65%",
+    isSoldOut: false,
     color: 'Grey',
     sizes: {
       single: true,
@@ -1591,7 +1645,8 @@ const products: Product[] = [
     price: "£10.49 – £12.97",
     image: '/printed-duvet104.jpg',
     hoverImage: '/printed-duvet104-hover.jpg',
-    discount: '-60%',
+    discount: "-65%",
+    isSoldOut: false,
     color: 'Pink/Blue',
     sizes: {
       single: true,
@@ -1606,7 +1661,8 @@ const products: Product[] = [
     price: "£10.49 – £12.97",
     image: '/printed-duvet105.jpg',
     hoverImage: '/printed-duvet105-hover.jpg',
-    discount: '-62%',
+    discount: "-65%",
+    isSoldOut: false,
     color: 'Purple',
     sizes: {
       single: true,
@@ -1621,7 +1677,8 @@ const products: Product[] = [
     price: "£10.49 – £12.97",
     image: '/printed-duvet106.jpg',
     hoverImage: '/printed-duvet106-hover.jpg',
-    discount: '-65%',
+    discount: "-65%",
+    isSoldOut: false,
     color: 'Teal',
     sizes: {
       single: true,
@@ -1636,7 +1693,8 @@ const products: Product[] = [
     price: "£15.99 – £20.99",
     image: '/printed-duvet107.jpg',
     hoverImage: '/printed-duvet107-hover.jpg',
-    discount: '-68%',
+    discount: "-65%",
+    isSoldOut: false,
     color: 'Multi',
     sizes: {
       single: true,
@@ -1651,7 +1709,8 @@ const products: Product[] = [
     price: "£17.99 – £18.49",
     image: '/printed-duvet108.jpg',
     hoverImage: '/printed-duvet108-hover.jpg',
-    discount: '-70%',
+    discount: "-65%",
+    isSoldOut: false,
     color: 'Multi',
     sizes: {
       single: true,
@@ -1666,7 +1725,8 @@ const products: Product[] = [
     price: "£13.83 – £18.16",
     image: '/printed-duvet109.jpg',
     hoverImage: '/printed-duvet109-hover.jpg',
-    discount: '-72%',
+    discount: "-65%",
+    isSoldOut: false,
     color: 'Blue',
     sizes: {
       single: true,
@@ -1681,13 +1741,14 @@ const products: Product[] = [
     price: "£13.83 – £18.16",
     image: '/printed-duvet110.jpg',
     hoverImage: '/printed-duvet110-hover.jpg',
-    discount: '-75%',
+    discount: "-75%",
+    isSoldOut: true,
     color: 'Grey',
     sizes: {
-      single: true,
-      double: true,
-      king: true,
-      superKing: true
+      single: false,
+      double: false,
+      king: false,
+      superKing: false
     }
   },
   {
@@ -1696,13 +1757,14 @@ const products: Product[] = [
     price: "£18.99 – £20.99",
     image: '/printed-duvet111.jpg',
     hoverImage: '/printed-duvet111-hover.jpg',
-    discount: '-78%',
+    discount: "-58%",
+    isSoldOut: true,
     color: 'Grey/Charcoal',
     sizes: {
-      single: true,
-      double: true,
-      king: true,
-      superKing: true
+      single: false,
+      double: false,
+      king: false,
+      superKing: false
     }
   },
   {
@@ -1711,7 +1773,8 @@ const products: Product[] = [
     price: "£13.83 – £20.75",
     image: '/printed-duvet112.jpg',
     hoverImage: '/printed-duvet112-hover.jpg',
-    discount: '-80%',
+    discount: "-65%",
+    isSoldOut: false,
     color: 'Blush Pink',
     sizes: {
       single: true,
@@ -1726,7 +1789,8 @@ const products: Product[] = [
     price: "£13.83 – £20.75",
     image: '/printed-duvet113.jpg',
     hoverImage: '/printed-duvet113-hover.jpg',
-    discount: '-82%',
+    discount: "-65%",
+    isSoldOut: false,
     color: 'Black',
     sizes: {
       single: true,
@@ -1741,7 +1805,8 @@ const products: Product[] = [
     price: "£13.83 – £20.75",
     image: '/printed-duvet114.jpg',
     hoverImage: '/printed-duvet114-hover.jpg',
-    discount: '-85%',
+    discount: "-65%",
+    isSoldOut: false,
     color: 'Blue',
     sizes: {
       single: true,
@@ -1844,40 +1909,43 @@ const products: Product[] = [
     id: 121,
     name: "Reversible Polycotton Tropical Monkey Duvet Cover and Pillowcase Set – Natural",
     price: "£9.51 – £18.16",
-    image: '/printed-duvet121.jpg',
-    hoverImage: '/printed-duvet121-hover.jpg',
-    discount: '-40%',
-    color: 'Natural',
+    image: "/images/printed-duvet-set/121.jpg",
+    hoverImage: "/images/printed-duvet-set/121-hover.jpg",
+    discount: "-76%",
+    isSoldOut: true,
+    color: "Natural",
     sizes: {
-      single: true,
-      double: true,
-      king: true,
-      superKing: true
+      single: false,
+      double: false,
+      king: false,
+      superKing: false
     }
   },
   {
     id: 122,
     name: "Reversible Polycotton Wolf Panel Duvet Cover and Pillowcase Set",
     price: "£15.99 – £20.99",
-    image: '/printed-duvet122.jpg',
-    hoverImage: '/printed-duvet122-hover.jpg',
-    discount: '-42%',
-    color: 'Multi',
+    image: "/images/printed-duvet-set/122.jpg",
+    hoverImage: "/images/printed-duvet-set/122-hover.jpg",
+    discount: "-60%",
+    isSoldOut: true,
+    color: "Grey",
     sizes: {
-      single: true,
-      double: true,
-      king: true,
-      superKing: true
+      single: false,
+      double: false,
+      king: false,
+      superKing: false
     }
   },
   {
     id: 123,
     name: "Rex Duvet Cover and Pillowcase Set – Blush Pink",
     price: "£15.99 – £20.99",
-    image: '/printed-duvet123.jpg',
-    hoverImage: '/printed-duvet123-hover.jpg',
-    discount: '-45%',
-    color: 'Blush Pink',
+    image: "/images/printed-duvet-set/123.jpg",
+    hoverImage: "/images/printed-duvet-set/123-hover.jpg",
+    discount: "-60%",
+    isSoldOut: false,
+    color: "Blush Pink",
     sizes: {
       single: true,
       double: true,
@@ -1889,25 +1957,27 @@ const products: Product[] = [
     id: 124,
     name: "Rex Duvet Cover and Pillowcase Set – Green",
     price: "£15.99 – £20.99",
-    image: '/printed-duvet124.jpg',
-    hoverImage: '/printed-duvet124-hover.jpg',
-    discount: '-48%',
-    color: 'Green',
+    image: "/images/printed-duvet-set/124.jpg",
+    hoverImage: "/images/printed-duvet-set/124-hover.jpg",
+    discount: "-60%",
+    isSoldOut: true,
+    color: "Green",
     sizes: {
-      single: true,
-      double: true,
-      king: true,
-      superKing: true
+      single: false,
+      double: false,
+      king: false,
+      superKing: false
     }
   },
   {
     id: 125,
     name: "Rex Duvet Cover and Pillowcase Set – Grey",
     price: "£15.99 – £20.99",
-    image: '/printed-duvet125.jpg',
-    hoverImage: '/printed-duvet125-hover.jpg',
-    discount: '-50%',
-    color: 'Grey',
+    image: "/images/printed-duvet-set/125.jpg",
+    hoverImage: "/images/printed-duvet-set/125-hover.jpg",
+    discount: "-60%",
+    isSoldOut: false,
+    color: "Grey",
     sizes: {
       single: true,
       double: true,
@@ -1919,10 +1989,11 @@ const products: Product[] = [
     id: 126,
     name: "Rex Duvet Cover and Pillowcase Set – Ochre",
     price: "£15.99 – £20.99",
-    image: '/printed-duvet126.jpg',
-    hoverImage: '/printed-duvet126-hover.jpg',
-    discount: '-52%',
-    color: 'Ochre',
+    image: "/images/printed-duvet-set/126.jpg",
+    hoverImage: "/images/printed-duvet-set/126-hover.jpg",
+    discount: "-60%",
+    isSoldOut: false,
+    color: "Ochre",
     sizes: {
       single: true,
       double: true,
@@ -1934,10 +2005,11 @@ const products: Product[] = [
     id: 127,
     name: "Romorus Duvet Cover and Pillowcase Set",
     price: "£13.49",
-    image: '/printed-duvet127.jpg',
-    hoverImage: '/printed-duvet127-hover.jpg',
-    discount: '-55%',
-    color: 'Multi',
+    image: "/images/printed-duvet-set/127.jpg",
+    hoverImage: "/images/printed-duvet-set/127-hover.jpg",
+    discount: "-73%",
+    isSoldOut: false,
+    color: "Grey",
     sizes: {
       single: true,
       double: true,
@@ -1949,10 +2021,11 @@ const products: Product[] = [
     id: 128,
     name: "Rosettes Duvet Cover and Pillowcase Set – Pink",
     price: "£13.49 – £44.99",
-    image: '/printed-duvet128.jpg',
-    hoverImage: '/printed-duvet128-hover.jpg',
-    discount: '-58%',
-    color: 'Pink',
+    image: "/images/printed-duvet-set/128.jpg",
+    hoverImage: "/images/printed-duvet-set/128-hover.jpg",
+    discount: "-73%",
+    isSoldOut: false,
+    color: "Pink",
     sizes: {
       single: true,
       double: true,
@@ -1964,10 +2037,11 @@ const products: Product[] = [
     id: 129,
     name: "Rural Italy Duvet Cover and Pillowcase Set – Multi",
     price: "£13.49 – £39.99",
-    image: '/printed-duvet129.jpg',
-    hoverImage: '/printed-duvet129-hover.jpg',
-    discount: '-60%',
-    color: 'Multi',
+    image: "/images/printed-duvet-set/129.jpg",
+    hoverImage: "/images/printed-duvet-set/129-hover.jpg",
+    discount: "-73%",
+    isSoldOut: false,
+    color: "Multi",
     sizes: {
       single: true,
       double: true,
@@ -1979,25 +2053,27 @@ const products: Product[] = [
     id: 130,
     name: "Rural Italy Duvet Cover and Pillowcase Set – Teal",
     price: "£39.99 – £49.99",
-    image: '/printed-duvet130.jpg',
-    hoverImage: '/printed-duvet130-hover.jpg',
-    discount: '-62%',
-    color: 'Teal',
+    image: "/images/printed-duvet-set/130.jpg",
+    hoverImage: "/images/printed-duvet-set/130-hover.jpg",
+    discount: "",
+    isSoldOut: true,
+    color: "Teal",
     sizes: {
-      single: true,
-      double: true,
-      king: true,
-      superKing: true
+      single: false,
+      double: false,
+      king: false,
+      superKing: false
     }
   },
   {
     id: 131,
     name: "Safari Duvet Cover and Pillowcase Set – Red",
     price: "£13.49 – £49.99",
-    image: '/printed-duvet131.jpg',
-    hoverImage: '/printed-duvet131-hover.jpg',
-    discount: '-65%',
-    color: 'Red',
+    image: "/images/printed-duvet-set/131.jpg",
+    hoverImage: "/images/printed-duvet-set/131-hover.jpg",
+    discount: "-70%",
+    isSoldOut: false,
+    color: "Red",
     sizes: {
       single: true,
       double: true,
@@ -2009,25 +2085,27 @@ const products: Product[] = [
     id: 132,
     name: "Selfie For Christmas Duvet Cover and Pillowcase Set",
     price: "£59.99 – £69.99",
-    image: '/printed-duvet132.jpg',
-    hoverImage: '/printed-duvet132-hover.jpg',
-    discount: '-68%',
-    color: 'Multi',
+    image: "/images/printed-duvet-set/132.jpg",
+    hoverImage: "/images/printed-duvet-set/132-hover.jpg",
+    discount: "",
+    isSoldOut: true,
+    color: "Multi",
     sizes: {
-      single: true,
-      double: true,
-      king: true,
-      superKing: true
+      single: false,
+      double: false,
+      king: false,
+      superKing: false
     }
   },
   {
     id: 133,
     name: "Super Soft & Reversible Dino Skiing Printed Duvet Cover with Pillowcase",
     price: "£16.99 – £19.99",
-    image: '/printed-duvet133.jpg',
-    hoverImage: '/printed-duvet133-hover.jpg',
-    discount: '-70%',
-    color: 'Multi',
+    image: "/images/printed-duvet-set/133.jpg",
+    hoverImage: "/images/printed-duvet-set/133-hover.jpg",
+    discount: "-51%",
+    isSoldOut: false,
+    color: "Multi",
     sizes: {
       single: true,
       double: true,
@@ -2039,10 +2117,11 @@ const products: Product[] = [
     id: 134,
     name: "The Real Boss Duvet Cover and Pillowcase Set – Green/Cream",
     price: "£11.67",
-    image: '/printed-duvet134.jpg',
-    hoverImage: '/printed-duvet134-hover.jpg',
-    discount: '-72%',
-    color: 'Green/Cream',
+    image: "/images/printed-duvet-set/134.jpg",
+    hoverImage: "/images/printed-duvet-set/134-hover.jpg",
+    discount: "-77%",
+    isSoldOut: false,
+    color: "Green/Cream",
     sizes: {
       single: true,
       double: true,
@@ -2054,25 +2133,27 @@ const products: Product[] = [
     id: 135,
     name: "Tribal Zebra Duvet Cover and Pillowcase Set",
     price: "£39.99 – £49.99",
-    image: '/printed-duvet135.jpg',
-    hoverImage: '/printed-duvet135-hover.jpg',
-    discount: '-75%',
-    color: 'Multi',
+    image: "/images/printed-duvet-set/135.jpg",
+    hoverImage: "/images/printed-duvet-set/135-hover.jpg",
+    discount: "",
+    isSoldOut: true,
+    color: "Black/White",
     sizes: {
-      single: true,
-      double: true,
-      king: true,
-      superKing: true
+      single: false,
+      double: false,
+      king: false,
+      superKing: false
     }
   },
   {
     id: 136,
     name: "Tribute Duvet Cover and Pillowcase Set",
     price: "£13.49",
-    image: '/printed-duvet136.jpg',
-    hoverImage: '/printed-duvet136-hover.jpg',
-    discount: '-78%',
-    color: 'Multi',
+    image: "/images/printed-duvet-set/136.jpg",
+    hoverImage: "/images/printed-duvet-set/136-hover.jpg",
+    discount: "-73%",
+    isSoldOut: false,
+    color: "Grey",
     sizes: {
       single: true,
       double: true,
@@ -2084,10 +2165,11 @@ const products: Product[] = [
     id: 137,
     name: "Tropical Leaf Duvet Cover and Pillowcase Set",
     price: "£13.83 – £18.16",
-    image: '/printed-duvet137.jpg',
-    hoverImage: '/printed-duvet137-hover.jpg',
-    discount: '-80%',
-    color: 'Multi',
+    image: "/images/printed-duvet-set/137.jpg",
+    hoverImage: "/images/printed-duvet-set/137-hover.jpg",
+    discount: "-65%",
+    isSoldOut: false,
+    color: "Green",
     sizes: {
       single: true,
       double: true,
@@ -2099,10 +2181,11 @@ const products: Product[] = [
     id: 138,
     name: "Urban Ombre Duvet Cover and Pillowcase Set – Grey",
     price: "£15.99 – £20.99",
-    image: '/printed-duvet138.jpg',
-    hoverImage: '/printed-duvet138-hover.jpg',
-    discount: '-82%',
-    color: 'Grey',
+    image: "/images/printed-duvet-set/138.jpg",
+    hoverImage: "/images/printed-duvet-set/138-hover.jpg",
+    discount: "-60%",
+    isSoldOut: false,
+    color: "Grey",
     sizes: {
       single: true,
       double: true,
@@ -2114,10 +2197,11 @@ const products: Product[] = [
     id: 139,
     name: "Urban Ombre Duvet Cover and Pillowcase Set – Pink",
     price: "£15.99 – £20.99",
-    image: '/printed-duvet139.jpg',
-    hoverImage: '/printed-duvet139-hover.jpg',
-    discount: '-85%',
-    color: 'Pink',
+    image: "/images/printed-duvet-set/139.jpg",
+    hoverImage: "/images/printed-duvet-set/139-hover.jpg",
+    discount: "-60%",
+    isSoldOut: false,
+    color: "Pink",
     sizes: {
       single: true,
       double: true,
@@ -2129,10 +2213,11 @@ const products: Product[] = [
     id: 140,
     name: "Urban Ombre Duvet Cover and Pillowcase Set – Purple",
     price: "£15.99 – £20.99",
-    image: '/printed-duvet140.jpg',
-    hoverImage: '/printed-duvet140-hover.jpg',
-    discount: '-88%',
-    color: 'Purple',
+    image: "/images/printed-duvet-set/140.jpg",
+    hoverImage: "/images/printed-duvet-set/140-hover.jpg",
+    discount: "-60%",
+    isSoldOut: false,
+    color: "Purple",
     sizes: {
       single: true,
       double: true,
@@ -2144,10 +2229,11 @@ const products: Product[] = [
     id: 141,
     name: "Urban Ombre Duvet Cover and Pillowcase Set – Teal",
     price: "£15.99 – £20.99",
-    image: '/printed-duvet141.jpg',
-    hoverImage: '/printed-duvet141-hover.jpg',
-    discount: '-90%',
-    color: 'Teal',
+    image: "/images/printed-duvet-set/141.jpg",
+    hoverImage: "/images/printed-duvet-set/141-hover.jpg",
+    discount: "-60%",
+    isSoldOut: false,
+    color: "Teal",
     sizes: {
       single: true,
       double: true,
@@ -2159,100 +2245,107 @@ const products: Product[] = [
     id: 142,
     name: "Vibrance Duvet Cover and Pillowcase Set – Lime/Green",
     price: "£44.99 – £49.99",
-    image: '/printed-duvet142.jpg',
-    hoverImage: '/printed-duvet142-hover.jpg',
-    discount: '-92%',
-    color: 'Lime/Green',
+    image: "/images/printed-duvet-set/142.jpg",
+    hoverImage: "/images/printed-duvet-set/142-hover.jpg",
+    discount: "",
+    isSoldOut: true,
+    color: "Lime/Green",
     sizes: {
-      single: true,
-      double: true,
-      king: true,
-      superKing: true
+      single: false,
+      double: false,
+      king: false,
+      superKing: false
     }
   },
   {
     id: 143,
     name: "Wave Ombre Duvet Cover and Pillowcase Set – Grey",
     price: "£15.99 – £20.99",
-    image: '/printed-duvet143.jpg',
-    hoverImage: '/printed-duvet143-hover.jpg',
-    discount: '-94%',
-    color: 'Grey',
+    image: "/images/printed-duvet-set/143.jpg",
+    hoverImage: "/images/printed-duvet-set/143-hover.jpg",
+    discount: "-60%",
+    isSoldOut: true,
+    color: "Grey",
     sizes: {
-      single: true,
-      double: true,
-      king: true,
-      superKing: true
+      single: false,
+      double: false,
+      king: false,
+      superKing: false
     }
   },
   {
     id: 144,
     name: "Wave Ombre Duvet Cover and Pillowcase Set – Purple",
     price: "£15.99 – £20.99",
-    image: '/printed-duvet144.jpg',
-    hoverImage: '/printed-duvet144-hover.jpg',
-    discount: '-96%',
-    color: 'Purple',
+    image: "/images/printed-duvet-set/144.jpg",
+    hoverImage: "/images/printed-duvet-set/144-hover.jpg",
+    discount: "-60%",
+    isSoldOut: true,
+    color: "Purple",
     sizes: {
-      single: true,
-      double: true,
-      king: true,
-      superKing: true
+      single: false,
+      double: false,
+      king: false,
+      superKing: false
     }
   },
   {
     id: 145,
     name: "Waverly Duvet Cover and Pillowcase Set – Grey",
     price: "£39.99 – £49.99",
-    image: '/printed-duvet145.jpg',
-    hoverImage: '/printed-duvet145-hover.jpg',
-    discount: '-98%',
-    color: 'Grey',
+    image: "/images/printed-duvet-set/145.jpg",
+    hoverImage: "/images/printed-duvet-set/145-hover.jpg",
+    discount: "",
+    isSoldOut: true,
+    color: "Grey",
     sizes: {
-      single: true,
-      double: true,
-      king: true,
-      superKing: true
+      single: false,
+      double: false,
+      king: false,
+      superKing: false
     }
   },
   {
     id: 146,
     name: "Waverly Duvet Cover and Pillowcase Set – Purple",
     price: "£39.99 – £49.99",
-    image: '/printed-duvet146.jpg',
-    hoverImage: '/printed-duvet146-hover.jpg',
-    discount: '-40%',
-    color: 'Purple',
+    image: "/images/printed-duvet-set/146.jpg",
+    hoverImage: "/images/printed-duvet-set/146-hover.jpg",
+    discount: "",
+    isSoldOut: true,
+    color: "Purple",
     sizes: {
-      single: true,
-      double: true,
-      king: true,
-      superKing: true
+      single: false,
+      double: false,
+      king: false,
+      superKing: false
     }
   },
   {
     id: 147,
     name: "Waverly Duvet Cover and Pillowcase Set – Red",
     price: "£39.99 – £49.99",
-    image: '/printed-duvet147.jpg',
-    hoverImage: '/printed-duvet147-hover.jpg',
-    discount: '-42%',
-    color: 'Red',
+    image: "/images/printed-duvet-set/147.jpg",
+    hoverImage: "/images/printed-duvet-set/147-hover.jpg",
+    discount: "",
+    isSoldOut: true,
+    color: "Red",
     sizes: {
-      single: true,
-      double: true,
-      king: true,
-      superKing: true
+      single: false,
+      double: false,
+      king: false,
+      superKing: false
     }
   },
   {
     id: 148,
     name: "Zander Duvet Cover and Pillowcase Set – Aqua",
     price: "£15.99 – £20.99",
-    image: '/printed-duvet148.jpg',
-    hoverImage: '/printed-duvet148-hover.jpg',
-    discount: '-45%',
-    color: 'Aqua',
+    image: "/images/printed-duvet-set/148.jpg",
+    hoverImage: "/images/printed-duvet-set/148-hover.jpg",
+    discount: "-60%",
+    isSoldOut: false,
+    color: "Aqua",
     sizes: {
       single: true,
       double: true,
@@ -2264,10 +2357,11 @@ const products: Product[] = [
     id: 149,
     name: "Zander Duvet Cover and Pillowcase Set – Blush Pink",
     price: "£15.99 – £20.99",
-    image: '/printed-duvet149.jpg',
-    hoverImage: '/printed-duvet149-hover.jpg',
-    discount: '-48%',
-    color: 'Blush Pink',
+    image: "/images/printed-duvet-set/149.jpg",
+    hoverImage: "/images/printed-duvet-set/149-hover.jpg",
+    discount: "-60%",
+    isSoldOut: false,
+    color: "Blush Pink",
     sizes: {
       single: true,
       double: true,
@@ -2279,10 +2373,11 @@ const products: Product[] = [
     id: 150,
     name: "Zander Duvet Cover and Pillowcase Set – Grey",
     price: "£15.99 – £20.99",
-    image: '/printed-duvet150.jpg',
-    hoverImage: '/printed-duvet150-hover.jpg',
-    discount: '-50%',
-    color: 'Grey',
+    image: "/images/printed-duvet-set/150.jpg",
+    hoverImage: "/images/printed-duvet-set/150-hover.jpg",
+    discount: "-60%",
+    isSoldOut: false,
+    color: "Grey",
     sizes: {
       single: true,
       double: true,
@@ -2328,43 +2423,44 @@ export default function PrintedDuvetSet() {
   }, []);
 
   const toggleWishlist = (id: number) => {
-    setWishlist(prev => {
-      const prefixedId = `printed_duvet_${id}`;
-      const newWishlist = prev.includes(prefixedId) 
-        ? prev.filter(i => i !== prefixedId)
-        : [...prev, prefixedId];
+    try {
+      const prefixedId = `printed_${id}`;
+      const savedWishlist = localStorage.getItem('wishlist');
+      const existingItems = savedWishlist ? JSON.parse(savedWishlist) : [];
       
-      try {
-        const existingItems = JSON.parse(localStorage.getItem('wishlist') || '[]');
-        const validItems = Array.isArray(existingItems) 
-          ? existingItems.filter(item => 
-              item && 
-              typeof item === 'object' && 
-              'id' in item && 
-              typeof item.id === 'string' && 
-              !item.id.startsWith('printed_duvet_')
-            )
-          : [];
-        
-        const newItems = products
-          .filter((_, i) => newWishlist.includes(`printed_duvet_${i + 1}`))
-          .map((item) => ({
-            id: `printed_duvet_${item.id}`,
-            src: item.image,
-            hoverSrc: item.hoverImage,
-            title: item.name,
-            price: item.price,
-            discount: item.discount
-          }));
-        
-        const wishlistItems = [...validItems, ...newItems];
-        localStorage.setItem('wishlist', JSON.stringify(wishlistItems));
-        return newWishlist;
-      } catch (error) {
-        console.error('Error handling wishlist:', error);
-        return newWishlist;
+      if (!Array.isArray(existingItems)) {
+        throw new Error('Invalid wishlist format');
       }
-    });
+
+      const product = products.find(p => p.id === id);
+      if (!product) return;
+
+      const newItem = {
+        id: prefixedId,
+        name: product.name,
+        price: product.price,
+        image: product.image,
+        hoverImage: product.hoverImage,
+        discount: product.discount,
+        color: product.color,
+        sizes: {
+          single: product.sizes.single,
+          double: product.sizes.double,
+          king: product.sizes.king,
+          superKing: product.sizes.superKing
+        }
+      };
+
+      const isCurrentlyInWishlist = existingItems.some(item => item.id === prefixedId);
+      const updatedItems = isCurrentlyInWishlist
+        ? existingItems.filter(item => item.id !== prefixedId)
+        : [...existingItems, newItem];
+
+      localStorage.setItem('wishlist', JSON.stringify(updatedItems));
+      setWishlist(updatedItems.map(item => item.id));
+    } catch (error) {
+      console.error('Error toggling wishlist:', error);
+    }
   };
 
   return (

@@ -4,6 +4,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ProductPageBestSeller from '@/components/ProductPageBestSeller';
 
+
 interface PageProps {
   params: {
     id: string;

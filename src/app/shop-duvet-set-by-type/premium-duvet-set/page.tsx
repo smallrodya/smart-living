@@ -32,7 +32,7 @@ const products: Product[] = [
     image: '/premium-duvet1.jpg',
     hoverImage: '/premium-duvet1-hover.jpg',
     discount: '-65%',
-    isSoldOut: true,
+    isSoldOut: false,
     color: 'Oyster',
     sizes: {
       single: true,
@@ -47,13 +47,14 @@ const products: Product[] = [
     price: "£49.99 – £79.99",
     image: '/premium-duvet2.jpg',
     hoverImage: '/premium-duvet2-hover.jpg',
-    discount: '-65%',
+    discount: '',
+    isSoldOut: true,
     color: 'Silver',
     sizes: {
-      single: true,
-      double: true,
-      king: true,
-      superKing: true,
+      single: false,
+      double: false,
+      king: false,
+      superKing: false,
     }
   },
   {
@@ -63,6 +64,7 @@ const products: Product[] = [
     image: '/premium-duvet3.jpg',
     hoverImage: '/premium-duvet3-hover.jpg',
     discount: '-65%',
+    isSoldOut: false,
     color: 'White',
     sizes: {
       single: true,
@@ -78,6 +80,7 @@ const products: Product[] = [
     image: '/premium-duvet4.jpg',
     hoverImage: '/premium-duvet4-hover.jpg',
     discount: '-65%',
+    isSoldOut: false,
     color: 'Aubergine',
     sizes: {
       single: true,
@@ -93,6 +96,7 @@ const products: Product[] = [
     image: '/premium-duvet5.jpg',
     hoverImage: '/premium-duvet5-hover.jpg',
     discount: '-65%',
+    isSoldOut: false,
     color: 'Black',
     sizes: {
       single: true,
@@ -108,6 +112,7 @@ const products: Product[] = [
     image: '/premium-duvet6.jpg',
     hoverImage: '/premium-duvet6-hover.jpg',
     discount: '-65%',
+    isSoldOut: false,
     color: 'Charcoal',
     sizes: {
       single: true,
@@ -123,6 +128,7 @@ const products: Product[] = [
     image: '/premium-duvet7.jpg',
     hoverImage: '/premium-duvet7-hover.jpg',
     discount: '-65%',
+    isSoldOut: false,
     color: 'Cream',
     sizes: {
       single: true,
@@ -138,6 +144,7 @@ const products: Product[] = [
     image: '/premium-duvet8.jpg',
     hoverImage: '/premium-duvet8-hover.jpg',
     discount: '-65%',
+    isSoldOut: false,
     color: 'Duck Egg',
     sizes: {
       single: true,
@@ -153,6 +160,7 @@ const products: Product[] = [
     image: '/premium-duvet9.jpg',
     hoverImage: '/premium-duvet9-hover.jpg',
     discount: '-65%',
+    isSoldOut: false,
     color: 'Latte',
     sizes: {
       single: true,
@@ -168,7 +176,7 @@ const products: Product[] = [
     image: '/premium-duvet10.jpg',
     hoverImage: '/premium-duvet10-hover.jpg',
     discount: '-65%',
-    isSoldOut: true,
+    isSoldOut: false,
     color: 'Navy',
     sizes: {
       single: true,
@@ -184,8 +192,9 @@ const products: Product[] = [
     image: '/premium-duvet11.jpg',
     hoverImage: '/premium-duvet11-hover.jpg',
     discount: '-65%',
+    isSoldOut: true,
     color: 'Ochre',
-    sizes: { single: true, double: true, king: true, superKing: true }
+    sizes: { single: false, double: false, king: false, superKing: false }
   },
   {
     id: 12,
@@ -194,6 +203,7 @@ const products: Product[] = [
     image: '/premium-duvet12.jpg',
     hoverImage: '/premium-duvet12-hover.jpg',
     discount: '-65%',
+    isSoldOut: false,
     color: 'Silver',
     sizes: { single: true, double: true, king: true, superKing: true }
   },
@@ -204,6 +214,7 @@ const products: Product[] = [
     image: '/premium-duvet13.jpg',
     hoverImage: '/premium-duvet13-hover.jpg',
     discount: '-65%',
+    isSoldOut: false,
     color: 'Soft Pink',
     sizes: { single: true, double: true, king: true, superKing: true }
   },
@@ -214,6 +225,7 @@ const products: Product[] = [
     image: '/premium-duvet14.jpg',
     hoverImage: '/premium-duvet14-hover.jpg',
     discount: '-65%',
+    isSoldOut: false,
     color: 'White',
     sizes: { single: true, double: true, king: true, superKing: true }
   },
@@ -224,6 +236,7 @@ const products: Product[] = [
     image: '/premium-duvet15.jpg',
     hoverImage: '/premium-duvet15-hover.jpg',
     discount: '-75%',
+    isSoldOut: false,
     color: 'Black',
     sizes: { single: true, double: true, king: true, superKing: true }
   },
@@ -234,6 +247,7 @@ const products: Product[] = [
     image: '/premium-duvet16.jpg',
     hoverImage: '/premium-duvet16-hover.jpg',
     discount: '-75%',
+    isSoldOut: false,
     color: 'Red',
     sizes: { single: true, double: true, king: true, superKing: true }
   },
@@ -244,6 +258,7 @@ const products: Product[] = [
     image: '/premium-duvet17.jpg',
     hoverImage: '/premium-duvet17-hover.jpg',
     discount: '-74%',
+    isSoldOut: false,
     color: 'Oyster',
     sizes: { single: true, double: true, king: true, superKing: true }
   },
@@ -254,6 +269,7 @@ const products: Product[] = [
     image: '/premium-duvet18.jpg',
     hoverImage: '/premium-duvet18-hover.jpg',
     discount: '-74%',
+    isSoldOut: false,
     color: 'Silver',
     sizes: { single: true, double: true, king: true, superKing: true }
   },
@@ -264,8 +280,9 @@ const products: Product[] = [
     image: '/premium-duvet19.jpg',
     hoverImage: '/premium-duvet19-hover.jpg',
     discount: '-74%',
+    isSoldOut: true,
     color: 'White',
-    sizes: { single: true, double: true, king: true, superKing: true }
+    sizes: { single: false, double: false, king: false, superKing: false }
   },
   {
     id: 20,
@@ -273,9 +290,10 @@ const products: Product[] = [
     price: "£49.99 – £69.99",
     image: '/premium-duvet20.jpg',
     hoverImage: '/premium-duvet20-hover.jpg',
-    discount: '0%',
+    discount: '',
+    isSoldOut: true,
     color: 'Cream',
-    sizes: { single: true, double: true, king: true, superKing: true }
+    sizes: { single: false, double: false, king: false, superKing: false }
   },
   {
     id: 21,
@@ -283,9 +301,10 @@ const products: Product[] = [
     price: "£49.99 – £69.99",
     image: '/premium-duvet21.jpg',
     hoverImage: '/premium-duvet21-hover.jpg',
-    discount: '0%',
+    discount: '',
+    isSoldOut: true,
     color: 'Oyster',
-    sizes: { single: true, double: true, king: true, superKing: true }
+    sizes: { single: false, double: false, king: false, superKing: false }
   },
   {
     id: 22,
@@ -293,9 +312,10 @@ const products: Product[] = [
     price: "£21.62 – £26.81",
     image: '/premium-duvet22.jpg',
     hoverImage: '/premium-duvet22-hover.jpg',
-    discount: '0%',
+    discount: '-65%',
+    isSoldOut: true,
     color: 'Blush Pink',
-    sizes: { single: true, double: true, king: true, superKing: true }
+    sizes: { single: false, double: false, king: false, superKing: false }
   },
   {
     id: 23,
@@ -303,7 +323,8 @@ const products: Product[] = [
     price: "£21.62 – £24.99",
     image: '/premium-duvet23.jpg',
     hoverImage: '/premium-duvet23-hover.jpg',
-    discount: '0%',
+    discount: '-64%',
+    isSoldOut: true,
     color: 'Charcoal',
     sizes: { single: true, double: true, king: true, superKing: true }
   },
@@ -313,9 +334,10 @@ const products: Product[] = [
     price: "£21.62 – £24.99",
     image: '/premium-duvet24.jpg',
     hoverImage: '/premium-duvet24-hover.jpg',
-    discount: '0%',
+    discount: '-64%',
+    isSoldOut: true,
     color: 'Silver',
-    sizes: { single: true, double: true, king: true, superKing: true }
+    sizes: { single: false, double: false, king: false, superKing: false }
   },
   {
     id: 25,
@@ -323,7 +345,8 @@ const products: Product[] = [
     price: "£21.62 – £32.43",
     image: '/premium-duvet25.jpg',
     hoverImage: '/premium-duvet25-hover.jpg',
-    discount: '0%',
+    discount: '-62%',
+    isSoldOut: false,
     color: 'White/Black',
     sizes: { single: true, double: true, king: true, superKing: true }
   },
@@ -333,7 +356,8 @@ const products: Product[] = [
     price: "£21.62 – £32.43",
     image: '/premium-duvet26.jpg',
     hoverImage: '/premium-duvet26-hover.jpg',
-    discount: '0%',
+    discount: '-62%',
+    isSoldOut: false,
     color: 'White/Charcoal',
     sizes: { single: true, double: true, king: true, superKing: true }
   },
@@ -343,7 +367,8 @@ const products: Product[] = [
     price: "£21.62 – £32.43",
     image: '/premium-duvet27.jpg',
     hoverImage: '/premium-duvet27-hover.jpg',
-    discount: '0%',
+    discount: '-62%',
+    isSoldOut: false,
     color: 'White/Grey',
     sizes: { single: true, double: true, king: true, superKing: true }
   },
@@ -353,9 +378,10 @@ const products: Product[] = [
     price: "£21.62 – £32.43",
     image: '/premium-duvet28.jpg',
     hoverImage: '/premium-duvet28-hover.jpg',
-    discount: '0%',
+    discount: '-62%',
+    isSoldOut: true,
     color: 'White/Latte',
-    sizes: { single: true, double: true, king: true, superKing: true }
+    sizes: { single: false, double: false, king: false, superKing: false }
   },
   {
     id: 29,
@@ -363,7 +389,8 @@ const products: Product[] = [
     price: "£21.62 – £32.43",
     image: '/premium-duvet29.jpg',
     hoverImage: '/premium-duvet29-hover.jpg',
-    discount: '0%',
+    discount: '-62%',
+    isSoldOut: false,
     color: 'White/Navy',
     sizes: { single: true, double: true, king: true, superKing: true }
   },
@@ -373,9 +400,10 @@ const products: Product[] = [
     price: "£21.62 – £32.43",
     image: '/premium-duvet30.jpg',
     hoverImage: '/premium-duvet30-hover.jpg',
-    discount: '0%',
+    discount: '-62%',
+    isSoldOut: true,
     color: 'White/Pink',
-    sizes: { single: true, double: true, king: true, superKing: true }
+    sizes: { single: false, double: false, king: false, superKing: false }
   },
   {
     id: 31,
@@ -383,7 +411,8 @@ const products: Product[] = [
     price: "£21.62 – £32.43",
     image: '/premium-duvet31.jpg',
     hoverImage: '/premium-duvet31-hover.jpg',
-    discount: '0%',
+    discount: '-62%',
+    isSoldOut: false,
     color: 'White/White',
     sizes: { single: true, double: true, king: true, superKing: true }
   },
@@ -393,7 +422,8 @@ const products: Product[] = [
     price: "£19.02 – £29.99",
     image: '/premium-duvet32.jpg',
     hoverImage: '/premium-duvet32-hover.jpg',
-    discount: '0%',
+    discount: '-60%',
+    isSoldOut: false,
     color: 'Charcoal',
     sizes: { single: true, double: true, king: true, superKing: true }
   },
@@ -403,7 +433,8 @@ const products: Product[] = [
     price: "£14.70 – £19.02",
     image: '/premium-duvet33.jpg',
     hoverImage: '/premium-duvet33-hover.jpg',
-    discount: '0%',
+    discount: '-73%',
+    isSoldOut: false,
     color: 'Ivory',
     sizes: { single: true, double: true, king: true, superKing: true }
   },
@@ -413,9 +444,10 @@ const products: Product[] = [
     price: "£17.29 – £79.99",
     image: '/premium-duvet34.jpg',
     hoverImage: '/premium-duvet34-hover.jpg',
-    discount: '0%',
+    discount: '-66%',
+    isSoldOut: true,
     color: 'Aubergine',
-    sizes: { single: true, double: true, king: true, superKing: true }
+    sizes: { single: false, double: false, king: false, superKing: false }
   },
   {
     id: 35,
@@ -423,9 +455,10 @@ const products: Product[] = [
     price: "£17.29 – £79.99",
     image: '/premium-duvet35.jpg',
     hoverImage: '/premium-duvet35-hover.jpg',
-    discount: '0%',
+    discount: '-66%',
+    isSoldOut: true,
     color: 'Black',
-    sizes: { single: true, double: true, king: true, superKing: true }
+    sizes: { single: false, double: false, king: false, superKing: false }
   },
   {
     id: 36,
@@ -433,7 +466,8 @@ const products: Product[] = [
     price: "£17.29 – £79.99",
     image: '/premium-duvet36.jpg',
     hoverImage: '/premium-duvet36-hover.jpg',
-    discount: '0%',
+    discount: '-66%',
+    isSoldOut: false,
     color: 'Chambray',
     sizes: { single: true, double: true, king: true, superKing: true }
   },
@@ -443,7 +477,8 @@ const products: Product[] = [
     price: "£17.29 – £79.99",
     image: '/premium-duvet37.jpg',
     hoverImage: '/premium-duvet37-hover.jpg',
-    discount: '0%',
+    discount: '-66%',
+    isSoldOut: false,
     color: 'Cream',
     sizes: { single: true, double: true, king: true, superKing: true }
   },
@@ -453,7 +488,8 @@ const products: Product[] = [
     price: "£17.29 – £79.99",
     image: '/premium-duvet38.jpg',
     hoverImage: '/premium-duvet38-hover.jpg',
-    discount: '0%',
+    discount: '-66%',
+    isSoldOut: false,
     color: 'Natural',
     sizes: { single: true, double: true, king: true, superKing: true }
   },
@@ -463,9 +499,10 @@ const products: Product[] = [
     price: "£17.29 – £79.99",
     image: '/premium-duvet39.jpg',
     hoverImage: '/premium-duvet39-hover.jpg',
-    discount: '0%',
+    discount: '-66%',
+    isSoldOut: true,
     color: 'Silver',
-    sizes: { single: true, double: true, king: true, superKing: true }
+    sizes: { single: false, double: false, king: false, superKing: false }
   },
   {
     id: 40,
@@ -473,9 +510,10 @@ const products: Product[] = [
     price: "£17.29 – £79.99",
     image: '/premium-duvet40.jpg',
     hoverImage: '/premium-duvet40-hover.jpg',
-    discount: '0%',
+    discount: '-66%',
+    isSoldOut: true,
     color: 'White',
-    sizes: { single: true, double: true, king: true, superKing: true }
+    sizes: { single: false, double: false, king: false, superKing: false }
   },
   {
     id: 41,
@@ -483,9 +521,10 @@ const products: Product[] = [
     price: "£21.62 – £69.99",
     image: '/premium-duvet41.jpg',
     hoverImage: '/premium-duvet41-hover.jpg',
-    discount: '0%',
+    discount: '-64%',
+    isSoldOut: true,
     color: 'Cream',
-    sizes: { single: true, double: true, king: true, superKing: true }
+    sizes: { single: false, double: false, king: false, superKing: false }
   },
   {
     id: 42,
@@ -493,9 +532,10 @@ const products: Product[] = [
     price: "£59.99 – £69.99",
     image: '/premium-duvet42.jpg',
     hoverImage: '/premium-duvet42-hover.jpg',
-    discount: '0%',
+    discount: '',
+    isSoldOut: true,
     color: 'Grey',
-    sizes: { single: true, double: true, king: true, superKing: true }
+    sizes: { single: false, double: false, king: false, superKing: false }
   },
   {
     id: 43,
@@ -503,9 +543,10 @@ const products: Product[] = [
     price: "£13.49",
     image: '/premium-duvet43.jpg',
     hoverImage: '/premium-duvet43-hover.jpg',
-    discount: '0%',
-    color: 'Christmas',
-    sizes: { single: true, double: true, king: true, superKing: true }
+    discount: '-81%',
+    isSoldOut: true,
+    color: 'Red',
+    sizes: { single: false, double: false, king: false, superKing: false }
   },
   {
     id: 44,
@@ -513,7 +554,8 @@ const products: Product[] = [
     price: "£17.29 – £79.99",
     image: '/premium-duvet44.jpg',
     hoverImage: '/premium-duvet44-hover.jpg',
-    discount: '0%',
+    discount: '-67%',
+    isSoldOut: false,
     color: 'Chambray Silver',
     sizes: { single: true, double: true, king: true, superKing: true }
   },
@@ -523,7 +565,8 @@ const products: Product[] = [
     price: "£17.29 – £79.99",
     image: '/premium-duvet45.jpg',
     hoverImage: '/premium-duvet45-hover.jpg',
-    discount: '0%',
+    discount: '-67%',
+    isSoldOut: false,
     color: 'Cream Gold',
     sizes: { single: true, double: true, king: true, superKing: true }
   },
@@ -533,7 +576,8 @@ const products: Product[] = [
     price: "£15.56 – £79.99",
     image: '/premium-duvet46.jpg',
     hoverImage: '/premium-duvet46-hover.jpg',
-    discount: '0%',
+    discount: '-73%',
+    isSoldOut: false,
     color: 'Oyster',
     sizes: { single: true, double: true, king: true, superKing: true }
   },
@@ -543,9 +587,10 @@ const products: Product[] = [
     price: "£49.99 – £79.99",
     image: '/premium-duvet47.jpg',
     hoverImage: '/premium-duvet47-hover.jpg',
-    discount: '0%',
+    discount: '',
+    isSoldOut: true,
     color: 'Silver',
-    sizes: { single: true, double: true, king: true, superKing: true }
+    sizes: { single: false, double: false, king: false, superKing: false }
   },
   {
     id: 48,
@@ -553,9 +598,10 @@ const products: Product[] = [
     price: "£49.99 – £79.99",
     image: '/premium-duvet48.jpg',
     hoverImage: '/premium-duvet48-hover.jpg',
-    discount: '0%',
+    discount: '',
+    isSoldOut: true,
     color: 'White',
-    sizes: { single: true, double: true, king: true, superKing: true }
+    sizes: { single: false, double: false, king: false, superKing: false }
   },
   {
     id: 49,
@@ -563,7 +609,8 @@ const products: Product[] = [
     price: "£9.51 – £19.02",
     image: '/premium-duvet49.jpg',
     hoverImage: '/premium-duvet49-hover.jpg',
-    discount: '0%',
+    discount: '-73%',
+    isSoldOut: false,
     color: 'Blue',
     sizes: { single: true, double: true, king: true, superKing: true }
   },
@@ -573,7 +620,8 @@ const products: Product[] = [
     price: "£9.51 – £19.02",
     image: '/premium-duvet50.jpg',
     hoverImage: '/premium-duvet50-hover.jpg',
-    discount: '0%',
+    discount: '-73%',
+    isSoldOut: false,
     color: 'Grey',
     sizes: { single: true, double: true, king: true, superKing: true }
   },
@@ -583,7 +631,8 @@ const products: Product[] = [
     price: "£18.16 – £24.21",
     image: '/premium-duvet51.jpg',
     hoverImage: '/premium-duvet51-hover.jpg',
-    discount: '0%',
+    discount: '-57%',
+    isSoldOut: false,
     color: 'Grey',
     sizes: { single: true, double: true, king: true, superKing: true }
   },
@@ -593,7 +642,8 @@ const products: Product[] = [
     price: "£16.43 – £22.48",
     image: '/premium-duvet52.jpg',
     hoverImage: '/premium-duvet52-hover.jpg',
-    discount: '0%',
+    discount: '-72%',
+    isSoldOut: false,
     color: 'Blush',
     sizes: { single: true, double: true, king: true, superKing: true }
   },
@@ -603,7 +653,8 @@ const products: Product[] = [
     price: "£17.29 – £22.48",
     image: '/premium-duvet53.jpg',
     hoverImage: '/premium-duvet53-hover.jpg',
-    discount: '0%',
+    discount: '-72%',
+    isSoldOut: false,
     color: 'Charcoal',
     sizes: { single: true, double: true, king: true, superKing: true }
   },
@@ -613,7 +664,8 @@ const products: Product[] = [
     price: "£16.43 – £22.48",
     image: '/premium-duvet54.jpg',
     hoverImage: '/premium-duvet54-hover.jpg',
-    discount: '0%',
+    discount: '-72%',
+    isSoldOut: false,
     color: 'White',
     sizes: { single: true, double: true, king: true, superKing: true }
   },
@@ -623,7 +675,8 @@ const products: Product[] = [
     price: "£16.43 – £22.48",
     image: '/premium-duvet55.jpg',
     hoverImage: '/premium-duvet55-hover.jpg',
-    discount: '0%',
+    discount: '-72%',
+    isSoldOut: false,
     color: 'Blush',
     sizes: { single: true, double: true, king: true, superKing: true }
   },
@@ -633,7 +686,8 @@ const products: Product[] = [
     price: "£16.43 – £22.48",
     image: '/premium-duvet56.jpg',
     hoverImage: '/premium-duvet56-hover.jpg',
-    discount: '0%',
+    discount: '-72%',
+    isSoldOut: false,
     color: 'Charcoal',
     sizes: { single: true, double: true, king: true, superKing: true }
   },
@@ -643,7 +697,8 @@ const products: Product[] = [
     price: "£16.43 – £22.48",
     image: '/premium-duvet57.jpg',
     hoverImage: '/premium-duvet57-hover.jpg',
-    discount: '0%',
+    discount: '-72%',
+    isSoldOut: false,
     color: 'Natural',
     sizes: { single: true, double: true, king: true, superKing: true }
   },
@@ -653,7 +708,8 @@ const products: Product[] = [
     price: "£16.43 – £22.48",
     image: '/premium-duvet58.jpg',
     hoverImage: '/premium-duvet58-hover.jpg',
-    discount: '0%',
+    discount: '-72%',
+    isSoldOut: false,
     color: 'Silver',
     sizes: { single: true, double: true, king: true, superKing: true }
   },
@@ -663,8 +719,9 @@ const products: Product[] = [
     price: "£24.44 – £32.43",
     image: '/premium-duvet59.jpg',
     hoverImage: '/premium-duvet59-hover.jpg',
-    discount: '0%',
-    color: 'Swirl',
+    discount: '-62%',
+    isSoldOut: false,
+    color: 'Silver',
     sizes: { single: true, double: true, king: true, superKing: true }
   },
   {
@@ -673,7 +730,8 @@ const products: Product[] = [
     price: "£12.97 – £32.43",
     image: '/premium-duvet60.jpg',
     hoverImage: '/premium-duvet60-hover.jpg',
-    discount: '0%',
+    discount: '-74%',
+    isSoldOut: false,
     color: 'White/Mink',
     sizes: { single: true, double: true, king: true, superKing: true }
   },
@@ -683,7 +741,8 @@ const products: Product[] = [
     price: "£12.97 – £32.43",
     image: '/premium-duvet61.jpg',
     hoverImage: '/premium-duvet61-hover.jpg',
-    discount: '0%',
+    discount: '-74%',
+    isSoldOut: false,
     color: 'White/Silver',
     sizes: { single: true, double: true, king: true, superKing: true }
   },
@@ -693,7 +752,8 @@ const products: Product[] = [
     price: "£16.95 – £22.48",
     image: '/premium-duvet62.jpg',
     hoverImage: '/premium-duvet62-hover.jpg',
-    discount: '0%',
+    discount: '-72%',
+    isSoldOut: false,
     color: 'Blue',
     sizes: { single: true, double: true, king: true, superKing: true }
   },
@@ -879,211 +939,232 @@ const products: Product[] = [
   },
   {
     id: 81,
-    name: "Luxury Velvet Duvet Cover and Pillowcase Set – White",
-    price: "£12.97 – £15.99",
+    name: "Luxury Super Soft Stylish Lace Panel Duvet Cover with Pillowcases – White",
+    price: "£15.56 – £19.02",
     image: '/premium-duvet81.jpg',
     hoverImage: '/premium-duvet81-hover.jpg',
-    discount: '0%',
+    discount: '-73%',
+    isSoldOut: false,
     color: 'White',
     sizes: { single: true, double: true, king: true, superKing: true }
   },
   {
     id: 82,
-    name: "Luxury Velvet Duvet Cover and Pillowcase Set – White",
-    price: "£12.97 – £15.99",
+    name: "Luxury Super Soft Stylish Lace Panel Duvet Cover with Pillowcases- Blush Pink",
+    price: "£15.56 – £19.02",
     image: '/premium-duvet82.jpg',
     hoverImage: '/premium-duvet82-hover.jpg',
-    discount: '0%',
-    color: 'White',
+    discount: '-73%',
+    isSoldOut: false,
+    color: 'Blush Pink',
     sizes: { single: true, double: true, king: true, superKing: true }
   },
   {
     id: 83,
-    name: "Luxury Velvet Duvet Cover and Pillowcase Set – White",
-    price: "£12.97 – £15.99",
+    name: "Magical Winter Duvet Cover and Pillowcase Set",
+    price: "£13.49",
     image: '/premium-duvet83.jpg',
     hoverImage: '/premium-duvet83-hover.jpg',
-    discount: '0%',
+    discount: '-81%',
+    isSoldOut: true,
     color: 'White',
-    sizes: { single: true, double: true, king: true, superKing: true }
+    sizes: { single: false, double: false, king: false, superKing: false }
   },
   {
     id: 84,
-    name: "Luxury Velvet Duvet Cover and Pillowcase Set – White",
-    price: "£12.97 – £15.99",
+    name: "Muriva Diamonds Duvet Cover and Pillowcase Set – Black",
+    price: "£49.99 – £79.99",
     image: '/premium-duvet84.jpg',
     hoverImage: '/premium-duvet84-hover.jpg',
-    discount: '0%',
-    color: 'White',
-    sizes: { single: true, double: true, king: true, superKing: true }
+    discount: '',
+    isSoldOut: true,
+    color: 'Black',
+    sizes: { single: false, double: false, king: false, superKing: false }
   },
   {
     id: 85,
-    name: "Luxury Velvet Duvet Cover and Pillowcase Set – White",
-    price: "£12.97 – £15.99",
+    name: "Muriva Diamonds Duvet Cover and Pillowcase Set – Champagne",
+    price: "£49.99 – £79.99",
     image: '/premium-duvet85.jpg',
     hoverImage: '/premium-duvet85-hover.jpg',
-    discount: '0%',
-    color: 'White',
-    sizes: { single: true, double: true, king: true, superKing: true }
+    discount: '',
+    isSoldOut: true,
+    color: 'Champagne',
+    sizes: { single: false, double: false, king: false, superKing: false }
   },
   {
     id: 86,
-    name: "Luxury Velvet Duvet Cover and Pillowcase Set – White",
-    price: "£12.97 – £15.99",
+    name: "Muriva Diamonds Duvet Cover and Pillowcase Set – Charcoal",
+    price: "£49.99 – £79.99",
     image: '/premium-duvet86.jpg',
     hoverImage: '/premium-duvet86-hover.jpg',
-    discount: '0%',
-    color: 'White',
+    discount: '',
+    isSoldOut: false,
+    color: 'Charcoal',
     sizes: { single: true, double: true, king: true, superKing: true }
   },
   {
     id: 87,
-    name: "Luxury Velvet Duvet Cover and Pillowcase Set – White",
-    price: "£12.97 – £15.99",
+    name: "Muriva Diamonds Duvet Cover and Pillowcase Set – Cream",
+    price: "£49.99 – £79.99",
     image: '/premium-duvet87.jpg',
     hoverImage: '/premium-duvet87-hover.jpg',
-    discount: '0%',
-    color: 'White',
-    sizes: { single: true, double: true, king: true, superKing: true }
+    discount: '',
+    isSoldOut: true,
+    color: 'Cream',
+    sizes: { single: false, double: false, king: false, superKing: false }
   },
   {
     id: 88,
-    name: "Luxury Velvet Duvet Cover and Pillowcase Set – White",
-    price: "£12.97 – £15.99",
+    name: "Muriva Diamonds Duvet Cover and Pillowcase Set – Duck Egg",
+    price: "£49.99 – £79.99",
     image: '/premium-duvet88.jpg',
     hoverImage: '/premium-duvet88-hover.jpg',
-    discount: '0%',
-    color: 'White',
-    sizes: { single: true, double: true, king: true, superKing: true }
+    discount: '',
+    isSoldOut: true,
+    color: 'Duck Egg',
+    sizes: { single: false, double: false, king: false, superKing: false }
   },
   {
     id: 89,
-    name: "Luxury Velvet Duvet Cover and Pillowcase Set – White",
-    price: "£12.97 – £15.99",
+    name: "Muriva Diamonds Duvet Cover and Pillowcase Set – Pink",
+    price: "£49.99 – £79.99",
     image: '/premium-duvet89.jpg',
     hoverImage: '/premium-duvet89-hover.jpg',
-    discount: '0%',
-    color: 'White',
-    sizes: { single: true, double: true, king: true, superKing: true }
+    discount: '',
+    isSoldOut: true,
+    color: 'Pink',
+    sizes: { single: false, double: false, king: false, superKing: false }
   },
   {
     id: 90,
-    name: "Luxury Velvet Duvet Cover and Pillowcase Set – White",
-    price: "£12.97 – £15.99",
+    name: "Muriva Diamonds Duvet Cover and Pillowcase Set – Purple",
+    price: "£49.99 – £79.99",
     image: '/premium-duvet90.jpg',
     hoverImage: '/premium-duvet90-hover.jpg',
-    discount: '0%',
-    color: 'White',
-    sizes: { single: true, double: true, king: true, superKing: true }
+    discount: '',
+    isSoldOut: true,
+    color: 'Purple',
+    sizes: { single: false, double: false, king: false, superKing: false }
   },
   {
     id: 91,
-    name: "Luxury Velvet Duvet Cover and Pillowcase Set – White",
-    price: "£12.97 – £15.99",
+    name: "Onyx Duvet Cover and Pillowcase Set – Aubergine",
+    price: "£8.99 – £17.29",
     image: '/premium-duvet91.jpg',
     hoverImage: '/premium-duvet91-hover.jpg',
-    discount: '0%',
-    color: 'White',
+    discount: '-78%',
+    isSoldOut: false,
+    color: 'Aubergine',
     sizes: { single: true, double: true, king: true, superKing: true }
   },
   {
     id: 92,
-    name: "Luxury Velvet Duvet Cover and Pillowcase Set – White",
-    price: "£12.97 – £15.99",
+    name: "Onyx Duvet Cover and Pillowcase Set – Black",
+    price: "£8.99 – £17.29",
     image: '/premium-duvet92.jpg',
     hoverImage: '/premium-duvet92-hover.jpg',
-    discount: '0%',
-    color: 'White',
+    discount: '-78%',
+    isSoldOut: true,
+    color: 'Black',
     sizes: { single: true, double: true, king: true, superKing: true }
   },
   {
     id: 93,
-    name: "Luxury Velvet Duvet Cover and Pillowcase Set – White",
-    price: "£12.97 – £15.99",
+    name: "Onyx Duvet Cover and Pillowcase Set – Cream",
+    price: "£8.99 – £17.29",
     image: '/premium-duvet93.jpg',
     hoverImage: '/premium-duvet93-hover.jpg',
-    discount: '0%',
-    color: 'White',
-    sizes: { single: true, double: true, king: true, superKing: true }
+    discount: '-78%',
+    isSoldOut: false,
+    color: 'Cream',
+    sizes: { single: false, double: false, king: false, superKing: false }
   },
   {
     id: 94,
-    name: "Luxury Velvet Duvet Cover and Pillowcase Set – White",
-    price: "£12.97 – £15.99",
+    name: "Onyx Duvet Cover and Pillowcase Set – Latte",
+    price: "£8.99 – £17.29",
     image: '/premium-duvet94.jpg',
     hoverImage: '/premium-duvet94-hover.jpg',
-    discount: '0%',
-    color: 'White',
+    discount: '-78%',
+    isSoldOut: false,
+    color: 'Latte',
     sizes: { single: true, double: true, king: true, superKing: true }
   },
   {
     id: 95,
-    name: "Luxury Velvet Duvet Cover and Pillowcase Set – White",
-    price: "£12.97 – £15.99",
+    name: "Onyx Duvet Cover and Pillowcase Set – Silver",
+    price: "£12.97 – £17.29",
     image: '/premium-duvet95.jpg',
     hoverImage: '/premium-duvet95-hover.jpg',
-    discount: '0%',
-    color: 'White',
-    sizes: { single: true, double: true, king: true, superKing: true }
+    discount: '-75%',
+    isSoldOut: true,
+    color: 'Silver',
+    sizes: { single: false, double: false, king: false, superKing: false }
   },
   {
     id: 96,
-    name: "Luxury Velvet Duvet Cover and Pillowcase Set – White",
-    price: "£12.97 – £15.99",
+    name: "Polycotton Jersey Melange Duvet Cover With Pillowcases – Beige",
+    price: "£18.16 – £19.89",
     image: '/premium-duvet96.jpg',
     hoverImage: '/premium-duvet96-hover.jpg',
-    discount: '0%',
-    color: 'White',
-    sizes: { single: true, double: true, king: true, superKing: true }
+    discount: '-56%',
+    isSoldOut: false,
+    color: 'Beige',
+    sizes: { single: false, double: false, king: false, superKing: false }
   },
   {
     id: 97,
-    name: "Luxury Velvet Duvet Cover and Pillowcase Set – White",
-    price: "£12.97 – £15.99",
+    name: "Polycotton Jersey Melange Duvet Cover With Pillowcases – CHARCOAL",
+    price: "£18.16 – £19.89",
     image: '/premium-duvet97.jpg',
     hoverImage: '/premium-duvet97-hover.jpg',
-    discount: '0%',
-    color: 'White',
+    discount: '-56%',
+    isSoldOut: false,
+    color: 'Charcoal',
     sizes: { single: true, double: true, king: true, superKing: true }
   },
   {
     id: 98,
-    name: "Luxury Velvet Duvet Cover and Pillowcase Set – White",
-    price: "£12.97 – £15.99",
+    name: "Polycotton Jersey Melange Duvet Cover With Pillowcases – White",
+    price: "£18.16 – £19.89",
     image: '/premium-duvet98.jpg',
     hoverImage: '/premium-duvet98-hover.jpg',
-    discount: '0%',
+    discount: '-64%',
+    isSoldOut: false,
     color: 'White',
     sizes: { single: true, double: true, king: true, superKing: true }
   },
   {
     id: 99,
-    name: "Luxury Velvet Duvet Cover and Pillowcase Set – White",
-    price: "£12.97 – £15.99",
+    name: "Polycotton Pintuck Duvet Cover With Pillowcases – Blush Pink",
+    price: "£12.10 – £17.29",
     image: '/premium-duvet99.jpg',
     hoverImage: '/premium-duvet99-hover.jpg',
-    discount: '0%',
-    color: 'White',
+    discount: '-75%',
+    isSoldOut: false,
+    color: 'Blush Pink',
     sizes: { single: true, double: true, king: true, superKing: true }
   },
   {
     id: 100,
-    name: "Luxury Velvet Duvet Cover and Pillowcase Set – White",
-    price: "£12.97 – £15.99",
+    name: "Polycotton Pintuck Duvet Cover With Pillowcases – Silver",
+    price: "£12.10 – £17.29",
     image: '/premium-duvet100.jpg',
     hoverImage: '/premium-duvet100-hover.jpg',
-    discount: '0%',
-    color: 'White',
+    discount: '-75%',
+    isSoldOut: false,
+    color: 'Silver',
     sizes: { single: true, double: true, king: true, superKing: true }
   },
   {
     id: 101,
-    name: "Luxury Velvet Duvet Cover and Pillowcase Set – White",
-    price: "£12.97 – £15.99",
+    name: "Polycotton Pintuck Duvet Cover With Pillowcases – White",
+    price: "£12.10 – £17.29",
     image: '/premium-duvet101.jpg',
     hoverImage: '/premium-duvet101-hover.jpg',
-    discount: '0%',
+    discount: '-75%',
+    isSoldOut: false,
     color: 'White',
     sizes: { single: true, double: true, king: true, superKing: true }
   },
@@ -1093,7 +1174,8 @@ const products: Product[] = [
     price: "£18.99 – £31.99",
     image: '/premium-duvet102.jpg',
     hoverImage: '/premium-duvet102-hover.jpg',
-    discount: '0%',
+    discount: '-62%',
+    isSoldOut: false,
     color: 'Charcoal',
     sizes: { single: true, double: true, king: true, superKing: true }
   },
@@ -1103,7 +1185,8 @@ const products: Product[] = [
     price: "£16.43 – £30.27",
     image: '/premium-duvet103.jpg',
     hoverImage: '/premium-duvet103-hover.jpg',
-    discount: '0%',
+    discount: '-67%',
+    isSoldOut: false,
     color: 'Grey',
     sizes: { single: true, double: true, king: true, superKing: true }
   },
@@ -1113,9 +1196,10 @@ const products: Product[] = [
     price: "£16.43 – £30.27",
     image: '/premium-duvet104.jpg',
     hoverImage: '/premium-duvet104-hover.jpg',
-    discount: '0%',
+    discount: '-67%',
+    isSoldOut: true,
     color: 'Natural',
-    sizes: { single: true, double: true, king: true, superKing: true }
+    sizes: { single: false, double: false, king: false, superKing: false }
   },
   {
     id: 105,
@@ -1123,9 +1207,10 @@ const products: Product[] = [
     price: "£16.43 – £30.27",
     image: '/premium-duvet105.jpg',
     hoverImage: '/premium-duvet105-hover.jpg',
-    discount: '0%',
+    discount: '-67%',
+    isSoldOut: false,
     color: 'White',
-    sizes: { single: true, double: true, king: true, superKing: true }
+    sizes: { single: false, double: false, king: false, superKing: false }
   },
   {
     id: 106,
@@ -1133,9 +1218,10 @@ const products: Product[] = [
     price: "£49.99 – £79.99",
     image: '/premium-duvet106.jpg',
     hoverImage: '/premium-duvet106-hover.jpg',
-    discount: '0%',
+    discount: '',
+    isSoldOut: true,
     color: 'Black',
-    sizes: { single: true, double: true, king: true, superKing: true }
+    sizes: { single: false, double: false, king: false, superKing: false }
   },
   {
     id: 107,
@@ -1143,9 +1229,10 @@ const products: Product[] = [
     price: "£49.99 – £79.99",
     image: '/premium-duvet107.jpg',
     hoverImage: '/premium-duvet107-hover.jpg',
-    discount: '0%',
+    discount: '',
+    isSoldOut: true,
     color: 'Burgundy',
-    sizes: { single: true, double: true, king: true, superKing: true }
+    sizes: { single: false, double: false, king: false, superKing: false }
   },
   {
     id: 108,
@@ -1153,9 +1240,10 @@ const products: Product[] = [
     price: "£49.99 – £79.99",
     image: '/premium-duvet108.jpg',
     hoverImage: '/premium-duvet108-hover.jpg',
-    discount: '0%',
+    discount: '',
+    isSoldOut: true,
     color: 'Champagne',
-    sizes: { single: true, double: true, king: true, superKing: true }
+    sizes: { single: false, double: false, king: false, superKing: false }
   },
   {
     id: 109,
@@ -1163,9 +1251,10 @@ const products: Product[] = [
     price: "£49.99 – £79.99",
     image: '/premium-duvet109.jpg',
     hoverImage: '/premium-duvet109-hover.jpg',
-    discount: '0%',
+    discount: '',
+    isSoldOut: true,
     color: 'Cream',
-    sizes: { single: true, double: true, king: true, superKing: true }
+    sizes: { single: false, double: false, king: false, superKing: false }
   },
   {
     id: 110,
@@ -1173,9 +1262,10 @@ const products: Product[] = [
     price: "£49.99 – £79.99",
     image: '/premium-duvet110.jpg',
     hoverImage: '/premium-duvet110-hover.jpg',
-    discount: '0%',
+    discount: '',
+    isSoldOut: true,
     color: 'Grey',
-    sizes: { single: true, double: true, king: true, superKing: true }
+    sizes: { single: false, double: false, king: false, superKing: false }
   },
   {
     id: 111,
@@ -1183,9 +1273,10 @@ const products: Product[] = [
     price: "£49.99 – £79.99",
     image: '/premium-duvet111.jpg',
     hoverImage: '/premium-duvet111-hover.jpg',
-    discount: '0%',
+    discount: '',
+    isSoldOut: true,
     color: 'Navy',
-    sizes: { single: true, double: true, king: true, superKing: true }
+    sizes: { single: false, double: false, king: false, superKing: false }
   },
   {
     id: 112,
@@ -1193,9 +1284,10 @@ const products: Product[] = [
     price: "£49.99 – £79.99",
     image: '/premium-duvet112.jpg',
     hoverImage: '/premium-duvet112-hover.jpg',
-    discount: '0%',
+    discount: '',
+    isSoldOut: true,
     color: 'Purple',
-    sizes: { single: true, double: true, king: true, superKing: true }
+    sizes: { single: false, double: false, king: false, superKing: false }
   },
   {
     id: 113,
@@ -1203,8 +1295,9 @@ const products: Product[] = [
     price: "£10.37 – £12.97",
     image: '/premium-duvet113.jpg',
     hoverImage: '/premium-duvet113-hover.jpg',
-    discount: '0%',
-    color: 'Fern',
+    discount: '-81%Hot',
+    isSoldOut: false,
+    color: 'Green',
     sizes: { single: true, double: true, king: true, superKing: true }
   },
   {
@@ -1213,7 +1306,8 @@ const products: Product[] = [
     price: "£17.49 – £79.99",
     image: '/premium-duvet114.jpg',
     hoverImage: '/premium-duvet114-hover.jpg',
-    discount: '0%',
+    discount: '-65%',
+    isSoldOut: false,
     color: 'Oyster',
     sizes: { single: true, double: true, king: true, superKing: true }
   },
@@ -1223,7 +1317,8 @@ const products: Product[] = [
     price: "£17.49 – £79.99",
     image: '/premium-duvet115.jpg',
     hoverImage: '/premium-duvet115-hover.jpg',
-    discount: '0%',
+    discount: '-65%',
+    isSoldOut: false,
     color: 'Silver',
     sizes: { single: true, double: true, king: true, superKing: true }
   },
@@ -1233,7 +1328,8 @@ const products: Product[] = [
     price: "£17.49 – £79.99",
     image: '/premium-duvet116.jpg',
     hoverImage: '/premium-duvet116-hover.jpg',
-    discount: '0%',
+    discount: '-65%',
+    isSoldOut: false,
     color: 'White',
     sizes: { single: true, double: true, king: true, superKing: true }
   },
@@ -1243,9 +1339,10 @@ const products: Product[] = [
     price: "£49.99 – £69.99",
     image: '/premium-duvet117.jpg',
     hoverImage: '/premium-duvet117-hover.jpg',
-    discount: '0%',
+    discount: '',
+    isSoldOut: true,
     color: 'Cream',
-    sizes: { single: true, double: true, king: true, superKing: true }
+    sizes: { single: false, double: false, king: false, superKing: false }
   },
   {
     id: 118,
@@ -1253,9 +1350,10 @@ const products: Product[] = [
     price: "£49.99 – £69.99",
     image: '/premium-duvet118.jpg',
     hoverImage: '/premium-duvet118-hover.jpg',
-    discount: '0%',
+    discount: '',
+    isSoldOut: true,
     color: 'Grey',
-    sizes: { single: true, double: true, king: true, superKing: true }
+    sizes: { single: false, double: false, king: false, superKing: false }
   },
   {
     id: 119,
@@ -1263,9 +1361,10 @@ const products: Product[] = [
     price: "£49.99 – £69.99",
     image: '/premium-duvet119.jpg',
     hoverImage: '/premium-duvet119-hover.jpg',
-    discount: '0%',
+    discount: '',
+    isSoldOut: true,
     color: 'Silver',
-    sizes: { single: true, double: true, king: true, superKing: true }
+    sizes: { single: false, double: false, king: false, superKing: false }
   },
   {
     id: 120,
@@ -1273,9 +1372,10 @@ const products: Product[] = [
     price: "£49.99 – £69.99",
     image: '/premium-duvet120.jpg',
     hoverImage: '/premium-duvet120-hover.jpg',
-    discount: '0%',
+    discount: '',
+    isSoldOut: true,
     color: 'White',
-    sizes: { single: true, double: true, king: true, superKing: true }
+    sizes: { single: false, double: false, king: false, superKing: false }
   },
   {
     id: 121,
@@ -1283,8 +1383,9 @@ const products: Product[] = [
     price: "£17.29 – £19.89",
     image: '/premium-duvet121.jpg',
     hoverImage: '/premium-duvet121-hover.jpg',
-    discount: '0%',
-    color: 'Velvet',
+    discount: '-72%',
+    isSoldOut: false,
+    color: 'White',
     sizes: { single: true, double: true, king: true, superKing: true }
   },
   {
@@ -1293,9 +1394,10 @@ const products: Product[] = [
     price: "£24.99 – £30.99",
     image: '/premium-duvet122.jpg',
     hoverImage: '/premium-duvet122-hover.jpg',
-    discount: '0%',
+    discount: '-56%',
+    isSoldOut: true,
     color: 'Blush Pink',
-    sizes: { single: true, double: true, king: true, superKing: true }
+    sizes: { single: false, double: false, king: false, superKing: false }
   },
   {
     id: 123,
@@ -1303,9 +1405,10 @@ const products: Product[] = [
     price: "£24.99 – £30.99",
     image: '/premium-duvet123.jpg',
     hoverImage: '/premium-duvet123-hover.jpg',
-    discount: '0%',
+    discount: '-56%',
+    isSoldOut: true,
     color: 'Charcoal',
-    sizes: { single: true, double: true, king: true, superKing: true }
+    sizes: { single: false, double: false, king: false, superKing: false }
   },
   {
     id: 124,
@@ -1313,9 +1416,10 @@ const products: Product[] = [
     price: "£24.99 – £30.99",
     image: '/premium-duvet124.jpg',
     hoverImage: '/premium-duvet124-hover.jpg',
-    discount: '0%',
+    discount: '-56%',
+    isSoldOut: true,
     color: 'Silver',
-    sizes: { single: true, double: true, king: true, superKing: true }
+    sizes: { single: false, double: false, king: false, superKing: false }
   },
   {
     id: 125,
@@ -1323,7 +1427,8 @@ const products: Product[] = [
     price: "£13.49 – £69.99",
     image: '/premium-duvet125.jpg',
     hoverImage: '/premium-duvet125-hover.jpg',
-    discount: '0%',
+    discount: '-78%',
+    isSoldOut: false,
     color: 'Beige',
     sizes: { single: true, double: true, king: true, superKing: true }
   },
@@ -1333,9 +1438,10 @@ const products: Product[] = [
     price: "£49.99 – £69.99",
     image: '/premium-duvet126.jpg',
     hoverImage: '/premium-duvet126-hover.jpg',
-    discount: '0%',
+    discount: '',
+    isSoldOut: true,
     color: 'Black',
-    sizes: { single: true, double: true, king: true, superKing: true }
+    sizes: { single: false, double: false, king: false, superKing: false }
   },
   {
     id: 127,
@@ -1343,9 +1449,10 @@ const products: Product[] = [
     price: "£49.99 – £69.99",
     image: '/premium-duvet127.jpg',
     hoverImage: '/premium-duvet127-hover.jpg',
-    discount: '0%',
+    discount: '',
+    isSoldOut: true,
     color: 'Grey',
-    sizes: { single: true, double: true, king: true, superKing: true }
+    sizes: { single: false, double: false, king: false, superKing: false }
   },
   {
     id: 128,
@@ -1353,9 +1460,10 @@ const products: Product[] = [
     price: "£13.49 – £69.99",
     image: '/premium-duvet128.jpg',
     hoverImage: '/premium-duvet128-hover.jpg',
-    discount: '0%',
+    discount: '-73%',
+    isSoldOut: true,
     color: 'Red',
-    sizes: { single: true, double: true, king: true, superKing: true }
+    sizes: { single: false, double: false, king: false, superKing: false }
   },
   {
     id: 129,
@@ -1363,9 +1471,10 @@ const products: Product[] = [
     price: "£49.99 – £69.99",
     image: '/premium-duvet129.jpg',
     hoverImage: '/premium-duvet129-hover.jpg',
-    discount: '0%',
-    color: 'Stags',
-    sizes: { single: true, double: true, king: true, superKing: true }
+    discount: '',
+    isSoldOut: false,
+    color: 'Grey',
+    sizes: { single: false, double: false, king: false, superKing: false }
   },
   {
     id: 130,
@@ -1373,9 +1482,10 @@ const products: Product[] = [
     price: "£49.99 – £79.99",
     image: '/premium-duvet130.jpg',
     hoverImage: '/premium-duvet130-hover.jpg',
-    discount: '0%',
+    discount: '',
+    isSoldOut: true,
     color: 'Black',
-    sizes: { single: true, double: true, king: true, superKing: true }
+    sizes: { single: false, double: false, king: false, superKing: false }
   },
   {
     id: 131,
@@ -1383,7 +1493,8 @@ const products: Product[] = [
     price: "£49.99 – £79.99",
     image: '/premium-duvet131.jpg',
     hoverImage: '/premium-duvet131-hover.jpg',
-    discount: '0%',
+    discount: '',
+    isSoldOut: false,
     color: 'Cream',
     sizes: { single: true, double: true, king: true, superKing: true }
   },
@@ -1393,7 +1504,8 @@ const products: Product[] = [
     price: "£49.99 – £79.99",
     image: '/premium-duvet132.jpg',
     hoverImage: '/premium-duvet132-hover.jpg',
-    discount: '0%',
+    discount: '',
+    isSoldOut: false,
     color: 'Gold',
     sizes: { single: true, double: true, king: true, superKing: true }
   },
@@ -1403,7 +1515,8 @@ const products: Product[] = [
     price: "£49.99 – £79.99",
     image: '/premium-duvet133.jpg',
     hoverImage: '/premium-duvet133-hover.jpg',
-    discount: '0%',
+    discount: '',
+    isSoldOut: false,
     color: 'Natural',
     sizes: { single: true, double: true, king: true, superKing: true }
   },
@@ -1413,9 +1526,10 @@ const products: Product[] = [
     price: "£49.99 – £79.99",
     image: '/premium-duvet134.jpg',
     hoverImage: '/premium-duvet134-hover.jpg',
-    discount: '0%',
+    discount: '',
+    isSoldOut: true,
     color: 'Silver',
-    sizes: { single: true, double: true, king: true, superKing: true }
+    sizes: { single: false, double: false, king: false, superKing: false }
   },
   {
     id: 135,
@@ -1423,7 +1537,8 @@ const products: Product[] = [
     price: "£49.99 – £79.99",
     image: '/premium-duvet135.jpg',
     hoverImage: '/premium-duvet135-hover.jpg',
-    discount: '0%',
+    discount: '',
+    isSoldOut: false,
     color: 'White',
     sizes: { single: true, double: true, king: true, superKing: true }
   },
@@ -1433,9 +1548,10 @@ const products: Product[] = [
     price: "£49.99 – £79.99",
     image: '/premium-duvet136.jpg',
     hoverImage: '/premium-duvet136-hover.jpg',
-    discount: '0%',
+    discount: '',
+    isSoldOut: true,
     color: 'Aubergine',
-    sizes: { single: true, double: true, king: true, superKing: true }
+    sizes: { single: false, double: false, king: false, superKing: false }
   },
   {
     id: 137,
@@ -1443,9 +1559,10 @@ const products: Product[] = [
     price: "£49.99 – £79.99",
     image: '/premium-duvet137.jpg',
     hoverImage: '/premium-duvet137-hover.jpg',
-    discount: '0%',
+    discount: '',
+    isSoldOut: true,
     color: 'Black',
-    sizes: { single: true, double: true, king: true, superKing: true }
+    sizes: { single: false, double: false, king: false, superKing: false }
   },
   {
     id: 138,
@@ -1453,7 +1570,8 @@ const products: Product[] = [
     price: "£15.49 – £19.99",
     image: '/premium-duvet138.jpg',
     hoverImage: '/premium-duvet138-hover.jpg',
-    discount: '0%',
+    discount: '-75%',
+    isSoldOut: false,
     color: 'Cream',
     sizes: { single: true, double: true, king: true, superKing: true }
   },
@@ -1463,9 +1581,10 @@ const products: Product[] = [
     price: "£49.99 – £79.99",
     image: '/premium-duvet139.jpg',
     hoverImage: '/premium-duvet139-hover.jpg',
-    discount: '0%',
+    discount: '',
+    isSoldOut: true,
     color: 'Oyster',
-    sizes: { single: true, double: true, king: true, superKing: true }
+    sizes: { single: false, double: false, king: false, superKing: false }
   },
   {
     id: 140,
@@ -1473,9 +1592,10 @@ const products: Product[] = [
     price: "£49.99 – £79.99",
     image: '/premium-duvet140.jpg',
     hoverImage: '/premium-duvet140-hover.jpg',
-    discount: '0%',
+    discount: '',
+    isSoldOut: true,
     color: 'Red',
-    sizes: { single: true, double: true, king: true, superKing: true }
+    sizes: { single: false, double: false, king: false, superKing: false }
   },
   {
     id: 141,
@@ -1483,9 +1603,10 @@ const products: Product[] = [
     price: "£49.99 – £79.99",
     image: '/premium-duvet141.jpg',
     hoverImage: '/premium-duvet141-hover.jpg',
-    discount: '0%',
+    discount: '',
+    isSoldOut: true,
     color: 'Silver',
-    sizes: { single: true, double: true, king: true, superKing: true }
+    sizes: { single: false, double: false, king: false, superKing: false }
   },
   {
     id: 142,
@@ -1493,9 +1614,10 @@ const products: Product[] = [
     price: "£49.99 – £79.99",
     image: '/premium-duvet142.jpg',
     hoverImage: '/premium-duvet142-hover.jpg',
-    discount: '0%',
+    discount: '',
+    isSoldOut: true,
     color: 'White',
-    sizes: { single: true, double: true, king: true, superKing: true }
+    sizes: { single: false, double: false, king: false, superKing: false }
   },
   {
     id: 143,
@@ -1503,9 +1625,10 @@ const products: Product[] = [
     price: "£49.99 – £79.99",
     image: '/premium-duvet143.jpg',
     hoverImage: '/premium-duvet143-hover.jpg',
-    discount: '0%',
+    discount: '',
+    isSoldOut: true,
     color: 'Oyster',
-    sizes: { single: true, double: true, king: true, superKing: true }
+    sizes: { single: false, double: false, king: false, superKing: false }
   },
   {
     id: 144,
@@ -1513,9 +1636,10 @@ const products: Product[] = [
     price: "£49.99 – £79.99",
     image: '/premium-duvet144.jpg',
     hoverImage: '/premium-duvet144-hover.jpg',
-    discount: '0%',
+    discount: '',
+    isSoldOut: true,
     color: 'Silver',
-    sizes: { single: true, double: true, king: true, superKing: true }
+    sizes: { single: false, double: false, king: false, superKing: false }
   },
   {
     id: 145,
@@ -1523,9 +1647,10 @@ const products: Product[] = [
     price: "£49.99 – £79.99",
     image: '/premium-duvet145.jpg',
     hoverImage: '/premium-duvet145-hover.jpg',
-    discount: '0%',
+    discount: '',
+    isSoldOut: true,
     color: 'White',
-    sizes: { single: true, double: true, king: true, superKing: true }
+    sizes: { single: false, double: false, king: false, superKing: false }
   },
   {
     id: 146,
@@ -1533,9 +1658,10 @@ const products: Product[] = [
     price: "£49.99 – £79.99",
     image: '/premium-duvet146.jpg',
     hoverImage: '/premium-duvet146-hover.jpg',
-    discount: '0%',
+    discount: '',
+    isSoldOut: true,
     color: 'Black',
-    sizes: { single: true, double: true, king: true, superKing: true }
+    sizes: { single: false, double: false, king: false, superKing: false }
   },
   {
     id: 147,
@@ -1543,9 +1669,10 @@ const products: Product[] = [
     price: "£49.99 – £79.99",
     image: '/premium-duvet147.jpg',
     hoverImage: '/premium-duvet147-hover.jpg',
-    discount: '0%',
+    discount: '',
+    isSoldOut: true,
     color: 'Charcoal',
-    sizes: { single: true, double: true, king: true, superKing: true }
+    sizes: { single: false, double: false, king: false, superKing: false }
   },
   {
     id: 148,
@@ -1553,9 +1680,10 @@ const products: Product[] = [
     price: "£49.99 – £79.99",
     image: '/premium-duvet148.jpg',
     hoverImage: '/premium-duvet148-hover.jpg',
-    discount: '0%',
+    discount: '',
+    isSoldOut: true,
     color: 'Grey',
-    sizes: { single: true, double: true, king: true, superKing: true }
+    sizes: { single: false, double: false, king: false, superKing: false }
   },
   {
     id: 149,
@@ -1563,9 +1691,10 @@ const products: Product[] = [
     price: "£49.99 – £79.99",
     image: '/premium-duvet149.jpg',
     hoverImage: '/premium-duvet149-hover.jpg',
-    discount: '0%',
+    discount: '',
+    isSoldOut: true,
     color: 'Natural',
-    sizes: { single: true, double: true, king: true, superKing: true }
+    sizes: { single: false, double: false, king: false, superKing: false }
   },
   {
     id: 150,
@@ -1573,9 +1702,10 @@ const products: Product[] = [
     price: "£49.99 – £79.99",
     image: '/premium-duvet150.jpg',
     hoverImage: '/premium-duvet150-hover.jpg',
-    discount: '0%',
+    discount: '',
+    isSoldOut: true,
     color: 'White',
-    sizes: { single: true, double: true, king: true, superKing: true }
+    sizes: { single: false, double: false, king: false, superKing: false }
   },
   {
     id: 151,
@@ -1583,7 +1713,8 @@ const products: Product[] = [
     price: "£49.99 – £69.99",
     image: '/premium-duvet151.jpg',
     hoverImage: '/premium-duvet151-hover.jpg',
-    discount: '0%',
+    discount: '',
+    isSoldOut: false,
     color: 'Grey',
     sizes: { single: true, double: true, king: true, superKing: true }
   },
@@ -1593,7 +1724,8 @@ const products: Product[] = [
     price: "£49.99 – £69.99",
     image: '/premium-duvet152.jpg',
     hoverImage: '/premium-duvet152-hover.jpg',
-    discount: '0%',
+    discount: '',
+    isSoldOut: false,
     color: 'Purple',
     sizes: { single: true, double: true, king: true, superKing: true }
   },
@@ -1603,8 +1735,9 @@ const products: Product[] = [
     price: "£13.49",
     image: '/premium-duvet153.jpg',
     hoverImage: '/premium-duvet153-hover.jpg',
-    discount: '0%',
-    color: 'Christmas',
+    discount: '-81%',
+    isSoldOut: false,
+    color: 'Red',
     sizes: { single: true, double: true, king: true, superKing: true }
   },
   {
@@ -1613,7 +1746,8 @@ const products: Product[] = [
     price: "£13.49",
     image: '/premium-duvet154.jpg',
     hoverImage: '/premium-duvet154-hover.jpg',
-    discount: '0%',
+    discount: '-81%',
+    isSoldOut: false,
     color: 'White/Red',
     sizes: { single: true, double: true, king: true, superKing: true }
   },
@@ -1623,8 +1757,9 @@ const products: Product[] = [
     price: "£49.99 – £69.99",
     image: '/premium-duvet155.jpg',
     hoverImage: '/premium-duvet155-hover.jpg',
-    discount: '0%',
-    color: 'Christmas',
+    discount: '',
+    isSoldOut: false,
+    color: 'White',
     sizes: { single: true, double: true, king: true, superKing: true }
   }
 ];
@@ -1691,7 +1826,13 @@ const PremiumDuvetSetPage = () => {
             hoverSrc: item.hoverImage,
             title: item.name,
             price: item.price,
-            discount: item.discount
+            discount: item.discount,
+            sizes: {
+              single: item.sizes.single,
+              double: item.sizes.double,
+              king: item.sizes.king,
+              superKing: item.sizes.superKing
+            }
           }));
         
         const wishlistItems = [...validItems, ...newItems];

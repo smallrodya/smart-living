@@ -57,7 +57,12 @@ const MobileCategoriesSection = () => {
   };
 
   const handleLinkClick = (href: string) => {
-    router.push(href);
+    if (href === '/shop-duvet-set-by-type') {
+      window.location.href = href;
+    } else {
+      router.push(href);
+    }
+    setExpandedCategory(null);
   };
 
   return (

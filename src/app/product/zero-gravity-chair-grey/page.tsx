@@ -1,6 +1,7 @@
 import ProductPage from '@/components/ProductPage';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import MobileBottomMenu from '@/components/MobileBottomMenu';
 
 const Page = () => {
   const product = {
