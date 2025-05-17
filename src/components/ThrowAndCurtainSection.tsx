@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 
 const ThrowAndCurtainSection = () => {
-  const [hovered, setHovered] = useState<'throws' | 'curtains' | null>(null);
+  const [hovered, setHovered] = useState<'bedding' | 'rugs' | null>(null);
 
   return (
     <section style={{
@@ -28,7 +28,7 @@ const ThrowAndCurtainSection = () => {
         marginLeft: 'auto',
         marginRight: 'auto',
       }}>
-        Add a touch of comfort and style to every room with our throws and curtains.
+        Add a touch of comfort and style to every room with our duvet sets and rugs.
       </p>
       <div style={{
         display: 'flex',
@@ -38,7 +38,7 @@ const ThrowAndCurtainSection = () => {
         maxWidth: 1200,
         margin: '0 auto',
       }}>
-        {/* Throws */}
+        {/* DUVET SET */}
         <div
           style={{
             position: 'relative',
@@ -54,7 +54,7 @@ const ThrowAndCurtainSection = () => {
             alignItems: 'flex-end',
             cursor: 'pointer',
           }}
-          onMouseEnter={() => setHovered('throws')}
+          onMouseEnter={() => setHovered('bedding')}
           onMouseLeave={() => setHovered(null)}
         >
           <div style={{
@@ -62,11 +62,11 @@ const ThrowAndCurtainSection = () => {
             inset: 0,
             zIndex: 1,
             transition: 'transform 0.35s cubic-bezier(.4,2,.6,1)',
-            transform: hovered === 'throws' ? 'scale(1.06)' : 'scale(1)',
+            transform: hovered === 'bedding' ? 'scale(1.06)' : 'scale(1)',
           }}>
             <Image
-              src="/cat-throws-main.jpg"
-              alt="Throws"
+              src="/best4.jpg"
+              alt="BEDDING"
               fill
               style={{ objectFit: 'cover', borderRadius: 12 }}
               sizes="(max-width: 900px) 100vw, 500px"
@@ -78,7 +78,7 @@ const ThrowAndCurtainSection = () => {
             right: 0,
             bottom: 0,
             margin: '0 auto',
-            background: 'rgba(255,255,255,0.97)',
+            background: 'rgba(255,255,255,0.5)',
             borderRadius: 8,
             boxShadow: '0 2px 12px rgba(34,34,34,0.08)',
             padding: '32px 24px 24px 24px',
@@ -88,8 +88,8 @@ const ThrowAndCurtainSection = () => {
             marginLeft: 'auto',
             marginRight: 'auto',
           }}>
-            <h3 style={{ fontSize: 22, fontWeight: 700, marginBottom: 8 }}>Throws</h3>
-            <p style={{ fontSize: 15, color: '#444', marginBottom: 18 }}>Soft, stylish, and perfect for warmth or décor.</p>
+            <h3 style={{ fontSize: 22, fontWeight: 700, marginBottom: 8 }}>BEDDING</h3>
+            <p style={{ fontSize: 15, color: '#111', marginBottom: 18 }}>Soft, stylish, and perfect for warmth or décor.</p>
             <button style={{
               background: '#111',
               color: '#fff',
@@ -102,11 +102,11 @@ const ThrowAndCurtainSection = () => {
               boxShadow: '0 2px 8px rgba(34,34,34,0.10)',
               transition: 'background 0.2s',
             }}
-            onClick={() => window.location.href = '/category/throws-blankets'}
+            onClick={() => window.location.href = '/shop-duvet-set-by-type'}
             >SHOP NOW</button>
           </div>
         </div>
-        {/* Curtains */}
+        {/* RUGS */}
         <div
           style={{
             position: 'relative',
@@ -122,7 +122,7 @@ const ThrowAndCurtainSection = () => {
             alignItems: 'flex-end',
             cursor: 'pointer',
           }}
-          onMouseEnter={() => setHovered('curtains')}
+          onMouseEnter={() => setHovered('rugs')}
           onMouseLeave={() => setHovered(null)}
         >
           <div style={{
@@ -130,10 +130,10 @@ const ThrowAndCurtainSection = () => {
             inset: 0,
             zIndex: 1,
             transition: 'transform 0.35s cubic-bezier(.4,2,.6,1)',
-            transform: hovered === 'curtains' ? 'scale(1.06)' : 'scale(1)',
+            transform: hovered === 'rugs' ? 'scale(1.06)' : 'scale(1)',
           }}>
             <Image
-              src="/cat-curtains-main.jpg"
+              src="/carved9.jpg"
               alt="Curtains"
               fill
               style={{ objectFit: 'cover', borderRadius: 12 }}
@@ -146,7 +146,7 @@ const ThrowAndCurtainSection = () => {
             right: 0,
             bottom: 0,
             margin: '0 auto',
-            background: 'rgba(255,255,255,0.97)',
+            background: 'rgba(255,255,255,0.5)',
             borderRadius: 8,
             boxShadow: '0 2px 12px rgba(34,34,34,0.08)',
             padding: '32px 24px 24px 24px',
@@ -156,8 +156,8 @@ const ThrowAndCurtainSection = () => {
             marginLeft: 'auto',
             marginRight: 'auto',
           }}>
-            <h3 style={{ fontSize: 22, fontWeight: 700, marginBottom: 8 }}>Curtains</h3>
-            <p style={{ fontSize: 15, color: '#444', marginBottom: 18 }}>Elegant curtains that balance light and privacy.</p>
+            <h3 style={{ fontSize: 22, fontWeight: 700, marginBottom: 8 }}>RUGS</h3>
+            <p style={{ fontSize: 15, color: '#111', marginBottom: 18 }}>Elegant rugs that balance light and privacy.</p>
             <button style={{
               background: '#111',
               color: '#fff',

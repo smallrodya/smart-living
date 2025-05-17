@@ -44,13 +44,28 @@ const Header = () => {
         padding: '0 24px' 
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '20px', flex: 1 }}>
-          <Image 
-            src="/SmartLivingLogo.png" 
-            alt="Smart Living" 
-            width={250}
-            height={50}
-            style={{ maxWidth: '250px' }}
-          />
+          <a 
+            href="/"
+            style={{
+              display: 'block',
+              cursor: 'pointer',
+              transition: 'opacity 0.3s ease'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.opacity = '0.8';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.opacity = '1';
+            }}
+          >
+            <Image 
+              src="/SmartLivingLogo.png" 
+              alt="Smart Living" 
+              width={250}
+              height={50}
+              style={{ maxWidth: '250px' }}
+            />
+          </a>
           <form 
             role="search" 
             method="get" 
@@ -219,11 +234,101 @@ const Header = () => {
               fontWeight: '600',
               display: 'flex',
               alignItems: 'center',
+              justifyContent: 'center',
               gap: '8px',
-              transition: 'all 0.3s ease'
+              transition: 'all 0.3s ease',
+              position: 'relative',
+              overflow: 'hidden',
+              minWidth: '160px',
+              width: '100%'
+            }}
+            onMouseEnter={(e) => {
+              const text = e.currentTarget.querySelector('span');
+              const car = e.currentTarget.querySelector('img');
+              const button = e.currentTarget;
+              
+              if (text && car && button.dataset.animating !== 'true') {
+                button.dataset.animating = 'true';
+                button.style.background = '#333';
+                
+                car.style.left = '-30px';
+                car.style.transform = 'scale(0.8)';
+                car.style.opacity = '0';
+                
+                text.style.opacity = '0';
+                text.style.transform = 'translateX(100px)';
+                
+                setTimeout(() => {
+                  car.style.opacity = '1';
+                  car.style.transform = 'scale(1)';
+                  
+                  setTimeout(() => {
+                    car.style.left = '50%';
+                    car.style.transform = 'translateX(-50%) scale(1)';
+                    
+                    setTimeout(() => {
+                      car.style.transform = 'translateX(-50%) scale(1.2)';
+                      
+                      setTimeout(() => {
+                        car.style.transform = 'translateX(-50%) scale(1)';
+                        car.style.left = 'calc(100% + 30px)';
+                        
+                        setTimeout(() => {
+                          text.style.opacity = '1';
+                          text.style.transform = 'translateX(0)';
+                          car.style.opacity = '0';
+                          button.style.background = '#000';
+                          delete button.dataset.animating;
+                        }, 500);
+                      }, 500);
+                    }, 500);
+                  }, 100);
+                }, 50);
+              }
+            }}
+            onMouseLeave={(e) => {
+              const button = e.currentTarget;
+              if (button.dataset.animating !== 'true') {
+                const text = button.querySelector('span');
+                const car = button.querySelector('img');
+                if (text && car) {
+                  text.style.opacity = '1';
+                  text.style.transform = 'translateX(0)';
+                  car.style.opacity = '0';
+                  car.style.left = '-30px';
+                  car.style.transform = 'scale(0.8)';
+                  button.style.background = '#000';
+                }
+              }
             }}
           >
-            Track Order
+            <span style={{
+              display: 'inline-block',
+              transition: 'all 0.5s ease',
+              opacity: 1,
+              position: 'relative',
+              zIndex: 1,
+              width: '100%',
+              textAlign: 'center'
+            }}>
+              Track Order
+            </span>
+            <Image 
+              src="/car-svgrepo-com.svg"
+              alt="Car"
+              width={24}
+              height={24}
+              style={{
+                position: 'absolute',
+                left: '-30px',
+                opacity: 0,
+                transition: 'all 0.5s ease',
+                transform: 'scale(0.8)',
+                filter: 'invert(1)',
+                zIndex: 2,
+                pointerEvents: 'none'
+              }}
+            />
           </a>
         </div>
       </div>

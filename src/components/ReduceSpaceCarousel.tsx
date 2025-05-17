@@ -326,13 +326,13 @@ const DesktopReduceSpaceCarousel = () => {
             fontWeight: 600, 
             color: '#222',
             marginBottom: 4,
-          }}>24/7 HELP CENTER</span>
+          }}>HELP CENTER</span>
           <span style={{ 
             fontSize: 14, 
             color: '#666', 
             textAlign: 'center',
             lineHeight: 1.4,
-          }}>Dedicated 24/7 support</span>
+          }}>Dedicated 10:30 - 18:00 support</span>
         </div>
       </div>
     </section>
