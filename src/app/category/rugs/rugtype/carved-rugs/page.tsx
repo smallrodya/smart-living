@@ -5,6 +5,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import CookieBanner from '@/components/CookieBanner';
 import { useRouter } from 'next/navigation';
+import MobileBottomMenu from '@/components/MobileBottomMenu';
 
 interface Product {
   id: number;

@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import styles from './category.module.css';
-
 interface SubCategory {
   name: string;
   links: string[];

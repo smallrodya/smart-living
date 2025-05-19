@@ -36,6 +36,11 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
 
 
+# Добавить все изменения в индекс
 git add .
-git commit -m "Ваше описание изменений"
-git remote add origin https://github.com/smallrodya/smart-living.git
+
+# Создать коммит с описанием изменений
+git commit -m "Update:  Добавил 100 фотографий в раздел premium duvet set"
+
+# Отправить изменения в удаленный репозиторий
+git push origin main
