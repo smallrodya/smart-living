@@ -165,13 +165,25 @@ const DesktopBestSellersSlider = () => {
         padding: '0 20px',
       }}>
         <h2 style={{
-          fontSize: 32,
+          fontSize: 28,
           fontWeight: 700,
-          marginBottom: 40,
+          marginBottom: 12,
           textAlign: 'center',
           letterSpacing: 0.5,
           color: '#222',
         }}>BESTSELLERS</h2>
+        <p style={{
+          fontSize: 17,
+          color: '#666',
+          marginBottom: 40,
+          textAlign: 'center',
+          maxWidth: 600,
+          marginLeft: 'auto',
+          marginRight: 'auto',
+          lineHeight: 1.5,
+        }}>
+          Discover our most popular bedding sets, chosen by thousands of happy customers. Quality, comfort, and style in every piece.
+        </p>
         
         <div style={{
           display: 'grid',

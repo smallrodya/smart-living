@@ -212,11 +212,23 @@ const MobileBestSellersSlider = () => {
       <h2 style={{
         fontSize: 24,
         fontWeight: 700,
-        marginBottom: 24,
+        marginBottom: 12,
         textAlign: 'center',
         letterSpacing: 0.5,
         color: '#222',
       }}>BESTSELLERS</h2>
+      <p style={{
+        fontSize: 17,
+        color: '#666',
+        marginBottom: 24,
+        textAlign: 'center',
+        maxWidth: 320,
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        lineHeight: 1.4,
+      }}>
+        Discover our most popular bedding sets, chosen by thousands of happy customers
+      </p>
 
       <div 
         ref={containerRef}

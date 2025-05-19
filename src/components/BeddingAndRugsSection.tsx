@@ -18,7 +18,7 @@ const ThrowAndCurtainSection = () => {
         marginBottom: 12,
         letterSpacing: 0.2,
       }}>
-        Transform Your Home with Style
+        Elevate Your Living Space with Elegance
       </h2>
       <p style={{
         fontSize: 17,
@@ -28,7 +28,7 @@ const ThrowAndCurtainSection = () => {
         marginLeft: 'auto',
         marginRight: 'auto',
       }}>
-        Add a touch of comfort and style to every room with our duvet sets and rugs.
+        Create a cozy and stylish atmosphere in every room with our bedding sets and rugs.
       </p>
       <div style={{
         display: 'flex',
@@ -170,7 +170,7 @@ const ThrowAndCurtainSection = () => {
               boxShadow: '0 2px 8px rgba(34,34,34,0.10)',
               transition: 'background 0.2s',
             }}
-            onClick={() => window.location.href = '/category/curtains'}
+            onClick={() => window.location.href = '/category/rugs/rugtype'}
             >SHOP NOW</button>
           </div>
         </div>

@@ -142,6 +142,27 @@ const MobileReduceSpaceCarousel = () => {
       margin: '0 auto',
       padding: '20px 0',
     }}>
+      <h2 style={{
+        fontSize: 24,
+        fontWeight: 700,
+        marginBottom: 12,
+        textAlign: 'center',
+        letterSpacing: 0.5,
+        color: '#222',
+      }}>REDUCE SPACE</h2>
+      <p style={{
+        fontSize: 15,
+        color: '#666',
+        marginBottom: 24,
+        textAlign: 'center',
+        maxWidth: 320,
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        lineHeight: 1.4,
+      }}>
+        Transform your living space with our innovative furniture solutions. Perfect for small apartments and cozy homes.
+      </p>
+
       <div 
         ref={containerRef}
         style={{

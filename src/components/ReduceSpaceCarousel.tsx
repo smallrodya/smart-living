@@ -95,7 +95,18 @@ const DesktopReduceSpaceCarousel = () => {
 
   return (
     <section style={{width: '100%', height: 'auto', margin: '0 auto 40px', padding: 0, textAlign: 'center'}}>
-      <h2 style={{fontSize: 26, fontWeight: 700, marginBottom: 20, letterSpacing: 0.2}}>REDUCE SPACE</h2>
+      <h2 style={{fontSize: 26, fontWeight: 700, marginBottom: 12, letterSpacing: 0.2}}>REDUCE SPACE</h2>
+      <p style={{
+        fontSize: 17,
+        color: '#666',
+        marginBottom: 40,
+        maxWidth: 600,
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        lineHeight: 1.5
+      }}>
+        Transform your living space with our innovative furniture solutions. Perfect for small apartments and cozy homes.
+      </p>
       <div style={{
         display: 'flex',
         gap: 32,

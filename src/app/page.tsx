@@ -3,13 +3,11 @@ import CategoriesSection from "../components/CategoriesSection";
 import Banner from "../components/Banner";
 import ReduceSpaceCarousel from "../components/ReduceSpaceCarousel";
 import BestSellersSlider from "../components/BestSellersSlider";
-import BigCategory from "../components/BigCategory";
-import MobileBigCategory from "../components/MobileBigCategory"
 import SubscribeSection from "../components/SubscribeSection";
 import Footer from "../components/Footer";
 import CookieBanner from "../components/CookieBanner";
 import Blog from "../components/Blog";
-import ThrowAndCurtainSection from "../components/ThrowAndCurtainSection";
+import ThrowAndCurtainSection from "../components/BeddingAndRugsSection";
 export default function Home() {
   return (
     <>
@@ -19,8 +17,6 @@ export default function Home() {
       <ReduceSpaceCarousel />
       <ThrowAndCurtainSection />
       <BestSellersSlider />
-      <BigCategory />
-      <MobileBigCategory />
       <Blog />
       <SubscribeSection />
       <Footer />

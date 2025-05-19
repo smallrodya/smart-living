@@ -1,6 +1,7 @@
 'use client';
 import React from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 
 const MobileHeader = () => {
   return (
@@ -22,13 +23,15 @@ const MobileHeader = () => {
         height: 60, 
         padding: '0 24px' 
       }}>
-        <Image 
-          src="/SmartLivingLogo.png" 
-          alt="Smart Living" 
-          width={200}
-          height={40}
-          style={{ maxWidth: '200px' }}
-        />
+        <Link href="/">
+          <Image 
+            src="/SmartLivingLogo.png" 
+            alt="Smart Living" 
+            width={200}
+            height={40}
+            style={{ maxWidth: '200px' }}
+          />
+        </Link>
       </div>
     </header>
   );
