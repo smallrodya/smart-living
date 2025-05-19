@@ -4,7 +4,7 @@ import Banner from "../components/Banner";
 import ReduceSpaceCarousel from "../components/ReduceSpaceCarousel";
 import BestSellersSlider from "../components/BestSellersSlider";
 import BigCategory from "../components/BigCategory";
-import MobileBigCategory from "../components/MobileBigCategory";
+import MobileBigCategory from "../components/MobileBigCategory"
 import SubscribeSection from "../components/SubscribeSection";
 import Footer from "../components/Footer";
 import CookieBanner from "../components/CookieBanner";

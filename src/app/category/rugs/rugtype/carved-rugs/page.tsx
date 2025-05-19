@@ -1318,7 +1318,7 @@ const CarvedRugsPage = () => {
               zIndex: 10
             }}>
               <button
-                onClick={() => router.push('/')}
+                onClick={() => router.push('/category/rugs/rugtype')}
                 style={{
                   background: 'rgba(255, 255, 255, 0.9)',
                   border: 'none',

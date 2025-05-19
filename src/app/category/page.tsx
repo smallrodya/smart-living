@@ -3,9 +3,13 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import styles from './category.module.css';
+
 interface SubCategory {
   name: string;
-  links: string[];
+  links: Array<{
+    label: string;
+    href: string;
+  }>;
 }
 
 interface Category {
@@ -22,42 +26,42 @@ const categories: Category[] = [
       {
         name: 'DUVET SET',
         links: [
-          'Shop Duvet Set by Type',
-          'Shop Duvet Set by Colour',
-          'Shop Duvet Set under £10',
-          'Clearance',
-          'Shop All',
-          'Duvet Covers from £9.99',
+          { label: 'Shop Duvet Set by Type', href: '/shop-duvet-set-by-type' },
+          { label: 'Shop Duvet Set by Colour', href: '/category/bedding/duvet-colour' },
+          { label: 'Shop Duvet Set under £10', href: '/category/bedding/duvet-under-10' },
+          { label: 'Clearance', href: '/category/bedding/clearance' },
+          { label: 'Shop All', href: '/category/bedding/all' },
+          { label: 'Duvet Covers from £9.99', href: '/category/bedding/duvet-covers' },
         ],
       },
       {
         name: 'BED SHEETS',
         links: [
-          'Shop by Sheet Type',
-          'Shop by Sheet Colour',
-          'Shop from £4.49',
-          'Shop All',
+          { label: 'Shop by Sheet Type', href: '/category/bedding/sheets-type' },
+          { label: 'Shop by Sheet Colour', href: '/category/bedding/sheets-colour' },
+          { label: 'Shop from £4.49', href: '/category/bedding/sheets-sale' },
+          { label: 'Shop All', href: '/category/bedding/sheets-all' },
         ],
       },
       {
         name: 'KIDS COLLECTION',
         links: [
-          'Kids collection by type',
-          'Shop by Colour',
-          'Shop by Material',
-          'Shop All',
+          { label: 'Kids collection by type', href: '/category/bedding/kids-type' },
+          { label: 'Shop by Colour', href: '/category/bedding/kids-colour' },
+          { label: 'Shop by Material', href: '/category/bedding/kids-material' },
+          { label: 'Shop All', href: '/category/bedding/kids-all' },
         ],
       },
       {
         name: 'BED LINEN',
         links: [
-          'Bed Linen from £4.49',
+          { label: 'Bed Linen from £4.49', href: '/category/bedding/bed-linen-sale' },
         ],
       },
       {
         name: 'TEDDY SETS',
         links: [
-          'Teddy Sets from £11.99',
+          { label: 'Teddy Sets from £11.99', href: '/category/bedding/teddy-sets' },
         ],
       },
     ],
@@ -69,22 +73,22 @@ const categories: Category[] = [
       {
         name: 'MATS',
         links: [
-          'Shop Mats by Colour',
-          'Shop Mats by Design',
-          'Shop Mats from £5.49',
-          'Shop All',
+          { label: 'Shop Mats by Colour', href: '/category/rugs/mats-colour' },
+          { label: 'Shop Mats by Design', href: '/category/rugs/mats-design' },
+          { label: 'Shop Mats from £5.49', href: '/category/rugs/mats-sale' },
+          { label: 'Shop All', href: '/category/rugs/mats-all' },
         ],
       },
       {
         name: 'RUGS',
         links: [
-          'Shop Rugs by Type',
-          'Shop Rugs by Colour',
-          'Shop Rugs from £10.99',
-          'Shop All',
-          'Carved Rugs from £12.99',
-          'Shaggy Rugs from £11.98',
-          'Non Slip Mats from £5.49',
+          { label: 'Shop Rugs by Type', href: '/category/rugs/rugtype' },
+          { label: 'Shop Rugs by Colour', href: '/category/rugs/rugs-colour' },
+          { label: 'Shop Rugs from £10.99', href: '/category/rugs/rugs-sale' },
+          { label: 'Shop All', href: '/category/rugs/rugs-all' },
+          { label: 'Carved Rugs from £12.99', href: '/category/rugs/rugtype/carved-rugs' },
+          { label: 'Shaggy Rugs from £11.98', href: '/category/rugs/rugtype/shaggy-rugs' },
+          { label: 'Non Slip Mats from £5.49', href: '/category/rugs/non-slip-mats' },
         ],
       },
     ],
@@ -96,19 +100,19 @@ const categories: Category[] = [
       {
         name: 'TOWELS',
         links: [
-          'Shop Towels by Design',
-          'Shop Towel by Colour',
-          'Shop All',
-          'Towel Bales From £8.99',
+          { label: 'Shop Towels by Design', href: '/category/throws/towels-design' },
+          { label: 'Shop Towel by Colour', href: '/category/throws/towels-colour' },
+          { label: 'Shop All', href: '/category/throws/towels-all' },
+          { label: 'Towel Bales From £8.99', href: '/category/throws/towels-sale' },
         ],
       },
       {
         name: 'THROWS',
         links: [
-          'Shop Throw by Type',
-          'Shop Throw by Colour',
-          'Shop All',
-          'Throws from £11.99',
+          { label: 'Shop Throw by Type', href: '/category/throws/throw-type' },
+          { label: 'Shop Throw by Colour', href: '/category/throws/throw-colour' },
+          { label: 'Shop All', href: '/category/throws/throw-all' },
+          { label: 'Throws from £11.99', href: '/category/throws/throw-sale' },
         ],
       },
     ],
@@ -120,7 +124,7 @@ const categories: Category[] = [
       {
         name: 'CHAIRS',
         links: [
-          'Shop all',
+          { label: 'Shop all', href: '/category/outdoor/chairs-all' },
         ],
       },
     ],
@@ -132,9 +136,9 @@ const categories: Category[] = [
       {
         name: 'CURTAINS',
         links: [
-          'Shop by Curtain Type',
-          'Shop by Curtain Colour',
-          'Shop All',
+          { label: 'Shop by Curtain Type', href: '/category/curtains/curtain-type' },
+          { label: 'Shop by Curtain Colour', href: '/category/curtains/curtain-colour' },
+          { label: 'Shop All', href: '/category/curtains/curtain-all' },
         ],
       },
     ],
@@ -146,17 +150,17 @@ const categories: Category[] = [
       {
         name: 'MEN',
         links: [
-          'Hoodie',
-          'Sweatshirt',
+          { label: 'Hoodie', href: '/category/clothing/men/hoodie' },
+          { label: 'Sweatshirt', href: '/category/clothing/men/sweatshirt' },
         ],
       },
       {
         name: 'WOMEN',
         links: [
-          'Denim',
-          'Jersey',
-          'Jogger',
-          'Lounge & Nightwear',
+          { label: 'Denim', href: '/category/clothing/women/denim' },
+          { label: 'Jersey', href: '/category/clothing/women/jersey' },
+          { label: 'Jogger', href: '/category/clothing/women/jogger' },
+          { label: 'Lounge & Nightwear', href: '/category/clothing/women/lounge-nightwear' },
         ],
       },
     ],
@@ -168,19 +172,19 @@ const categories: Category[] = [
       {
         name: 'BOOTIES',
         links: [
-          'Shop All',
+          { label: 'Shop All', href: '/category/footwear/booties-all' },
         ],
       },
       {
         name: 'SLIPPERS',
         links: [
-          'Shop All',
+          { label: 'Shop All', href: '/category/footwear/slippers-all' },
         ],
       },
       {
         name: 'SOCKS',
         links: [
-          'Shop all',
+          { label: 'Shop all', href: '/category/footwear/socks-all' },
         ],
       },
     ],
@@ -235,11 +239,11 @@ export default function CategoryPage() {
                     <div className={styles.links}>
                       {sub.links.map((link) => (
                         <Link 
-                          key={link} 
-                          href={`/category/${category.name.toLowerCase()}/${link.toLowerCase().replace(/\s+/g, '-')}`}
+                          key={link.label} 
+                          href={link.href}
                           className={styles.link}
                         >
-                          {link}
+                          {link.label}
                         </Link>
                       ))}
                     </div>

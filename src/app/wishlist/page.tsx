@@ -138,7 +138,7 @@ const WishlistPage = () => {
                 marginBottom: '24px'
               }}>Add items to your wishlist to save them for later</p>
               <button
-                onClick={() => router.push('/shop-duvet-set-by-type')}
+                onClick={() => router.push('/')}
                 style={{
                   background: '#222',
                   color: '#fff',

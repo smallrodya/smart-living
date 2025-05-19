@@ -17,398 +17,168 @@ interface Product {
   isSoldOut?: boolean;
   color: string;
   sizes: {
-    size1: boolean; // 60cm X 110cm
-    size2: boolean; // 60cm X 220cm
-    size3: boolean; // 80cm X 150cm
-    size4: boolean; // 120cm X 170cm
-    size5: boolean; // 160cm X 230cm
-    size6: boolean; // 200cm X 290cm
+    size1: boolean; // 120cm X 180cm (4ft X 5.9ft)
+    size2: boolean; // 200cm X 300cm (6.5ft X 9.8ft)
+    size3: boolean; // 80cm X 200cm (2.6ft X 6.5ft)
+    size4: boolean; // 160cm X 230cm (5.2ft X 7.5ft)
   };
 }
 
 const products: Product[] = [
   { 
     id: 1, 
-    name: 'Shaggy Rug – Aubergine', 
-    price: '£14.43 – £106.74', 
-    image: '/shaggy1.jpg', 
-    hoverImage: '/shaggy1-hover.jpg', 
-    discount: '-60%',
-    color: 'Aubergine',
+    name: 'Aqcha Reversible Rug – Mustard', 
+    price: '£15.99 – £38.99', 
+    image: '/reversible-mustard1.jpg', 
+    hoverImage: '/reversible-mustard1-hover.jpg', 
+    discount: '-61%',
+    color: 'Mustard',
     sizes: {
       size1: true,
       size2: true,
       size3: true,
-      size4: true,
-      size5: true,
-      size6: true
+      size4: true
     }
   },
   { 
     id: 2, 
-    name: 'Shaggy Rug – Black', 
-    price: '£14.43 – £106.74', 
-    image: '/shaggy2.jpg', 
-    hoverImage: '/shaggy2-hover.jpg', 
-    discount: '-60%',
-    color: 'Black',
-    sizes: {
-      size1: true,
-      size2: true,
-      size3: true,
-      size4: true,
-      size5: true,
-      size6: true
-    }
-  },
-  { 
-    id: 3, 
-    name: 'Shaggy Rug – Brown', 
-    price: '£14.43 – £106.74', 
-    image: '/shaggy3.jpg', 
-    hoverImage: '/shaggy3-hover.jpg', 
-    discount: '-60%',
-    isSoldOut: false,
-    color: 'Brown',
-    sizes: {
-      size1: false,
-      size2: false,
-      size3: false,
-      size4: false,
-      size5: false,
-      size6: false
-    }
-  },
-  { 
-    id: 4, 
-    name: 'Shaggy Rug – Cream', 
-    price: '£14.43 – £106.74', 
-    image: '/shaggy4.jpg', 
-    hoverImage: '/shaggy4-hover.jpg', 
-    discount: '-60%',
-    isSoldOut: true,
-    color: 'Cream',
-    sizes: {
-      size1: false,
-      size2: false,
-      size3: false,
-      size4: false,
-      size5: false,
-      size6: false
-    }
-  },
-  { 
-    id: 5, 
-    name: 'Shaggy Rug – Dark Beige', 
-    price: '£14.43 – £106.74', 
-    image: '/shaggy5.jpg', 
-    hoverImage: '/shaggy5-hover.jpg', 
-    discount: '-60%',
-    color: 'Dark Beige',
-    sizes: {
-      size1: true,
-      size2: true,
-      size3: true,
-      size4: true,
-      size5: true,
-      size6: true
-    }
-  },
-  { 
-    id: 6, 
-    name: 'Shaggy Rug – Dark Grey', 
-    price: '£14.43 – £106.74', 
-    image: '/shaggy6.jpg', 
-    hoverImage: '/shaggy6-hover.jpg', 
-    discount: '-60%',
-    color: 'Dark Grey',
-    sizes: {
-      size1: true,
-      size2: true,
-      size3: true,
-      size4: true,
-      size5: true,
-      size6: true
-    }
-  },
-  { 
-    id: 7, 
-    name: 'Shaggy Rug – Duck Egg', 
-    price: '£14.43 – £106.74', 
-    image: '/shaggy7.jpg', 
-    hoverImage: '/shaggy7-hover.jpg', 
-    discount: '-60%',
-    color: 'Duck Egg',
-    sizes: {
-      size1: true,
-      size2: true,
-      size3: true,
-      size4: true,
-      size5: true,
-      size6: true
-    }
-  },
-  { 
-    id: 8, 
-    name: 'Shaggy Rug – Dusky Pink', 
-    price: '£14.43 – £106.74', 
-    image: '/shaggy8.jpg', 
-    hoverImage: '/shaggy8-hover.jpg', 
-    discount: '-60%',
-    color: 'Dusky Pink',
-    sizes: {
-      size1: true,
-      size2: true,
-      size3: true,
-      size4: true,
-      size5: true,
-      size6: true
-    }
-  },
-  { 
-    id: 9, 
-    name: 'Shaggy Rug – Emerald', 
-    price: '£14.43 – £106.74', 
-    image: '/shaggy9.jpg', 
-    hoverImage: '/shaggy9-hover.jpg', 
-    discount: '-60%',
-    isHot: true,
-    color: 'Emerald',
-    sizes: {
-      size1: true,
-      size2: true,
-      size3: true,
-      size4: true,
-      size5: true,
-      size6: true
-    }
-  },
-  { 
-    id: 10, 
-    name: 'Shaggy Rug – Green', 
-    price: '£14.43 – £106.74', 
-    image: '/shaggy10.jpg', 
-    hoverImage: '/shaggy10-hover.jpg', 
-    discount: '-60%',
-    color: 'Green',
-    sizes: {
-      size1: true,
-      size2: true,
-      size3: true,
-      size4: true,
-      size5: true,
-      size6: true
-    }
-  },
-  { 
-    id: 11, 
-    name: 'Shaggy Rug – Ink', 
-    price: '£14.43 – £106.74', 
-    image: '/shaggy11.jpg', 
-    hoverImage: '/shaggy11-hover.jpg', 
-    discount: '-60%',
-    color: 'Ink',
-    sizes: {
-      size1: true,
-      size2: true,
-      size3: true,
-      size4: true,
-      size5: true,
-      size6: true
-    }
-  },
-  { 
-    id: 12, 
-    name: 'Shaggy Rug – Latte', 
-    price: '£14.43 – £106.74', 
-    image: '/shaggy12.jpg', 
-    hoverImage: '/shaggy12-hover.jpg', 
-    discount: '-60%',
-    color: 'Latte',
-    sizes: {
-      size1: true,
-      size2: true,
-      size3: true,
-      size4: true,
-      size5: true,
-      size6: true
-    }
-  },
-  { 
-    id: 13, 
-    name: 'Shaggy Rug – Light Beige', 
-    price: '£14.43 – £106.74', 
-    image: '/shaggy13.jpg', 
-    hoverImage: '/shaggy13-hover.jpg', 
-    discount: '-60%',
-    color: 'Light Beige',
-    sizes: {
-      size1: true,
-      size2: true,
-      size3: true,
-      size4: true,
-      size5: true,
-      size6: true
-    }
-  },
-  { 
-    id: 14, 
-    name: 'Shaggy Rug – Mauve', 
-    price: '£14.43 – £106.74', 
-    image: '/shaggy14.jpg', 
-    hoverImage: '/shaggy14-hover.jpg', 
-    discount: '-60%',
-    color: 'Mauve',
-    sizes: {
-      size1: true,
-      size2: true,
-      size3: true,
-      size4: true,
-      size5: true,
-      size6: true
-    }
-  },
-  { 
-    id: 15, 
-    name: 'Shaggy Rug – Oatmeal', 
-    price: '£14.43 – £106.74', 
-    image: '/shaggy15.jpg', 
-    hoverImage: '/shaggy15-hover.jpg', 
-    discount: '-60%',
-    color: 'Oatmeal',
-    sizes: {
-      size1: true,
-      size2: true,
-      size3: true,
-      size4: true,
-      size5: true,
-      size6: true
-    }
-  },
-  { 
-    id: 16, 
-    name: 'Shaggy Rug – Ochre', 
-    price: '£14.43 – £106.74', 
-    image: '/shaggy16.jpg', 
-    hoverImage: '/shaggy16-hover.jpg', 
-    discount: '-60%',
-    color: 'Ochre',
-    sizes: {
-      size1: true,
-      size2: true,
-      size3: true,
-      size4: true,
-      size5: true,
-      size6: true
-    }
-  },
-  { 
-    id: 17, 
-    name: 'Shaggy Rug – Orange', 
-    price: '£14.43 – £106.74', 
-    image: '/shaggy17.jpg', 
-    hoverImage: '/shaggy17-hover.jpg', 
-    discount: '-60%',
-    color: 'Orange',
-    sizes: {
-      size1: true,
-      size2: true,
-      size3: true,
-      size4: true,
-      size5: true,
-      size6: true
-    }
-  },
-  { 
-    id: 18, 
-    name: 'Shaggy Rug – Red', 
-    price: '£14.43 – £106.74', 
-    image: '/shaggy18.jpg', 
-    hoverImage: '/shaggy18-hover.jpg', 
-    discount: '-60%',
+    name: 'Aqcha Reversible Rug – Red', 
+    price: '£15.99 – £38.99', 
+    image: '/reversible-red1.jpg', 
+    hoverImage: '/reversible-red1-hover.jpg', 
+    discount: '-61%',
     color: 'Red',
     sizes: {
       size1: true,
       size2: true,
       size3: true,
-      size4: true,
-      size5: true,
-      size6: true
+      size4: true
     }
   },
   { 
-    id: 19, 
-    name: 'Shaggy Rug – Silver/Grey', 
-    price: '£14.43 – £106.74', 
-    image: '/shaggy19.jpg', 
-    hoverImage: '/shaggy19-hover.jpg', 
-    discount: '-60%',
-    isHot: true,
-    color: 'Silver/Grey',
+    id: 3, 
+    name: 'Aybak Reversible Rug – Mustard', 
+    price: '£15.99 – £38.99', 
+    image: '/reversible-mustard2.jpg', 
+    hoverImage: '/reversible-mustard2-hover.jpg', 
+    discount: '-61%',
+    color: 'Mustard',
     sizes: {
       size1: true,
       size2: true,
       size3: true,
-      size4: true,
-      size5: true,
-      size6: true
+      size4: true
     }
   },
   { 
-    id: 20, 
-    name: 'Shaggy Rug – Soft Lilac', 
-    price: '£14.43 – £106.74', 
-    image: '/shaggy20.jpg', 
-    hoverImage: '/shaggy20-hover.jpg', 
+    id: 4, 
+    name: 'Aybak Reversible Rug – Red', 
+    price: '£15.99 – £38.99', 
+    image: '/reversible-red2.jpg', 
+    hoverImage: '/reversible-red2-hover.jpg', 
+    discount: '-61%',
+    color: 'Red',
+    sizes: {
+      size1: true,
+      size2: true,
+      size3: true,
+      size4: true
+    }
+  },
+  { 
+    id: 5, 
+    name: 'Balkh Reversible Rug – Mustard', 
+    price: '£15.99 – £38.99', 
+    image: '/reversible-mustard3.jpg', 
+    hoverImage: '/reversible-mustard3-hover.jpg', 
+    discount: '-61%',
+    color: 'Mustard',
+    sizes: {
+      size1: true,
+      size2: true,
+      size3: true,
+      size4: true
+    }
+  },
+  { 
+    id: 6, 
+    name: 'Balkh Reversible Rug – Red', 
+    price: '£15.99 – £38.99', 
+    image: '/reversible-red3.jpg', 
+    hoverImage: '/reversible-red3-hover.jpg', 
+    discount: '-61%',
     isSoldOut: true,
-    discount: '-60%',
-    color: 'Soft Lilac',
+    color: 'Red',
     sizes: {
       size1: false,
       size2: false,
       size3: false,
-      size4: false,
-      size5: false,
-      size6: false
+      size4: false
     }
   },
   { 
-    id: 21, 
-    name: 'Shaggy Rug – Teal', 
-    price: '£14.43 – £106.74', 
-    image: '/shaggy21.jpg', 
-    hoverImage: '/shaggy21-hover.jpg', 
-    discount: '-60%',
-    color: 'Teal',
+    id: 7, 
+    name: 'Doshi Reversible Rug – Mustard', 
+    price: '£15.99 – £38.99', 
+    image: '/reversible-mustard4.jpg', 
+    hoverImage: '/reversible-mustard4-hover.jpg', 
+    discount: '-61%',
+    color: 'Mustard',
     sizes: {
       size1: true,
       size2: true,
       size3: true,
-      size4: true,
-      size5: true,
-      size6: true
+      size4: true
     }
   },
   { 
-    id: 22, 
-    name: 'Shaggy Rug – Terracotta', 
-    price: '£14.43 – £106.74', 
-    image: '/shaggy22.jpg', 
-    hoverImage: '/shaggy22-hover.jpg', 
-    discount: '-60%',
-    color: 'Terracotta',
+    id: 8, 
+    name: 'Doshi Reversible Rug – Red', 
+    price: '£15.99 – £38.99', 
+    image: '/reversible-red4.jpg', 
+    hoverImage: '/reversible-red4-hover.jpg', 
+    discount: '-61%',
+    color: 'Red',
     sizes: {
       size1: true,
       size2: true,
       size3: true,
-      size4: true,
-      size5: true,
-      size6: true
+      size4: true
+    }
+  },
+  { 
+    id: 9, 
+    name: 'Zal Reversible Rug – Mustard', 
+    price: '£15.99 – £38.99', 
+    image: '/reversible-mustard5.jpg', 
+    hoverImage: '/reversible-mustard5-hover.jpg', 
+    discount: '-61%',
+    color: 'Mustard',
+    sizes: {
+      size1: true,
+      size2: true,
+      size3: true,
+      size4: true
+    }
+  },
+  { 
+    id: 10, 
+    name: 'Zal Reversible Rug – Red', 
+    price: '£15.99 – £38.99', 
+    image: '/reversible-red5.jpg', 
+    hoverImage: '/reversible-red5-hover.jpg', 
+    discount: '-61%',
+    color: 'Red',
+    sizes: {
+      size1: true,
+      size2: true,
+      size3: true,
+      size4: true
     }
   }
 ];
 
-const ShaggyRugsPage = () => {
+const ReversibleRugsPage = () => {
   const [hoveredItem, setHoveredItem] = useState<number | null>(null);
   const [hoveredButton, setHoveredButton] = useState<number | null>(null);
   const [wishlist, setWishlist] = useState<string[]>([]);
@@ -430,9 +200,7 @@ const ShaggyRugsPage = () => {
       size === 'size1' ? product.sizes.size1 :
       size === 'size2' ? product.sizes.size2 :
       size === 'size3' ? product.sizes.size3 :
-      size === 'size4' ? product.sizes.size4 :
-      size === 'size5' ? product.sizes.size5 :
-      size === 'size6' ? product.sizes.size6 : false
+      size === 'size4' ? product.sizes.size4 : false
     );
     return price >= minPrice && price <= maxPrice && colorMatch && sizeMatch;
   });
@@ -447,7 +215,7 @@ const ShaggyRugsPage = () => {
 
   const toggleWishlist = (id: number) => {
     setWishlist(prev => {
-      const prefixedId = `shaggy_${id}`;
+      const prefixedId = `reversible_${id}`;
       const newWishlist = prev.includes(prefixedId) 
         ? prev.filter(i => i !== prefixedId)
         : [...prev, prefixedId];
@@ -460,14 +228,14 @@ const ShaggyRugsPage = () => {
               typeof item === 'object' && 
               'id' in item && 
               typeof item.id === 'string' && 
-              !item.id.startsWith('shaggy_')
+              !item.id.startsWith('reversible_')
             )
           : [];
         
         const newItems = products
-          .filter((_, i) => newWishlist.includes(`shaggy_${i + 1}`))
+          .filter((_, i) => newWishlist.includes(`reversible_${i + 1}`))
           .map((item) => ({
-            id: `shaggy_${item.id}`,
+            id: `reversible_${item.id}`,
             src: item.image,
             hoverSrc: item.hoverImage,
             title: item.name,
@@ -497,8 +265,8 @@ const ShaggyRugsPage = () => {
           marginBottom: '60px'
         }}>
           <Image
-            src="/category-banner.jpg"
-            alt="Shaggy Rugs Category"
+            src="/reversible-mustard5.jpg"
+            alt="Reversible Rugs Category"
             fill
             style={{
               objectFit: 'cover',
@@ -573,7 +341,7 @@ const ShaggyRugsPage = () => {
                 textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
                 lineHeight: '1.2',
                 marginBottom: '20px'
-              }}>Shaggy Rugs</h1>
+              }}>Reversible Rugs</h1>
               <p style={{
                 color: '#fff',
                 fontSize: '24px',
@@ -583,7 +351,7 @@ const ShaggyRugsPage = () => {
                 margin: '0 auto',
                 lineHeight: '1.5'
               }}>
-                Discover our collection of luxurious shaggy rugs, perfect for adding warmth and texture to any space
+                Discover our collection of premium reversible rugs, perfect for adding versatility and style to any space
               </p>
             </div>
           </div>
@@ -803,12 +571,10 @@ const ShaggyRugsPage = () => {
                     gap: '8px'
                   }}>
                     {[
-                      { id: 'size1', label: '60cm X 110cm (2ft X 3.5ft)' },
-                      { id: 'size2', label: '60cm X 220cm (2ft X 7.2ft)' },
-                      { id: 'size3', label: '80cm X 150cm (2.6ft X 5ft)' },
-                      { id: 'size4', label: '120cm X 170cm (4ft X 5.5ft)' },
-                      { id: 'size5', label: '160cm X 230cm (5.2ft X 7.5ft)' },
-                      { id: 'size6', label: '200cm X 290cm (6.5ft X 9.5ft)' }
+                      { id: 'size1', label: '120cm X 180cm (4ft X 5.9ft)' },
+                      { id: 'size2', label: '200cm X 300cm (6.5ft X 9.8ft)' },
+                      { id: 'size3', label: '80cm X 200cm (2.6ft X 6.5ft)' },
+                      { id: 'size4', label: '160cm X 230cm (5.2ft X 7.5ft)' }
                     ].map(size => (
                       <button
                         key={size.id}
@@ -937,7 +703,7 @@ const ShaggyRugsPage = () => {
                       cursor: 'pointer',
                       boxShadow: '0 2px 12px rgba(0,0,0,0.15)',
                       transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                      transform: wishlist.includes(`shaggy_${product.id}`) ? 'scale(1.1)' : 'scale(1)',
+                      transform: wishlist.includes(`reversible_${product.id}`) ? 'scale(1.1)' : 'scale(1)',
                       backdropFilter: 'blur(4px)'
                     }}
                     onMouseEnter={() => setHoveredButton(product.id)}
@@ -947,7 +713,7 @@ const ShaggyRugsPage = () => {
                       width="24"
                       height="24"
                       viewBox="0 0 24 24"
-                      fill={wishlist.includes(`shaggy_${product.id}`) ? '#e53935' : 'none'}
+                      fill={wishlist.includes(`reversible_${product.id}`) ? '#e53935' : 'none'}
                       stroke="#e53935"
                       strokeWidth="2"
                       strokeLinecap="round"
@@ -1062,12 +828,10 @@ const ShaggyRugsPage = () => {
                             <path d="M18 6L6 18M6 6l12 12"/>
                           </svg>
                         )}
-                        {size === 'size1' && '60x110cm'}
-                        {size === 'size2' && '60x220cm'}
-                        {size === 'size3' && '80x150cm'}
-                        {size === 'size4' && '120x170cm'}
-                        {size === 'size5' && '160x230cm'}
-                        {size === 'size6' && '200x290cm'}
+                        {size === 'size1' && '120x180cm'}
+                        {size === 'size2' && '200x300cm'}
+                        {size === 'size3' && '80x200cm'}
+                        {size === 'size4' && '160x230cm'}
                       </span>
                     ))}
                   </div>
@@ -1134,4 +898,4 @@ const ShaggyRugsPage = () => {
   );
 };
 
-export default ShaggyRugsPage; 
+export default ReversibleRugsPage; 

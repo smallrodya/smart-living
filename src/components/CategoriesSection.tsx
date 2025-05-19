@@ -78,7 +78,7 @@ const categories: Category[] = [
       {
         name: 'RUGS',
         links: [
-          { label: 'Shop Rugs by Type', href: '/categories/rugs-mats/rugs-type' },
+          { label: 'Shop Rugs by Type', href: '/category/rugs/rugtype' },
           { label: 'Shop Rugs by Colour', href: '/categories/rugs-mats/rugs-colour' },
           { label: 'Shop Rugs from £10.99', href: '/categories/rugs-mats/rugs-from-10.99' },
           { label: 'Shop All', href: '/categories/rugs-mats' },
