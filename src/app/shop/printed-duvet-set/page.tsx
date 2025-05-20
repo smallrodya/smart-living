@@ -2074,7 +2074,7 @@ export default function PrintedDuvetSet() {
     const savedWishlist = localStorage.getItem('wishlist');
     if (savedWishlist) {
       try {
-        const items = JSON.parse(savedWishlist);
+      const items = JSON.parse(savedWishlist);
         if (Array.isArray(items)) {
           const printedDuvetItems = items.filter(item => 
             item && 

@@ -1,74 +1,91 @@
 'use client';
 import React, { useState, useRef } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import styles from './CategoriesSection.module.css';
 
-interface SubCategory {
-  name: string;
-  links: { label: string; href: string }[];
+interface MenuColumn {
+  title?: string;
+  items: Array<{ label: string; href?: string; color?: string; img?: string; description?: string }>;
 }
 
-interface Category {
+interface MegaMenu {
   name: string;
-  img: string;
-  sub: SubCategory[];
+  columns: MenuColumn[];
 }
 
-const categories: Category[] = [
+const megaMenus: MegaMenu[] = [
   {
     name: 'BEDDING',
-    img: '/cat-bedding-main.jpg',
-    sub: [
+    columns: [
       {
-        name: 'DUVET SET',
-        links: [
+        title: 'SHOP BY CATEGORY',
+        items: [
           { label: 'Shop Duvet Set by Type', href: '/shop-duvet-set-by-type' },
-          { label: 'Shop Duvet Set by Colour', href: '/category/bedding/duvet-colour' },
-          { label: 'Shop Duvet Set under £10', href: '/category/bedding/under-10' },
-          { label: 'Clearance', href: '/category/bedding/clearance' },
-          { label: 'Shop All', href: '/category/bedding' },
-          { label: 'Duvet Covers from £9.99', href: '/category/duvet-covers' },
+          { label: 'Shop Kids collection by type', href: '/kids-collection-by-type' },
+          { label: 'Shop by Sheet Type', href: '/shop-by-sheet-type' },
+          { label: 'Shop all', href: '/shop-all-bedding' },
+          
         ],
       },
       {
-        name: 'BED SHEETS',
-        links: [
-          { label: 'Shop by Sheet Type', href: '/category/bedding/sheet-type' },
-          { label: 'Shop by Sheet Colour', href: '/category/bedding/sheet-colour' },
-          { label: 'Shop from £4.49', href: '/category/bedding/from-4.49' },
-          { label: 'Shop All', href: '/category/bedding' },
+        title: 'DUVETS & PILLOWS',
+        items: [
+          { label: 'Duvets', href: '/category/bedding/duvets' },
+          { label: 'Coverless Duvets', href: '/category/bedding/coverless-duvets' },
+          { label: 'Pillows', href: '/category/bedding/pillows' },
         ],
       },
       {
-        name: 'KIDS COLLECTION',
-        links: [
-          { label: 'Kids collection by type', href: '/category/bedding/kids-collection' },
-          { label: 'Shop by Colour', href: '/category/bedding/kids-colour' },
-          { label: 'Shop by Material', href: '/category/bedding/kids-material' },
-          { label: 'Shop All', href: '/category/bedding' },
+        title: 'SHOP BY STYLE',
+        items: [
+          { label: 'Fleece', href: '/category/bedding/fleece' },
+          { label: 'Plain', href: '/category/bedding/plain' },
+          { label: 'Reversible', href: '/category/bedding/reversible' },
+          { label: 'Striped', href: '/category/bedding/striped' },
+          { label: 'Teddy', href: '/category/bedding/teddy' },
         ],
       },
       {
-        name: 'BED LINEN',
-        links: [
-          { label: 'Bed Linen from £4.49', href: '/category/bed-linen' },
+        title: 'SHOP BY SIZE',
+        items: [
+          { label: 'Single', href: '/category/bedding/single' },
+          { label: 'Double', href: '/category/bedding/double' },
+          { label: 'King', href: '/category/bedding/king' },
+          { label: 'Super King', href: '/category/bedding/super-king' },
         ],
       },
       {
-        name: 'TEDDY SETS',
-        links: [
-          { label: 'Teddy Sets from £11.99', href: '/category/teddy-sets' },
+        title: 'POPULAR COLOURS',
+        items: [
+          { label: 'Black', color: '#222' },
+          { label: 'Grey', color: '#888' },
+          { label: 'White', color: '#fff' },
+          { label: 'Cream', color: '#f5f5dc' },
+          { label: 'Pink', color: '#f7d6e0' },
+          { label: 'Red', color: '#e53935' },
+          { label: 'Orange', color: '#ff9800' },
+          { label: 'Yellow', color: '#ffe066' },
+          { label: 'Green', color: '#4caf50' },
+          { label: 'Teal', color: '#00bfae' },
+          { label: 'Purple', color: '#9c27b0' },
+          { label: 'Brown', color: '#795548' },
+        ],
+      },
+      {
+        items: [
+          { img: '/printed-duvet68.jpg', label: 'Printed Duvet', description: 'Shop Now', href: '/shop/printed-duvet-set' },
+          { img: '/premium-duvet139.jpg', label: 'Premium Duvet', description: 'Shop Now', href: '/shop-duvet-set-by-type/premium-duvet-set' },
         ],
       },
     ],
   },
   {
     name: 'RUGS & MATS',
-    img: '/cat-rugs-main.jpg',
-    sub: [
+    columns: [
       {
-        name: 'MATS',
-        links: [
+        title: 'MATS',
+        items: [
           { label: 'Shop Mats by Colour', href: '/category/rugs-mats/mats-colour' },
           { label: 'Shop Mats by Design', href: '/category/rugs-mats/mats-design' },
           { label: 'Shop Mats from £5.49', href: '/category/rugs-mats/mats-from-5.49' },
@@ -76,8 +93,8 @@ const categories: Category[] = [
         ],
       },
       {
-        name: 'RUGS',
-        links: [
+        title: 'RUGS',
+        items: [
           { label: 'Shop Rugs by Type', href: '/category/rugs/rugtype' },
           { label: 'Shop Rugs by Colour', href: '/category/rugs-mats/rugs-colour' },
           { label: 'Shop Rugs from £10.99', href: '/category/rugs-mats/rugs-from-10.99' },
@@ -91,11 +108,10 @@ const categories: Category[] = [
   },
   {
     name: 'THROWS & TOWELS',
-    img: '/cat-throws-main.jpg',
-    sub: [
+    columns: [
       {
-        name: 'TOWELS',
-        links: [
+        title: 'TOWELS',
+        items: [
           { label: 'Shop Towels by Design', href: '/category/throws-towels/towels-design' },
           { label: 'Shop Towel by Colour', href: '/category/throws-towels/towel-colour' },
           { label: 'Shop All', href: '/category/throws-towels' },
@@ -103,8 +119,8 @@ const categories: Category[] = [
         ],
       },
       {
-        name: 'THROWS',
-        links: [
+        title: 'THROWS',
+        items: [
           { label: 'Shop Throw by Type', href: '/category/throws-towels/throw-type' },
           { label: 'Shop Throw by Colour', href: '/category/throws-towels/throw-colour' },
           { label: 'Shop All', href: '/category/throws-towels' },
@@ -115,11 +131,10 @@ const categories: Category[] = [
   },
   {
     name: 'OUTDOOR',
-    img: '/cat-outdoor-main.jpg',
-    sub: [
+    columns: [
       {
-        name: 'CHAIRS',
-        links: [
+        title: 'CHAIRS',
+        items: [
           { label: 'Shop all', href: '/category/outdoor/chairs' },
         ],
       },
@@ -127,11 +142,10 @@ const categories: Category[] = [
   },
   {
     name: 'CURTAINS',
-    img: '/cat-curtains-main.jpg',
-    sub: [
+    columns: [
       {
-        name: 'CURTAINS',
-        links: [
+        title: 'CURTAINS',
+        items: [
           { label: 'Shop by Curtain Type', href: '/category/curtains/curtain-type' },
           { label: 'Shop by Curtain Colour', href: '/category/curtains/curtain-colour' },
           { label: 'Shop All', href: '/category/curtains' },
@@ -141,18 +155,17 @@ const categories: Category[] = [
   },
   {
     name: 'CLOTHING',
-    img: '/cat-clothing-main.jpg',
-    sub: [
+    columns: [
       {
-        name: 'MEN',
-        links: [
+        title: 'MEN',
+        items: [
           { label: 'Hoodie', href: '/category/clothing/men/hoodie' },
           { label: 'Sweatshirt', href: '/category/clothing/men/sweatshirt' },
         ],
       },
       {
-        name: 'WOMEN',
-        links: [
+        title: 'WOMEN',
+        items: [
           { label: 'Denim', href: '/category/clothing/women/denim' },
           { label: 'Jersey', href: '/category/clothing/women/jersey' },
           { label: 'Jogger', href: '/category/clothing/women/jogger' },
@@ -163,23 +176,22 @@ const categories: Category[] = [
   },
   {
     name: 'FOOTWEAR',
-    img: '/cat-footwear-main.jpg',
-    sub: [
+    columns: [
       {
-        name: 'BOOTIES',
-        links: [
+        title: 'BOOTIES',
+        items: [
           { label: 'Shop All', href: '/category/footwear/booties' },
         ],
       },
       {
-        name: 'SLIPPERS',
-        links: [
+        title: 'SLIPPERS',
+        items: [
           { label: 'Shop All', href: '/category/footwear/slippers' },
         ],
       },
       {
-        name: 'SOCKS',
-        links: [
+        title: 'SOCKS',
+        items: [
           { label: 'Shop all', href: '/category/footwear/socks' },
         ],
       },
@@ -202,15 +214,15 @@ const CategoriesSection = () => {
     closeTimeout.current = setTimeout(() => {
       setDropdownOpen(false);
       setHoveredIdx(null);
-    }, 180); // задержка закрытия
+    }, 180);
   };
 
   return (
     <nav className={styles.menuBar} aria-label="Main categories">
       <ul className={styles.menuList} role="menubar">
-        {categories.map((cat, idx) => (
+        {megaMenus.map((cat, idx) => (
           <li
-              key={cat.name}
+            key={cat.name}
             className={styles.menuItem + (hoveredIdx === idx && dropdownOpen ? ' ' + styles.active : '')}
             onMouseEnter={() => handleMouseEnter(idx)}
             onMouseLeave={handleMouseLeave}
@@ -222,25 +234,44 @@ const CategoriesSection = () => {
             <span className={styles.menuTitle}>{cat.name}</span>
             {hoveredIdx === idx && dropdownOpen && (
               <div className={styles.dropdown} role="menu">
-                {/* <div className={styles.dropdownImageWrap}>
-                  <Image src={cat.img} alt={cat.name} width={180} height={80} className={styles.dropdownImage} />
-                </div> */}
                 <div className={styles.dropdownContent}>
-                  {cat.sub.map((sub) => (
-                    <div key={sub.name} className={styles.dropdownCol}>
-                      <div className={styles.dropdownColTitle}>{sub.name}</div>
-                      <ul className={styles.dropdownLinks}>
-                      {sub.links.map((link) => (
-                          <li key={link.label} className={styles.dropdownLink}>
-                            <a href={link.href} tabIndex={0}>{link.label}</a>
-                          </li>
-                        ))}
-                      </ul>
-                      </div>
-                      ))}
-          </div>
-        </div>
-      )}
+                  {cat.columns.map((col, colIdx) => (
+                    <div key={colIdx} className={styles.dropdownCol}>
+                      {col.title && <div className={styles.dropdownColTitle}>{col.title}</div>}
+                      {col.title === 'POPULAR COLOURS' ? (
+                        <div className={styles.colorDotsGrid}>
+                          {col.items.map((item, itemIdx) => (
+                            <span key={itemIdx} className={styles.colorDot} title={item.label} style={{ background: item.color }}></span>
+                          ))}
+                        </div>
+                      ) : (
+                        col.items[0]?.img ? (
+                          <div className={styles.promoRow}>
+                            {col.items.map((item, itemIdx) => (
+                              <div key={itemIdx} className={styles.promoBlock}>
+                                <Link href={item.href || '#'}>
+                                  <Image src={item.img ?? '/placeholder.jpg'} alt={item.label} width={180} height={120} className={styles.promoImg} />
+                                  <div className={styles.promoText}>{item.label}</div>
+                                  <div className={styles.promoDesc}>{item.description}</div>
+                                </Link>
+                              </div>
+                            ))}
+                          </div>
+                        ) : (
+                          <ul className={styles.dropdownLinks}>
+                            {col.items.map((item, itemIdx) => (
+                              <li key={itemIdx} className={styles.dropdownLink}>
+                                <Link href={item.href || '#'} tabIndex={0}>{item.label}</Link>
+                              </li>
+                            ))}
+                          </ul>
+                        )
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </li>
         ))}
       </ul>

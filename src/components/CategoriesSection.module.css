@@ -210,6 +210,7 @@
   }
 } 
 
+/* --- Новый современный стиль для мегаменю --- */
 .menuBar {
   width: 100%;
   background: #fff;
@@ -218,9 +219,7 @@
   position: sticky;
   top: 0;
   z-index: 1001;
-  transition: box-shadow 0.2s;
 }
-
 .menuList {
   display: flex;
   justify-content: center;
@@ -231,7 +230,6 @@
   list-style: none;
   height: 56px;
 }
-
 .menuItem {
   position: relative;
   height: 100%;
@@ -239,13 +237,11 @@
   align-items: center;
   transition: background 0.2s;
 }
-
 .menuItem.active .menuTitle {
   background: #f5f5f5;
   color: #0a0a0a;
   box-shadow: 0 2px 8px rgba(0,0,0,0.04);
 }
-
 .menuTitle {
   font-size: 16px;
   font-weight: 600;
@@ -260,24 +256,21 @@
   position: relative;
   z-index: 2;
 }
-
 .menuItem:hover .menuTitle,
 .menuItem:focus-within .menuTitle {
   background: #f8f8f8;
   color: #0a0a0a;
 }
-
 .dropdown {
   position: absolute;
-  left: 0;
+  left: -175px;
   top: 100%;
-  min-width: 260px;
+  min-width: 900px;
   max-width: 98vw;
-  max-height: 60vh;
   background: #fff;
   box-shadow: 0 12px 48px rgba(0,0,0,0.13), 0 1.5px 8px rgba(0,0,0,0.07);
   border-radius: 0 0 18px 18px;
-  padding: 24px 18px 24px 18px;
+  padding: 32px 24px 32px 24px;
   display: flex;
   flex-direction: column;
   gap: 0;
@@ -288,43 +281,15 @@
   overflow-y: auto;
   overflow-x: hidden;
 }
-
-.dropdown::before {
-  content: '';
-  position: absolute;
-  top: -16px;
-  left: 0;
-  right: 0;
-  height: 16px;
-  background: transparent;
-}
-
-.dropdownImageWrap {
-  flex-shrink: 0;
-  display: flex;
-  align-items: flex-start;
-  min-width: 180px;
-}
-
-.dropdownImage {
-  border-radius: 14px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-  object-fit: cover;
-  width: 180px;
-  height: 80px;
-}
-
 .dropdownContent {
   display: flex;
-  flex-direction: column;
-  gap: 0;
+  flex-direction: row;
+  gap: 36px;
 }
-
 .dropdownCol {
-  min-width: 220px;
+  min-width: 180px;
   margin-bottom: 12px;
 }
-
 .dropdownColTitle {
   font-size: 15px;
   font-weight: 700;
@@ -332,7 +297,6 @@
   margin-bottom: 12px;
   letter-spacing: 0.1px;
 }
-
 .dropdownLinks {
   list-style: none;
   margin: 0;
@@ -341,7 +305,6 @@
   flex-direction: column;
   gap: 8px;
 }
-
 .dropdownLink a {
   font-size: 14px;
   color: #444;
@@ -352,46 +315,77 @@
   text-decoration: none;
   display: block;
 }
-
 .dropdownLink a:hover, .dropdownLink a:focus {
   background: #f0f0f0;
   color: #1a1a1a;
   padding-left: 16px;
 }
-
+.colorDotsGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 8px;
+  max-width: 120px;
+  margin-top: 4px;
+  margin-bottom: 8px;
+}
+.colorDot {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: inline-block;
+  border: 1.5px solid #e0e0e0;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  cursor: pointer;
+  transition: border 0.2s, box-shadow 0.2s;
+}
+.colorDot:hover {
+  border: 2px solid #222;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+.promoBlock {
+  margin-top: 18px;
+  margin-bottom: 8px;
+  text-align: left;
+}
+.promoImg {
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  object-fit: cover;
+  width: 180px;
+  height: 120px;
+  margin-bottom: 10px;
+}
+.promoText {
+  font-size: 14px;
+  font-weight: 600;
+  color: #222;
+  margin-bottom: 4px;
+}
+.promoDesc {
+  font-size: 13px;
+  color: #0070f3;
+  font-weight: 500;
+  margin-bottom: 2px;
+}
 @keyframes dropdownFadeIn {
   from { opacity: 0; transform: translateY(24px); }
   to { opacity: 1; transform: translateY(8px); }
 }
-
 @media (max-width: 1200px) {
-  .menuList {
-    gap: 18px;
-  }
   .dropdown {
-    gap: 18px;
-    min-width: 220px;
-    max-width: 98vw;
+    min-width: 600px;
     padding: 18px 12px 18px 12px;
   }
   .dropdownContent {
     gap: 18px;
   }
-  .dropdownImageWrap {
+  .dropdownCol {
     min-width: 120px;
   }
-  .dropdownImage {
-    width: 120px;
-    height: 60px;
-  }
 }
-
 @media (max-width: 900px) {
-  .menuList {
-    gap: 8px;
-  }
   .dropdown {
-    min-width: 160px;
+    min-width: 320px;
     max-width: 98vw;
     max-height: 70vh;
     padding: 10px 6px 10px 6px;
@@ -401,20 +395,21 @@
     flex-direction: column;
     flex-wrap: nowrap;
   }
-  .dropdownImageWrap {
-    min-width: 80px;
-  }
-  .dropdownImage {
-    width: 80px;
-    height: 40px;
-  }
   .dropdownCol {
-    min-width: 120px;
+    min-width: 100px;
   }
 }
-
 @media (max-width: 600px) {
   .menuBar {
     display: none;
   }
+}
+
+.promoRow {
+  display: flex;
+  flex-direction: row;
+  gap: 24px;
+  align-items: flex-start;
+  margin-top: 10px;
+  margin-bottom: 10px;
 } 
