@@ -27,58 +27,10 @@ interface Product {
 const products: Product[] = [
   {
     id: 1,
-    name: "Aubrey Duvet Cover and Pillowcase Set – Grey",
-    price: "£39.99 – £49.99",
-    image: '/printed-duvet1.jpg',
-    hoverImage: '/printed-duvet1-hover.jpg',
-    discount: "",
-    isSoldOut: true,
-    color: 'Grey',
-    sizes: {
-      single: false,
-      double: false,
-      king: false,
-      superKing: false
-    }
-  },
-  {
-    id: 2,
-    name: "Aubrey Duvet Cover and Pillowcase Set – Pink",
-    price: "£39.99 – £49.99",
-    image: '/printed-duvet2.jpg',
-    hoverImage: '/printed-duvet2-hover.jpg',
-    discount: "",
-    isSoldOut: true,
-    color: 'Pink',
-    sizes: {
-      single: false,
-      double: false,
-      king: false,
-      superKing: false
-    }
-  },
-  {
-    id: 3,
-    name: "Aubrey Duvet Cover and Pillowcase Set – Purple",
-    price: "£39.99 – £49.99",
-    image: '/printed-duvet3.jpg',
-    hoverImage: '/printed-duvet3-hover.jpg',
-    discount: "",
-    isSoldOut: true,
-    color: 'Purple',
-    sizes: {
-      single: false,
-      double: false,
-      king: false,
-      superKing: false
-    }
-  },
-  {
-    id: 4,
     name: "AVA Duvet Cover and Pillowcase Set – Grey",
     price: "£13.83 – £18.16",
-    image: '/printed-duvet4.jpg',
-    hoverImage: '/printed-duvet4-hover.jpg',
+    image: '/printed-duvet1.jpg',
+    hoverImage: '/printed-duvet1-hover.jpg',
     discount: "-65%",
     isSoldOut: false,
     color: 'Grey',
@@ -90,27 +42,27 @@ const products: Product[] = [
     }
   },
   {
-    id: 5,
+    id: 2,
     name: "AVA Duvet Cover and Pillowcase Set – Pink",
     price: "£13.83 – £18.16",
-    image: '/printed-duvet5.jpg',
-    hoverImage: '/printed-duvet5-hover.jpg',
+    image: '/printed-duvet2.jpg',
+    hoverImage: '/printed-duvet2-hover.jpg',
     discount: "-65%",
     isSoldOut: true,
     color: 'Pink',
     sizes: {
-      single: false,
-      double: false,
-      king: false,
-      superKing: false
+      single: true,
+      double: true,
+      king: true,
+      superKing: true
     }
   },
   {
-    id: 6,
+    id: 3,
     name: "Bardsley Check Duvet Cover and Pillowcase Set – Grey",
     price: "£14.70 – £19.02",
-    image: '/printed-duvet6.jpg',
-    hoverImage: '/printed-duvet6-hover.jpg',
+    image: '/printed-duvet3.jpg',
+    hoverImage: '/printed-duvet3-hover.jpg',
     discount: "-63%",
     isSoldOut: false,
     color: 'Grey',
@@ -122,11 +74,11 @@ const products: Product[] = [
     }
   },
   {
-    id: 7,
+    id: 4,
     name: "Bardsley Check Duvet Cover and Pillowcase Set – Red",
     price: "£14.70 – £19.02",
-    image: '/printed-duvet7.jpg',
-    hoverImage: '/printed-duvet7-hover.jpg',
+    image: '/printed-duvet4.jpg',
+    hoverImage: '/printed-duvet4-hover.jpg',
     discount: "-63%",
     isSoldOut: false,
     color: 'Red',
@@ -138,11 +90,11 @@ const products: Product[] = [
     }
   },
   {
-    id: 8,
+    id: 5,
     name: "Bardsley Check Duvet Cover and Pillowcase Set – Teal",
     price: "£14.70 – £19.02",
-    image: '/printed-duvet8.jpg',
-    hoverImage: '/printed-duvet8-hover.jpg',
+    image: '/printed-duvet5.jpg',
+    hoverImage: '/printed-duvet5-hover.jpg',
     discount: "-63%",
     isSoldOut: false,
     color: 'Teal',
@@ -154,11 +106,11 @@ const products: Product[] = [
     }
   },
   {
-    id: 9,
+    id: 6,
     name: "Bee Happy Duvet Cover and Pillowcase Set – Blush Pink",
     price: "£13.83 – £18.16",
-    image: '/printed-duvet9.jpg',
-    hoverImage: '/printed-duvet9-hover.jpg',
+    image: '/printed-duvet6.jpg',
+    hoverImage: '/printed-duvet6-hover.jpg',
     discount: "-65%",
     isSoldOut: false,
     color: 'Blush Pink',
@@ -170,24 +122,72 @@ const products: Product[] = [
     }
   },
   {
-    id: 10,
+    id: 7,
     name: "Bee Happy Duvet Cover and Pillowcase Set – Green",
     price: "£13.83 – £18.16",
-    image: '/printed-duvet10.jpg',
-    hoverImage: '/printed-duvet10-hover.jpg',
+    image: '/printed-duvet7.jpg',
+    hoverImage: '/printed-duvet7-hover.jpg',
     discount: "-65%",
     isSoldOut: true,
     color: 'Green',
     sizes: {
-      single: false,
-      double: false,
-      king: false,
-      superKing: false
+      single: true,
+      double: true,
+      king: true,
+      superKing: true
+    }
+  },
+  {
+    id: 8,
+    name: "Bee Happy Duvet Cover and Pillowcase Set – Grey",
+    price: "£13.83 – £18.16",
+    image: '/printed-duvet8.jpg',
+    hoverImage: '/printed-duvet8-hover.jpg',
+    discount: "-65%",
+    isSoldOut: false,
+    color: 'Grey',
+    sizes: {
+      single: true,
+      double: true,
+      king: true,
+      superKing: true
+    }
+  },
+  {
+    id: 9,
+    name: "Bee Happy Duvet Cover and Pillowcase Set – Ochre",
+    price: "£13.83 – £18.16",
+    image: '/printed-duvet9.jpg',
+    hoverImage: '/printed-duvet9-hover.jpg',
+    discount: "-65%",
+    isSoldOut: true,
+    color: 'Ochre',
+    sizes: {
+      single: true,
+      double: true,
+      king: true,
+      superKing: true
+    }
+  },
+  {
+    id: 10,
+    name: "Bellerose Duvet Cover and Pillowcase Set – Duck Egg",
+    price: "£13.83 – £18.16",
+    image: '/printed-duvet10.jpg',
+    hoverImage: '/printed-duvet10-hover.jpg',
+    discount: "-65%",
+    isSoldOut: false,
+    color: 'Duck Egg',
+    sizes: {
+      single: true,
+      double: true,
+      king: true,
+      superKing: true
     }
   },
   {
     id: 11,
-    name: "Bee Happy Duvet Cover and Pillowcase Set – Grey",
+    name: "Bellerose Duvet Cover and Pillowcase Set – Grey",
     price: "£13.83 – £18.16",
     image: '/printed-duvet11.jpg',
     hoverImage: '/printed-duvet11-hover.jpg',
@@ -203,29 +203,29 @@ const products: Product[] = [
   },
   {
     id: 12,
-    name: "Bee Happy Duvet Cover and Pillowcase Set – Ochre",
+    name: "Bellerose Duvet Cover and Pillowcase Set – Ochre",
     price: "£13.83 – £18.16",
     image: '/printed-duvet12.jpg',
     hoverImage: '/printed-duvet12-hover.jpg',
     discount: "-65%",
-    isSoldOut: true,
+    isSoldOut: false,
     color: 'Ochre',
     sizes: {
-      single: false,
-      double: false,
-      king: false,
-      superKing: false
+      single: true,
+      double: true,
+      king: true,
+      superKing: true
     }
   },
   {
     id: 13,
-    name: "Bellerose Duvet Cover and Pillowcase Set – Duck Egg",
+    name: "Bellerose Duvet Cover and Pillowcase Set – Pink",
     price: "£13.83 – £18.16",
     image: '/printed-duvet13.jpg',
     hoverImage: '/printed-duvet13-hover.jpg',
     discount: "-65%",
     isSoldOut: false,
-    color: 'Duck Egg',
+    color: 'Pink',
     sizes: {
       single: true,
       double: true,
@@ -235,13 +235,13 @@ const products: Product[] = [
   },
   {
     id: 14,
-    name: "Bellerose Duvet Cover and Pillowcase Set – Grey",
+    name: "Birdie Blossom Duvet Cover and Pillowcase Set – Blue",
     price: "£13.83 – £18.16",
     image: '/printed-duvet14.jpg',
     hoverImage: '/printed-duvet14-hover.jpg',
     discount: "-65%",
     isSoldOut: false,
-    color: 'Grey',
+    color: 'Blue',
     sizes: {
       single: true,
       double: true,
@@ -251,10 +251,58 @@ const products: Product[] = [
   },
   {
     id: 15,
-    name: "Bellerose Duvet Cover and Pillowcase Set – Ochre",
+    name: "Birdie Blossom Duvet Cover and Pillowcase Set – Duck Egg",
     price: "£13.83 – £18.16",
     image: '/printed-duvet15.jpg',
     hoverImage: '/printed-duvet15-hover.jpg',
+    discount: "-65%",
+    isSoldOut: false,
+    color: 'Duck Egg',
+    sizes: {
+      single: true,
+      double: true,
+      king: true,
+      superKing: true
+    }
+  },
+  {
+    id: 16,
+    name: "Birdie Blossom Duvet Cover and Pillowcase Set – Grey",
+    price: "£13.83 – £18.16",
+    image: '/printed-duvet16.jpg',
+    hoverImage: '/printed-duvet16-hover.jpg',
+    discount: "-65%",
+    isSoldOut: false,
+    color: 'Grey',
+    sizes: {
+      single: true,
+      double: true,
+      king: true,
+      superKing: true
+    }
+  },
+  {
+    id: 17,
+    name: "Birdie Blossom Duvet Cover and Pillowcase Set – Natural",
+    price: "£13.83 – £18.16",
+    image: '/printed-duvet17.jpg',
+    hoverImage: '/printed-duvet17-hover.jpg',
+    discount: "-65%",
+    isSoldOut: false,
+    color: 'Natural',
+    sizes: {
+      single: true,
+      double: true,
+      king: true,
+      superKing: true
+    }
+  },
+  {
+    id: 18,
+    name: "Birdie Blossom Duvet Cover and Pillowcase Set – Ochre",
+    price: "£13.83 – £18.16",
+    image: '/printed-duvet18.jpg',
+    hoverImage: '/printed-duvet18-hover.jpg',
     discount: "-65%",
     isSoldOut: false,
     color: 'Ochre',
@@ -266,58 +314,14 @@ const products: Product[] = [
     }
   },
   {
-    id: 16,
-    name: "Bellerose Duvet Cover and Pillowcase Set – Pink",
-    price: "£13.83 – £18.16",
-    image: '/printed-duvet16.jpg',
-    hoverImage: '/printed-duvet16-hover.jpg',
-    discount: '-28%',
-    color: 'Pink',
-    sizes: {
-      single: true,
-      double: true,
-      king: true,
-      superKing: true
-    }
-  },
-  {
-    id: 17,
-    name: "Birdie Blossom Duvet Cover and Pillowcase Set – Blue",
-    price: "£13.83 – £18.16",
-    image: '/printed-duvet17.jpg',
-    hoverImage: '/printed-duvet17-hover.jpg',
-    discount: '-30%',
-    color: 'Blue',
-    sizes: {
-      single: true,
-      double: true,
-      king: true,
-      superKing: true
-    }
-  },
-  {
-    id: 18,
-    name: "Birdie Blossom Duvet Cover and Pillowcase Set – Duck Egg",
-    price: "£13.83 – £18.16",
-    image: '/printed-duvet18.jpg',
-    hoverImage: '/printed-duvet18-hover.jpg',
-    discount: '-32%',
-    color: 'Duck Egg',
-    sizes: {
-      single: true,
-      double: true,
-      king: true,
-      superKing: true
-    }
-  },
-  {
     id: 19,
-    name: "Birdie Blossom Duvet Cover and Pillowcase Set – Grey",
+    name: "Birdie Blossom Duvet Cover and Pillowcase Set – Pink",
     price: "£13.83 – £18.16",
     image: '/printed-duvet19.jpg',
     hoverImage: '/printed-duvet19-hover.jpg',
-    discount: '-35%',
-    color: 'Grey',
+    discount: "-65%",
+    isSoldOut: false,
+    color: 'Pink',
     sizes: {
       single: true,
       double: true,
@@ -327,12 +331,13 @@ const products: Product[] = [
   },
   {
     id: 20,
-    name: "Birdie Blossom Duvet Cover and Pillowcase Set – Natural",
-    price: "£13.83 – £18.16",
+    name: "Cara Carle Duvet Cover and Pillowcase Set",
+    price: "£13.49",
     image: '/printed-duvet20.jpg',
     hoverImage: '/printed-duvet20-hover.jpg',
-    discount: '-38%',
-    color: 'Natural',
+    discount: "-73%",
+    isSoldOut: false,
+    color: 'Multi',
     sizes: {
       single: true,
       double: true,
@@ -342,116 +347,12 @@ const products: Product[] = [
   },
   {
     id: 21,
-    name: "Birdie Blossom Duvet Cover and Pillowcase Set – Ochre",
-    price: "£13.83 – £18.16",
-    image: '/printed-duvet21.jpg',
-    hoverImage: '/printed-duvet21-hover.jpg',
-    discount: '-40%',
-    color: 'Ochre',
-    sizes: {
-      single: true,
-      double: true,
-      king: true,
-      superKing: true
-    }
-  },
-  {
-    id: 22,
-    name: "Birdie Blossom Duvet Cover and Pillowcase Set – Pink",
-    price: "£13.83 – £18.16",
-    image: '/printed-duvet22.jpg',
-    hoverImage: '/printed-duvet22-hover.jpg',
-    discount: '-42%',
-    color: 'Pink',
-    sizes: {
-      single: true,
-      double: true,
-      king: true,
-      superKing: true
-    }
-  },
-  {
-    id: 23,
-    name: "Blake Duvet Cover and Pillowcase Set – Blush Pink",
-    price: "£13.83 – £18.16",
-    image: '/printed-duvet23.jpg',
-    hoverImage: '/printed-duvet23-hover.jpg',
-    discount: '-45%',
-    color: 'Blush Pink',
-    sizes: {
-      single: true,
-      double: true,
-      king: true,
-      superKing: true
-    }
-  },
-  {
-    id: 24,
-    name: "Blake Duvet Cover and Pillowcase Set – Grey",
-    price: "£13.83 – £18.16",
-    image: '/printed-duvet24.jpg',
-    hoverImage: '/printed-duvet24-hover.jpg',
-    discount: '-48%',
-    color: 'Grey',
-    sizes: {
-      single: true,
-      double: true,
-      king: true,
-      superKing: true
-    }
-  },
-  {
-    id: 25,
-    name: "Blake Duvet Cover and Pillowcase Set – Purple",
-    price: "£13.83 – £18.16",
-    image: '/printed-duvet25.jpg',
-    hoverImage: '/printed-duvet25-hover.jpg',
-    discount: '-50%',
-    color: 'Purple',
-    sizes: {
-      single: true,
-      double: true,
-      king: true,
-      superKing: true
-    }
-  },
-  {
-    id: 26,
-    name: "Camila Duvet Cover and Pillowcase Set – Teal",
-    price: "£13.49",
-    image: '/printed-duvet26.jpg',
-    hoverImage: '/printed-duvet26-hover.jpg',
-    discount: '-52%',
-    color: 'Teal',
-    sizes: {
-      single: true,
-      double: true,
-      king: true,
-      superKing: true
-    }
-  },
-  {
-    id: 27,
-    name: "Cara Carle Duvet Cover and Pillowcase Set",
-    price: "£13.49",
-    image: '/printed-duvet27.jpg',
-    hoverImage: '/printed-duvet27-hover.jpg',
-    discount: '-55%',
-    color: 'Multi',
-    sizes: {
-      single: true,
-      double: true,
-      king: true,
-      superKing: true
-    }
-  },
-  {
-    id: 28,
     name: "Denim Check Duvet Cover and Pillowcase Set – Blue",
     price: "£14.70 – £19.02",
-    image: '/printed-duvet28.jpg',
-    hoverImage: '/printed-duvet28-hover.jpg',
-    discount: '-58%',
+    image: '/printed-duvet21.jpg',
+    hoverImage: '/printed-duvet21-hover.jpg',
+    discount: "-63%",
+    isSoldOut: false,
     color: 'Blue',
     sizes: {
       single: true,
@@ -461,12 +362,13 @@ const products: Product[] = [
     }
   },
   {
-    id: 29,
+    id: 22,
     name: "Denim Check Duvet Cover and Pillowcase Set – Grey",
     price: "£14.70 – £19.02",
-    image: '/printed-duvet29.jpg',
-    hoverImage: '/printed-duvet29-hover.jpg',
-    discount: '-60%',
+    image: '/printed-duvet22.jpg',
+    hoverImage: '/printed-duvet22-hover.jpg',
+    discount: "-63%",
+    isSoldOut: false,
     color: 'Grey',
     sizes: {
       single: true,
@@ -476,12 +378,13 @@ const products: Product[] = [
     }
   },
   {
-    id: 30,
+    id: 23,
     name: "Denim Check Duvet Cover and Pillowcase Set – Red",
     price: "£14.70 – £19.02",
-    image: '/printed-duvet30.jpg',
-    hoverImage: '/printed-duvet30-hover.jpg',
-    discount: '-62%',
+    image: '/printed-duvet23.jpg',
+    hoverImage: '/printed-duvet23-hover.jpg',
+    discount: "-63%",
+    isSoldOut: false,
     color: 'Red',
     sizes: {
       single: true,
@@ -491,87 +394,13 @@ const products: Product[] = [
     }
   },
   {
-    id: 31,
-    name: "ECO Duvet Cover and Pillowcase Set – Choco/Cream",
-    price: "£39.99 – £49.99",
-    image: '/printed-duvet31.jpg',
-    hoverImage: '/printed-duvet31-hover.jpg',
-    discount: '-65%',
-    color: 'Choco/Cream',
-    sizes: {
-      single: true,
-      double: true,
-      king: true,
-      superKing: true
-    }
-  },
-  {
-    id: 32,
-    name: "Empire Damask Duvet Cover and Pillowcase Set – Black",
-    price: "£13.49 – £49.99",
-    image: '/printed-duvet32.jpg',
-    hoverImage: '/printed-duvet32-hover.jpg',
-    discount: '-68%',
-    color: 'Black',
-    sizes: {
-      single: true,
-      double: true,
-      king: true,
-      superKing: true
-    }
-  },
-  {
-    id: 33,
-    name: "Empire Damask Duvet Cover and Pillowcase Set – Cream",
-    price: "£39.99 – £49.99",
-    image: '/printed-duvet33.jpg',
-    hoverImage: '/printed-duvet33-hover.jpg',
-    discount: '-70%',
-    color: 'Cream',
-    sizes: {
-      single: true,
-      double: true,
-      king: true,
-      superKing: true
-    }
-  },
-  {
-    id: 34,
-    name: "Empire Damask Duvet Cover and Pillowcase Set – Purple",
-    price: "£39.99 – £49.99",
-    image: '/printed-duvet34.jpg',
-    hoverImage: '/printed-duvet34-hover.jpg',
-    discount: '-72%',
-    color: 'Purple',
-    sizes: {
-      single: true,
-      double: true,
-      king: true,
-      superKing: true
-    }
-  },
-  {
-    id: 35,
-    name: "Fashion Animal Duvet Cover and Pillowcase Set",
-    price: "£39.99 – £49.99",
-    image: '/printed-duvet35.jpg',
-    hoverImage: '/printed-duvet35-hover.jpg',
-    discount: '-75%',
-    color: 'Multi',
-    sizes: {
-      single: true,
-      double: true,
-      king: true,
-      superKing: true
-    }
-  },
-  {
-    id: 36,
+    id: 24,
     name: "Feathers Duvet Cover and Pillowcase Set – Duck Egg",
     price: "£14.70 – £19.02",
-    image: '/printed-duvet36.jpg',
-    hoverImage: '/printed-duvet36-hover.jpg',
-    discount: '-78%',
+    image: '/printed-duvet24.jpg',
+    hoverImage: '/printed-duvet24-hover.jpg',
+    discount: "-63%",
+    isSoldOut: false,
     color: 'Duck Egg',
     sizes: {
       single: true,
@@ -581,12 +410,13 @@ const products: Product[] = [
     }
   },
   {
-    id: 37,
+    id: 25,
     name: "Feathers Duvet Cover and Pillowcase Set – Grey",
     price: "£14.70 – £22.48",
-    image: '/printed-duvet37.jpg',
-    hoverImage: '/printed-duvet37-hover.jpg',
-    discount: '-80%',
+    image: '/printed-duvet25.jpg',
+    hoverImage: '/printed-duvet25-hover.jpg',
+    discount: "-63%",
+    isSoldOut: false,
     color: 'Grey',
     sizes: {
       single: true,
@@ -596,12 +426,13 @@ const products: Product[] = [
     }
   },
   {
-    id: 38,
+    id: 26,
     name: "Feathers Duvet Cover and Pillowcase Set – Navy",
     price: "£16.99 – £21.99",
-    image: '/printed-duvet38.jpg',
-    hoverImage: '/printed-duvet38-hover.jpg',
-    discount: '-82%',
+    image: '/printed-duvet26.jpg',
+    hoverImage: '/printed-duvet26-hover.jpg',
+    discount: "-58%",
+    isSoldOut: false,
     color: 'Navy',
     sizes: {
       single: true,
@@ -611,12 +442,13 @@ const products: Product[] = [
     }
   },
   {
-    id: 39,
+    id: 27,
     name: "Feathers Duvet Cover and Pillowcase Set – Pink",
     price: "£16.99 – £25.99",
-    image: '/printed-duvet39.jpg',
-    hoverImage: '/printed-duvet39-hover.jpg',
-    discount: '-85%',
+    image: '/printed-duvet27.jpg',
+    hoverImage: '/printed-duvet27-hover.jpg',
+    discount: "-58%",
+    isSoldOut: false,
     color: 'Pink',
     sizes: {
       single: true,
@@ -626,12 +458,13 @@ const products: Product[] = [
     }
   },
   {
-    id: 40,
+    id: 28,
     name: "Feathers Duvet Cover and Pillowcase Set – Purple",
     price: "£16.99 – £25.99",
-    image: '/printed-duvet40.jpg',
-    hoverImage: '/printed-duvet40-hover.jpg',
-    discount: '-88%',
+    image: '/printed-duvet28.jpg',
+    hoverImage: '/printed-duvet28-hover.jpg',
+    discount: "-58%",
+    isSoldOut: false,
     color: 'Purple',
     sizes: {
       single: true,
@@ -641,12 +474,13 @@ const products: Product[] = [
     }
   },
   {
-    id: 41,
+    id: 29,
     name: "Feathers Duvet Cover and Pillowcase Set – White",
     price: "£16.99 – £25.99",
-    image: '/printed-duvet41.jpg',
-    hoverImage: '/printed-duvet41-hover.jpg',
-    discount: '-90%',
+    image: '/printed-duvet29.jpg',
+    hoverImage: '/printed-duvet29-hover.jpg',
+    discount: "-58%",
+    isSoldOut: false,
     color: 'White',
     sizes: {
       single: true,
@@ -656,12 +490,13 @@ const products: Product[] = [
     }
   },
   {
-    id: 42,
+    id: 30,
     name: "Feathers Duvet Cover and Pillowcase Set – Yellow",
     price: "£16.99 – £25.99",
-    image: '/printed-duvet42.jpg',
-    hoverImage: '/printed-duvet42-hover.jpg',
-    discount: '-92%',
+    image: '/printed-duvet30.jpg',
+    hoverImage: '/printed-duvet30-hover.jpg',
+    discount: "-58%",
+    isSoldOut: false,
     color: 'Yellow',
     sizes: {
       single: true,
@@ -671,27 +506,13 @@ const products: Product[] = [
     }
   },
   {
-    id: 43,
-    name: "Flutter Duvet Cover and Pillowcase Set – Multi",
-    price: "£39.99 – £49.99",
-    image: '/printed-duvet43.jpg',
-    hoverImage: '/printed-duvet43-hover.jpg',
-    discount: '-94%',
-    color: 'Multi',
-    sizes: {
-      single: true,
-      double: true,
-      king: true,
-      superKing: true
-    }
-  },
-  {
-    id: 44,
+    id: 31,
     name: "Halloween Mix Fleece Reversible Duvet Cover with Pillowcase",
     price: "£19.02 – £22.91",
-    image: '/printed-duvet44.jpg',
-    hoverImage: '/printed-duvet44-hover.jpg',
-    discount: '-96%',
+    image: '/printed-duvet31.jpg',
+    hoverImage: '/printed-duvet31-hover.jpg',
+    discount: "-54%",
+    isSoldOut: true,
     color: 'Multi',
     sizes: {
       single: true,
@@ -701,13 +522,14 @@ const products: Product[] = [
     }
   },
   {
-    id: 45,
+    id: 32,
     name: "Honesty Leaf Duvet Cover and Pillowcase Set",
     price: "£13.83 – £18.16",
-    image: '/printed-duvet45.jpg',
-    hoverImage: '/printed-duvet45-hover.jpg',
-    discount: '-98%',
-    color: 'Green',
+    image: '/printed-duvet32.jpg',
+    hoverImage: '/printed-duvet32-hover.jpg',
+    discount: "-65%",
+    isSoldOut: true,
+    color: 'Multi',
     sizes: {
       single: true,
       double: true,
@@ -716,12 +538,13 @@ const products: Product[] = [
     }
   },
   {
-    id: 46,
+    id: 33,
     name: "Inspire Duvet Cover and Pillowcase Set – Red",
     price: "£13.49",
-    image: '/printed-duvet46.jpg',
-    hoverImage: '/printed-duvet46-hover.jpg',
-    discount: '-40%',
+    image: '/printed-duvet33.jpg',
+    hoverImage: '/printed-duvet33-hover.jpg',
+    discount: "-73%",
+    isSoldOut: false,
     color: 'Red',
     sizes: {
       single: true,
@@ -731,12 +554,13 @@ const products: Product[] = [
     }
   },
   {
-    id: 47,
+    id: 34,
     name: "Inspire Duvet Cover and Pillowcase Set – Teal",
     price: "£13.49",
-    image: '/printed-duvet47.jpg',
-    hoverImage: '/printed-duvet47-hover.jpg',
-    discount: '-42%',
+    image: '/printed-duvet34.jpg',
+    hoverImage: '/printed-duvet34-hover.jpg',
+    discount: "-73%",
+    isSoldOut: false,
     color: 'Teal',
     sizes: {
       single: true,
@@ -746,12 +570,13 @@ const products: Product[] = [
     }
   },
   {
-    id: 48,
+    id: 35,
     name: "IOLA Duvet Cover and Pillowcase Set – Black",
     price: "£13.49",
-    image: '/printed-duvet48.jpg',
-    hoverImage: '/printed-duvet48-hover.jpg',
-    discount: '-45%',
+    image: '/printed-duvet35.jpg',
+    hoverImage: '/printed-duvet35-hover.jpg',
+    discount: "-73%",
+    isSoldOut: true,
     color: 'Black',
     sizes: {
       single: true,
@@ -761,12 +586,13 @@ const products: Product[] = [
     }
   },
   {
-    id: 49,
+    id: 36,
     name: "IOLA Duvet Cover and Pillowcase Set – Teal",
     price: "£13.49",
-    image: '/printed-duvet49.jpg',
-    hoverImage: '/printed-duvet49-hover.jpg',
-    discount: '-48%',
+    image: '/printed-duvet36.jpg',
+    hoverImage: '/printed-duvet36-hover.jpg',
+    discount: "-73%",
+    isSoldOut: false,
     color: 'Teal',
     sizes: {
       single: true,
@@ -776,43 +602,11 @@ const products: Product[] = [
     }
   },
   {
-    id: 50,
-    name: "Leopard Duvet Cover and Pillowcase Set – Red",
-    price: "£39.99 – £49.99",
-    image: '/printed-duvet50.jpg',
-    hoverImage: '/printed-duvet50-hover.jpg',
-    discount: "",
-    isSoldOut: true,
-    color: 'Red',
-    sizes: {
-      single: false,
-      double: false,
-      king: false,
-      superKing: false
-    }
-  },
-  {
-    id: 51,
-    name: "Linear Duvet Cover and Pillowcase Set – Red",
-    price: "£44.99 – £49.99",
-    image: '/printed-duvet51.jpg',
-    hoverImage: '/printed-duvet51-hover.jpg',
-    discount: "",
-    isSoldOut: true,
-    color: 'Red',
-    sizes: {
-      single: false,
-      double: false,
-      king: false,
-      superKing: false
-    }
-  },
-  {
-    id: 52,
+    id: 37,
     name: "Luxury Fleece Unicorn Foil Duvet Cover with Pillowcase- Ivory",
     price: "£41.99",
-    image: '/printed-duvet52.jpg',
-    hoverImage: '/printed-duvet52-hover.jpg',
+    image: '/printed-duvet37.jpg',
+    hoverImage: '/printed-duvet37-hover.jpg',
     discount: "",
     isSoldOut: false,
     color: 'Ivory',
@@ -824,11 +618,11 @@ const products: Product[] = [
     }
   },
   {
-    id: 53,
+    id: 38,
     name: "Luxury Soft Reversible Artisan Blockprint Duvet Cover & Pillowcases",
     price: "£9.51 – £12.10",
-    image: '/printed-duvet53.jpg',
-    hoverImage: '/printed-duvet53-hover.jpg',
+    image: '/printed-duvet38.jpg',
+    hoverImage: '/printed-duvet38-hover.jpg',
     discount: "-83%",
     isSoldOut: false,
     color: 'Multi',
@@ -840,8 +634,248 @@ const products: Product[] = [
     }
   },
   {
-    id: 54,
+    id: 39,
     name: "Luxury Soft Reversible Camping Retreat Duvet Cover & Pillowcases",
+    price: "£9.51 – £12.10",
+    image: '/printed-duvet39.jpg',
+    hoverImage: '/printed-duvet39-hover.jpg',
+    discount: "-83%",
+    isSoldOut: false,
+    color: 'Multi',
+    sizes: {
+      single: true,
+      double: true,
+      king: true,
+      superKing: true
+    }
+  },
+  {
+    id: 40,
+    name: "Luxury Soft Reversible Celestial Halloween Duvet Cover with Pillowcases – Lilac",
+    price: "£8.64 – £9.51",
+    image: '/printed-duvet40.jpg',
+    hoverImage: '/printed-duvet40-hover.jpg',
+    discount: "-76%",
+    isSoldOut: false,
+    color: 'Lilac',
+    sizes: {
+      single: true,
+      double: true,
+      king: true,
+      superKing: true
+    }
+  },
+  {
+    id: 41,
+    name: "Luxury Soft Reversible Elegant Blooms Duvet Cover & Pillowcases – Blush Pink",
+    price: "£14.70 – £19.02",
+    image: '/printed-duvet41.jpg',
+    hoverImage: '/printed-duvet41-hover.jpg',
+    discount: "-73%",
+    isSoldOut: false,
+    color: 'Blush Pink',
+    sizes: {
+      single: true,
+      double: true,
+      king: true,
+      superKing: true
+    }
+  },
+  {
+    id: 42,
+    name: "Luxury Soft Reversible Elegant Blooms Duvet Cover & Pillowcases – Green",
+    price: "£14.70 – £19.02",
+    image: '/printed-duvet42.jpg',
+    hoverImage: '/printed-duvet42-hover.jpg',
+    discount: "-73%",
+    isSoldOut: false,
+    color: 'Green',
+    sizes: {
+      single: true,
+      double: true,
+      king: true,
+      superKing: true
+    }
+  },
+  {
+    id: 43,
+    name: "Luxury Soft Reversible Folk Floral Duvet Cover & Pillowcases – Blue",
+    price: "£33.99 Original price was: £33.99.£14.70Current price is: £14.70.",
+    image: '/printed-duvet43.jpg',
+    hoverImage: '/printed-duvet43-hover.jpg',
+    discount: "-57%",
+    isSoldOut: false,
+    color: 'Blue',
+    sizes: {
+      single: true,
+      double: true,
+      king: true,
+      superKing: true
+    }
+  },
+  {
+    id: 44,
+    name: "Luxury Soft Reversible Folk Floral Duvet Cover & Pillowcases – Mustard",
+    price: "£33.99 Original price was: £33.99.£14.70Current price is: £14.70.",
+    image: '/printed-duvet44.jpg',
+    hoverImage: '/printed-duvet44-hover.jpg',
+    discount: "-57%",
+    isSoldOut: false,
+    color: 'Mustard',
+    sizes: {
+      single: true,
+      double: true,
+      king: true,
+      superKing: true
+    }
+  },
+  {
+    id: 45,
+    name: "Luxury Soft Reversible Forest Mushrooms Duvet Cover & Pillowcases – Green",
+    price: "£33.99 Original price was: £33.99.£14.70Current price is: £14.70.",
+    image: '/printed-duvet45.jpg',
+    hoverImage: '/printed-duvet45-hover.jpg',
+    discount: "-57%",
+    isSoldOut: false,
+    color: 'Green',
+    sizes: {
+      single: true,
+      double: true,
+      king: true,
+      superKing: true
+    }
+  },
+  {
+    id: 46,
+    name: "Luxury Soft Reversible Frosted Foliage Duvet Cover & Pillowcases – Natural",
+    price: "£9.51 – £10.37",
+    image: '/printed-duvet46.jpg',
+    hoverImage: '/printed-duvet46-hover.jpg',
+    discount: "-74%",
+    isSoldOut: false,
+    color: 'Natural',
+    sizes: {
+      single: true,
+      double: true,
+      king: true,
+      superKing: true
+    }
+  },
+  {
+    id: 47,
+    name: "Luxury Soft Reversible Haunted House Duvet Cover & Pillowcases – Charcoal",
+    price: "£8.64 – £8.99",
+    image: '/printed-duvet47.jpg',
+    hoverImage: '/printed-duvet47-hover.jpg',
+    discount: "-78%",
+    isSoldOut: false,
+    color: 'Charcoal',
+    sizes: {
+      single: true,
+      double: true,
+      king: true,
+      superKing: true
+    }
+  },
+  {
+    id: 48,
+    name: "Luxury Soft Reversible Highland Cow Duvet Cover & Pillowcases – Green",
+    price: "£9.51 – £11.24",
+    image: '/printed-duvet48.jpg',
+    hoverImage: '/printed-duvet48-hover.jpg',
+    discount: "-75%",
+    isSoldOut: false,
+    color: 'Green',
+    sizes: {
+      single: true,
+      double: true,
+      king: true,
+      superKing: true
+    }
+  },
+  {
+    id: 49,
+    name: "Luxury Soft Reversible Holiday Postcard Duvet Cover & Pillowcases",
+    price: "£9.51 – £12.10",
+    image: '/printed-duvet49.jpg',
+    hoverImage: '/printed-duvet49-hover.jpg',
+    discount: "-83%",
+    isSoldOut: false,
+    color: 'Multi',
+    sizes: {
+      single: true,
+      double: true,
+      king: true,
+      superKing: true
+    }
+  },
+  {
+    id: 50,
+    name: "Luxury Soft Reversible Mystical Gothic Duvet Cover & Pillowcases – Charcoal",
+    price: "£8.64 – £10.37",
+    image: '/printed-duvet50.jpg',
+    hoverImage: '/printed-duvet50-hover.jpg',
+    discount: "-77%",
+    isSoldOut: false,
+    color: 'Charcoal',
+    sizes: {
+      single: true,
+      double: true,
+      king: true,
+      superKing: true
+    }
+  },
+  {
+    id: 51,
+    name: "Luxury Soft Reversible Oiled Swirl Duvet Cover & Pillowcases",
+    price: "£9.51 – £12.97",
+    image: '/printed-duvet51.jpg',
+    hoverImage: '/printed-duvet51-hover.jpg',
+    discount: "-81%",
+    isSoldOut: false,
+    color: 'Multi',
+    sizes: {
+      single: true,
+      double: true,
+      king: true,
+      superKing: true
+    }
+  },
+  {
+    id: 52,
+    name: "Luxury Soft Reversible Pastel Waves Duvet Cover & Pillowcases",
+    price: "£9.51 – £12.10",
+    image: '/printed-duvet52.jpg',
+    hoverImage: '/printed-duvet52-hover.jpg',
+    discount: "-83%",
+    isSoldOut: false,
+    color: 'Multi',
+    sizes: {
+      single: true,
+      double: true,
+      king: true,
+      superKing: true
+    }
+  },
+  {
+    id: 53,
+    name: "Luxury Soft Reversible Tropical Leaf Duvet Cover with Pillowcases – Green",
+    price: "£33.99 Original price was: £33.99.£9.59Current price is: £9.59.",
+    image: '/printed-duvet53.jpg',
+    hoverImage: '/printed-duvet53-hover.jpg',
+    discount: "-72%",
+    isSoldOut: true,
+    color: 'Green',
+    sizes: {
+      single: true,
+      double: true,
+      king: true,
+      superKing: true
+    }
+  },
+  {
+    id: 54,
+    name: "Luxury Soft Reversible Wild Flowers Duvet Cover & Pillowcases",
     price: "£9.51 – £12.10",
     image: '/printed-duvet54.jpg',
     hoverImage: '/printed-duvet54-hover.jpg',
@@ -857,13 +891,13 @@ const products: Product[] = [
   },
   {
     id: 55,
-    name: "Luxury Soft Reversible Celestial Halloween Duvet Cover with Pillowcases – Lilac",
-    price: "£8.64 – £9.51",
+    name: "Luxury Super Soft & Elegant Reversible PARTY SANTA Duvet Cover with Pillowcase",
+    price: "£14.70 – £19.02",
     image: '/printed-duvet55.jpg',
     hoverImage: '/printed-duvet55-hover.jpg',
-    discount: "-76%",
+    discount: "-58%",
     isSoldOut: false,
-    color: 'Lilac',
+    color: 'Multi',
     sizes: {
       single: true,
       double: true,
@@ -873,13 +907,13 @@ const products: Product[] = [
   },
   {
     id: 56,
-    name: "Luxury Soft Reversible Elegant Blooms Duvet Cover & Pillowcases – Blush Pink",
-    price: "£14.70 – £19.02",
+    name: "Luxury Super Soft & Elegant Reversible Winter Woodland Duvet Cover Set",
+    price: "£9.51 – £12.10",
     image: '/printed-duvet56.jpg',
     hoverImage: '/printed-duvet56-hover.jpg',
     discount: "-73%",
     isSoldOut: false,
-    color: 'Blush Pink',
+    color: 'Multi',
     sizes: {
       single: true,
       double: true,
@@ -889,13 +923,13 @@ const products: Product[] = [
   },
   {
     id: 57,
-    name: "Luxury Soft Reversible Elegant Blooms Duvet Cover & Pillowcases – Green",
-    price: "£14.70 – £19.02",
+    name: "Luxury Super Soft & Reversible Festive Christmas Puddings Duvet Set",
+    price: "£8.64 – £10.37",
     image: '/printed-duvet57.jpg',
     hoverImage: '/printed-duvet57-hover.jpg',
-    discount: "-73%",
+    discount: "-77%",
     isSoldOut: false,
-    color: 'Green',
+    color: 'Multi',
     sizes: {
       single: true,
       double: true,
@@ -905,13 +939,13 @@ const products: Product[] = [
   },
   {
     id: 58,
-    name: "Luxury Soft Reversible Folk Floral Duvet Cover & Pillowcases – Blue",
-    price: "£33.99 Original price was: £33.99.£14.70Current price is: £14.70.",
+    name: "Luxury Super Soft Crosshatch Check Duvet Cover with Pillowcase",
+    price: "£39.99 – £49.99",
     image: '/printed-duvet58.jpg',
     hoverImage: '/printed-duvet58-hover.jpg',
-    discount: "-57%",
+    discount: "",
     isSoldOut: false,
-    color: 'Blue',
+    color: 'Multi',
     sizes: {
       single: true,
       double: true,
@@ -921,13 +955,13 @@ const products: Product[] = [
   },
   {
     id: 59,
-    name: "Luxury Soft Reversible Folk Floral Duvet Cover & Pillowcases – Mustard",
-    price: "£33.99 Original price was: £33.99.£14.70Current price is: £14.70.",
+    name: "Luxury Super Soft Reversible Abstract Floral Duvet Cover With Pillowcase",
+    price: "£39.99 – £49.99",
     image: '/printed-duvet59.jpg',
     hoverImage: '/printed-duvet59-hover.jpg',
-    discount: "-57%",
+    discount: "",
     isSoldOut: false,
-    color: 'Mustard',
+    color: 'Multi',
     sizes: {
       single: true,
       double: true,
@@ -937,13 +971,13 @@ const products: Product[] = [
   },
   {
     id: 60,
-    name: "Luxury Soft Reversible Forest Mushrooms Duvet Cover & Pillowcases – Green",
-    price: "£33.99 Original price was: £33.99.£14.70Current price is: £14.70.",
+    name: "Luxury Super Soft Reversible Bright Leaves Duvet Cover With Pillowcase",
+    price: "£39.99 – £49.99",
     image: '/printed-duvet60.jpg',
     hoverImage: '/printed-duvet60-hover.jpg',
-    discount: "-57%",
+    discount: "",
     isSoldOut: false,
-    color: 'Green',
+    color: 'Multi',
     sizes: {
       single: true,
       double: true,
@@ -953,13 +987,13 @@ const products: Product[] = [
   },
   {
     id: 61,
-    name: "Luxury Soft Reversible Frosted Foliage Duvet Cover & Pillowcases – Natural",
-    price: "£9.51 – £10.37",
+    name: "Luxury Super Soft Reversible Celestial Cats Duvet Cover with Pillowcase",
+    price: "£9.51 – £19.02",
     image: '/printed-duvet61.jpg',
     hoverImage: '/printed-duvet61-hover.jpg',
-    discount: "-74%",
-    isSoldOut: false,
-    color: 'Natural',
+    discount: "-73%",
+    isSoldOut: true,
+    color: 'Multi',
     sizes: {
       single: true,
       double: true,
@@ -969,13 +1003,13 @@ const products: Product[] = [
   },
   {
     id: 62,
-    name: "Luxury Soft Reversible Haunted House Duvet Cover & Pillowcases – Charcoal",
-    price: "£8.64 – £8.99",
+    name: "Luxury Super Soft Reversible Christmas Town House Duvet Cover Set",
+    price: "£14.70 – £19.02",
     image: '/printed-duvet62.jpg',
     hoverImage: '/printed-duvet62-hover.jpg',
-    discount: "-78%",
+    discount: "-58%",
     isSoldOut: false,
-    color: 'Charcoal',
+    color: 'Multi',
     sizes: {
       single: true,
       double: true,
@@ -985,13 +1019,13 @@ const products: Product[] = [
   },
   {
     id: 63,
-    name: "Luxury Soft Reversible Highland Cow Duvet Cover & Pillowcases – Green",
-    price: "£9.51 – £11.24",
+    name: "Luxury Super Soft Reversible Elemental Geo Duvet Cover with Pillowcase",
+    price: "£9.51 – £19.02",
     image: '/printed-duvet63.jpg',
     hoverImage: '/printed-duvet63-hover.jpg',
-    discount: "-75%",
+    discount: "-73%",
     isSoldOut: false,
-    color: 'Green',
+    color: 'Multi',
     sizes: {
       single: true,
       double: true,
@@ -1001,11 +1035,11 @@ const products: Product[] = [
   },
   {
     id: 64,
-    name: "Luxury Soft Reversible Holiday Postcard Duvet Cover & Pillowcases",
-    price: "£9.51 – £12.10",
+    name: "Luxury Super Soft Reversible Exotic Palms Duvet Cover with Pillowcase",
+    price: "£39.99 – £49.99",
     image: '/printed-duvet64.jpg',
     hoverImage: '/printed-duvet64-hover.jpg',
-    discount: "-83%",
+    discount: "",
     isSoldOut: false,
     color: 'Multi',
     sizes: {
@@ -1017,13 +1051,13 @@ const products: Product[] = [
   },
   {
     id: 65,
-    name: "Luxury Soft Reversible Mystical Gothic Duvet Cover & Pillowcases – Charcoal",
-    price: "£8.64 – £10.37",
+    name: "Luxury Super Soft Reversible Floral Toile Duvet Cover with Pillowcase",
+    price: "£39.99 – £49.99",
     image: '/printed-duvet65.jpg',
     hoverImage: '/printed-duvet65-hover.jpg',
-    discount: "-77%",
+    discount: "",
     isSoldOut: false,
-    color: 'Charcoal',
+    color: 'Multi',
     sizes: {
       single: true,
       double: true,
@@ -1033,11 +1067,11 @@ const products: Product[] = [
   },
   {
     id: 66,
-    name: "Luxury Soft Reversible Oiled Swirl Duvet Cover & Pillowcases",
-    price: "£9.51 – £12.97",
+    name: "Luxury Super Soft Reversible Hawaiian Tropic Duvet Cover with Pillowcase",
+    price: "£39.99 – £49.99",
     image: '/printed-duvet66.jpg',
     hoverImage: '/printed-duvet66-hover.jpg',
-    discount: "-81%",
+    discount: "",
     isSoldOut: false,
     color: 'Multi',
     sizes: {
@@ -1049,13 +1083,13 @@ const products: Product[] = [
   },
   {
     id: 67,
-    name: "Luxury Soft Reversible Pastel Waves Duvet Cover & Pillowcases",
+    name: "Luxury Super Soft Reversible Misty Forest Duvet Cover with Pillowcase- Green",
     price: "£9.51 – £12.10",
     image: '/printed-duvet67.jpg',
     hoverImage: '/printed-duvet67-hover.jpg',
-    discount: "-83%",
+    discount: "-74%",
     isSoldOut: false,
-    color: 'Multi',
+    color: 'Green',
     sizes: {
       single: true,
       double: true,
@@ -1065,251 +1099,11 @@ const products: Product[] = [
   },
   {
     id: 68,
-    name: "Luxury Soft Reversible Tropical Leaf Duvet Cover with Pillowcases – Green",
-    price: "£33.99 Original price was: £33.99.£9.59Current price is: £9.59.",
-    image: '/printed-duvet68.jpg',
-    hoverImage: '/printed-duvet68-hover.jpg',
-    discount: "-72%",
-    isSoldOut: true,
-    color: 'Green',
-    sizes: {
-      single: false,
-      double: false,
-      king: false,
-      superKing: false
-    }
-  },
-  {
-    id: 69,
-    name: "Luxury Soft Reversible Wild Flowers Duvet Cover & Pillowcases",
-    price: "£9.51 – £12.10",
-    image: '/printed-duvet69.jpg',
-    hoverImage: '/printed-duvet69-hover.jpg',
-    discount: "-83%",
-    isSoldOut: false,
-    color: 'Multi',
-    sizes: {
-      single: true,
-      double: true,
-      king: true,
-      superKing: true
-    }
-  },
-  {
-    id: 70,
-    name: "Luxury Super Soft & Elegant Reversible PARTY SANTA Duvet Cover with Pillowcase",
-    price: "£14.70 – £19.02",
-    image: '/printed-duvet70.jpg',
-    hoverImage: '/printed-duvet70-hover.jpg',
-    discount: "-58%",
-    isSoldOut: false,
-    color: 'Multi',
-    sizes: {
-      single: true,
-      double: true,
-      king: true,
-      superKing: true
-    }
-  },
-  {
-    id: 71,
-    name: "Luxury Super Soft & Elegant Reversible Winter Woodland Duvet Cover Set",
-    price: "£9.51 – £12.10",
-    image: '/printed-duvet71.jpg',
-    hoverImage: '/printed-duvet71-hover.jpg',
-    discount: "-73%",
-    isSoldOut: false,
-    color: 'Multi',
-    sizes: {
-      single: true,
-      double: true,
-      king: true,
-      superKing: true
-    }
-  },
-  {
-    id: 72,
-    name: "Luxury Super Soft & Reversible Festive Christmas Puddings Duvet Set",
-    price: "£8.64 – £10.37",
-    image: '/printed-duvet72.jpg',
-    hoverImage: '/printed-duvet72-hover.jpg',
-    discount: "-77%",
-    isSoldOut: false,
-    color: 'Multi',
-    sizes: {
-      single: true,
-      double: true,
-      king: true,
-      superKing: true
-    }
-  },
-  {
-    id: 73,
-    name: "Luxury Super Soft Crosshatch Check Duvet Cover with Pillowcase",
-    price: "£39.99 – £49.99",
-    image: '/printed-duvet73.jpg',
-    hoverImage: '/printed-duvet73-hover.jpg',
-    discount: "",
-    isSoldOut: false,
-    color: 'Multi',
-    sizes: {
-      single: true,
-      double: true,
-      king: true,
-      superKing: true
-    }
-  },
-  {
-    id: 74,
-    name: "Luxury Super Soft Reversible Abstract Floral Duvet Cover With Pillowcase",
-    price: "£39.99 – £49.99",
-    image: '/printed-duvet74.jpg',
-    hoverImage: '/printed-duvet74-hover.jpg',
-    discount: "",
-    isSoldOut: false,
-    color: 'Multi',
-    sizes: {
-      single: true,
-      double: true,
-      king: true,
-      superKing: true
-    }
-  },
-  {
-    id: 75,
-    name: "Luxury Super Soft Reversible Bright Leaves Duvet Cover With Pillowcase",
-    price: "£39.99 – £49.99",
-    image: '/printed-duvet75.jpg',
-    hoverImage: '/printed-duvet75-hover.jpg',
-    discount: "",
-    isSoldOut: false,
-    color: 'Multi',
-    sizes: {
-      single: true,
-      double: true,
-      king: true,
-      superKing: true
-    }
-  },
-  {
-    id: 76,
-    name: "Luxury Super Soft Reversible Celestial Cats Duvet Cover with Pillowcase",
-    price: "£9.51 – £19.02",
-    image: '/printed-duvet76.jpg',
-    hoverImage: '/printed-duvet76-hover.jpg',
-    discount: "-73%",
-    isSoldOut: true,
-    color: 'Multi',
-    sizes: {
-      single: false,
-      double: false,
-      king: false,
-      superKing: false
-    }
-  },
-  {
-    id: 77,
-    name: "Luxury Super Soft Reversible Christmas Town House Duvet Cover Set",
-    price: "£14.70 – £19.02",
-    image: '/printed-duvet77.jpg',
-    hoverImage: '/printed-duvet77-hover.jpg',
-    discount: "-58%",
-    isSoldOut: false,
-    color: 'Multi',
-    sizes: {
-      single: true,
-      double: true,
-      king: true,
-      superKing: true
-    }
-  },
-  {
-    id: 78,
-    name: "Luxury Super Soft Reversible Elemental Geo Duvet Cover with Pillowcase",
-    price: "£9.51 – £19.02",
-    image: '/printed-duvet78.jpg',
-    hoverImage: '/printed-duvet78-hover.jpg',
-    discount: "-73%",
-    isSoldOut: false,
-    color: 'Multi',
-    sizes: {
-      single: true,
-      double: true,
-      king: true,
-      superKing: true
-    }
-  },
-  {
-    id: 79,
-    name: "Luxury Super Soft Reversible Exotic Palms Duvet Cover with Pillowcase",
-    price: "£39.99 – £49.99",
-    image: '/printed-duvet79.jpg',
-    hoverImage: '/printed-duvet79-hover.jpg',
-    discount: "",
-    isSoldOut: false,
-    color: 'Multi',
-    sizes: {
-      single: true,
-      double: true,
-      king: true,
-      superKing: true
-    }
-  },
-  {
-    id: 80,
-    name: "Luxury Super Soft Reversible Floral Toile Duvet Cover with Pillowcase",
-    price: "£39.99 – £49.99",
-    image: '/printed-duvet80.jpg',
-    hoverImage: '/printed-duvet80-hover.jpg',
-    discount: "",
-    isSoldOut: false,
-    color: 'Multi',
-    sizes: {
-      single: true,
-      double: true,
-      king: true,
-      superKing: true
-    }
-  },
-  {
-    id: 81,
-    name: "Luxury Super Soft Reversible Hawaiian Tropic Duvet Cover with Pillowcase",
-    price: "£39.99 – £49.99",
-    image: '/printed-duvet81.jpg',
-    hoverImage: '/printed-duvet81-hover.jpg',
-    discount: "",
-    isSoldOut: false,
-    color: 'Multi',
-    sizes: {
-      single: true,
-      double: true,
-      king: true,
-      superKing: true
-    }
-  },
-  {
-    id: 82,
-    name: "Luxury Super Soft Reversible Misty Forest Duvet Cover with Pillowcase- Green",
-    price: "£9.51 – £12.10",
-    image: '/printed-duvet82.jpg',
-    hoverImage: '/printed-duvet82-hover.jpg',
-    discount: "-73%",
-    isSoldOut: false,
-    color: 'Green',
-    sizes: {
-      single: true,
-      double: true,
-      king: true,
-      superKing: true
-    }
-  },
-  {
-    id: 83,
     name: "Luxury Super Soft Reversible Misty Forest Duvet Cover with Pillowcase- Navy",
     price: "£9.51 – £12.10",
-    image: '/printed-duvet83.jpg',
-    hoverImage: '/printed-duvet83-hover.jpg',
-    discount: "-73%",
+    image: '/printed-duvet68.jpg',
+    hoverImage: '/printed-duvet68-hover.jpg',
+    discount: "-74%",
     isSoldOut: false,
     color: 'Navy',
     sizes: {
@@ -1320,27 +1114,11 @@ const products: Product[] = [
     }
   },
   {
-    id: 84,
-    name: "Meander Duvet Cover and Pillowcase Set – Black/White",
-    price: "£14.70 – £18.16",
-    image: '/printed-duvet84.jpg',
-    hoverImage: '/printed-duvet84-hover.jpg',
-    discount: "-58%",
-    isSoldOut: false,
-    color: 'Black/White',
-    sizes: {
-      single: true,
-      double: true,
-      king: true,
-      superKing: true
-    }
-  },
-  {
-    id: 85,
+    id: 69,
     name: "Mila Duvet Cover and Pillowcase Set – Charcoal/Grey",
     price: "£13.83 – £18.16",
-    image: '/printed-duvet85.jpg',
-    hoverImage: '/printed-duvet85-hover.jpg',
+    image: '/printed-duvet69.jpg',
+    hoverImage: '/printed-duvet69-hover.jpg',
     discount: "-65%",
     isSoldOut: false,
     color: 'Charcoal/Grey',
@@ -1352,11 +1130,11 @@ const products: Product[] = [
     }
   },
   {
-    id: 86,
+    id: 70,
     name: "Mila Duvet Cover and Pillowcase Set – Ochre/Grey",
     price: "£13.83 – £18.16",
-    image: '/printed-duvet86.jpg',
-    hoverImage: '/printed-duvet86-hover.jpg',
+    image: '/printed-duvet70.jpg',
+    hoverImage: '/printed-duvet70-hover.jpg',
     discount: "-65%",
     isSoldOut: false,
     color: 'Ochre/Grey',
@@ -1368,11 +1146,11 @@ const products: Product[] = [
     }
   },
   {
-    id: 87,
+    id: 71,
     name: "Mila Duvet Cover and Pillowcase Set – Pink",
     price: "£13.83 – £18.16",
-    image: '/printed-duvet87.jpg',
-    hoverImage: '/printed-duvet87-hover.jpg',
+    image: '/printed-duvet71.jpg',
+    hoverImage: '/printed-duvet71-hover.jpg',
     discount: "-65%",
     isSoldOut: false,
     color: 'Pink',
@@ -1384,11 +1162,11 @@ const products: Product[] = [
     }
   },
   {
-    id: 88,
+    id: 72,
     name: "Mila Duvet Cover and Pillowcase Set – Purple/Grey",
     price: "£13.83 – £18.16",
-    image: '/printed-duvet88.jpg',
-    hoverImage: '/printed-duvet88-hover.jpg',
+    image: '/printed-duvet72.jpg',
+    hoverImage: '/printed-duvet72-hover.jpg',
     discount: "-65%",
     isSoldOut: false,
     color: 'Purple/Grey',
@@ -1400,11 +1178,11 @@ const products: Product[] = [
     }
   },
   {
-    id: 89,
+    id: 73,
     name: "Moxie Duvet Cover and Pillowcase Set – Black/White",
     price: "£13.83 – £18.16",
-    image: '/printed-duvet89.jpg',
-    hoverImage: '/printed-duvet89-hover.jpg',
+    image: '/printed-duvet73.jpg',
+    hoverImage: '/printed-duvet73-hover.jpg',
     discount: "-65%",
     isSoldOut: false,
     color: 'Black/White',
@@ -1416,11 +1194,11 @@ const products: Product[] = [
     }
   },
   {
-    id: 90,
+    id: 74,
     name: "Moxie Duvet Cover and Pillowcase Set – Blue",
     price: "£13.83 – £18.16",
-    image: '/printed-duvet90.jpg',
-    hoverImage: '/printed-duvet90-hover.jpg',
+    image: '/printed-duvet74.jpg',
+    hoverImage: '/printed-duvet74-hover.jpg',
     discount: "-65%",
     isSoldOut: false,
     color: 'Blue',
@@ -1432,11 +1210,11 @@ const products: Product[] = [
     }
   },
   {
-    id: 91,
+    id: 75,
     name: "Moxie Duvet Cover and Pillowcase Set – Blush Pink",
     price: "£13.83 – £18.16",
-    image: '/printed-duvet91.jpg',
-    hoverImage: '/printed-duvet91-hover.jpg',
+    image: '/printed-duvet75.jpg',
+    hoverImage: '/printed-duvet75-hover.jpg',
     discount: "-65%",
     isSoldOut: false,
     color: 'Blush Pink',
@@ -1448,12 +1226,12 @@ const products: Product[] = [
     }
   },
   {
-    id: 92,
+    id: 76,
     name: "Oooh Lala Duvet Cover and Pillowcase Set – Teal",
     price: "£13.49 – £39.99",
-    image: '/printed-duvet92.jpg',
-    hoverImage: '/printed-duvet92-hover.jpg',
-    discount: "-65%",
+    image: '/printed-duvet76.jpg',
+    hoverImage: '/printed-duvet76-hover.jpg',
+    discount: "-73%",
     isSoldOut: false,
     color: 'Teal',
     sizes: {
@@ -1464,11 +1242,11 @@ const products: Product[] = [
     }
   },
   {
-    id: 93,
+    id: 77,
     name: "Poppy Duvet Cover and Pillowcase Set – Aubergine",
     price: "£13.83 – £18.16",
-    image: '/printed-duvet93.jpg',
-    hoverImage: '/printed-duvet93-hover.jpg',
+    image: '/printed-duvet77.jpg',
+    hoverImage: '/printed-duvet77-hover.jpg',
     discount: "-65%",
     isSoldOut: false,
     color: 'Aubergine',
@@ -1480,11 +1258,11 @@ const products: Product[] = [
     }
   },
   {
-    id: 94,
+    id: 78,
     name: "Poppy Duvet Cover and Pillowcase Set – Blush Pink",
     price: "£13.83 – £18.16",
-    image: '/printed-duvet94.jpg',
-    hoverImage: '/printed-duvet94-hover.jpg',
+    image: '/printed-duvet78.jpg',
+    hoverImage: '/printed-duvet78-hover.jpg',
     discount: "-65%",
     isSoldOut: false,
     color: 'Blush Pink',
@@ -1496,11 +1274,11 @@ const products: Product[] = [
     }
   },
   {
-    id: 95,
+    id: 79,
     name: "Poppy Duvet Cover and Pillowcase Set – Red",
     price: "£13.83 – £18.16",
-    image: '/printed-duvet95.jpg',
-    hoverImage: '/printed-duvet95-hover.jpg',
+    image: '/printed-duvet79.jpg',
+    hoverImage: '/printed-duvet79-hover.jpg',
     discount: "-65%",
     isSoldOut: false,
     color: 'Red',
@@ -1512,13 +1290,13 @@ const products: Product[] = [
     }
   },
   {
-    id: 96,
+    id: 80,
     name: "Poppy Duvet Cover and Pillowcase Set – Yellow",
     price: "£13.83 – £18.16",
-    image: '/printed-duvet96.jpg',
-    hoverImage: '/printed-duvet96-hover.jpg',
+    image: '/printed-duvet80.jpg',
+    hoverImage: '/printed-duvet80-hover.jpg',
     discount: "-65%",
-    isSoldOut: false,
+    isSoldOut: true,
     color: 'Yellow',
     sizes: {
       single: true,
@@ -1528,12 +1306,12 @@ const products: Product[] = [
     }
   },
   {
-    id: 97,
+    id: 81,
     name: "Printed Metallic Floral Duvet with Pillowcases – Blush Pink",
     price: "£15.99 – £23.99",
-    image: '/printed-duvet97.jpg',
-    hoverImage: '/printed-duvet97-hover.jpg',
-    discount: "-65%",
+    image: '/printed-duvet81.jpg',
+    hoverImage: '/printed-duvet81-hover.jpg',
+    discount: "-60%",
     isSoldOut: false,
     color: 'Blush Pink',
     sizes: {
@@ -1544,11 +1322,11 @@ const products: Product[] = [
     }
   },
   {
-    id: 98,
+    id: 82,
     name: "Printed Metallic Marble Reversible Duvet Cover with Pillowcases – Blush Pink",
     price: "£13.83 – £20.75",
-    image: '/printed-duvet98.jpg',
-    hoverImage: '/printed-duvet98-hover.jpg',
+    image: '/printed-duvet82.jpg',
+    hoverImage: '/printed-duvet82-hover.jpg',
     discount: "-65%",
     isSoldOut: false,
     color: 'Blush Pink',
@@ -1560,12 +1338,12 @@ const products: Product[] = [
     }
   },
   {
-    id: 99,
+    id: 83,
     name: "Printed Nellie Duvet Cover and Pillowcase Set – Multi",
     price: "£44.99 Original price was: £44.99.£16.99Current price is: £16.99.",
-    image: '/printed-duvet99.jpg',
-    hoverImage: '/printed-duvet99-hover.jpg',
-    discount: "-65%",
+    image: '/printed-duvet83.jpg',
+    hoverImage: '/printed-duvet83-hover.jpg',
+    discount: "-62%",
     isSoldOut: false,
     color: 'Multi',
     sizes: {
@@ -1576,11 +1354,11 @@ const products: Product[] = [
     }
   },
   {
-    id: 100,
+    id: 84,
     name: "Printed Ombre Metallic Deco Duvet with Pillowcases – Blush Pink",
     price: "£13.83 – £20.75",
-    image: '/printed-duvet100.jpg',
-    hoverImage: '/printed-duvet100-hover.jpg',
+    image: '/printed-duvet84.jpg',
+    hoverImage: '/printed-duvet84-hover.jpg',
     discount: "-65%",
     isSoldOut: false,
     color: 'Blush Pink',
@@ -1592,11 +1370,11 @@ const products: Product[] = [
     }
   },
   {
-    id: 101,
+    id: 85,
     name: "Printed Ombre Metallic Deco Duvet with Pillowcases ? Grey",
     price: "£13.83 – £20.75",
-    image: '/printed-duvet101.jpg',
-    hoverImage: '/printed-duvet101-hover.jpg',
+    image: '/printed-duvet85.jpg',
+    hoverImage: '/printed-duvet85-hover.jpg',
     discount: "-65%",
     isSoldOut: false,
     color: 'Grey',
@@ -1608,11 +1386,11 @@ const products: Product[] = [
     }
   },
   {
-    id: 102,
+    id: 86,
     name: "Reversible Polycotton Connected Geo Duvet Cover and Pillowcase Set",
     price: "£13.83 – £20.75",
-    image: '/printed-duvet102.jpg',
-    hoverImage: '/printed-duvet102-hover.jpg',
+    image: '/printed-duvet86.jpg',
+    hoverImage: '/printed-duvet86-hover.jpg',
     discount: "-65%",
     isSoldOut: false,
     color: 'Multi',
@@ -1624,13 +1402,13 @@ const products: Product[] = [
     }
   },
   {
-    id: 103,
+    id: 87,
     name: "Reversible Polycotton Decorative Hearts Duvet Cover and Pillowcase Set – Grey",
     price: "£13.83 – £20.75",
-    image: '/printed-duvet103.jpg',
-    hoverImage: '/printed-duvet103-hover.jpg',
+    image: '/printed-duvet87.jpg',
+    hoverImage: '/printed-duvet87-hover.jpg',
     discount: "-65%",
-    isSoldOut: false,
+    isSoldOut: true,
     color: 'Grey',
     sizes: {
       single: true,
@@ -1640,12 +1418,12 @@ const products: Product[] = [
     }
   },
   {
-    id: 104,
+    id: 88,
     name: "Reversible Polycotton Elephant Mandala Duvet Cover and Pillowcase Set ? Pink/Blue",
     price: "£10.49 – £12.97",
-    image: '/printed-duvet104.jpg',
-    hoverImage: '/printed-duvet104-hover.jpg',
-    discount: "-65%",
+    image: '/printed-duvet88.jpg',
+    hoverImage: '/printed-duvet88-hover.jpg',
+    discount: "-76%",
     isSoldOut: false,
     color: 'Pink/Blue',
     sizes: {
@@ -1656,12 +1434,12 @@ const products: Product[] = [
     }
   },
   {
-    id: 105,
+    id: 89,
     name: "Reversible Polycotton Elephant Mandala Duvet Cover and Pillowcase Set ? Purple",
     price: "£10.49 – £12.97",
-    image: '/printed-duvet105.jpg',
-    hoverImage: '/printed-duvet105-hover.jpg',
-    discount: "-65%",
+    image: '/printed-duvet89.jpg',
+    hoverImage: '/printed-duvet89-hover.jpg',
+    discount: "-76%",
     isSoldOut: false,
     color: 'Purple',
     sizes: {
@@ -1672,13 +1450,14 @@ const products: Product[] = [
     }
   },
   {
-    id: 106,
+    id: 90,
     name: "Reversible Polycotton Elephant Mandala Duvet Cover and Pillowcase Set ? Teal",
     price: "£10.49 – £12.97",
-    image: '/printed-duvet106.jpg',
-    hoverImage: '/printed-duvet106-hover.jpg',
-    discount: "-65%",
+    image: '/printed-duvet90.jpg',
+    hoverImage: '/printed-duvet90-hover.jpg',
+    discount: "-76%",
     isSoldOut: false,
+    isHot: true,
     color: 'Teal',
     sizes: {
       single: true,
@@ -1688,28 +1467,12 @@ const products: Product[] = [
     }
   },
   {
-    id: 107,
-    name: "Reversible Polycotton Flamingo Stripe Duvet Cover and Pillowcase Set",
-    price: "£15.99 – £20.99",
-    image: '/printed-duvet107.jpg',
-    hoverImage: '/printed-duvet107-hover.jpg',
-    discount: "-65%",
-    isSoldOut: false,
-    color: 'Multi',
-    sizes: {
-      single: true,
-      double: true,
-      king: true,
-      superKing: true
-    }
-  },
-  {
-    id: 108,
+    id: 91,
     name: "Reversible Polycotton Grid Check Duvet Cover and Pillowcase Set",
     price: "£17.99 – £18.49",
-    image: '/printed-duvet108.jpg',
-    hoverImage: '/printed-duvet108-hover.jpg',
-    discount: "-65%",
+    image: '/printed-duvet91.jpg',
+    hoverImage: '/printed-duvet91-hover.jpg',
+    discount: "-63%",
     isSoldOut: false,
     color: 'Multi',
     sizes: {
@@ -1720,11 +1483,11 @@ const products: Product[] = [
     }
   },
   {
-    id: 109,
+    id: 92,
     name: "Reversible Polycotton Inky Floral Duvet Cover and Pillowcase Set – Blue",
     price: "£13.83 – £18.16",
-    image: '/printed-duvet109.jpg',
-    hoverImage: '/printed-duvet109-hover.jpg',
+    image: '/printed-duvet92.jpg',
+    hoverImage: '/printed-duvet92-hover.jpg',
     discount: "-65%",
     isSoldOut: false,
     color: 'Blue',
@@ -1736,43 +1499,43 @@ const products: Product[] = [
     }
   },
   {
-    id: 110,
+    id: 93,
     name: "Reversible Polycotton Inky Floral Duvet Cover and Pillowcase Set – Grey",
     price: "£13.83 – £18.16",
-    image: '/printed-duvet110.jpg',
-    hoverImage: '/printed-duvet110-hover.jpg',
+    image: '/printed-duvet93.jpg',
+    hoverImage: '/printed-duvet93-hover.jpg',
     discount: "-75%",
     isSoldOut: true,
     color: 'Grey',
     sizes: {
-      single: false,
-      double: false,
-      king: false,
-      superKing: false
+      single: true,
+      double: true,
+      king: true,
+      superKing: true
     }
   },
   {
-    id: 111,
+    id: 94,
     name: "Reversible Polycotton Jersey Melange Stripe Duvet Cover and Pillowcase Set ? Grey/Charcoal",
     price: "£18.99 – £20.99",
-    image: '/printed-duvet111.jpg',
-    hoverImage: '/printed-duvet111-hover.jpg',
+    image: '/printed-duvet94.jpg',
+    hoverImage: '/printed-duvet94-hover.jpg',
     discount: "-58%",
     isSoldOut: true,
     color: 'Grey/Charcoal',
     sizes: {
-      single: false,
-      double: false,
-      king: false,
-      superKing: false
+      single: true,
+      double: true,
+      king: true,
+      superKing: true
     }
   },
   {
-    id: 112,
+    id: 95,
     name: "Reversible Polycotton Paisley Duvet Cover and Pillowcase Set ? Blush Pink",
     price: "£13.83 – £20.75",
-    image: '/printed-duvet112.jpg',
-    hoverImage: '/printed-duvet112-hover.jpg',
+    image: '/printed-duvet95.jpg',
+    hoverImage: '/printed-duvet95-hover.jpg',
     discount: "-65%",
     isSoldOut: false,
     color: 'Blush Pink',
@@ -1784,11 +1547,11 @@ const products: Product[] = [
     }
   },
   {
-    id: 113,
+    id: 96,
     name: "Reversible Polycotton Paisley Mandala Duvet Cover and Pillowcase Set ? Black",
     price: "£13.83 – £20.75",
-    image: '/printed-duvet113.jpg',
-    hoverImage: '/printed-duvet113-hover.jpg',
+    image: '/printed-duvet96.jpg',
+    hoverImage: '/printed-duvet96-hover.jpg',
     discount: "-65%",
     isSoldOut: false,
     color: 'Black',
@@ -1800,11 +1563,11 @@ const products: Product[] = [
     }
   },
   {
-    id: 114,
+    id: 97,
     name: "Reversible Polycotton Paisley Mandala Duvet Cover and Pillowcase Set ? Blue",
     price: "£13.83 – £20.75",
-    image: '/printed-duvet114.jpg',
-    hoverImage: '/printed-duvet114-hover.jpg',
+    image: '/printed-duvet97.jpg',
+    hoverImage: '/printed-duvet97-hover.jpg',
     discount: "-65%",
     isSoldOut: false,
     color: 'Blue',
@@ -1816,12 +1579,13 @@ const products: Product[] = [
     }
   },
   {
-    id: 115,
+    id: 98,
     name: "Reversible Polycotton Textured Stripe Duvet Cover and Pillowcase Set ? Purple",
     price: "£11.24 – £14.26",
-    image: '/printed-duvet115.jpg',
-    hoverImage: '/printed-duvet115-hover.jpg',
-    discount: '-88%',
+    image: '/printed-duvet98.jpg',
+    hoverImage: '/printed-duvet98-hover.jpg',
+    discount: "-74%",
+    isSoldOut: false,
     color: 'Purple',
     sizes: {
       single: true,
@@ -1831,12 +1595,13 @@ const products: Product[] = [
     }
   },
   {
-    id: 116,
+    id: 99,
     name: "Reversible Polycotton Textured Stripe Duvet Cover and Pillowcase Set ? Teal",
     price: "£11.24 – £14.26",
-    image: '/printed-duvet116.jpg',
-    hoverImage: '/printed-duvet116-hover.jpg',
-    discount: '-90%',
+    image: '/printed-duvet99.jpg',
+    hoverImage: '/printed-duvet99-hover.jpg',
+    discount: "-74%",
+    isSoldOut: false,
     color: 'Teal',
     sizes: {
       single: true,
@@ -1846,12 +1611,13 @@ const products: Product[] = [
     }
   },
   {
-    id: 117,
+    id: 100,
     name: "Reversible Polycotton Tiedye Tassel Trim Duvet Cover and Pillowcase Set ? Blue",
     price: "£13.83 – £20.75",
-    image: '/printed-duvet117.jpg',
-    hoverImage: '/printed-duvet117-hover.jpg',
-    discount: '-92%',
+    image: '/printed-duvet100.jpg',
+    hoverImage: '/printed-duvet100-hover.jpg',
+    discount: "-65%",
+    isSoldOut: false,
     color: 'Blue',
     sizes: {
       single: true,
@@ -1861,12 +1627,13 @@ const products: Product[] = [
     }
   },
   {
-    id: 118,
+    id: 101,
     name: "Reversible Polycotton Tiedye Tassel Trim Duvet Cover and Pillowcase Set ? Mono",
     price: "£13.83 – £20.75",
-    image: '/printed-duvet118.jpg',
-    hoverImage: '/printed-duvet118-hover.jpg',
-    discount: '-94%',
+    image: '/printed-duvet101.jpg',
+    hoverImage: '/printed-duvet101-hover.jpg',
+    discount: "-65%",
+    isSoldOut: false,
     color: 'Mono',
     sizes: {
       single: true,
@@ -1876,12 +1643,13 @@ const products: Product[] = [
     }
   },
   {
-    id: 119,
+    id: 102,
     name: "Reversible Polycotton Tribal Elephant Duvet Cover and Pillowcase Set ? Natural",
     price: "£10.37 – £14.70",
-    image: '/printed-duvet119.jpg',
-    hoverImage: '/printed-duvet119-hover.jpg',
-    discount: '-96%',
+    image: '/printed-duvet102.jpg',
+    hoverImage: '/printed-duvet102-hover.jpg',
+    discount: "-74%",
+    isSoldOut: false,
     color: 'Natural',
     sizes: {
       single: true,
@@ -1891,12 +1659,13 @@ const products: Product[] = [
     }
   },
   {
-    id: 120,
+    id: 103,
     name: "Reversible Polycotton Tribal Elephant Duvet Cover and Pillowcase Set ? Rust",
     price: "£10.37 – £14.70",
-    image: '/printed-duvet120.jpg',
-    hoverImage: '/printed-duvet120-hover.jpg',
-    discount: '-98%',
+    image: '/printed-duvet103.jpg',
+    hoverImage: '/printed-duvet103-hover.jpg',
+    discount: "-74%",
+    isSoldOut: false,
     color: 'Rust',
     sizes: {
       single: true,
@@ -1906,46 +1675,318 @@ const products: Product[] = [
     }
   },
   {
-    id: 121,
+    id: 104,
     name: "Reversible Polycotton Tropical Monkey Duvet Cover and Pillowcase Set – Natural",
     price: "£9.51 – £18.16",
-    image: "/images/printed-duvet-set/121.jpg",
-    hoverImage: "/images/printed-duvet-set/121-hover.jpg",
+    image: '/printed-duvet104.jpg',
+    hoverImage: '/printed-duvet104-hover.jpg',
     discount: "-76%",
     isSoldOut: true,
-    color: "Natural",
+    color: 'Natural',
     sizes: {
-      single: false,
-      double: false,
-      king: false,
-      superKing: false
+      single: true,
+      double: true,
+      king: true,
+      superKing: true
+    }
+  },
+  {
+    id: 105,
+    name: "Reversible Polycotton Wolf Panel Duvet Cover and Pillowcase Set",
+    price: "£15.99 – £20.99",
+    image: '/printed-duvet105.jpg',
+    hoverImage: '/printed-duvet105-hover.jpg',
+    discount: "-60%",
+    isSoldOut: true,
+    color: 'Multi',
+    sizes: {
+      single: true,
+      double: true,
+      king: true,
+      superKing: true
+    }
+  },
+  {
+    id: 106,
+    name: "Rex Duvet Cover and Pillowcase Set – Blush Pink",
+    price: "£15.99 – £20.99",
+    image: '/printed-duvet106.jpg',
+    hoverImage: '/printed-duvet106-hover.jpg',
+    discount: "-60%",
+    isSoldOut: false,
+    color: 'Blush Pink',
+    sizes: {
+      single: true,
+      double: true,
+      king: true,
+      superKing: true
+    }
+  },
+  {
+    id: 107,
+    name: "Rex Duvet Cover and Pillowcase Set – Green",
+    price: "£15.99 – £20.99",
+    image: '/printed-duvet107.jpg',
+    hoverImage: '/printed-duvet107-hover.jpg',
+    discount: "-60%",
+    isSoldOut: true,
+    color: 'Green',
+    sizes: {
+      single: true,
+      double: true,
+      king: true,
+      superKing: true
+    }
+  },
+  {
+    id: 108,
+    name: "Rex Duvet Cover and Pillowcase Set – Grey",
+    price: "£15.99 – £20.99",
+    image: '/printed-duvet108.jpg',
+    hoverImage: '/printed-duvet108-hover.jpg',
+    discount: "-60%",
+    isSoldOut: false,
+    color: 'Grey',
+    sizes: {
+      single: true,
+      double: true,
+      king: true,
+      superKing: true
+    }
+  },
+  {
+    id: 109,
+    name: "Rex Duvet Cover and Pillowcase Set – Ochre",
+    price: "£15.99 – £20.99",
+    image: '/printed-duvet109.jpg',
+    hoverImage: '/printed-duvet109-hover.jpg',
+    discount: "-60%",
+    isSoldOut: false,
+    color: 'Ochre',
+    sizes: {
+      single: true,
+      double: true,
+      king: true,
+      superKing: true
+    }
+  },
+  {
+    id: 110,
+    name: "Romorus Duvet Cover and Pillowcase Set",
+    price: "£13.49",
+    image: '/printed-duvet110.jpg',
+    hoverImage: '/printed-duvet110-hover.jpg',
+    discount: "-73%",
+    isSoldOut: false,
+    color: 'Multi',
+    sizes: {
+      single: true,
+      double: true,
+      king: true,
+      superKing: true
+    }
+  },
+  {
+    id: 111,
+    name: "Rural Italy Duvet Cover and Pillowcase Set – Multi",
+    price: "£13.49 – £39.99",
+    image: '/printed-duvet111.jpg',
+    hoverImage: '/printed-duvet111-hover.jpg',
+    discount: "-73%",
+    isSoldOut: false,
+    color: 'Multi',
+    sizes: {
+      single: true,
+      double: true,
+      king: true,
+      superKing: true
+    }
+  },
+  {
+    id: 112,
+    name: "Rural Italy Duvet Cover and Pillowcase Set – Teal",
+    price: "£39.99 – £49.99",
+    image: '/printed-duvet112.jpg',
+    hoverImage: '/printed-duvet112-hover.jpg',
+    discount: "",
+    isSoldOut: true,
+    color: 'Teal',
+    sizes: {
+      single: true,
+      double: true,
+      king: true,
+      superKing: true
+    }
+  },
+  {
+    id: 113,
+    name: "Safari Duvet Cover and Pillowcase Set – Red",
+    price: "£13.49 – £49.99",
+    image: '/printed-duvet113.jpg',
+    hoverImage: '/printed-duvet113-hover.jpg',
+    discount: "-70%",
+    isSoldOut: false,
+    color: 'Red',
+    sizes: {
+      single: true,
+      double: true,
+      king: true,
+      superKing: true
+    }
+  },
+  {
+    id: 114,
+    name: "Selfie For Christmas Duvet Cover and Pillowcase Set",
+    price: "£59.99 – £69.99",
+    image: '/printed-duvet114.jpg',
+    hoverImage: '/printed-duvet114-hover.jpg',
+    discount: "",
+    isSoldOut: true,
+    color: 'Multi',
+    sizes: {
+      single: true,
+      double: true,
+      king: true,
+      superKing: true
+    }
+  },
+  {
+    id: 115,
+    name: "Super Soft & Reversible Dino Skiing Printed Duvet Cover with Pillowcase",
+    price: "£16.99 – £19.99",
+    image: '/printed-duvet115.jpg',
+    hoverImage: '/printed-duvet115-hover.jpg',
+    discount: "-51%",
+    isSoldOut: false,
+    color: 'Multi',
+    sizes: {
+      single: true,
+      double: true,
+      king: true,
+      superKing: true
+    }
+  },
+  {
+    id: 116,
+    name: "The Real Boss Duvet Cover and Pillowcase Set – Green/Cream",
+    price: "£11.67",
+    image: '/printed-duvet116.jpg',
+    hoverImage: '/printed-duvet116-hover.jpg',
+    discount: "-77%",
+    isSoldOut: false,
+    color: 'Green/Cream',
+    sizes: {
+      single: true,
+      double: true,
+      king: true,
+      superKing: true
+    }
+  },
+  {
+    id: 117,
+    name: "Tribute Duvet Cover and Pillowcase Set",
+    price: "£13.49",
+    image: '/printed-duvet117.jpg',
+    hoverImage: '/printed-duvet117-hover.jpg',
+    discount: "-73%",
+    isSoldOut: false,
+    color: 'Multi',
+    sizes: {
+      single: true,
+      double: true,
+      king: true,
+      superKing: true
+    }
+  },
+  {
+    id: 118,
+    name: "Tropical Leaf Duvet Cover and Pillowcase Set",
+    price: "£13.83 – £18.16",
+    image: '/printed-duvet118.jpg',
+    hoverImage: '/printed-duvet118-hover.jpg',
+    discount: "-65%",
+    isSoldOut: false,
+    color: 'Multi',
+    sizes: {
+      single: true,
+      double: true,
+      king: true,
+      superKing: true
+    }
+  },
+  {
+    id: 119,
+    name: "Urban Ombre Duvet Cover and Pillowcase Set – Grey",
+    price: "£15.99 – £20.99",
+    image: '/printed-duvet119.jpg',
+    hoverImage: '/printed-duvet119-hover.jpg',
+    discount: "-60%",
+    isSoldOut: false,
+    color: 'Grey',
+    sizes: {
+      single: true,
+      double: true,
+      king: true,
+      superKing: true
+    }
+  },
+  {
+    id: 120,
+    name: "Urban Ombre Duvet Cover and Pillowcase Set – Pink",
+    price: "£15.99 – £20.99",
+    image: '/printed-duvet120.jpg',
+    hoverImage: '/printed-duvet120-hover.jpg',
+    discount: "-60%",
+    isSoldOut: false,
+    color: 'Pink',
+    sizes: {
+      single: true,
+      double: true,
+      king: true,
+      superKing: true
+    }
+  },
+  {
+    id: 121,
+    name: "Urban Ombre Duvet Cover and Pillowcase Set – Purple",
+    price: "£15.99 – £20.99",
+    image: '/printed-duvet121.jpg',
+    hoverImage: '/printed-duvet121-hover.jpg',
+    discount: "-60%",
+    isSoldOut: false,
+    color: 'Purple',
+    sizes: {
+      single: true,
+      double: true,
+      king: true,
+      superKing: true
     }
   },
   {
     id: 122,
-    name: "Reversible Polycotton Wolf Panel Duvet Cover and Pillowcase Set",
+    name: "Urban Ombre Duvet Cover and Pillowcase Set – Teal",
     price: "£15.99 – £20.99",
-    image: "/images/printed-duvet-set/122.jpg",
-    hoverImage: "/images/printed-duvet-set/122-hover.jpg",
+    image: '/printed-duvet122.jpg',
+    hoverImage: '/printed-duvet122-hover.jpg',
     discount: "-60%",
-    isSoldOut: true,
-    color: "Grey",
+    isSoldOut: false,
+    color: 'Teal',
     sizes: {
-      single: false,
-      double: false,
-      king: false,
-      superKing: false
+      single: true,
+      double: true,
+      king: true,
+      superKing: true
     }
   },
   {
     id: 123,
-    name: "Rex Duvet Cover and Pillowcase Set – Blush Pink",
-    price: "£15.99 – £20.99",
-    image: "/images/printed-duvet-set/123.jpg",
-    hoverImage: "/images/printed-duvet-set/123-hover.jpg",
-    discount: "-60%",
-    isSoldOut: false,
-    color: "Blush Pink",
+    name: "Vibrance Duvet Cover and Pillowcase Set – Lime/Green",
+    price: "£44.99 – £49.99",
+    image: '/printed-duvet123.jpg',
+    hoverImage: '/printed-duvet123-hover.jpg',
+    discount: "",
+    isSoldOut: true,
+    color: 'Lime/Green',
     sizes: {
       single: true,
       double: true,
@@ -1955,29 +1996,29 @@ const products: Product[] = [
   },
   {
     id: 124,
-    name: "Rex Duvet Cover and Pillowcase Set – Green",
+    name: "Zander Duvet Cover and Pillowcase Set – Aqua",
     price: "£15.99 – £20.99",
-    image: "/images/printed-duvet-set/124.jpg",
-    hoverImage: "/images/printed-duvet-set/124-hover.jpg",
+    image: '/printed-duvet124.jpg',
+    hoverImage: '/printed-duvet124-hover.jpg',
     discount: "-60%",
-    isSoldOut: true,
-    color: "Green",
+    isSoldOut: false,
+    color: 'Aqua',
     sizes: {
-      single: false,
-      double: false,
-      king: false,
-      superKing: false
+      single: true,
+      double: true,
+      king: true,
+      superKing: true
     }
   },
   {
     id: 125,
-    name: "Rex Duvet Cover and Pillowcase Set – Grey",
+    name: "Zander Duvet Cover and Pillowcase Set – Blush Pink",
     price: "£15.99 – £20.99",
-    image: "/images/printed-duvet-set/125.jpg",
-    hoverImage: "/images/printed-duvet-set/125-hover.jpg",
+    image: '/printed-duvet125.jpg',
+    hoverImage: '/printed-duvet125-hover.jpg',
     discount: "-60%",
     isSoldOut: false,
-    color: "Grey",
+    color: 'Blush Pink',
     sizes: {
       single: true,
       double: true,
@@ -1987,397 +2028,13 @@ const products: Product[] = [
   },
   {
     id: 126,
-    name: "Rex Duvet Cover and Pillowcase Set – Ochre",
-    price: "£15.99 – £20.99",
-    image: "/images/printed-duvet-set/126.jpg",
-    hoverImage: "/images/printed-duvet-set/126-hover.jpg",
-    discount: "-60%",
-    isSoldOut: false,
-    color: "Ochre",
-    sizes: {
-      single: true,
-      double: true,
-      king: true,
-      superKing: true
-    }
-  },
-  {
-    id: 127,
-    name: "Romorus Duvet Cover and Pillowcase Set",
-    price: "£13.49",
-    image: "/images/printed-duvet-set/127.jpg",
-    hoverImage: "/images/printed-duvet-set/127-hover.jpg",
-    discount: "-73%",
-    isSoldOut: false,
-    color: "Grey",
-    sizes: {
-      single: true,
-      double: true,
-      king: true,
-      superKing: true
-    }
-  },
-  {
-    id: 128,
-    name: "Rosettes Duvet Cover and Pillowcase Set – Pink",
-    price: "£13.49 – £44.99",
-    image: "/images/printed-duvet-set/128.jpg",
-    hoverImage: "/images/printed-duvet-set/128-hover.jpg",
-    discount: "-73%",
-    isSoldOut: false,
-    color: "Pink",
-    sizes: {
-      single: true,
-      double: true,
-      king: true,
-      superKing: true
-    }
-  },
-  {
-    id: 129,
-    name: "Rural Italy Duvet Cover and Pillowcase Set – Multi",
-    price: "£13.49 – £39.99",
-    image: "/images/printed-duvet-set/129.jpg",
-    hoverImage: "/images/printed-duvet-set/129-hover.jpg",
-    discount: "-73%",
-    isSoldOut: false,
-    color: "Multi",
-    sizes: {
-      single: true,
-      double: true,
-      king: true,
-      superKing: true
-    }
-  },
-  {
-    id: 130,
-    name: "Rural Italy Duvet Cover and Pillowcase Set – Teal",
-    price: "£39.99 – £49.99",
-    image: "/images/printed-duvet-set/130.jpg",
-    hoverImage: "/images/printed-duvet-set/130-hover.jpg",
-    discount: "",
-    isSoldOut: true,
-    color: "Teal",
-    sizes: {
-      single: false,
-      double: false,
-      king: false,
-      superKing: false
-    }
-  },
-  {
-    id: 131,
-    name: "Safari Duvet Cover and Pillowcase Set – Red",
-    price: "£13.49 – £49.99",
-    image: "/images/printed-duvet-set/131.jpg",
-    hoverImage: "/images/printed-duvet-set/131-hover.jpg",
-    discount: "-70%",
-    isSoldOut: false,
-    color: "Red",
-    sizes: {
-      single: true,
-      double: true,
-      king: true,
-      superKing: true
-    }
-  },
-  {
-    id: 132,
-    name: "Selfie For Christmas Duvet Cover and Pillowcase Set",
-    price: "£59.99 – £69.99",
-    image: "/images/printed-duvet-set/132.jpg",
-    hoverImage: "/images/printed-duvet-set/132-hover.jpg",
-    discount: "",
-    isSoldOut: true,
-    color: "Multi",
-    sizes: {
-      single: false,
-      double: false,
-      king: false,
-      superKing: false
-    }
-  },
-  {
-    id: 133,
-    name: "Super Soft & Reversible Dino Skiing Printed Duvet Cover with Pillowcase",
-    price: "£16.99 – £19.99",
-    image: "/images/printed-duvet-set/133.jpg",
-    hoverImage: "/images/printed-duvet-set/133-hover.jpg",
-    discount: "-51%",
-    isSoldOut: false,
-    color: "Multi",
-    sizes: {
-      single: true,
-      double: true,
-      king: true,
-      superKing: true
-    }
-  },
-  {
-    id: 134,
-    name: "The Real Boss Duvet Cover and Pillowcase Set – Green/Cream",
-    price: "£11.67",
-    image: "/images/printed-duvet-set/134.jpg",
-    hoverImage: "/images/printed-duvet-set/134-hover.jpg",
-    discount: "-77%",
-    isSoldOut: false,
-    color: "Green/Cream",
-    sizes: {
-      single: true,
-      double: true,
-      king: true,
-      superKing: true
-    }
-  },
-  {
-    id: 135,
-    name: "Tribal Zebra Duvet Cover and Pillowcase Set",
-    price: "£39.99 – £49.99",
-    image: "/images/printed-duvet-set/135.jpg",
-    hoverImage: "/images/printed-duvet-set/135-hover.jpg",
-    discount: "",
-    isSoldOut: true,
-    color: "Black/White",
-    sizes: {
-      single: false,
-      double: false,
-      king: false,
-      superKing: false
-    }
-  },
-  {
-    id: 136,
-    name: "Tribute Duvet Cover and Pillowcase Set",
-    price: "£13.49",
-    image: "/images/printed-duvet-set/136.jpg",
-    hoverImage: "/images/printed-duvet-set/136-hover.jpg",
-    discount: "-73%",
-    isSoldOut: false,
-    color: "Grey",
-    sizes: {
-      single: true,
-      double: true,
-      king: true,
-      superKing: true
-    }
-  },
-  {
-    id: 137,
-    name: "Tropical Leaf Duvet Cover and Pillowcase Set",
-    price: "£13.83 – £18.16",
-    image: "/images/printed-duvet-set/137.jpg",
-    hoverImage: "/images/printed-duvet-set/137-hover.jpg",
-    discount: "-65%",
-    isSoldOut: false,
-    color: "Green",
-    sizes: {
-      single: true,
-      double: true,
-      king: true,
-      superKing: true
-    }
-  },
-  {
-    id: 138,
-    name: "Urban Ombre Duvet Cover and Pillowcase Set – Grey",
-    price: "£15.99 – £20.99",
-    image: "/images/printed-duvet-set/138.jpg",
-    hoverImage: "/images/printed-duvet-set/138-hover.jpg",
-    discount: "-60%",
-    isSoldOut: false,
-    color: "Grey",
-    sizes: {
-      single: true,
-      double: true,
-      king: true,
-      superKing: true
-    }
-  },
-  {
-    id: 139,
-    name: "Urban Ombre Duvet Cover and Pillowcase Set – Pink",
-    price: "£15.99 – £20.99",
-    image: "/images/printed-duvet-set/139.jpg",
-    hoverImage: "/images/printed-duvet-set/139-hover.jpg",
-    discount: "-60%",
-    isSoldOut: false,
-    color: "Pink",
-    sizes: {
-      single: true,
-      double: true,
-      king: true,
-      superKing: true
-    }
-  },
-  {
-    id: 140,
-    name: "Urban Ombre Duvet Cover and Pillowcase Set – Purple",
-    price: "£15.99 – £20.99",
-    image: "/images/printed-duvet-set/140.jpg",
-    hoverImage: "/images/printed-duvet-set/140-hover.jpg",
-    discount: "-60%",
-    isSoldOut: false,
-    color: "Purple",
-    sizes: {
-      single: true,
-      double: true,
-      king: true,
-      superKing: true
-    }
-  },
-  {
-    id: 141,
-    name: "Urban Ombre Duvet Cover and Pillowcase Set – Teal",
-    price: "£15.99 – £20.99",
-    image: "/images/printed-duvet-set/141.jpg",
-    hoverImage: "/images/printed-duvet-set/141-hover.jpg",
-    discount: "-60%",
-    isSoldOut: false,
-    color: "Teal",
-    sizes: {
-      single: true,
-      double: true,
-      king: true,
-      superKing: true
-    }
-  },
-  {
-    id: 142,
-    name: "Vibrance Duvet Cover and Pillowcase Set – Lime/Green",
-    price: "£44.99 – £49.99",
-    image: "/images/printed-duvet-set/142.jpg",
-    hoverImage: "/images/printed-duvet-set/142-hover.jpg",
-    discount: "",
-    isSoldOut: true,
-    color: "Lime/Green",
-    sizes: {
-      single: false,
-      double: false,
-      king: false,
-      superKing: false
-    }
-  },
-  {
-    id: 143,
-    name: "Wave Ombre Duvet Cover and Pillowcase Set – Grey",
-    price: "£15.99 – £20.99",
-    image: "/images/printed-duvet-set/143.jpg",
-    hoverImage: "/images/printed-duvet-set/143-hover.jpg",
-    discount: "-60%",
-    isSoldOut: true,
-    color: "Grey",
-    sizes: {
-      single: false,
-      double: false,
-      king: false,
-      superKing: false
-    }
-  },
-  {
-    id: 144,
-    name: "Wave Ombre Duvet Cover and Pillowcase Set – Purple",
-    price: "£15.99 – £20.99",
-    image: "/images/printed-duvet-set/144.jpg",
-    hoverImage: "/images/printed-duvet-set/144-hover.jpg",
-    discount: "-60%",
-    isSoldOut: true,
-    color: "Purple",
-    sizes: {
-      single: false,
-      double: false,
-      king: false,
-      superKing: false
-    }
-  },
-  {
-    id: 145,
-    name: "Waverly Duvet Cover and Pillowcase Set – Grey",
-    price: "£39.99 – £49.99",
-    image: "/images/printed-duvet-set/145.jpg",
-    hoverImage: "/images/printed-duvet-set/145-hover.jpg",
-    discount: "",
-    isSoldOut: true,
-    color: "Grey",
-    sizes: {
-      single: false,
-      double: false,
-      king: false,
-      superKing: false
-    }
-  },
-  {
-    id: 146,
-    name: "Waverly Duvet Cover and Pillowcase Set – Purple",
-    price: "£39.99 – £49.99",
-    image: "/images/printed-duvet-set/146.jpg",
-    hoverImage: "/images/printed-duvet-set/146-hover.jpg",
-    discount: "",
-    isSoldOut: true,
-    color: "Purple",
-    sizes: {
-      single: false,
-      double: false,
-      king: false,
-      superKing: false
-    }
-  },
-  {
-    id: 147,
-    name: "Waverly Duvet Cover and Pillowcase Set – Red",
-    price: "£39.99 – £49.99",
-    image: "/images/printed-duvet-set/147.jpg",
-    hoverImage: "/images/printed-duvet-set/147-hover.jpg",
-    discount: "",
-    isSoldOut: true,
-    color: "Red",
-    sizes: {
-      single: false,
-      double: false,
-      king: false,
-      superKing: false
-    }
-  },
-  {
-    id: 148,
-    name: "Zander Duvet Cover and Pillowcase Set – Aqua",
-    price: "£15.99 – £20.99",
-    image: "/images/printed-duvet-set/148.jpg",
-    hoverImage: "/images/printed-duvet-set/148-hover.jpg",
-    discount: "-60%",
-    isSoldOut: false,
-    color: "Aqua",
-    sizes: {
-      single: true,
-      double: true,
-      king: true,
-      superKing: true
-    }
-  },
-  {
-    id: 149,
-    name: "Zander Duvet Cover and Pillowcase Set – Blush Pink",
-    price: "£15.99 – £20.99",
-    image: "/images/printed-duvet-set/149.jpg",
-    hoverImage: "/images/printed-duvet-set/149-hover.jpg",
-    discount: "-60%",
-    isSoldOut: false,
-    color: "Blush Pink",
-    sizes: {
-      single: true,
-      double: true,
-      king: true,
-      superKing: true
-    }
-  },
-  {
-    id: 150,
     name: "Zander Duvet Cover and Pillowcase Set – Grey",
     price: "£15.99 – £20.99",
-    image: "/images/printed-duvet-set/150.jpg",
-    hoverImage: "/images/printed-duvet-set/150-hover.jpg",
+    image: '/printed-duvet126.jpg',
+    hoverImage: '/printed-duvet126-hover.jpg',
     discount: "-60%",
     isSoldOut: false,
-    color: "Grey",
+    color: 'Grey',
     sizes: {
       single: true,
       double: true,

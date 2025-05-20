@@ -13,28 +13,28 @@ const categories = [
     name: '3D DUVET SET',
     image: '/SHOP3DUVET.jpg',
     link: '/shop/3d-duvet-set',
-    productCount: 19
+    productCount: 15
   },
   {
     id: 2,
     name: 'PREMIUM DUVET SET',
     image: '/PREMIUMSHOPUVET.jpg',
     link: '/shop-duvet-set-by-type/premium-duvet-set',
-    productCount: 155
+    productCount: 112
   },
   {
     id: 3,
     name: 'PRINTED DUVET SET',
     image: '/PRINTED.jpg',
     link: '/shop/printed-duvet-set',
-    productCount: 150
+    productCount: 126
   },
   {
     id: 4,
     name: 'TEDDY DUVET SET',
     image: '/TEDDY.jpg',
     link: '/shop/teddy-duvet-set',
-    productCount: 97
+    productCount: 81
   }
 ];
 

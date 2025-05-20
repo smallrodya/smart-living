@@ -4,14 +4,14 @@ import json
 import time
 
 def parse_premium_duvet_sets():
-    base_url = "https://smart-living.co.uk/category/rugs/rugtype/reversible-rugs/"
+    base_url = "https://smart-living.co.uk/category/bedding/shopbytype/teddy-duvet-set-bedding/"
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
     }
     
     products = []
     page = 1
-    max_pages = 1 # Мы знаем, что есть 3 страницы
+    max_pages = 2 # Мы знаем, что есть 3 страницы
     product_id = 1  # Начинаем с ID 1
     
     while page <= max_pages:
@@ -87,14 +87,14 @@ def parse_premium_duvet_sets():
             break
     
     # Сохраняем результаты в JSON файл
-    with open('Reversible Rugs_products.json', 'w', encoding='utf-8') as f:
+    with open('Teddy DUVET SET_products.json', 'w', encoding='utf-8') as f:
         json.dump(products, f, ensure_ascii=False, indent=2)
         
     print(f"\nВсего спарсено товаров: {len(products)}")
-    print("Результаты сохранены в файл reversible_rugs_products.json")
+    print("Результаты сохранены в файл Teddy DUVET SET_products.json")
     
-    if len(products) != 10:
-        print(f"\nВНИМАНИЕ: Спарсено {len(products)} товаров вместо ожидаемых 10!")
+    if len(products) != 81:
+        print(f"\nВНИМАНИЕ: Спарсено {len(products)} товаров вместо ожидаемых 81!")
         print("Возможно, некоторые товары не были найдены или сайт изменился.")
 
 if __name__ == "__main__":

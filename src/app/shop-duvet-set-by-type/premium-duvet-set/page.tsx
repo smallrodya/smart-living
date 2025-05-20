@@ -27,54 +27,6 @@ interface Product {
 const products: Product[] = [
   {
     id: 1,
-    name: "Adrianna Duvet Cover and Pillowcase Set – Oyster",
-    price: "£17.29 – £79.99",
-    image: '/premium-duvet1.jpg',
-    hoverImage: '/premium-duvet1.jpg',
-    discount: '-65%',
-    isSoldOut: false,
-    color: 'Oyster',
-    sizes: {
-      single: true,
-      double: true,
-      king: true,
-      superKing: true,
-    }
-  },
-  {
-    id: 2,
-    name: "Adrianna Duvet Cover and Pillowcase Set – Silver",
-    price: "£49.99 – £79.99",
-    image: '/premium-duvet2.jpg',
-    hoverImage: '/premium-duvet2.jpg',
-    discount: '',
-    isSoldOut: true,
-    color: 'Silver',
-    sizes: {
-      single: false,
-      double: false,
-      king: false,
-      superKing: false,
-    }
-  },
-  {
-    id: 3,
-    name: "Adrianna Duvet Cover and Pillowcase Set – White",
-    price: "£17.29 – £79.99",
-    image: '/premium-duvet3.jpg',
-    hoverImage: '/premium-duvet3.jpg',
-    discount: '-65%',
-    isSoldOut: false,
-    color: 'White',
-    sizes: {
-      single: true,
-      double: true,
-      king: true,
-      superKing: true,
-    }
-  },
-  {
-    id: 4,
     name: "Alford Duvet Cover and Pillowcase Set – Aubergine",
     price: "£17.29 – £26.81",
     image: '/premium-duvet4.jpg',
@@ -90,7 +42,7 @@ const products: Product[] = [
     }
   },
   {
-    id: 5,
+    id: 2,
     name: "Alford Duvet Cover and Pillowcase Set – Black",
     price: "£17.29 – £26.81",
     image: '/premium-duvet5.jpg',
@@ -106,7 +58,7 @@ const products: Product[] = [
     }
   },
   {
-    id: 6,
+    id: 3,
     name: "Alford Duvet Cover and Pillowcase Set – Charcoal",
     price: "£17.29 – £26.81",
     image: '/premium-duvet6.jpg',
@@ -122,7 +74,7 @@ const products: Product[] = [
     }
   },
   {
-    id: 7,
+    id: 4,
     name: "Alford Duvet Cover and Pillowcase Set – Cream",
     price: "£17.29 – £26.81",
     image: '/premium-duvet7.jpg',
@@ -138,7 +90,7 @@ const products: Product[] = [
     }
   },
   {
-    id: 8,
+    id: 5,
     name: "Alford Duvet Cover and Pillowcase Set – Duck Egg",
     price: "£17.29 – £26.81",
     image: '/premium-duvet8.jpg',
@@ -154,7 +106,7 @@ const products: Product[] = [
     }
   },
   {
-    id: 9,
+    id: 6,
     name: "Alford Duvet Cover and Pillowcase Set – Latte",
     price: "£17.29 – £26.81",
     image: '/premium-duvet9.jpg',
@@ -170,7 +122,7 @@ const products: Product[] = [
     }
   },
   {
-    id: 10,
+    id: 7,
     name: "Alford Duvet Cover and Pillowcase Set – Navy",
     price: "£17.29 – £26.81",
     image: '/premium-duvet10.jpg',
@@ -186,7 +138,7 @@ const products: Product[] = [
     }
   },
   {
-    id: 11,
+    id: 8,
     name: "Alford Duvet Cover and Pillowcase Set – Ochre",
     price: "£17.29 – £26.81",
     image: '/premium-duvet11.jpg',
@@ -197,7 +149,7 @@ const products: Product[] = [
     sizes: { single: false, double: false, king: false, superKing: false }
   },
   {
-    id: 12,
+    id: 9,
     name: "Alford Duvet Cover and Pillowcase Set – Silver",
     price: "£17.29 – £26.81",
     image: '/premium-duvet12.jpg',
@@ -208,7 +160,7 @@ const products: Product[] = [
     sizes: { single: true, double: true, king: true, superKing: true }
   },
   {
-    id: 13,
+    id: 10,
     name: "Alford Duvet Cover and Pillowcase Set – Soft Pink",
     price: "£17.29 – £26.81",
     image: '/premium-duvet13.jpg',
@@ -219,7 +171,7 @@ const products: Product[] = [
     sizes: { single: true, double: true, king: true, superKing: true }
   },
   {
-    id: 14,
+    id: 11,
     name: "Alford Duvet Cover and Pillowcase Set – White",
     price: "£17.29 – £26.81",
     image: '/premium-duvet14.jpg',
@@ -230,7 +182,7 @@ const products: Product[] = [
     sizes: { single: true, double: true, king: true, superKing: true }
   },
   {
-    id: 15,
+    id: 12,
     name: "Alina Duvet Cover and Pillowcase Set – Black",
     price: "£15.56 – £19.89",
     image: '/premium-duvet15.jpg',
@@ -241,7 +193,7 @@ const products: Product[] = [
     sizes: { single: true, double: true, king: true, superKing: true }
   },
   {
-    id: 16,
+    id: 13,
     name: "Alina Duvet Cover and Pillowcase Set – Red",
     price: "£15.56 – £19.89",
     image: '/premium-duvet16.jpg',
@@ -252,7 +204,7 @@ const products: Product[] = [
     sizes: { single: true, double: true, king: true, superKing: true }
   },
   {
-    id: 17,
+    id: 14,
     name: "Aura Duvet Cover and Pillowcase Set – Oyster",
     price: "£13.40 – £20.98",
     image: '/premium-duvet17.jpg',
@@ -263,7 +215,7 @@ const products: Product[] = [
     sizes: { single: true, double: true, king: true, superKing: true }
   },
   {
-    id: 18,
+    id: 15,
     name: "Aura Duvet Cover and Pillowcase Set – Silver",
     price: "£13.40 – £20.98",
     image: '/premium-duvet18.jpg',
@@ -274,7 +226,7 @@ const products: Product[] = [
     sizes: { single: true, double: true, king: true, superKing: true }
   },
   {
-    id: 19,
+    id: 16,
     name: "Aura Duvet Cover and Pillowcase Set – White",
     price: "£13.40 – £20.98",
     image: '/premium-duvet19.jpg',
@@ -285,62 +237,7 @@ const products: Product[] = [
     sizes: { single: false, double: false, king: false, superKing: false }
   },
   {
-    id: 20,
-    name: "Beauford Ruched Duvet Cover and Pillowcase Set – Cream",
-    price: "£49.99 – £69.99",
-    image: '/premium-duvet20.jpg',
-    hoverImage: '/premium-duvet20.jpg',
-    discount: '',
-    isSoldOut: true,
-    color: 'Cream',
-    sizes: { single: false, double: false, king: false, superKing: false }
-  },
-  {
-    id: 21,
-    name: "Beauford Ruched Duvet Cover and Pillowcase Set – Oyster",
-    price: "£49.99 – £69.99",
-    image: '/premium-duvet21.jpg',
-    hoverImage: '/premium-duvet21.jpg',
-    discount: '',
-    isSoldOut: true,
-    color: 'Oyster',
-    sizes: { single: false, double: false, king: false, superKing: false }
-  },
-  {
-    id: 22,
-    name: "Crinkle Velvet Duvet Cover and Pillowcase Set – Blush Pink",
-    price: "£21.62 – £26.81",
-    image: '/premium-duvet22.jpg',
-    hoverImage: '/premium-duvet22-hover.jpg',
-    discount: '-65%',
-    isSoldOut: true,
-    color: 'Blush Pink',
-    sizes: { single: false, double: false, king: false, superKing: false }
-  },
-  {
-    id: 23,
-    name: "Crinkle Velvet Duvet Cover and Pillowcase Set – Charcoal",
-    price: "£21.62 – £24.99",
-    image: '/premium-duvet23.jpg',
-    hoverImage: '/premium-duvet23-hover.jpg',
-    discount: '-64%',
-    isSoldOut: true,
-    color: 'Charcoal',
-    sizes: { single: true, double: true, king: true, superKing: true }
-  },
-  {
-    id: 24,
-    name: "Crinkle Velvet Duvet Cover and Pillowcase Set – Silver",
-    price: "£21.62 – £24.99",
-    image: '/premium-duvet24.jpg',
-    hoverImage: '/premium-duvet24-hover.jpg',
-    discount: '-64%',
-    isSoldOut: true,
-    color: 'Silver',
-    sizes: { single: false, double: false, king: false, superKing: false }
-  },
-  {
-    id: 25,
+    id: 17,
     name: "Devore Duvet Cover and Pillowcase Set – White/Black",
     price: "£21.62 – £32.43",
     image: '/premium-duvet25.jpg',
@@ -351,7 +248,7 @@ const products: Product[] = [
     sizes: { single: true, double: true, king: true, superKing: true }
   },
   {
-    id: 26,
+    id: 18,
     name: "Devore Duvet Cover and Pillowcase Set – White/Charcoal",
     price: "£21.62 – £32.43",
     image: '/premium-duvet26.jpg',
@@ -362,7 +259,7 @@ const products: Product[] = [
     sizes: { single: true, double: true, king: true, superKing: true }
   },
   {
-    id: 27,
+    id: 19,
     name: "Devore Duvet Cover and Pillowcase Set – White/Grey",
     price: "£21.62 – £32.43",
     image: '/premium-duvet27.jpg',
@@ -373,7 +270,7 @@ const products: Product[] = [
     sizes: { single: true, double: true, king: true, superKing: true }
   },
   {
-    id: 28,
+    id: 20,
     name: "Devore Duvet Cover and Pillowcase Set – White/Latte",
     price: "£21.62 – £32.43",
     image: '/premium-duvet28.jpg',
@@ -384,7 +281,7 @@ const products: Product[] = [
     sizes: { single: false, double: false, king: false, superKing: false }
   },
   {
-    id: 29,
+    id: 21,
     name: "Devore Duvet Cover and Pillowcase Set – White/Navy",
     price: "£21.62 – £32.43",
     image: '/premium-duvet29.jpg',
@@ -395,7 +292,7 @@ const products: Product[] = [
     sizes: { single: true, double: true, king: true, superKing: true }
   },
   {
-    id: 30,
+    id: 22,
     name: "Devore Duvet Cover and Pillowcase Set – White/Pink",
     price: "£21.62 – £32.43",
     image: '/premium-duvet30.jpg',
@@ -406,7 +303,7 @@ const products: Product[] = [
     sizes: { single: false, double: false, king: false, superKing: false }
   },
   {
-    id: 31,
+    id: 23,
     name: "Devore Duvet Cover and Pillowcase Set – White/White",
     price: "£21.62 – £32.43",
     image: '/premium-duvet31.jpg',
@@ -417,7 +314,7 @@ const products: Product[] = [
     sizes: { single: true, double: true, king: true, superKing: true }
   },
   {
-    id: 32,
+    id: 24,
     name: "Embossed Seersucker Duvet Cover and Pillowcase Set – Charcoal",
     price: "£19.02 – £29.99",
     image: '/premium-duvet32.jpg',
@@ -428,7 +325,7 @@ const products: Product[] = [
     sizes: { single: true, double: true, king: true, superKing: true }
   },
   {
-    id: 33,
+    id: 25,
     name: "Floral Leaf Velvet Cuff Duvet Cover and Pillowcase Set – Ivory",
     price: "£14.70 – £19.02",
     image: '/premium-duvet33.jpg',
@@ -439,7 +336,7 @@ const products: Product[] = [
     sizes: { single: true, double: true, king: true, superKing: true }
   },
   {
-    id: 34,
+    id: 26,
     name: "Glamorous Duvet Cover and Pillowcase Set – Aubergine",
     price: "£17.29 – £79.99",
     image: '/premium-duvet34.jpg',
@@ -450,7 +347,7 @@ const products: Product[] = [
     sizes: { single: false, double: false, king: false, superKing: false }
   },
   {
-    id: 35,
+    id: 27,
     name: "Glamorous Duvet Cover and Pillowcase Set – Black",
     price: "£17.29 – £79.99",
     image: '/premium-duvet35.jpg',
@@ -461,7 +358,7 @@ const products: Product[] = [
     sizes: { single: false, double: false, king: false, superKing: false }
   },
   {
-    id: 36,
+    id: 28,
     name: "Glamorous Duvet Cover and Pillowcase Set – Chambray",
     price: "£17.29 – £79.99",
     image: '/premium-duvet36.jpg',
@@ -472,7 +369,7 @@ const products: Product[] = [
     sizes: { single: true, double: true, king: true, superKing: true }
   },
   {
-    id: 37,
+    id: 29,
     name: "Glamorous Duvet Cover and Pillowcase Set – Cream",
     price: "£17.29 – £79.99",
     image: '/premium-duvet37.jpg',
@@ -483,7 +380,7 @@ const products: Product[] = [
     sizes: { single: true, double: true, king: true, superKing: true }
   },
   {
-    id: 38,
+    id: 30,
     name: "Glamorous Duvet Cover and Pillowcase Set – Natural",
     price: "£17.29 – £79.99",
     image: '/premium-duvet38.jpg',
@@ -494,7 +391,7 @@ const products: Product[] = [
     sizes: { single: true, double: true, king: true, superKing: true }
   },
   {
-    id: 39,
+    id: 31,
     name: "Glamorous Duvet Cover and Pillowcase Set – Silver",
     price: "£17.29 – £79.99",
     image: '/premium-duvet39.jpg',
@@ -505,7 +402,7 @@ const products: Product[] = [
     sizes: { single: false, double: false, king: false, superKing: false }
   },
   {
-    id: 40,
+    id: 32,
     name: "Glamorous Duvet Cover and Pillowcase Set – White",
     price: "£17.29 – £79.99",
     image: '/premium-duvet40.jpg',
@@ -516,40 +413,7 @@ const products: Product[] = [
     sizes: { single: false, double: false, king: false, superKing: false }
   },
   {
-    id: 41,
-    name: "Jacquard Damask Duvet Cover and Pillowcase Set – Cream",
-    price: "£21.62 – £69.99",
-    image: '/premium-duvet41.jpg',
-    hoverImage: '/premium-duvet41.jpg',
-    discount: '-64%',
-    isSoldOut: true,
-    color: 'Cream',
-    sizes: { single: false, double: false, king: false, superKing: false }
-  },
-  {
-    id: 42,
-    name: "Jacquard Damask Duvet Cover and Pillowcase Set – Grey",
-    price: "£59.99 – £69.99",
-    image: '/premium-duvet42.jpg',
-    hoverImage: '/premium-duvet42.jpg',
-    discount: '',
-    isSoldOut: true,
-    color: 'Grey',
-    sizes: { single: false, double: false, king: false, superKing: false }
-  },
-  {
-    id: 43,
-    name: "Joyeux Noel Duvet Cover and Pillowcase Set",
-    price: "£13.49",
-    image: '/premium-duvet43.jpg',
-    hoverImage: '/premium-duvet43.jpg',
-    discount: '-81%',
-    isSoldOut: true,
-    color: 'Red',
-    sizes: { single: false, double: false, king: false, superKing: false }
-  },
-  {
-    id: 44,
+    id: 33,
     name: "Katie Duvet Cover and Pillowcase Set – Chambray Silver",
     price: "£17.29 – £79.99",
     image: '/premium-duvet44.jpg',
@@ -560,7 +424,7 @@ const products: Product[] = [
     sizes: { single: true, double: true, king: true, superKing: true }
   },
   {
-    id: 45,
+    id: 34,
     name: "Katie Duvet Cover and Pillowcase Set – Cream Gold",
     price: "£17.29 – £79.99",
     image: '/premium-duvet45.jpg',
@@ -571,7 +435,7 @@ const products: Product[] = [
     sizes: { single: true, double: true, king: true, superKing: true }
   },
   {
-    id: 46,
+    id: 35,
     name: "Lush Duvet Cover and Pillowcase Set – Oyster",
     price: "£15.56 – £79.99",
     image: '/premium-duvet46.jpg',
@@ -582,7 +446,7 @@ const products: Product[] = [
     sizes: { single: true, double: true, king: true, superKing: true }
   },
   {
-    id: 47,
+    id: 36,
     name: "Lush Duvet Cover and Pillowcase Set – Silver",
     price: "£49.99 – £79.99",
     image: '/premium-duvet47.jpg',
@@ -593,7 +457,7 @@ const products: Product[] = [
     sizes: { single: false, double: false, king: false, superKing: false }
   },
   {
-    id: 48,
+    id: 37,
     name: "Lush Duvet Cover and Pillowcase Set – White",
     price: "£49.99 – £79.99",
     image: '/premium-duvet48.jpg',
@@ -604,7 +468,7 @@ const products: Product[] = [
     sizes: { single: false, double: false, king: false, superKing: false }
   },
   {
-    id: 49,
+    id: 38,
     name: "Luxury Block Check Print Reversible Duvet Set- Blue",
     price: "£9.51 – £19.02",
     image: '/premium-duvet49.jpg',
@@ -615,7 +479,7 @@ const products: Product[] = [
     sizes: { single: true, double: true, king: true, superKing: true }
   },
   {
-    id: 50,
+    id: 39,
     name: "Luxury Block Check Print Reversible Duvet Set- Grey",
     price: "£9.51 – £19.02",
     image: '/premium-duvet50.jpg',
@@ -626,7 +490,7 @@ const products: Product[] = [
     sizes: { single: true, double: true, king: true, superKing: true }
   },
   {
-    id: 51,
+    id: 40,
     name: "Luxury Fleece Polka Dot Duvet Cover with Pillowcases- Grey",
     price: "£18.16 – £24.21",
     image: '/premium-duvet51.jpg',
@@ -637,7 +501,7 @@ const products: Product[] = [
     sizes: { single: true, double: true, king: true, superKing: true }
   },
   {
-    id: 52,
+    id: 41,
     name: "Luxury Hotel Quality Boho Embroidered Tassels Duvet Cover with Pillowcases – Blush",
     price: "£16.43 – £22.48",
     image: '/premium-duvet52.jpg',
@@ -648,7 +512,7 @@ const products: Product[] = [
     sizes: { single: true, double: true, king: true, superKing: true }
   },
   {
-    id: 53,
+    id: 42,
     name: "Luxury Hotel Quality Boho Embroidered Tassels Duvet Cover with Pillowcases – Charcoal",
     price: "£17.29 – £22.48",
     image: '/premium-duvet53.jpg',
@@ -659,7 +523,7 @@ const products: Product[] = [
     sizes: { single: true, double: true, king: true, superKing: true }
   },
   {
-    id: 54,
+    id: 43,
     name: "Luxury Hotel Quality Boho Embroidered Tassels Duvet Cover with Pillowcases – White",
     price: "£16.43 – £22.48",
     image: '/premium-duvet54.jpg',
@@ -670,7 +534,7 @@ const products: Product[] = [
     sizes: { single: true, double: true, king: true, superKing: true }
   },
   {
-    id: 55,
+    id: 44,
     name: "Luxury Hotel Quality Diamonte Embellished Duvet Cover with Pillowcases – Blush",
     price: "£16.43 – £22.48",
     image: '/premium-duvet55.jpg',
@@ -681,7 +545,7 @@ const products: Product[] = [
     sizes: { single: true, double: true, king: true, superKing: true }
   },
   {
-    id: 56,
+    id: 45,
     name: "Luxury Hotel Quality Diamonte Embellished Duvet Cover with Pillowcases – Charcoal",
     price: "£16.43 – £22.48",
     image: '/premium-duvet56.jpg',
@@ -692,7 +556,7 @@ const products: Product[] = [
     sizes: { single: true, double: true, king: true, superKing: true }
   },
   {
-    id: 57,
+    id: 46,
     name: "Luxury Hotel Quality Lurex Jacquard Geometric Deco Duvet Cover with Pillowcases – Natural",
     price: "£16.43 – £22.48",
     image: '/premium-duvet57.jpg',
@@ -703,7 +567,7 @@ const products: Product[] = [
     sizes: { single: true, double: true, king: true, superKing: true }
   },
   {
-    id: 58,
+    id: 47,
     name: "Luxury Hotel Quality Lurex Jacquard Geometric Deco Duvet Cover with Pillowcases – Silver",
     price: "£16.43 – £22.48",
     image: '/premium-duvet58.jpg',
@@ -714,7 +578,7 @@ const products: Product[] = [
     sizes: { single: true, double: true, king: true, superKing: true }
   },
   {
-    id: 59,
+    id: 48,
     name: "Luxury Hotel Quality Lurex Jacquard Swirl Duvet Cover with Pillowcases",
     price: "£24.44 – £32.43",
     image: '/premium-duvet59.jpg',
@@ -725,7 +589,7 @@ const products: Product[] = [
     sizes: { single: true, double: true, king: true, superKing: true }
   },
   {
-    id: 60,
+    id: 49,
     name: "Luxury Hotel Quality Lurex Stripe Jacquard Duvet Cover with Pillowcases – White/Mink",
     price: "£12.97 – £32.43",
     image: '/premium-duvet60.jpg',
@@ -736,7 +600,7 @@ const products: Product[] = [
     sizes: { single: true, double: true, king: true, superKing: true }
   },
   {
-    id: 61,
+    id: 50,
     name: "Luxury Hotel Quality Lurex Stripe Jacquard Duvet Cover with Pillowcases – White/Silver",
     price: "£12.97 – £32.43",
     image: '/premium-duvet61.jpg',
@@ -747,7 +611,7 @@ const products: Product[] = [
     sizes: { single: true, double: true, king: true, superKing: true }
   },
   {
-    id: 62,
+    id: 51,
     name: "Luxury Hotel Quality Reversible Ribbed Velvet Duvet Cover with Pillowcases – Blue",
     price: "£16.95 – £22.48",
     image: '/premium-duvet62.jpg',
@@ -758,7 +622,7 @@ const products: Product[] = [
     sizes: { single: true, double: true, king: true, superKing: true }
   },
   {
-    id: 63,
+    id: 52,
     name: "Luxury Hotel Quality Reversible Ribbed Velvet Duvet Cover with Pillowcases – Blush",
     price: "£12.97 – £22.48",
     image: '/premium-duvet63.jpg',
@@ -768,7 +632,7 @@ const products: Product[] = [
     sizes: { single: true, double: true, king: true, superKing: true }
   },
   {
-    id: 64,
+    id: 53,
     name: "Luxury Hotel Quality Reversible Tufted Arch Duvet Cover with Pillowcases – Champagne",
     price: "£21.62 – £32.43",
     image: '/premium-duvet64.jpg',
@@ -778,7 +642,7 @@ const products: Product[] = [
     sizes: { single: true, double: true, king: true, superKing: true }
   },
   {
-    id: 65,
+    id: 54,
     name: "Luxury Hotel Quality Reversible Tufted Arch Duvet Cover with Pillowcases – White",
     price: "£24.99 – £37.49",
     image: '/premium-duvet65.jpg',
@@ -788,7 +652,7 @@ const products: Product[] = [
     sizes: { single: true, double: true, king: true, superKing: true }
   },
   {
-    id: 66,
+    id: 55,
     name: "Luxury Hotel Quality Tufted Circles Duvet Cover with Pillowcases – Blush",
     price: "£16.43 – £21.62",
     image: '/premium-duvet66.jpg',
@@ -798,7 +662,7 @@ const products: Product[] = [
     sizes: { single: true, double: true, king: true, superKing: true }
   },
   {
-    id: 67,
+    id: 56,
     name: "Luxury Hotel Quality Tufted Circles Duvet Cover with Pillowcases – White",
     price: "£15.56 – £21.62",
     image: '/premium-duvet67.jpg',
@@ -808,7 +672,7 @@ const products: Product[] = [
     sizes: { single: true, double: true, king: true, superKing: true }
   },
   {
-    id: 68,
+    id: 57,
     name: "Luxury Hotel Quality Tufted Wave Duvet Cover with Pillowcases",
     price: "£18.16 – £32.43",
     image: '/premium-duvet68.jpg',
@@ -818,7 +682,7 @@ const products: Product[] = [
     sizes: { single: true, double: true, king: true, superKing: true }
   },
   {
-    id: 69,
+    id: 58,
     name: "Luxury Satin Stripe Reversible Duvet Cover Quilt Bedding Set with Pillowcase – Black",
     price: "£12.97 – £15.99",
     image: '/premium-duvet69.jpg',
@@ -828,7 +692,7 @@ const products: Product[] = [
     sizes: { single: true, double: true, king: true, superKing: true }
   },
   {
-    id: 70,
+    id: 59,
     name: "Luxury Satin Stripe Reversible Duvet Cover Quilt Bedding Set with Pillowcase – Grey",
     price: "£12.97 – £15.99",
     image: '/premium-duvet70.jpg',
@@ -838,7 +702,7 @@ const products: Product[] = [
     sizes: { single: true, double: true, king: true, superKing: true }
   },
   {
-    id: 71,
+    id: 60,
     name: "Luxury Satin Stripe Reversible Duvet Cover Quilt Bedding Set with Pillowcase – White",
     price: "£12.97 – £15.99",
     image: '/premium-duvet71.jpg',
@@ -848,7 +712,7 @@ const products: Product[] = [
     sizes: { single: true, double: true, king: true, superKing: true }
   },
   {
-    id: 72,
+    id: 61,
     name: "Luxury Velvet Duvet Cover and Pillowcase Set – Black",
     price: "£12.97 – £15.99",
     image: '/premium-duvet72.jpg',
@@ -858,7 +722,7 @@ const products: Product[] = [
     sizes: { single: true, double: true, king: true, superKing: true }
   },
   {
-    id: 73,
+    id: 62,
     name: "Luxury Velvet Duvet Cover and Pillowcase Set – Blush",
     price: "£12.97 – £15.99",
     image: '/premium-duvet73.jpg',
@@ -868,7 +732,7 @@ const products: Product[] = [
     sizes: { single: true, double: true, king: true, superKing: true }
   },
   {
-    id: 74,
+    id: 63,
     name: "Luxury Velvet Duvet Cover and Pillowcase Set – Grey",
     price: "£12.97 – £15.99",
     image: '/premium-duvet74.jpg',
@@ -878,7 +742,7 @@ const products: Product[] = [
     sizes: { single: true, double: true, king: true, superKing: true }
   },
   {
-    id: 75,
+    id: 64,
     name: "Luxury Velvet Duvet Cover and Pillowcase Set – Navy",
     price: "£12.97 – £15.99",
     image: '/premium-duvet75.jpg',
@@ -888,7 +752,7 @@ const products: Product[] = [
     sizes: { single: true, double: true, king: true, superKing: true }
   },
   {
-    id: 76,
+    id: 65,
     name: "Luxury Velvet Duvet Cover and Pillowcase Set – White",
     price: "£12.97 – £15.99",
     image: '/premium-duvet76.jpg',
@@ -898,7 +762,7 @@ const products: Product[] = [
     sizes: { single: true, double: true, king: true, superKing: true }
   },
   {
-    id: 77,
+    id: 66,
     name: "Luxury Velvet Duvet Cover and Pillowcase Set – White",
     price: "£12.97 – £15.99",
     image: '/premium-duvet77.jpg',
@@ -908,7 +772,7 @@ const products: Product[] = [
     sizes: { single: true, double: true, king: true, superKing: true }
   },
   {
-    id: 78,
+    id: 67,
     name: "Luxury Velvet Duvet Cover and Pillowcase Set – White",
     price: "£12.97 – £15.99",
     image: '/premium-duvet78.jpg',
@@ -918,7 +782,7 @@ const products: Product[] = [
     sizes: { single: true, double: true, king: true, superKing: true }
   },
   {
-    id: 79,
+    id: 68,
     name: "Luxury Velvet Duvet Cover and Pillowcase Set – White",
     price: "£12.97 – £15.99",
     image: '/premium-duvet79.jpg',
@@ -928,7 +792,7 @@ const products: Product[] = [
     sizes: { single: true, double: true, king: true, superKing: true }
   },
   {
-    id: 80,
+    id: 69,
     name: "Luxury Velvet Duvet Cover and Pillowcase Set – White",
     price: "£12.97 – £15.99",
     image: '/premium-duvet80.jpg',
@@ -938,7 +802,7 @@ const products: Product[] = [
     sizes: { single: true, double: true, king: true, superKing: true }
   },
   {
-    id: 81,
+    id: 70,
     name: "Luxury Super Soft Stylish Lace Panel Duvet Cover with Pillowcases – White",
     price: "£15.56 – £19.02",
     image: '/premium-duvet81.jpg',
@@ -949,7 +813,7 @@ const products: Product[] = [
     sizes: { single: true, double: true, king: true, superKing: true }
   },
   {
-    id: 82,
+    id: 71,
     name: "Luxury Super Soft Stylish Lace Panel Duvet Cover with Pillowcases- Blush Pink",
     price: "£15.56 – £19.02",
     image: '/premium-duvet82.jpg',
@@ -960,7 +824,7 @@ const products: Product[] = [
     sizes: { single: true, double: true, king: true, superKing: true }
   },
   {
-    id: 83,
+    id: 72,
     name: "Magical Winter Duvet Cover and Pillowcase Set",
     price: "£13.49",
     image: '/premium-duvet83.jpg',
@@ -971,84 +835,7 @@ const products: Product[] = [
     sizes: { single: false, double: false, king: false, superKing: false }
   },
   {
-    id: 84,
-    name: "Muriva Diamonds Duvet Cover and Pillowcase Set – Black",
-    price: "£49.99 – £79.99",
-    image: '/premium-duvet84.jpg',
-    hoverImage: '/premium-duvet84.jpg',
-    discount: '',
-    isSoldOut: true,
-    color: 'Black',
-    sizes: { single: false, double: false, king: false, superKing: false }
-  },
-  {
-    id: 85,
-    name: "Muriva Diamonds Duvet Cover and Pillowcase Set – Champagne",
-    price: "£49.99 – £79.99",
-    image: '/premium-duvet85.jpg',
-    hoverImage: '/premium-duvet85.jpg',
-    discount: '',
-    isSoldOut: true,
-    color: 'Champagne',
-    sizes: { single: false, double: false, king: false, superKing: false }
-  },
-  {
-    id: 86,
-    name: "Muriva Diamonds Duvet Cover and Pillowcase Set – Charcoal",
-    price: "£49.99 – £79.99",
-    image: '/premium-duvet86.jpg',
-    hoverImage: '/premium-duvet86.jpg',
-    discount: '',
-    isSoldOut: false,
-    color: 'Charcoal',
-    sizes: { single: true, double: true, king: true, superKing: true }
-  },
-  {
-    id: 87,
-    name: "Muriva Diamonds Duvet Cover and Pillowcase Set – Cream",
-    price: "£49.99 – £79.99",
-    image: '/premium-duvet87.jpg',
-    hoverImage: '/premium-duvet87.jpg',
-    discount: '',
-    isSoldOut: true,
-    color: 'Cream',
-    sizes: { single: false, double: false, king: false, superKing: false }
-  },
-  {
-    id: 88,
-    name: "Muriva Diamonds Duvet Cover and Pillowcase Set – Duck Egg",
-    price: "£49.99 – £79.99",
-    image: '/premium-duvet88.jpg',
-    hoverImage: '/premium-duvet88.jpg',
-    discount: '',
-    isSoldOut: true,
-    color: 'Duck Egg',
-    sizes: { single: false, double: false, king: false, superKing: false }
-  },
-  {
-    id: 89,
-    name: "Muriva Diamonds Duvet Cover and Pillowcase Set – Pink",
-    price: "£49.99 – £79.99",
-    image: '/premium-duvet89.jpg',
-    hoverImage: '/premium-duvet89.jpg',
-    discount: '',
-    isSoldOut: true,
-    color: 'Pink',
-    sizes: { single: false, double: false, king: false, superKing: false }
-  },
-  {
-    id: 90,
-    name: "Muriva Diamonds Duvet Cover and Pillowcase Set – Purple",
-    price: "£49.99 – £79.99",
-    image: '/premium-duvet90.jpg',
-    hoverImage: '/premium-duvet90.jpg',
-    discount: '',
-    isSoldOut: true,
-    color: 'Purple',
-    sizes: { single: false, double: false, king: false, superKing: false }
-  },
-  {
-    id: 91,
+    id: 73,
     name: "Onyx Duvet Cover and Pillowcase Set – Aubergine",
     price: "£8.99 – £17.29",
     image: '/premium-duvet91.jpg',
@@ -1059,7 +846,7 @@ const products: Product[] = [
     sizes: { single: true, double: true, king: true, superKing: true }
   },
   {
-    id: 92,
+    id: 74,
     name: "Onyx Duvet Cover and Pillowcase Set – Black",
     price: "£8.99 – £17.29",
     image: '/premium-duvet92.jpg',
@@ -1070,7 +857,7 @@ const products: Product[] = [
     sizes: { single: true, double: true, king: true, superKing: true }
   },
   {
-    id: 93,
+    id: 75,
     name: "Onyx Duvet Cover and Pillowcase Set – Cream",
     price: "£8.99 – £17.29",
     image: '/premium-duvet93.jpg',
@@ -1081,7 +868,7 @@ const products: Product[] = [
     sizes: { single: false, double: false, king: false, superKing: false }
   },
   {
-    id: 94,
+    id: 76,
     name: "Onyx Duvet Cover and Pillowcase Set – Latte",
     price: "£8.99 – £17.29",
     image: '/premium-duvet94.jpg',
@@ -1092,7 +879,7 @@ const products: Product[] = [
     sizes: { single: true, double: true, king: true, superKing: true }
   },
   {
-    id: 95,
+    id: 77,
     name: "Onyx Duvet Cover and Pillowcase Set – Silver",
     price: "£12.97 – £17.29",
     image: '/premium-duvet95.jpg',
@@ -1103,7 +890,7 @@ const products: Product[] = [
     sizes: { single: false, double: false, king: false, superKing: false }
   },
   {
-    id: 96,
+    id: 78,
     name: "Polycotton Jersey Melange Duvet Cover With Pillowcases – Beige",
     price: "£18.16 – £19.89",
     image: '/premium-duvet96.jpg',
@@ -1114,7 +901,7 @@ const products: Product[] = [
     sizes: { single: false, double: false, king: false, superKing: false }
   },
   {
-    id: 97,
+    id: 79,
     name: "Polycotton Jersey Melange Duvet Cover With Pillowcases – CHARCOAL",
     price: "£18.16 – £19.89",
     image: '/premium-duvet97.jpg',
@@ -1125,7 +912,7 @@ const products: Product[] = [
     sizes: { single: true, double: true, king: true, superKing: true }
   },
   {
-    id: 98,
+    id: 80,
     name: "Polycotton Jersey Melange Duvet Cover With Pillowcases – White",
     price: "£18.16 – £19.89",
     image: '/premium-duvet98.jpg',
@@ -1136,7 +923,7 @@ const products: Product[] = [
     sizes: { single: true, double: true, king: true, superKing: true }
   },
   {
-    id: 99,
+    id: 81,
     name: "Polycotton Pintuck Duvet Cover With Pillowcases – Blush Pink",
     price: "£12.10 – £17.29",
     image: '/premium-duvet99.jpg',
@@ -1147,7 +934,7 @@ const products: Product[] = [
     sizes: { single: true, double: true, king: true, superKing: true }
   },
   {
-    id: 100,
+    id: 82,
     name: "Polycotton Pintuck Duvet Cover With Pillowcases – Silver",
     price: "£12.10 – £17.29",
     image: '/premium-duvet100.jpg',
@@ -1158,7 +945,7 @@ const products: Product[] = [
     sizes: { single: true, double: true, king: true, superKing: true }
   },
   {
-    id: 101,
+    id: 83,
     name: "Polycotton Pintuck Duvet Cover With Pillowcases – White",
     price: "£12.10 – £17.29",
     image: '/premium-duvet101.jpg',
@@ -1169,7 +956,7 @@ const products: Product[] = [
     sizes: { single: true, double: true, king: true, superKing: true }
   },
   {
-    id: 102,
+    id: 84,
     name: "Pom Pom Duvet Cover and Pillowcase Set – Charcoal",
     price: "£18.99 – £31.99",
     image: '/premium-duvet102.jpg',
@@ -1180,7 +967,7 @@ const products: Product[] = [
     sizes: { single: true, double: true, king: true, superKing: true }
   },
   {
-    id: 103,
+    id: 85,
     name: "Pom Pom Duvet Cover and Pillowcase Set – Grey",
     price: "£16.43 – £30.27",
     image: '/premium-duvet103.jpg',
@@ -1191,7 +978,7 @@ const products: Product[] = [
     sizes: { single: true, double: true, king: true, superKing: true }
   },
   {
-    id: 104,
+    id: 86,
     name: "Pom Pom Duvet Cover and Pillowcase Set – Natural",
     price: "£16.43 – £30.27",
     image: '/premium-duvet104.jpg',
@@ -1202,7 +989,7 @@ const products: Product[] = [
     sizes: { single: false, double: false, king: false, superKing: false }
   },
   {
-    id: 105,
+    id: 87,
     name: "Pom Pom Duvet Cover and Pillowcase Set – White",
     price: "£16.43 – £30.27",
     image: '/premium-duvet105.jpg',
@@ -1213,84 +1000,7 @@ const products: Product[] = [
     sizes: { single: false, double: false, king: false, superKing: false }
   },
   {
-    id: 106,
-    name: "Prosecco Glitter Duvet Cover and Pillowcase Set – Black",
-    price: "£49.99 – £79.99",
-    image: '/premium-duvet106.jpg',
-    hoverImage: '/premium-duvet106.jpg',
-    discount: '',
-    isSoldOut: true,
-    color: 'Black',
-    sizes: { single: false, double: false, king: false, superKing: false }
-  },
-  {
-    id: 107,
-    name: "Prosecco Glitter Duvet Cover and Pillowcase Set – Burgundy",
-    price: "£49.99 – £79.99",
-    image: '/premium-duvet107.jpg',
-    hoverImage: '/premium-duvet107.jpg',
-    discount: '',
-    isSoldOut: true,
-    color: 'Burgundy',
-    sizes: { single: false, double: false, king: false, superKing: false }
-  },
-  {
-    id: 108,
-    name: "Prosecco Glitter Duvet Cover and Pillowcase Set – Champagne",
-    price: "£49.99 – £79.99",
-    image: '/premium-duvet108.jpg',
-    hoverImage: '/premium-duvet108.jpg',
-    discount: '',
-    isSoldOut: true,
-    color: 'Champagne',
-    sizes: { single: false, double: false, king: false, superKing: false }
-  },
-  {
-    id: 109,
-    name: "Prosecco Glitter Duvet Cover and Pillowcase Set – Cream",
-    price: "£49.99 – £79.99",
-    image: '/premium-duvet109.jpg',
-    hoverImage: '/premium-duvet109.jpg',
-    discount: '',
-    isSoldOut: true,
-    color: 'Cream',
-    sizes: { single: false, double: false, king: false, superKing: false }
-  },
-  {
-    id: 110,
-    name: "Prosecco Glitter Duvet Cover and Pillowcase Set – Grey",
-    price: "£49.99 – £79.99",
-    image: '/premium-duvet110.jpg',
-    hoverImage: '/premium-duvet110.jpg',
-    discount: '',
-    isSoldOut: true,
-    color: 'Grey',
-    sizes: { single: false, double: false, king: false, superKing: false }
-  },
-  {
-    id: 111,
-    name: "Prosecco Glitter Duvet Cover and Pillowcase Set – Navy",
-    price: "£49.99 – £79.99",
-    image: '/premium-duvet111.jpg',
-    hoverImage: '/premium-duvet111.jpg',
-    discount: '',
-    isSoldOut: true,
-    color: 'Navy',
-    sizes: { single: false, double: false, king: false, superKing: false }
-  },
-  {
-    id: 112,
-    name: "Prosecco Glitter Duvet Cover and Pillowcase Set – Purple",
-    price: "£49.99 – £79.99",
-    image: '/premium-duvet112.jpg',
-    hoverImage: '/premium-duvet112.jpg',
-    discount: '',
-    isSoldOut: true,
-    color: 'Purple',
-    sizes: { single: false, double: false, king: false, superKing: false }
-  },
-  {
-    id: 113,
+    id: 88,
     name: "Reversible Polycotton Fern Rouched Duvet Cover and Pillowcase Set",
     price: "£10.37 – £12.97",
     image: '/premium-duvet113.jpg',
@@ -1302,84 +1012,7 @@ const products: Product[] = [
     sizes: { single: true, double: true, king: true, superKing: true }
   },
   {
-    id: 114,
-    name: "Schema Duvet Cover and Pillowcase Set – Oyster",
-    price: "£17.49 – £79.99",
-    image: '/premium-duvet114.jpg',
-    hoverImage: '/premium-duvet114.jpg',
-    discount: '-65%',
-    isSoldOut: false,
-    color: 'Oyster',
-    sizes: { single: true, double: true, king: true, superKing: true }
-  },
-  {
-    id: 115,
-    name: "Schema Duvet Cover and Pillowcase Set – Silver",
-    price: "£17.49 – £79.99",
-    image: '/premium-duvet115.jpg',
-    hoverImage: '/premium-duvet115.jpg',
-    discount: '-65%',
-    isSoldOut: false,
-    color: 'Silver',
-    sizes: { single: true, double: true, king: true, superKing: true }
-  },
-  {
-    id: 116,
-    name: "Schema Duvet Cover and Pillowcase Set – White",
-    price: "£17.49 – £79.99",
-    image: '/premium-duvet116.jpg',
-    hoverImage: '/premium-duvet116.jpg',
-    discount: '-65%',
-    isSoldOut: false,
-    color: 'White',
-    sizes: { single: true, double: true, king: true, superKing: true }
-  },
-  {
-    id: 117,
-    name: "Seersucker Duvet Cover and Pillowcase Set – Cream",
-    price: "£49.99 – £69.99",
-    image: '/premium-duvet117.jpg',
-    hoverImage: '/premium-duvet117.jpg',
-    discount: '',
-    isSoldOut: true,
-    color: 'Cream',
-    sizes: { single: false, double: false, king: false, superKing: false }
-  },
-  {
-    id: 118,
-    name: "Seersucker Duvet Cover and Pillowcase Set – Grey",
-    price: "£49.99 – £69.99",
-    image: '/premium-duvet118.jpg',
-    hoverImage: '/premium-duvet118.jpg',
-    discount: '',
-    isSoldOut: true,
-    color: 'Grey',
-    sizes: { single: false, double: false, king: false, superKing: false }
-  },
-  {
-    id: 119,
-    name: "Seersucker Duvet Cover and Pillowcase Set – Silver",
-    price: "£49.99 – £69.99",
-    image: '/premium-duvet119.jpg',
-    hoverImage: '/premium-duvet119.jpg',
-    discount: '',
-    isSoldOut: true,
-    color: 'Silver',
-    sizes: { single: false, double: false, king: false, superKing: false }
-  },
-  {
-    id: 120,
-    name: "Seersucker Duvet Cover and Pillowcase Set – White",
-    price: "£49.99 – £69.99",
-    image: '/premium-duvet120.jpg',
-    hoverImage: '/premium-duvet120.jpg',
-    discount: '',
-    isSoldOut: true,
-    color: 'White',
-    sizes: { single: false, double: false, king: false, superKing: false }
-  },
-  {
-    id: 121,
+    id: 89,
     name: "Soft & Elegant Cosy Velvet Cuff Panel Duvet Cover Set with Pillowcases",
     price: "£17.29 – £19.89",
     image: '/premium-duvet121.jpg',
@@ -1390,40 +1023,7 @@ const products: Product[] = [
     sizes: { single: true, double: true, king: true, superKing: true }
   },
   {
-    id: 122,
-    name: "Sparkle Velvet Duvet Cover and Pillowcase Set – Blush Pink",
-    price: "£24.99 – £30.99",
-    image: '/premium-duvet122.jpg',
-    hoverImage: '/premium-duvet122.jpg',
-    discount: '-56%',
-    isSoldOut: true,
-    color: 'Blush Pink',
-    sizes: { single: false, double: false, king: false, superKing: false }
-  },
-  {
-    id: 123,
-    name: "Sparkle Velvet Duvet Cover and Pillowcase Set – Charcoal",
-    price: "£24.99 – £30.99",
-    image: '/premium-duvet123.jpg',
-    hoverImage: '/premium-duvet123.jpg',
-    discount: '-56%',
-    isSoldOut: true,
-    color: 'Charcoal',
-    sizes: { single: false, double: false, king: false, superKing: false }
-  },
-  {
-    id: 124,
-    name: "Sparkle Velvet Duvet Cover and Pillowcase Set – Silver",
-    price: "£24.99 – £30.99",
-    image: '/premium-duvet124.jpg',
-    hoverImage: '/premium-duvet124.jpg',
-    discount: '-56%',
-    isSoldOut: true,
-    color: 'Silver',
-    sizes: { single: false, double: false, king: false, superKing: false }
-  },
-  {
-    id: 125,
+    id: 90,
     name: "Stags Duvet Cover and Pillowcase Set – Beige",
     price: "£13.49 – £69.99",
     image: '/premium-duvet125.jpg',
@@ -1434,7 +1034,7 @@ const products: Product[] = [
     sizes: { single: true, double: true, king: true, superKing: true }
   },
   {
-    id: 126,
+    id: 91,
     name: "Stags Duvet Cover and Pillowcase Set – Black",
     price: "£49.99 – £69.99",
     image: '/premium-duvet126.jpg',
@@ -1445,7 +1045,7 @@ const products: Product[] = [
     sizes: { single: false, double: false, king: false, superKing: false }
   },
   {
-    id: 127,
+    id: 92,
     name: "Stags Duvet Cover and Pillowcase Set – Grey",
     price: "£49.99 – £69.99",
     image: '/premium-duvet127.jpg',
@@ -1456,7 +1056,7 @@ const products: Product[] = [
     sizes: { single: false, double: false, king: false, superKing: false }
   },
   {
-    id: 128,
+    id: 93,
     name: "Stags Duvet Cover and Pillowcase Set – Red",
     price: "£13.49 – £69.99",
     image: '/premium-duvet128.jpg',
@@ -1467,7 +1067,7 @@ const products: Product[] = [
     sizes: { single: false, double: false, king: false, superKing: false }
   },
   {
-    id: 129,
+    id: 94,
     name: "Stags in Jumper Duvet Cover and Pillowcase Set",
     price: "£49.99 – £69.99",
     image: '/premium-duvet129.jpg',
@@ -1478,7 +1078,7 @@ const products: Product[] = [
     sizes: { single: false, double: false, king: false, superKing: false }
   },
   {
-    id: 130,
+    id: 95,
     name: "Venice Duvet Cover and Pillowcase Set – Black",
     price: "£49.99 – £79.99",
     image: '/premium-duvet130.jpg',
@@ -1489,7 +1089,7 @@ const products: Product[] = [
     sizes: { single: false, double: false, king: false, superKing: false }
   },
   {
-    id: 131,
+    id: 96,
     name: "Venice Duvet Cover and Pillowcase Set – Cream",
     price: "£49.99 – £79.99",
     image: '/premium-duvet131.jpg',
@@ -1500,7 +1100,7 @@ const products: Product[] = [
     sizes: { single: true, double: true, king: true, superKing: true }
   },
   {
-    id: 132,
+    id: 97,
     name: "Venice Duvet Cover and Pillowcase Set – Gold",
     price: "£49.99 – £79.99",
     image: '/premium-duvet132.jpg',
@@ -1511,7 +1111,7 @@ const products: Product[] = [
     sizes: { single: true, double: true, king: true, superKing: true }
   },
   {
-    id: 133,
+    id: 98,
     name: "Venice Duvet Cover and Pillowcase Set – Natural",
     price: "£49.99 – £79.99",
     image: '/premium-duvet133.jpg',
@@ -1522,7 +1122,7 @@ const products: Product[] = [
     sizes: { single: true, double: true, king: true, superKing: true }
   },
   {
-    id: 134,
+    id: 99,
     name: "Venice Duvet Cover and Pillowcase Set – Silver",
     price: "£49.99 – £79.99",
     image: '/premium-duvet134.jpg',
@@ -1533,7 +1133,7 @@ const products: Product[] = [
     sizes: { single: false, double: false, king: false, superKing: false }
   },
   {
-    id: 135,
+    id: 100,
     name: "Venice Duvet Cover and Pillowcase Set – White",
     price: "£49.99 – £79.99",
     image: '/premium-duvet135.jpg',
@@ -1544,7 +1144,7 @@ const products: Product[] = [
     sizes: { single: true, double: true, king: true, superKing: true }
   },
   {
-    id: 136,
+    id: 101,
     name: "Verina Duvet Cover and Pillowcase Set – Aubergine",
     price: "£49.99 – £79.99",
     image: '/premium-duvet136.jpg',
@@ -1555,7 +1155,7 @@ const products: Product[] = [
     sizes: { single: false, double: false, king: false, superKing: false }
   },
   {
-    id: 137,
+    id: 102,
     name: "Verina Duvet Cover and Pillowcase Set – Black",
     price: "£49.99 – £79.99",
     image: '/premium-duvet137.jpg',
@@ -1566,7 +1166,7 @@ const products: Product[] = [
     sizes: { single: false, double: false, king: false, superKing: false }
   },
   {
-    id: 138,
+    id: 103,
     name: "Verina Duvet Cover and Pillowcase Set – Cream",
     price: "£15.49 – £19.99",
     image: '/premium-duvet138.jpg',
@@ -1577,7 +1177,7 @@ const products: Product[] = [
     sizes: { single: true, double: true, king: true, superKing: true }
   },
   {
-    id: 139,
+    id: 104,
     name: "Verina Duvet Cover and Pillowcase Set – Oyster",
     price: "£49.99 – £79.99",
     image: '/premium-duvet139.jpg',
@@ -1588,7 +1188,7 @@ const products: Product[] = [
     sizes: { single: false, double: false, king: false, superKing: false }
   },
   {
-    id: 140,
+    id: 105,
     name: "Verina Duvet Cover and Pillowcase Set – Red",
     price: "£49.99 – £79.99",
     image: '/premium-duvet140.jpg',
@@ -1599,7 +1199,7 @@ const products: Product[] = [
     sizes: { single: false, double: false, king: false, superKing: false }
   },
   {
-    id: 141,
+    id: 106,
     name: "Verina Duvet Cover and Pillowcase Set – Silver",
     price: "£49.99 – £79.99",
     image: '/premium-duvet141.jpg',
@@ -1610,7 +1210,7 @@ const products: Product[] = [
     sizes: { single: false, double: false, king: false, superKing: false }
   },
   {
-    id: 142,
+    id: 107,
     name: "Verina Duvet Cover and Pillowcase Set – White",
     price: "£49.99 – £79.99",
     image: '/premium-duvet142.jpg',
@@ -1621,95 +1221,7 @@ const products: Product[] = [
     sizes: { single: false, double: false, king: false, superKing: false }
   },
   {
-    id: 143,
-    name: "Victoria Duvet Cover and Pillowcase Set – Oyster",
-    price: "£49.99 – £79.99",
-    image: '/premium-duvet143.jpg',
-    hoverImage: '/premium-duvet143.jpg',
-    discount: '',
-    isSoldOut: true,
-    color: 'Oyster',
-    sizes: { single: false, double: false, king: false, superKing: false }
-  },
-  {
-    id: 144,
-    name: "Victoria Duvet Cover and Pillowcase Set – Silver",
-    price: "£49.99 – £79.99",
-    image: '/premium-duvet144.jpg',
-    hoverImage: '/premium-duvet144.jpg',
-    discount: '',
-    isSoldOut: true,
-    color: 'Silver',
-    sizes: { single: false, double: false, king: false, superKing: false }
-  },
-  {
-    id: 145,
-    name: "Victoria Duvet Cover and Pillowcase Set – White",
-    price: "£49.99 – £79.99",
-    image: '/premium-duvet145.jpg',
-    hoverImage: '/premium-duvet145.jpg',
-    discount: '',
-    isSoldOut: true,
-    color: 'White',
-    sizes: { single: false, double: false, king: false, superKing: false }
-  },
-  {
-    id: 146,
-    name: "Waffle Stripe Duvet Cover and Pillowcase Set – Black",
-    price: "£49.99 – £79.99",
-    image: '/premium-duvet146.jpg',
-    hoverImage: '/premium-duvet146.jpg',
-    discount: '',
-    isSoldOut: true,
-    color: 'Black',
-    sizes: { single: false, double: false, king: false, superKing: false }
-  },
-  {
-    id: 147,
-    name: "Waffle Stripe Duvet Cover and Pillowcase Set – Charcoal",
-    price: "£49.99 – £79.99",
-    image: '/premium-duvet147.jpg',
-    hoverImage: '/premium-duvet147.jpg',
-    discount: '',
-    isSoldOut: true,
-    color: 'Charcoal',
-    sizes: { single: false, double: false, king: false, superKing: false }
-  },
-  {
-    id: 148,
-    name: "Waffle Stripe Duvet Cover and Pillowcase Set – Grey",
-    price: "£49.99 – £79.99",
-    image: '/premium-duvet148.jpg',
-    hoverImage: '/premium-duvet148.jpg',
-    discount: '',
-    isSoldOut: true,
-    color: 'Grey',
-    sizes: { single: false, double: false, king: false, superKing: false }
-  },
-  {
-    id: 149,
-    name: "Waffle Stripe Duvet Cover and Pillowcase Set – Natural",
-    price: "£49.99 – £79.99",
-    image: '/premium-duvet149.jpg',
-    hoverImage: '/premium-duvet149.jpg',
-    discount: '',
-    isSoldOut: true,
-    color: 'Natural',
-    sizes: { single: false, double: false, king: false, superKing: false }
-  },
-  {
-    id: 150,
-    name: "Waffle Stripe Duvet Cover and Pillowcase Set – White",
-    price: "£49.99 – £79.99",
-    image: '/premium-duvet150.jpg',
-    hoverImage: '/premium-duvet150.jpg',
-    discount: '',
-    isSoldOut: true,
-    color: 'White',
-    sizes: { single: false, double: false, king: false, superKing: false }
-  },
-  {
-    id: 151,
+    id: 108,
     name: "Winter Berry Stag Duvet Cover and Pillowcase Set – Grey",
     price: "£49.99 – £69.99",
     image: '/premium-duvet151.jpg',
@@ -1720,7 +1232,7 @@ const products: Product[] = [
     sizes: { single: true, double: true, king: true, superKing: true }
   },
   {
-    id: 152,
+    id: 109,
     name: "Winter Berry Stag Duvet Cover and Pillowcase Set – Purple",
     price: "£49.99 – £69.99",
     image: '/premium-duvet152.jpg',
@@ -1731,7 +1243,7 @@ const products: Product[] = [
     sizes: { single: true, double: true, king: true, superKing: true }
   },
   {
-    id: 153,
+    id: 110,
     name: "Xmas Slogan Duvet Cover and Pillowcase Set",
     price: "£13.49",
     image: '/premium-duvet153.jpg',
@@ -1742,7 +1254,7 @@ const products: Product[] = [
     sizes: { single: true, double: true, king: true, superKing: true }
   },
   {
-    id: 154,
+    id: 111,
     name: "Xmas Sloth Duvet Cover and Pillowcase Set – White/Red",
     price: "£13.49",
     image: '/premium-duvet154.jpg',
@@ -1753,7 +1265,7 @@ const products: Product[] = [
     sizes: { single: true, double: true, king: true, superKing: true }
   },
   {
-    id: 155,
+    id: 112,
     name: "Xmas Snow Globe Duvet Cover and Pillowcase Set",
     price: "£49.99 – £69.99",
     image: '/premium-duvet155.jpg',

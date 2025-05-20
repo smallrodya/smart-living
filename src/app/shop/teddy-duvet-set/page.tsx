@@ -25,78 +25,15 @@ interface Product {
 }
 
 const products: Product[] = [
-  { 
-    id: 1, 
-    name: 'Arcade Teddy Duvet Cover and Pillowcase Set – Blush Pink', 
-    price: '£49.99 – £69.99', 
-    image: '/teddy-blush-pink.jpg', 
-    hoverImage: '/teddy-blush-pink-hover.jpg', 
-    discount: '',
+  {
+    id: 1,
+    name: "Chiswick Pintuck Duvet Cover and Pillowcase Set – Blush Pink",
+    price: "£22.05 – £31.13",
+    image: '/teddy-duvet1.jpg',
+    hoverImage: '/teddy-duvet1-hover.jpg',
+    discount: "-56%",
     isSoldOut: true,
     color: 'Blush Pink',
-    sizes: {
-      single: false,
-      double: false,
-      king: false,
-      superKing: false
-    }
-  },
-  { 
-    id: 2, 
-    name: 'Arcade Teddy Duvet Cover and Pillowcase Set – Charcoal', 
-    price: '£49.99 – £69.99', 
-    image: '/teddy-charcoal.jpg', 
-    hoverImage: '/teddy-charcoal-hover.jpg', 
-    discount: '',
-    isSoldOut: true,
-    color: 'Charcoal',
-    sizes: {
-      single: false,
-      double: false,
-      king: false,
-      superKing: false
-    }
-  },
-  { 
-    id: 3, 
-    name: 'Arcade Teddy Duvet Cover and Pillowcase Set – Grey', 
-    price: '£49.99 – £69.99', 
-    image: '/teddy-grey.jpg', 
-    hoverImage: '/teddy-grey-hover.jpg', 
-    discount: '',
-    isSoldOut: true,
-    color: 'Grey',
-    sizes: {
-      single: false,
-      double: false,
-      king: false,
-      superKing: false
-    }
-  },
-  { 
-    id: 4, 
-    name: 'Arcade Teddy Duvet Cover and Pillowcase Set – Purple', 
-    price: '£49.99 – £69.99', 
-    image: '/teddy-purple.jpg', 
-    hoverImage: '/teddy-purple-hover.jpg', 
-    discount: '',
-    isSoldOut: true,
-    color: 'Purple',
-    sizes: {
-      single: false,
-      double: false,
-      king: false,
-      superKing: false
-    }
-  },
-  { 
-    id: 5, 
-    name: 'Arcade Teddy Duvet Cover and Pillowcase Set – White', 
-    price: '£49.99 – £69.99', 
-    image: '/teddy-white.jpg', 
-    hoverImage: '/teddy-white-hover.jpg', 
-    discount: '',
-    color: 'White',
     sizes: {
       single: true,
       double: true,
@@ -104,29 +41,14 @@ const products: Product[] = [
       superKing: true
     }
   },
-  { 
-    id: 6, 
-    name: 'Chiswick Pintuck Duvet Cover and Pillowcase Set – Blush Pink', 
-    price: '£22.05 – £31.13', 
-    image: '/teddy-chiswick-blush.jpg', 
-    hoverImage: '/teddy-chiswick-blush-hover.jpg', 
-    discount: '-56%',
-    isSoldOut: true,
-    color: 'Blush Pink',
-    sizes: {
-      single: false,
-      double: false,
-      king: false,
-      superKing: false
-    }
-  },
-  { 
-    id: 7, 
-    name: 'Chiswick Pintuck Duvet Cover and Pillowcase Set – Charcoal', 
-    price: '£22.05 – £31.13', 
-    image: '/teddy-chiswick-charcoal.jpg', 
-    hoverImage: '/teddy-chiswick-charcoal-hover.jpg', 
-    discount: '-56%',
+  {
+    id: 2,
+    name: "Chiswick Pintuck Duvet Cover and Pillowcase Set – Charcoal",
+    price: "£22.05 – £31.13",
+    image: '/teddy-duvet2.jpg',
+    hoverImage: '/teddy-duvet2-hover.jpg',
+    discount: "-56%",
+    isSoldOut: false,
     color: 'Charcoal',
     sizes: {
       single: true,
@@ -135,29 +57,30 @@ const products: Product[] = [
       superKing: true
     }
   },
-  { 
-    id: 8, 
-    name: 'Chiswick Pintuck Duvet Cover and Pillowcase Set – Cream', 
-    price: '£22.05 – £31.13', 
-    image: '/teddy-chiswick-cream.jpg', 
-    hoverImage: '/teddy-chiswick-cream-hover.jpg', 
-    discount: '-56%',
+  {
+    id: 3,
+    name: "Chiswick Pintuck Duvet Cover and Pillowcase Set – Cream",
+    price: "£69.99 Original price was: £69.99.£31.13Current price is: £31.13.",
+    image: '/teddy-duvet3.jpg',
+    hoverImage: '/teddy-duvet3-hover.jpg',
+    discount: "-56%",
     isSoldOut: true,
     color: 'Cream',
     sizes: {
-      single: false,
-      double: false,
-      king: false,
-      superKing: false
+      single: true,
+      double: true,
+      king: true,
+      superKing: true
     }
   },
-  { 
-    id: 9, 
-    name: 'Chiswick Pintuck Duvet Cover and Pillowcase Set – Grey', 
-    price: '£22.05 – £31.13', 
-    image: '/teddy-chiswick-grey.jpg', 
-    hoverImage: '/teddy-chiswick-grey-hover.jpg', 
-    discount: '-56%',
+  {
+    id: 4,
+    name: "Chiswick Pintuck Duvet Cover and Pillowcase Set – Grey",
+    price: "£22.05 – £31.13",
+    image: '/teddy-duvet4.jpg',
+    hoverImage: '/teddy-duvet4-hover.jpg',
+    discount: "-56%",
+    isSoldOut: false,
     color: 'Grey',
     sizes: {
       single: true,
@@ -166,13 +89,14 @@ const products: Product[] = [
       superKing: true
     }
   },
-  { 
-    id: 10, 
-    name: 'Chiswick Pintuck Duvet Cover and Pillowcase Set – Navy', 
-    price: '£22.05 – £31.13', 
-    image: '/teddy-chiswick-navy.jpg', 
-    hoverImage: '/teddy-chiswick-navy-hover.jpg', 
-    discount: '-56%',
+  {
+    id: 5,
+    name: "Chiswick Pintuck Duvet Cover and Pillowcase Set – Navy",
+    price: "£22.05 – £31.13",
+    image: '/teddy-duvet5.jpg',
+    hoverImage: '/teddy-duvet5-hover.jpg',
+    discount: "-56%",
+    isSoldOut: false,
     color: 'Navy',
     sizes: {
       single: true,
@@ -181,13 +105,14 @@ const products: Product[] = [
       superKing: true
     }
   },
-  { 
-    id: 11, 
-    name: 'Chiswick Pintuck Duvet Cover and Pillowcase Set – Purple', 
-    price: '£22.05 – £31.13', 
-    image: '/teddy-chiswick-purple.jpg', 
-    hoverImage: '/teddy-chiswick-purple-hover.jpg', 
-    discount: '-56%',
+  {
+    id: 6,
+    name: "Chiswick Pintuck Duvet Cover and Pillowcase Set – Purple",
+    price: "£22.05 – £31.13",
+    image: '/teddy-duvet6.jpg',
+    hoverImage: '/teddy-duvet6-hover.jpg',
+    discount: "-56%",
+    isSoldOut: false,
     color: 'Purple',
     sizes: {
       single: true,
@@ -196,13 +121,14 @@ const products: Product[] = [
       superKing: true
     }
   },
-  { 
-    id: 12, 
-    name: 'Chiswick Pintuck Duvet Cover and Pillowcase Set – White', 
-    price: '£22.05 – £26.37', 
-    image: '/teddy-chiswick-white.jpg', 
-    hoverImage: '/teddy-chiswick-white-hover.jpg', 
-    discount: '-56%',
+  {
+    id: 7,
+    name: "Chiswick Pintuck Duvet Cover and Pillowcase Set – White",
+    price: "£22.05 – £26.37",
+    image: '/teddy-duvet7.jpg',
+    hoverImage: '/teddy-duvet7-hover.jpg',
+    discount: "-56%",
+    isSoldOut: false,
     color: 'White',
     sizes: {
       single: true,
@@ -211,29 +137,30 @@ const products: Product[] = [
       superKing: true
     }
   },
-  { 
-    id: 13, 
-    name: 'EMB Stag Duvet Cover and Pillowcase Set – Charcoal', 
-    price: '£49.99 – £69.99', 
-    image: '/teddy-emb-charcoal.jpg', 
-    hoverImage: '/teddy-emb-charcoal-hover.jpg', 
-    discount: '',
+  {
+    id: 8,
+    name: "EMB Stag Duvet Cover and Pillowcase Set – Charcoal",
+    price: "£49.99 – £69.99",
+    image: '/teddy-duvet8.jpg',
+    hoverImage: '/teddy-duvet8-hover.jpg',
+    discount: "",
     isSoldOut: true,
     color: 'Charcoal',
     sizes: {
-      single: false,
-      double: false,
-      king: false,
-      superKing: false
+      single: true,
+      double: true,
+      king: true,
+      superKing: true
     }
   },
-  { 
-    id: 14, 
-    name: 'EMB Stag Duvet Cover and Pillowcase Set – Cream', 
-    price: '£20.75 – £49.99', 
-    image: '/teddy-emb-cream.jpg', 
-    hoverImage: '/teddy-emb-cream-hover.jpg', 
-    discount: '-65%',
+  {
+    id: 9,
+    name: "EMB Stag Duvet Cover and Pillowcase Set – Cream",
+    price: "£20.75 – £49.99",
+    image: '/teddy-duvet9.jpg',
+    hoverImage: '/teddy-duvet9-hover.jpg',
+    discount: "-65%",
+    isSoldOut: false,
     color: 'Cream',
     sizes: {
       single: true,
@@ -242,77 +169,78 @@ const products: Product[] = [
       superKing: true
     }
   },
-  { 
-    id: 15, 
-    name: 'EMB Stag Duvet Cover and Pillowcase Set – Natural', 
-    price: '£49.99 – £69.99', 
-    image: '/teddy-emb-natural.jpg', 
-    hoverImage: '/teddy-emb-natural-hover.jpg', 
-    discount: '',
+  {
+    id: 10,
+    name: "EMB Stag Duvet Cover and Pillowcase Set – Natural",
+    price: "£49.99 – £69.99",
+    image: '/teddy-duvet10.jpg',
+    hoverImage: '/teddy-duvet10-hover.jpg',
+    discount: "",
     isSoldOut: true,
     color: 'Natural',
     sizes: {
-      single: false,
-      double: false,
-      king: false,
-      superKing: false
+      single: true,
+      double: true,
+      king: true,
+      superKing: true
     }
   },
-  { 
-    id: 16, 
-    name: 'EMB Stag Duvet Cover and Pillowcase Set – Navy', 
-    price: '£49.99 – £69.99', 
-    image: '/teddy-emb-navy.jpg', 
-    hoverImage: '/teddy-emb-navy-hover.jpg', 
-    discount: '',
+  {
+    id: 11,
+    name: "EMB Stag Duvet Cover and Pillowcase Set – Navy",
+    price: "£49.99 – £69.99",
+    image: '/teddy-duvet11.jpg',
+    hoverImage: '/teddy-duvet11-hover.jpg',
+    discount: "",
     isSoldOut: true,
     color: 'Navy',
     sizes: {
-      single: false,
-      double: false,
-      king: false,
-      superKing: false
+      single: true,
+      double: true,
+      king: true,
+      superKing: true
     }
   },
-  { 
-    id: 17, 
-    name: 'EMB Stag Duvet Cover and Pillowcase Set – Purple', 
-    price: '£49.99 – £69.99', 
-    image: '/teddy-emb-purple.jpg', 
-    hoverImage: '/teddy-emb-purple-hover.jpg', 
-    discount: '',
+  {
+    id: 12,
+    name: "EMB Stag Duvet Cover and Pillowcase Set – Purple",
+    price: "£49.99 – £69.99",
+    image: '/teddy-duvet12.jpg',
+    hoverImage: '/teddy-duvet12-hover.jpg',
+    discount: "",
     isSoldOut: true,
     color: 'Purple',
     sizes: {
-      single: false,
-      double: false,
-      king: false,
-      superKing: false
+      single: true,
+      double: true,
+      king: true,
+      superKing: true
     }
   },
-  { 
-    id: 18, 
-    name: 'EMB Stag Duvet Cover and Pillowcase Set – Silver', 
-    price: '£24.21 – £59.99', 
-    image: '/teddy-emb-silver.jpg', 
-    hoverImage: '/teddy-emb-silver-hover.jpg', 
-    discount: '-65%',
+  {
+    id: 13,
+    name: "EMB Stag Duvet Cover and Pillowcase Set – Silver",
+    price: "£24.21 – £59.99",
+    image: '/teddy-duvet13.jpg',
+    hoverImage: '/teddy-duvet13-hover.jpg',
+    discount: "-65%",
     isSoldOut: true,
     color: 'Silver',
     sizes: {
-      single: false,
-      double: false,
-      king: false,
-      superKing: false
+      single: true,
+      double: true,
+      king: true,
+      superKing: true
     }
   },
-  { 
-    id: 19, 
-    name: 'Flannelette Duvet Cover and Pillowcase Set – Polar Bear', 
-    price: '£15.56 – £19.02', 
-    image: '/teddy-flannelette-polar.jpg', 
-    hoverImage: '/teddy-flannelette-polar-hover.jpg', 
-    discount: '-62%',
+  {
+    id: 14,
+    name: "Flannelette Duvet Cover and Pillowcase Set – Polar Bear",
+    price: "£15.56 – £19.02",
+    image: '/teddy-duvet14.jpg',
+    hoverImage: '/teddy-duvet14-hover.jpg',
+    discount: "-62%",
+    isSoldOut: false,
     color: 'Polar Bear',
     sizes: {
       single: true,
@@ -321,13 +249,14 @@ const products: Product[] = [
       superKing: true
     }
   },
-  { 
-    id: 20, 
-    name: 'Flannelette Duvet Cover and Pillowcase Set – Snow Reindeer', 
-    price: '£15.56 – £19.02', 
-    image: '/teddy-flannelette-reindeer.jpg', 
-    hoverImage: '/teddy-flannelette-reindeer-hover.jpg', 
-    discount: '-62%',
+  {
+    id: 15,
+    name: "Flannelette Duvet Cover and Pillowcase Set – Snow Reindeer",
+    price: "£15.56 – £19.02",
+    image: '/teddy-duvet15.jpg',
+    hoverImage: '/teddy-duvet15-hover.jpg',
+    discount: "-62%",
+    isSoldOut: false,
     color: 'Snow Reindeer',
     sizes: {
       single: true,
@@ -336,187 +265,31 @@ const products: Product[] = [
       superKing: true
     }
   },
-  { 
-    id: 21, 
-    name: 'Fleece Pom Pom Duvet Cover and Pillowcase Set – Charcoal', 
-    price: '£17.29 – £24.21', 
-    image: '/teddy-fleece-charcoal.jpg', 
-    hoverImage: '/teddy-fleece-charcoal-hover.jpg', 
-    discount: '-65%',
-    color: 'Charcoal',
-    sizes: {
-      single: true,
-      double: true,
-      king: true,
-      superKing: true
-    }
-  },
-  { 
-    id: 22, 
-    name: 'Fleece Pom Pom Duvet Cover and Pillowcase Set – Coral', 
-    price: '£17.29 – £24.21', 
-    image: '/teddy-fleece-coral.jpg', 
-    hoverImage: '/teddy-fleece-coral-hover.jpg', 
-    discount: '-65%',
-    isSoldOut: true,
-    color: 'Coral',
-    sizes: {
-      single: false,
-      double: false,
-      king: false,
-      superKing: false
-    }
-  },
-  { 
-    id: 23, 
-    name: 'Fleece Pom Pom Duvet Cover and Pillowcase Set – Grey', 
-    price: '£17.29 – £24.21', 
-    image: '/teddy-fleece-grey.jpg', 
-    hoverImage: '/teddy-fleece-grey-hover.jpg', 
-    discount: '-65%',
-    isSoldOut: true,
-    color: 'Grey',
-    sizes: {
-      single: false,
-      double: false,
-      king: false,
-      superKing: false
-    }
-  },
-  { 
-    id: 24, 
-    name: 'Fleece Pom Pom Duvet Cover and Pillowcase Set – Natural', 
-    price: '£17.29 – £24.21', 
-    image: '/teddy-fleece-natural.jpg', 
-    hoverImage: '/teddy-fleece-natural-hover.jpg', 
-    discount: '-65%',
-    isSoldOut: true,
-    color: 'Natural',
-    sizes: {
-      single: false,
-      double: false,
-      king: false,
-      superKing: false
-    }
-  },
-  { 
-    id: 25, 
-    name: 'Fleece Pom Pom Duvet Cover and Pillowcase Set – Ochre', 
-    price: '£17.29 – £24.21', 
-    image: '/teddy-fleece-ochre.jpg', 
-    hoverImage: '/teddy-fleece-ochre-hover.jpg', 
-    discount: '-65%',
-    color: 'Ochre',
-    sizes: {
-      single: true,
-      double: true,
-      king: true,
-      superKing: true
-    }
-  },
-  { 
-    id: 26, 
-    name: 'Fleece Pom Pom Duvet Cover and Pillowcase Set – Pink', 
-    price: '£17.29 – £24.21', 
-    image: '/teddy-fleece-pink.jpg', 
-    hoverImage: '/teddy-fleece-pink-hover.jpg', 
-    discount: '-65%',
-    isSoldOut: true,
-    color: 'Pink',
-    sizes: {
-      single: false,
-      double: false,
-      king: false,
-      superKing: false
-    }
-  },
-  { 
-    id: 27, 
-    name: 'Fleece Pom Pom Duvet Cover and Pillowcase Set – Purple', 
-    price: '£17.29 – £24.21', 
-    image: '/teddy-fleece-purple.jpg', 
-    hoverImage: '/teddy-fleece-purple-hover.jpg', 
-    discount: '-65%',
-    color: 'Purple',
-    sizes: {
-      single: true,
-      double: true,
-      king: true,
-      superKing: true
-    }
-  },
-  { 
-    id: 28, 
-    name: 'Heart Foil Duvet Cover and Pillowcase Set – Cream', 
-    price: '£49.99 – £69.99', 
-    image: '/teddy-heart-cream.jpg', 
-    hoverImage: '/teddy-heart-cream-hover.jpg', 
-    discount: '',
+  {
+    id: 16,
+    name: "Heart Foil Duvet Cover and Pillowcase Set – Cream",
+    price: "£49.99 – £69.99",
+    image: '/teddy-duvet16.jpg',
+    hoverImage: '/teddy-duvet16-hover.jpg',
+    discount: "",
     isSoldOut: true,
     color: 'Cream',
     sizes: {
-      single: false,
-      double: false,
-      king: false,
-      superKing: false
+      single: true,
+      double: true,
+      king: true,
+      superKing: true
     }
   },
-  { 
-    id: 29, 
-    name: 'Heart Foil Duvet Cover and Pillowcase Set – Deep Red', 
-    price: '£49.99 – £69.99', 
-    image: '/teddy-heart-red.jpg', 
-    hoverImage: '/teddy-heart-red-hover.jpg', 
-    discount: '',
+  {
+    id: 17,
+    name: "Heart Foil Duvet Cover and Pillowcase Set – Deep Red",
+    price: "£49.99 – £69.99",
+    image: '/teddy-duvet17.jpg',
+    hoverImage: '/teddy-duvet17-hover.jpg',
+    discount: "",
     isSoldOut: true,
     color: 'Deep Red',
-    sizes: {
-      single: false,
-      double: false,
-      king: false,
-      superKing: false
-    }
-  },
-  { 
-    id: 30, 
-    name: 'Heart Foil Duvet Cover and Pillowcase Set – Grey', 
-    price: '£49.99 – £69.99', 
-    image: '/teddy-heart-grey.jpg', 
-    hoverImage: '/teddy-heart-grey-hover.jpg', 
-    discount: '',
-    isSoldOut: true,
-    color: 'Grey',
-    sizes: {
-      single: false,
-      double: false,
-      king: false,
-      superKing: false
-    }
-  },
-  { 
-    id: 31, 
-    name: 'Heart Foil Duvet Cover and Pillowcase Set – Purple', 
-    price: '£49.99 – £69.99', 
-    image: '/teddy-heart-purple.jpg', 
-    hoverImage: '/teddy-heart-purple-hover.jpg', 
-    discount: '',
-    isSoldOut: true,
-    color: 'Purple',
-    sizes: {
-      single: false,
-      double: false,
-      king: false,
-      superKing: false
-    }
-  },
-  { 
-    id: 32, 
-    name: 'Hug N Snug Duvet Cover and Pillowcase Set – Blush Pink', 
-    price: '£26.49 – £33.99', 
-    image: '/teddy-hug-blush.jpg', 
-    hoverImage: '/teddy-hug-blush-hover.jpg', 
-    discount: '-51%Hot',
-    color: 'Blush Pink',
     sizes: {
       single: true,
       double: true,
@@ -524,61 +297,46 @@ const products: Product[] = [
       superKing: true
     }
   },
-  { 
-    id: 33, 
-    name: 'Hug N Snug Duvet Cover and Pillowcase Set – Charcoal', 
-    price: '£26.49 – £33.99', 
-    image: '/teddy-hug-charcoal.jpg', 
-    hoverImage: '/teddy-hug-charcoal-hover.jpg', 
-    discount: '-51%Hot',
+  {
+    id: 18,
+    name: "Heart Foil Duvet Cover and Pillowcase Set – Grey",
+    price: "£49.99 – £69.99",
+    image: '/teddy-duvet18.jpg',
+    hoverImage: '/teddy-duvet18-hover.jpg',
+    discount: "",
     isSoldOut: true,
-    color: 'Charcoal',
+    color: 'Grey',
     sizes: {
-      single: false,
-      double: false,
-      king: false,
-      superKing: false
+      single: true,
+      double: true,
+      king: true,
+      superKing: true
     }
   },
-  { 
-    id: 34, 
-    name: 'Hug N Snug Duvet Cover and Pillowcase Set – Mink', 
-    price: '£26.49 – £33.99', 
-    image: '/teddy-hug-mink.jpg', 
-    hoverImage: '/teddy-hug-mink-hover.jpg', 
-    discount: '-51%',
+  {
+    id: 19,
+    name: "Heart Foil Duvet Cover and Pillowcase Set – Purple",
+    price: "£49.99 – £69.99",
+    image: '/teddy-duvet19.jpg',
+    hoverImage: '/teddy-duvet19-hover.jpg',
+    discount: "",
     isSoldOut: true,
-    color: 'Mink',
+    color: 'Purple',
     sizes: {
-      single: false,
-      double: false,
-      king: false,
-      superKing: false
+      single: true,
+      double: true,
+      king: true,
+      superKing: true
     }
   },
-  { 
-    id: 35, 
-    name: 'Hug N Snug Duvet Cover and Pillowcase Set – Silver-Grey', 
-    price: '£26.49 – £33.99', 
-    image: '/teddy-hug-silver.jpg', 
-    hoverImage: '/teddy-hug-silver-hover.jpg', 
-    discount: '-51%',
-    isSoldOut: true,
-    color: 'Silver-Grey',
-    sizes: {
-      single: false,
-      double: false,
-      king: false,
-      superKing: false
-    }
-  },
-  { 
-    id: 36, 
-    name: 'Luxurious GEO JACQUARD Fleece Duvet Cover with Pillowcases – Blush', 
-    price: '£19.02 – £30.70', 
-    image: '/teddy-geo-blush.jpg', 
-    hoverImage: '/teddy-geo-blush-hover.jpg', 
-    discount: '-56%',
+  {
+    id: 20,
+    name: "Luxurious GEO JACQUARD Fleece Duvet Cover with Pillowcases – Blush",
+    price: "£19.02 – £30.70",
+    image: '/teddy-duvet20.jpg',
+    hoverImage: '/teddy-duvet20-hover.jpg',
+    discount: "-56%",
+    isSoldOut: false,
     color: 'Blush',
     sizes: {
       single: true,
@@ -587,13 +345,14 @@ const products: Product[] = [
       superKing: true
     }
   },
-  { 
-    id: 37, 
-    name: 'Luxurious GEO JACQUARD Fleece Duvet Cover with Pillowcases – Charcoal', 
-    price: '£19.02 – £30.70', 
-    image: '/teddy-geo-charcoal.jpg', 
-    hoverImage: '/teddy-geo-charcoal-hover.jpg', 
-    discount: '-56%',
+  {
+    id: 21,
+    name: "Luxurious GEO JACQUARD Fleece Duvet Cover with Pillowcases – Charcoal",
+    price: "£19.02 – £30.70",
+    image: '/teddy-duvet21.jpg',
+    hoverImage: '/teddy-duvet21-hover.jpg',
+    discount: "-56%",
+    isSoldOut: false,
     color: 'Charcoal',
     sizes: {
       single: true,
@@ -602,13 +361,14 @@ const products: Product[] = [
       superKing: true
     }
   },
-  { 
-    id: 38, 
-    name: 'Luxurious GEO JACQUARD Fleece Duvet Cover with Pillowcases – Teal', 
-    price: '£19.02 – £30.70', 
-    image: '/teddy-geo-teal.jpg', 
-    hoverImage: '/teddy-geo-teal-hover.jpg', 
-    discount: '-56%',
+  {
+    id: 22,
+    name: "Luxurious GEO JACQUARD Fleece Duvet Cover with Pillowcases – Teal",
+    price: "£19.02 – £30.70",
+    image: '/teddy-duvet22.jpg',
+    hoverImage: '/teddy-duvet22-hover.jpg',
+    discount: "-56%",
+    isSoldOut: false,
     color: 'Teal',
     sizes: {
       single: true,
@@ -617,14 +377,15 @@ const products: Product[] = [
       superKing: true
     }
   },
-  { 
-    id: 39, 
-    name: 'Luxurious Geo Shaggy Faux Fur Fleece Duvet Cover with Pillowcases', 
-    price: '£19.02 – £30.70', 
-    image: '/teddy-geo-shaggy.jpg', 
-    hoverImage: '/teddy-geo-shaggy-hover.jpg', 
-    discount: '-52%',
-    color: 'Shaggy',
+  {
+    id: 23,
+    name: "Luxurious Geo Shaggy Faux Fur Fleece Duvet Cover with Pillowcases",
+    price: "£19.02 – £30.70",
+    image: '/teddy-duvet23.jpg',
+    hoverImage: '/teddy-duvet23-hover.jpg',
+    discount: "-52%",
+    isSoldOut: false,
+    color: 'Multi',
     sizes: {
       single: true,
       double: true,
@@ -632,13 +393,14 @@ const products: Product[] = [
       superKing: true
     }
   },
-  { 
-    id: 40, 
-    name: 'Luxurious GEO Triangle Fleece Duvet Cover with Pillowcases – Blush Pink', 
-    price: '£23.78 – £30.70', 
-    image: '/teddy-geo-triangle-blush.jpg', 
-    hoverImage: '/teddy-geo-triangle-blush-hover.jpg', 
-    discount: '-52%',
+  {
+    id: 24,
+    name: "Luxurious GEO Triangle Fleece Duvet Cover with Pillowcases – Blush Pink",
+    price: "£23.78 – £30.70",
+    image: '/teddy-duvet24.jpg',
+    hoverImage: '/teddy-duvet24-hover.jpg',
+    discount: "-52%",
+    isSoldOut: false,
     color: 'Blush Pink',
     sizes: {
       single: true,
@@ -647,13 +409,14 @@ const products: Product[] = [
       superKing: true
     }
   },
-  { 
-    id: 41, 
-    name: 'Luxurious GEO Triangle Fleece Duvet Cover with Pillowcases – Navy', 
-    price: '£23.78 – £30.70', 
-    image: '/teddy-geo-triangle-navy.jpg', 
-    hoverImage: '/teddy-geo-triangle-navy-hover.jpg', 
-    discount: '-52%',
+  {
+    id: 25,
+    name: "Luxurious GEO Triangle Fleece Duvet Cover with Pillowcases – Navy",
+    price: "£23.78 – £30.70",
+    image: '/teddy-duvet25.jpg',
+    hoverImage: '/teddy-duvet25-hover.jpg',
+    discount: "-52%",
+    isSoldOut: false,
     color: 'Navy',
     sizes: {
       single: true,
@@ -662,13 +425,14 @@ const products: Product[] = [
       superKing: true
     }
   },
-  { 
-    id: 42, 
-    name: 'Luxurious Pom Pom Fleece Duvet Cover with Pillowcases – Ice Pink', 
-    price: '£23.78 – £30.70', 
-    image: '/teddy-pom-ice-pink.jpg', 
-    hoverImage: '/teddy-pom-ice-pink-hover.jpg', 
-    discount: '-56%',
+  {
+    id: 26,
+    name: "Luxurious Pom Pom Fleece Duvet Cover with Pillowcases – Ice Pink",
+    price: "£23.78 – £30.70",
+    image: '/teddy-duvet26.jpg',
+    hoverImage: '/teddy-duvet26-hover.jpg',
+    discount: "-56%",
+    isSoldOut: false,
     color: 'Ice Pink',
     sizes: {
       single: true,
@@ -677,13 +441,14 @@ const products: Product[] = [
       superKing: true
     }
   },
-  { 
-    id: 43, 
-    name: 'Luxurious Pom Pom Fleece Duvet Cover with Pillowcases – Silver', 
-    price: '£19.02 – £30.70', 
-    image: '/teddy-pom-silver.jpg', 
-    hoverImage: '/teddy-pom-silver-hover.jpg', 
-    discount: '-56%',
+  {
+    id: 27,
+    name: "Luxurious Pom Pom Fleece Duvet Cover with Pillowcases – Silver",
+    price: "£19.02 – £30.70",
+    image: '/teddy-duvet27.jpg',
+    hoverImage: '/teddy-duvet27-hover.jpg',
+    discount: "-56%",
+    isSoldOut: false,
     color: 'Silver',
     sizes: {
       single: true,
@@ -692,14 +457,15 @@ const products: Product[] = [
       superKing: true
     }
   },
-  { 
-    id: 44, 
-    name: 'Luxurious Reversible Sparkle Ribbed Fleece Duvet Cover with Pillowcases', 
-    price: '£19.02 – £30.70', 
-    image: '/teddy-sparkle-ribbed.jpg', 
-    hoverImage: '/teddy-sparkle-ribbed-hover.jpg', 
-    discount: '-52%',
-    color: 'Sparkle',
+  {
+    id: 28,
+    name: "Luxurious Reversible Sparkle Ribbed Fleece Duvet Cover with Pillowcases",
+    price: "£19.02 – £30.70",
+    image: '/teddy-duvet28.jpg',
+    hoverImage: '/teddy-duvet28-hover.jpg',
+    discount: "-52%",
+    isSoldOut: false,
+    color: 'Multi',
     sizes: {
       single: true,
       double: true,
@@ -707,13 +473,14 @@ const products: Product[] = [
       superKing: true
     }
   },
-  { 
-    id: 45, 
-    name: 'Luxurious ROUCHED FAUX FUR Fleece Duvet Cover with Pillowcases – Grey', 
-    price: '£19.02 – £30.70', 
-    image: '/teddy-rouched-grey.jpg', 
-    hoverImage: '/teddy-rouched-grey-hover.jpg', 
-    discount: '-52%',
+  {
+    id: 29,
+    name: "Luxurious ROUCHED FAUX FUR Fleece Duvet Cover with Pillowcases – Grey",
+    price: "£19.02 – £30.70",
+    image: '/teddy-duvet29.jpg',
+    hoverImage: '/teddy-duvet29-hover.jpg',
+    discount: "-52%",
+    isSoldOut: false,
     color: 'Grey',
     sizes: {
       single: true,
@@ -722,13 +489,14 @@ const products: Product[] = [
       superKing: true
     }
   },
-  { 
-    id: 46, 
-    name: 'Luxurious ROUCHED FAUX FUR Fleece Duvet Cover with Pillowcases – Natural', 
-    price: '£19.02 – £30.70', 
-    image: '/teddy-rouched-natural.jpg', 
-    hoverImage: '/teddy-rouched-natural-hover.jpg', 
-    discount: '-52%',
+  {
+    id: 30,
+    name: "Luxurious ROUCHED FAUX FUR Fleece Duvet Cover with Pillowcases – Natural",
+    price: "£19.02 – £30.70",
+    image: '/teddy-duvet30.jpg',
+    hoverImage: '/teddy-duvet30-hover.jpg',
+    discount: "-52%",
+    isSoldOut: false,
     color: 'Natural',
     sizes: {
       single: true,
@@ -737,14 +505,15 @@ const products: Product[] = [
       superKing: true
     }
   },
-  { 
-    id: 47, 
-    name: 'Luxury Super Soft & Reversible Teddy Fleece Duvet Cover and Pillowcase', 
-    price: '£23.78 – £30.70', 
-    image: '/teddy-super-soft.jpg', 
-    hoverImage: '/teddy-super-soft-hover.jpg', 
-    discount: '-62%',
-    color: 'Teddy',
+  {
+    id: 31,
+    name: "Luxury Super Soft & Reversible Teddy Fleece Duvet Cover and Pillowcase",
+    price: "£23.78 – £30.70",
+    image: '/teddy-duvet31.jpg',
+    hoverImage: '/teddy-duvet31-hover.jpg',
+    discount: "-62%",
+    isSoldOut: false,
+    color: 'Multi',
     sizes: {
       single: true,
       double: true,
@@ -752,13 +521,14 @@ const products: Product[] = [
       superKing: true
     }
   },
-  { 
-    id: 48, 
-    name: 'Luxury Super Soft & Reversible Waffle Teddy Fleece Duvet Set- Black', 
-    price: '£23.78 – £33.29', 
-    image: '/teddy-waffle-black.jpg', 
-    hoverImage: '/teddy-waffle-black-hover.jpg', 
-    discount: '-60%',
+  {
+    id: 32,
+    name: "Luxury Super Soft & Reversible Waffle Teddy Fleece Duvet Set- Black",
+    price: "£23.78 – £33.29",
+    image: '/teddy-duvet32.jpg',
+    hoverImage: '/teddy-duvet32-hover.jpg',
+    discount: "-60%",
+    isSoldOut: false,
     color: 'Black',
     sizes: {
       single: true,
@@ -767,13 +537,14 @@ const products: Product[] = [
       superKing: true
     }
   },
-  { 
-    id: 49, 
-    name: 'Luxury Super Soft & Reversible Waffle Teddy Fleece Duvet Set- Rust', 
-    price: '£28.97 – £30.70', 
-    image: '/teddy-waffle-rust.jpg', 
-    hoverImage: '/teddy-waffle-rust-hover.jpg', 
-    discount: '-62%',
+  {
+    id: 33,
+    name: "Luxury Super Soft & Reversible Waffle Teddy Fleece Duvet Set- Rust",
+    price: "£28.97 – £30.70",
+    image: '/teddy-duvet33.jpg',
+    hoverImage: '/teddy-duvet33-hover.jpg',
+    discount: "-62%",
+    isSoldOut: false,
     color: 'Rust',
     sizes: {
       single: true,
@@ -782,45 +553,46 @@ const products: Product[] = [
       superKing: true
     }
   },
-  { 
-    id: 50, 
-    name: 'Teddy Dazzling Star Duvet Cover and Pillowcase Set – Blush Pink', 
-    price: '£49.99 – £69.99', 
-    image: '/teddy-star-blush.jpg', 
-    hoverImage: '/teddy-star-blush-hover.jpg', 
-    discount: '',
+  {
+    id: 34,
+    name: "Teddy Dazzling Star Duvet Cover and Pillowcase Set – Blush Pink",
+    price: "£49.99 – £69.99",
+    image: '/teddy-duvet34.jpg',
+    hoverImage: '/teddy-duvet34-hover.jpg',
+    discount: "",
     isSoldOut: true,
     color: 'Blush Pink',
     sizes: {
-      single: false,
-      double: false,
-      king: false,
-      superKing: false
+      single: true,
+      double: true,
+      king: true,
+      superKing: true
     }
   },
-  { 
-    id: 51, 
-    name: 'Teddy Dazzling Star Duvet Cover and Pillowcase Set – Charcoal', 
-    price: '£49.99 – £69.99', 
-    image: '/teddy-star-charcoal.jpg', 
-    hoverImage: '/teddy-star-charcoal-hover.jpg', 
-    discount: '',
+  {
+    id: 35,
+    name: "Teddy Dazzling Star Duvet Cover and Pillowcase Set – Charcoal",
+    price: "£49.99 – £69.99",
+    image: '/teddy-duvet35.jpg',
+    hoverImage: '/teddy-duvet35-hover.jpg',
+    discount: "",
     isSoldOut: true,
     color: 'Charcoal',
     sizes: {
-      single: false,
-      double: false,
-      king: false,
-      superKing: false
+      single: true,
+      double: true,
+      king: true,
+      superKing: true
     }
   },
-  { 
-    id: 52, 
-    name: 'Teddy Dazzling Star Duvet Cover and Pillowcase Set – Grey', 
-    price: '£49.99 – £69.99', 
-    image: '/teddy-star-grey.jpg', 
-    hoverImage: '/teddy-star-grey-hover.jpg', 
-    discount: '',
+  {
+    id: 36,
+    name: "Teddy Dazzling Star Duvet Cover and Pillowcase Set – Grey",
+    price: "£49.99 – £69.99",
+    image: '/teddy-duvet36.jpg',
+    hoverImage: '/teddy-duvet36-hover.jpg',
+    discount: "",
+    isSoldOut: false,
     color: 'Grey',
     sizes: {
       single: true,
@@ -829,13 +601,14 @@ const products: Product[] = [
       superKing: true
     }
   },
-  { 
-    id: 53, 
-    name: 'Teddy Highland Check Duvet Cover and Pillowcase Set – Grey/Ochre', 
-    price: '£23.78 – £49.99', 
-    image: '/teddy-highland-grey-ochre.jpg', 
-    hoverImage: '/teddy-highland-grey-ochre-hover.jpg', 
-    discount: '-60%',
+  {
+    id: 37,
+    name: "Teddy Highland Check Duvet Cover and Pillowcase Set – Grey/Ochre",
+    price: "£23.78 – £49.99",
+    image: '/teddy-duvet37.jpg',
+    hoverImage: '/teddy-duvet37-hover.jpg',
+    discount: "-60%",
+    isSoldOut: false,
     color: 'Grey/Ochre',
     sizes: {
       single: true,
@@ -844,13 +617,14 @@ const products: Product[] = [
       superKing: true
     }
   },
-  { 
-    id: 54, 
-    name: 'Teddy Highland Check Duvet Cover and Pillowcase Set – Grey/Pink', 
-    price: '£19.02 – £28.97', 
-    image: '/teddy-highland-grey-pink.jpg', 
-    hoverImage: '/teddy-highland-grey-pink-hover.jpg', 
-    discount: '-62%',
+  {
+    id: 38,
+    name: "Teddy Highland Check Duvet Cover and Pillowcase Set – Grey/Pink",
+    price: "£19.02 – £28.97",
+    image: '/teddy-duvet38.jpg',
+    hoverImage: '/teddy-duvet38-hover.jpg',
+    discount: "-62%",
+    isSoldOut: false,
     color: 'Grey/Pink',
     sizes: {
       single: true,
@@ -859,29 +633,30 @@ const products: Product[] = [
       superKing: true
     }
   },
-  { 
-    id: 55, 
-    name: 'Teddy Highland Check Duvet Cover and Pillowcase Set – Navy/Red', 
-    price: '£19.02 – £28.97', 
-    image: '/teddy-highland-navy-red.jpg', 
-    hoverImage: '/teddy-highland-navy-red-hover.jpg', 
-    discount: '-62%',
+  {
+    id: 39,
+    name: "Teddy Highland Check Duvet Cover and Pillowcase Set – Navy/Red",
+    price: "£19.02 – £28.97",
+    image: '/teddy-duvet39.jpg',
+    hoverImage: '/teddy-duvet39-hover.jpg',
+    discount: "-62%",
     isSoldOut: true,
     color: 'Navy/Red',
     sizes: {
-      single: false,
-      double: false,
-      king: false,
-      superKing: false
+      single: true,
+      double: true,
+      king: true,
+      superKing: true
     }
   },
-  { 
-    id: 56, 
-    name: 'Teddy Lincoln Check Duvet Cover and Pillowcase Set – Grey/Red', 
-    price: '£19.02 – £28.97', 
-    image: '/teddy-lincoln-grey-red.jpg', 
-    hoverImage: '/teddy-lincoln-grey-red-hover.jpg', 
-    discount: '-62%',
+  {
+    id: 40,
+    name: "Teddy Lincoln Check Duvet Cover and Pillowcase Set – Grey/Red",
+    price: "£19.02 – £28.97",
+    image: '/teddy-duvet40.jpg',
+    hoverImage: '/teddy-duvet40-hover.jpg',
+    discount: "-62%",
+    isSoldOut: false,
     color: 'Grey/Red',
     sizes: {
       single: true,
@@ -890,109 +665,62 @@ const products: Product[] = [
       superKing: true
     }
   },
-  { 
-    id: 57, 
-    name: 'Teddy Lincoln Check Duvet Cover and Pillowcase Set – Natural', 
-    price: '£19.02 – £28.97', 
-    image: '/teddy-lincoln-natural.jpg', 
-    hoverImage: '/teddy-lincoln-natural-hover.jpg', 
-    discount: '-62%',
+  {
+    id: 41,
+    name: "Teddy Lincoln Check Duvet Cover and Pillowcase Set – Natural",
+    price: "£19.02 – £28.97",
+    image: '/teddy-duvet41.jpg',
+    hoverImage: '/teddy-duvet41-hover.jpg',
+    discount: "-62%",
     isSoldOut: true,
     color: 'Natural',
     sizes: {
-      single: false,
-      double: false,
-      king: false,
-      superKing: false
+      single: true,
+      double: true,
+      king: true,
+      superKing: true
     }
   },
-  { 
-    id: 58, 
-    name: 'Teddy Lincoln Check Duvet Cover and Pillowcase Set – Navy/Red', 
-    price: '£19.02 – £28.97', 
-    image: '/teddy-lincoln-navy-red.jpg', 
-    hoverImage: '/teddy-lincoln-navy-red-hover.jpg', 
-    discount: '-62%',
+  {
+    id: 42,
+    name: "Teddy Lincoln Check Duvet Cover and Pillowcase Set – Navy/Red",
+    price: "£19.02 – £28.97",
+    image: '/teddy-duvet42.jpg',
+    hoverImage: '/teddy-duvet42-hover.jpg',
+    discount: "-62%",
     isSoldOut: true,
     color: 'Navy/Red',
     sizes: {
-      single: false,
-      double: false,
-      king: false,
-      superKing: false
+      single: true,
+      double: true,
+      king: true,
+      superKing: true
     }
   },
-  { 
-    id: 59, 
-    name: 'Teddy Nuevo Geo Duvet Cover and Pillowcase Set – Blush Pink', 
-    price: '£49.99 – £69.99', 
-    image: '/teddy-nuevo-blush.jpg', 
-    hoverImage: '/teddy-nuevo-blush-hover.jpg', 
-    discount: '',
+  {
+    id: 43,
+    name: "Teddy Nuevo Geo Duvet Cover and Pillowcase Set – Blush Pink",
+    price: "£49.99 – £69.99",
+    image: '/teddy-duvet43.jpg',
+    hoverImage: '/teddy-duvet43-hover.jpg',
+    discount: "",
     isSoldOut: true,
     color: 'Blush Pink',
     sizes: {
-      single: false,
-      double: false,
-      king: false,
-      superKing: false
+      single: true,
+      double: true,
+      king: true,
+      superKing: true
     }
   },
-  { 
-    id: 60, 
-    name: 'Teddy Nuevo Geo Duvet Cover and Pillowcase Set – Charcoal', 
-    price: '£49.99 – £69.99', 
-    image: '/teddy-nuevo-charcoal.jpg', 
-    hoverImage: '/teddy-nuevo-charcoal-hover.jpg', 
-    discount: '',
+  {
+    id: 44,
+    name: "Teddy Nuevo Geo Duvet Cover and Pillowcase Set – Charcoal",
+    price: "£49.99 – £69.99",
+    image: '/teddy-duvet44.jpg',
+    hoverImage: '/teddy-duvet44-hover.jpg',
+    discount: "",
     isSoldOut: true,
-    color: 'Charcoal',
-    sizes: {
-      single: false,
-      double: false,
-      king: false,
-      superKing: false
-    }
-  },
-  { 
-    id: 61, 
-    name: 'Teddy Nuevo Geo Duvet Cover and Pillowcase Set – Grey', 
-    price: '£49.99 – £69.99', 
-    image: '/teddy-nuevo-grey.jpg', 
-    hoverImage: '/teddy-nuevo-grey-hover.jpg', 
-    discount: '',
-    isSoldOut: true,
-    color: 'Grey',
-    sizes: {
-      single: false,
-      double: false,
-      king: false,
-      superKing: false
-    }
-  },
-  { 
-    id: 62, 
-    name: 'Teddy Nuevo Geo Duvet Cover and Pillowcase Set – Purple', 
-    price: '£49.99 – £69.99', 
-    image: '/teddy-nuevo-purple.jpg', 
-    hoverImage: '/teddy-nuevo-purple-hover.jpg', 
-    discount: '',
-    isSoldOut: true,
-    color: 'Purple',
-    sizes: {
-      single: false,
-      double: false,
-      king: false,
-      superKing: false
-    }
-  },
-  { 
-    id: 63, 
-    name: 'Teddy OCO Duvet Cover and Pillowcase Set – Charcoal', 
-    price: '£49.99 – £69.99', 
-    image: '/teddy-oco-charcoal.jpg', 
-    hoverImage: '/teddy-oco-charcoal-hover.jpg', 
-    discount: '',
     color: 'Charcoal',
     sizes: {
       single: true,
@@ -1001,45 +729,94 @@ const products: Product[] = [
       superKing: true
     }
   },
-  { 
-    id: 64, 
-    name: 'Teddy OCO Duvet Cover and Pillowcase Set – Pink', 
-    price: '£49.99 – £69.99', 
-    image: '/teddy-oco-pink.jpg', 
-    hoverImage: '/teddy-oco-pink-hover.jpg', 
-    discount: '',
+  {
+    id: 45,
+    name: "Teddy Nuevo Geo Duvet Cover and Pillowcase Set – Grey",
+    price: "£49.99 – £69.99",
+    image: '/teddy-duvet45.jpg',
+    hoverImage: '/teddy-duvet45-hover.jpg',
+    discount: "",
+    isSoldOut: true,
+    color: 'Grey',
+    sizes: {
+      single: true,
+      double: true,
+      king: true,
+      superKing: true
+    }
+  },
+  {
+    id: 46,
+    name: "Teddy Nuevo Geo Duvet Cover and Pillowcase Set – Purple",
+    price: "£49.99 – £69.99",
+    image: '/teddy-duvet46.jpg',
+    hoverImage: '/teddy-duvet46-hover.jpg',
+    discount: "",
+    isSoldOut: true,
+    color: 'Purple',
+    sizes: {
+      single: true,
+      double: true,
+      king: true,
+      superKing: true
+    }
+  },
+  {
+    id: 47,
+    name: "Teddy OCO Duvet Cover and Pillowcase Set – Charcoal",
+    price: "£49.99 – £69.99",
+    image: '/teddy-duvet47.jpg',
+    hoverImage: '/teddy-duvet47-hover.jpg',
+    discount: "",
+    isSoldOut: false,
+    color: 'Charcoal',
+    sizes: {
+      single: true,
+      double: true,
+      king: true,
+      superKing: true
+    }
+  },
+  {
+    id: 48,
+    name: "Teddy OCO Duvet Cover and Pillowcase Set – Pink",
+    price: "£49.99 – £69.99",
+    image: '/teddy-duvet48.jpg',
+    hoverImage: '/teddy-duvet48-hover.jpg',
+    discount: "",
     isSoldOut: true,
     color: 'Pink',
     sizes: {
-      single: false,
-      double: false,
-      king: false,
-      superKing: false
+      single: true,
+      double: true,
+      king: true,
+      superKing: true
     }
   },
-  { 
-    id: 65, 
-    name: 'Teddy OCO Duvet Cover and Pillowcase Set – Silver', 
-    price: '£49.99 – £69.99', 
-    image: '/teddy-oco-silver.jpg', 
-    hoverImage: '/teddy-oco-silver-hover.jpg', 
-    discount: '',
+  {
+    id: 49,
+    name: "Teddy OCO Duvet Cover and Pillowcase Set – Silver",
+    price: "£49.99 – £69.99",
+    image: '/teddy-duvet49.jpg',
+    hoverImage: '/teddy-duvet49-hover.jpg',
+    discount: "",
     isSoldOut: true,
     color: 'Silver',
     sizes: {
-      single: false,
-      double: false,
-      king: false,
-      superKing: false
+      single: true,
+      double: true,
+      king: true,
+      superKing: true
     }
   },
-  { 
-    id: 66, 
-    name: 'Teddy Plain Duvet Cover and Pillowcase Set – Aubergine', 
-    price: '£19.02 – £28.97', 
-    image: '/teddy-plain-aubergine.jpg', 
-    hoverImage: '/teddy-plain-aubergine-hover.jpg', 
-    discount: '-62%',
+  {
+    id: 50,
+    name: "Teddy Plain Duvet Cover and Pillowcase Set – Aubergine",
+    price: "£19.02 – £28.97",
+    image: '/teddy-duvet50.jpg',
+    hoverImage: '/teddy-duvet50-hover.jpg',
+    discount: "-62%",
+    isSoldOut: false,
     color: 'Aubergine',
     sizes: {
       single: true,
@@ -1048,13 +825,14 @@ const products: Product[] = [
       superKing: true
     }
   },
-  { 
-    id: 67, 
-    name: 'Teddy Plain Duvet Cover and Pillowcase Set – Black', 
-    price: '£19.02 – £28.97', 
-    image: '/teddy-plain-black.jpg', 
-    hoverImage: '/teddy-plain-black-hover.jpg', 
-    discount: '-62%',
+  {
+    id: 51,
+    name: "Teddy Plain Duvet Cover and Pillowcase Set – Black",
+    price: "£19.02 – £28.97",
+    image: '/teddy-duvet51.jpg',
+    hoverImage: '/teddy-duvet51-hover.jpg',
+    discount: "-62%",
+    isSoldOut: false,
     color: 'Black',
     sizes: {
       single: true,
@@ -1063,13 +841,14 @@ const products: Product[] = [
       superKing: true
     }
   },
-  { 
-    id: 68, 
-    name: 'Teddy Plain Duvet Cover and Pillowcase Set – Charcoal', 
-    price: '£19.02 – £28.97', 
-    image: '/teddy-plain-charcoal.jpg', 
-    hoverImage: '/teddy-plain-charcoal-hover.jpg', 
-    discount: '-62%',
+  {
+    id: 52,
+    name: "Teddy Plain Duvet Cover and Pillowcase Set – Charcoal",
+    price: "£19.02 – £28.97",
+    image: '/teddy-duvet52.jpg',
+    hoverImage: '/teddy-duvet52-hover.jpg',
+    discount: "-62%",
+    isSoldOut: false,
     color: 'Charcoal',
     sizes: {
       single: true,
@@ -1078,13 +857,14 @@ const products: Product[] = [
       superKing: true
     }
   },
-  { 
-    id: 69, 
-    name: 'Teddy Plain Duvet Cover and Pillowcase Set – Cream', 
-    price: '£19.02 – £28.97', 
-    image: '/teddy-plain-cream.jpg', 
-    hoverImage: '/teddy-plain-cream-hover.jpg', 
-    discount: '-62%',
+  {
+    id: 53,
+    name: "Teddy Plain Duvet Cover and Pillowcase Set – Cream",
+    price: "£19.02 – £28.97",
+    image: '/teddy-duvet53.jpg',
+    hoverImage: '/teddy-duvet53-hover.jpg',
+    discount: "-62%",
+    isSoldOut: false,
     color: 'Cream',
     sizes: {
       single: true,
@@ -1093,13 +873,14 @@ const products: Product[] = [
       superKing: true
     }
   },
-  { 
-    id: 70, 
-    name: 'Teddy Plain Duvet Cover and Pillowcase Set – Mink', 
-    price: '£19.02 – £28.97', 
-    image: '/teddy-plain-mink.jpg', 
-    hoverImage: '/teddy-plain-mink-hover.jpg', 
-    discount: '-62%',
+  {
+    id: 54,
+    name: "Teddy Plain Duvet Cover and Pillowcase Set – Mink",
+    price: "£19.02 – £28.97",
+    image: '/teddy-duvet54.jpg',
+    hoverImage: '/teddy-duvet54-hover.jpg',
+    discount: "-62%",
+    isSoldOut: false,
     color: 'Mink',
     sizes: {
       single: true,
@@ -1108,13 +889,14 @@ const products: Product[] = [
       superKing: true
     }
   },
-  { 
-    id: 71, 
-    name: 'Teddy Plain Duvet Cover and Pillowcase Set – Ochre', 
-    price: '£19.02 – £28.97', 
-    image: '/teddy-plain-ochre.jpg', 
-    hoverImage: '/teddy-plain-ochre-hover.jpg', 
-    discount: '-62%',
+  {
+    id: 55,
+    name: "Teddy Plain Duvet Cover and Pillowcase Set – Ochre",
+    price: "£19.02 – £28.97",
+    image: '/teddy-duvet55.jpg',
+    hoverImage: '/teddy-duvet55-hover.jpg',
+    discount: "-62%",
+    isSoldOut: false,
     color: 'Ochre',
     sizes: {
       single: true,
@@ -1123,13 +905,14 @@ const products: Product[] = [
       superKing: true
     }
   },
-  { 
-    id: 72, 
-    name: 'Teddy Plain Duvet Cover and Pillowcase Set – Pink', 
-    price: '£19.02 – £28.97', 
-    image: '/teddy-plain-pink.jpg', 
-    hoverImage: '/teddy-plain-pink-hover.jpg', 
-    discount: '-62%',
+  {
+    id: 56,
+    name: "Teddy Plain Duvet Cover and Pillowcase Set – Pink",
+    price: "£19.02 – £28.97",
+    image: '/teddy-duvet56.jpg',
+    hoverImage: '/teddy-duvet56-hover.jpg',
+    discount: "-62%",
+    isSoldOut: false,
     color: 'Pink',
     sizes: {
       single: true,
@@ -1138,13 +921,14 @@ const products: Product[] = [
       superKing: true
     }
   },
-  { 
-    id: 73, 
-    name: 'Teddy Plain Duvet Cover and Pillowcase Set – Red', 
-    price: '£19.02 – £28.97', 
-    image: '/teddy-plain-red.jpg', 
-    hoverImage: '/teddy-plain-red-hover.jpg', 
-    discount: '-62%',
+  {
+    id: 57,
+    name: "Teddy Plain Duvet Cover and Pillowcase Set – Red",
+    price: "£19.02 – £28.97",
+    image: '/teddy-duvet57.jpg',
+    hoverImage: '/teddy-duvet57-hover.jpg',
+    discount: "-62%",
+    isSoldOut: false,
     color: 'Red',
     sizes: {
       single: true,
@@ -1153,13 +937,14 @@ const products: Product[] = [
       superKing: true
     }
   },
-  { 
-    id: 74, 
-    name: 'Teddy Plain Duvet Cover and Pillowcase Set – Silver', 
-    price: '£19.02 – £28.97', 
-    image: '/teddy-plain-silver.jpg', 
-    hoverImage: '/teddy-plain-silver-hover.jpg', 
-    discount: '-62%',
+  {
+    id: 58,
+    name: "Teddy Plain Duvet Cover and Pillowcase Set – Silver",
+    price: "£19.02 – £28.97",
+    image: '/teddy-duvet58.jpg',
+    hoverImage: '/teddy-duvet58-hover.jpg',
+    discount: "-62%",
+    isSoldOut: false,
     color: 'Silver',
     sizes: {
       single: true,
@@ -1168,29 +953,30 @@ const products: Product[] = [
       superKing: true
     }
   },
-  { 
-    id: 75, 
-    name: 'Teddy Popcorn Duvet Cover and Pillowcase Set – Coral', 
-    price: '£49.99 – £69.99', 
-    image: '/teddy-popcorn-coral.jpg', 
-    hoverImage: '/teddy-popcorn-coral-hover.jpg', 
-    discount: '',
+  {
+    id: 59,
+    name: "Teddy Popcorn Duvet Cover and Pillowcase Set – Coral",
+    price: "£49.99 – £69.99",
+    image: '/teddy-duvet59.jpg',
+    hoverImage: '/teddy-duvet59-hover.jpg',
+    discount: "",
     isSoldOut: true,
     color: 'Coral',
     sizes: {
-      single: false,
-      double: false,
-      king: false,
-      superKing: false
+      single: true,
+      double: true,
+      king: true,
+      superKing: true
     }
   },
-  { 
-    id: 76, 
-    name: 'Teddy Popcorn Duvet Cover and Pillowcase Set – Cream', 
-    price: '£49.99 – £69.99', 
-    image: '/teddy-popcorn-cream.jpg', 
-    hoverImage: '/teddy-popcorn-cream-hover.jpg', 
-    discount: '',
+  {
+    id: 60,
+    name: "Teddy Popcorn Duvet Cover and Pillowcase Set – Cream",
+    price: "£49.99 – £69.99",
+    image: '/teddy-duvet60.jpg',
+    hoverImage: '/teddy-duvet60-hover.jpg',
+    discount: "",
+    isSoldOut: false,
     color: 'Cream',
     sizes: {
       single: true,
@@ -1199,13 +985,14 @@ const products: Product[] = [
       superKing: true
     }
   },
-  { 
-    id: 77, 
-    name: 'Teddy Popcorn Duvet Cover and Pillowcase Set – Mink', 
-    price: '£49.99 – £69.99', 
-    image: '/teddy-popcorn-mink.jpg', 
-    hoverImage: '/teddy-popcorn-mink-hover.jpg', 
-    discount: '',
+  {
+    id: 61,
+    name: "Teddy Popcorn Duvet Cover and Pillowcase Set – Mink",
+    price: "£49.99 – £69.99",
+    image: '/teddy-duvet61.jpg',
+    hoverImage: '/teddy-duvet61-hover.jpg',
+    discount: "",
+    isSoldOut: false,
     color: 'Mink',
     sizes: {
       single: true,
@@ -1214,61 +1001,62 @@ const products: Product[] = [
       superKing: true
     }
   },
-  { 
-    id: 78, 
-    name: 'Teddy Popcorn Duvet Cover and Pillowcase Set – Ochre', 
-    price: '£49.99 – £69.99', 
-    image: '/teddy-popcorn-ochre.jpg', 
-    hoverImage: '/teddy-popcorn-ochre-hover.jpg', 
-    discount: '',
+  {
+    id: 62,
+    name: "Teddy Popcorn Duvet Cover and Pillowcase Set – Ochre",
+    price: "£49.99 – £69.99",
+    image: '/teddy-duvet62.jpg',
+    hoverImage: '/teddy-duvet62-hover.jpg',
+    discount: "",
     isSoldOut: true,
     color: 'Ochre',
     sizes: {
-      single: false,
-      double: false,
-      king: false,
-      superKing: false
+      single: true,
+      double: true,
+      king: true,
+      superKing: true
     }
   },
-  { 
-    id: 79, 
-    name: 'Teddy Popcorn Duvet Cover and Pillowcase Set – Rust', 
-    price: '£49.99 – £69.99', 
-    image: '/teddy-popcorn-rust.jpg', 
-    hoverImage: '/teddy-popcorn-rust-hover.jpg', 
-    discount: '',
+  {
+    id: 63,
+    name: "Teddy Popcorn Duvet Cover and Pillowcase Set – Rust",
+    price: "£49.99 – £69.99",
+    image: '/teddy-duvet63.jpg',
+    hoverImage: '/teddy-duvet63-hover.jpg',
+    discount: "",
     isSoldOut: true,
     color: 'Rust',
     sizes: {
-      single: false,
-      double: false,
-      king: false,
-      superKing: false
+      single: true,
+      double: true,
+      king: true,
+      superKing: true
     }
   },
-  { 
-    id: 80, 
-    name: 'Teddy Reversible Duvet Cover and Pillowcase Set – Blue/Light Blue', 
-    price: '£49.99 – £69.99', 
-    image: '/teddy-reversible-blue.jpg', 
-    hoverImage: '/teddy-reversible-blue-hover.jpg', 
-    discount: '',
+  {
+    id: 64,
+    name: "Teddy Reversible Duvet Cover and Pillowcase Set – Blue/Light Blue",
+    price: "£49.99 – £69.99",
+    image: '/teddy-duvet64.jpg',
+    hoverImage: '/teddy-duvet64-hover.jpg',
+    discount: "",
     isSoldOut: true,
     color: 'Blue/Light Blue',
     sizes: {
-      single: false,
-      double: false,
-      king: false,
-      superKing: false
+      single: true,
+      double: true,
+      king: true,
+      superKing: true
     }
   },
-  { 
-    id: 81, 
-    name: 'Teddy Reversible Duvet Cover and Pillowcase Set – Blush Pink/Grey', 
-    price: '£49.99 – £69.99', 
-    image: '/teddy-reversible-blush-grey.jpg', 
-    hoverImage: '/teddy-reversible-blush-grey-hover.jpg', 
-    discount: '',
+  {
+    id: 65,
+    name: "Teddy Reversible Duvet Cover and Pillowcase Set – Blush Pink/Grey",
+    price: "£49.99 – £69.99",
+    image: '/teddy-duvet65.jpg',
+    hoverImage: '/teddy-duvet65-hover.jpg',
+    discount: "",
+    isSoldOut: false,
     color: 'Blush Pink/Grey',
     sizes: {
       single: true,
@@ -1277,29 +1065,30 @@ const products: Product[] = [
       superKing: true
     }
   },
-  { 
-    id: 82, 
-    name: 'Teddy Reversible Duvet Cover and Pillowcase Set – Charcoal/Grey', 
-    price: '£49.99 – £69.99', 
-    image: '/teddy-reversible-charcoal-grey.jpg', 
-    hoverImage: '/teddy-reversible-charcoal-grey-hover.jpg', 
-    discount: '',
+  {
+    id: 66,
+    name: "Teddy Reversible Duvet Cover and Pillowcase Set – Charcoal/Grey",
+    price: "£49.99 – £69.99",
+    image: '/teddy-duvet66.jpg',
+    hoverImage: '/teddy-duvet66-hover.jpg',
+    discount: "",
     isSoldOut: true,
     color: 'Charcoal/Grey',
     sizes: {
-      single: false,
-      double: false,
-      king: false,
-      superKing: false
+      single: true,
+      double: true,
+      king: true,
+      superKing: true
     }
   },
-  { 
-    id: 83, 
-    name: 'Teddy Reversible Duvet Cover and Pillowcase Set – Dark Pink/Pink', 
-    price: '£49.99 – £69.99', 
-    image: '/teddy-reversible-dark-pink.jpg', 
-    hoverImage: '/teddy-reversible-dark-pink-hover.jpg', 
-    discount: '',
+  {
+    id: 67,
+    name: "Teddy Reversible Duvet Cover and Pillowcase Set – Dark Pink/Pink",
+    price: "£49.99 – £69.99",
+    image: '/teddy-duvet67.jpg',
+    hoverImage: '/teddy-duvet67-hover.jpg',
+    discount: "",
+    isSoldOut: false,
     color: 'Dark Pink/Pink',
     sizes: {
       single: true,
@@ -1308,93 +1097,94 @@ const products: Product[] = [
       superKing: true
     }
   },
-  { 
-    id: 84, 
-    name: 'Teddy Reversible Duvet Cover and Pillowcase Set – Deep Red/Charcoal', 
-    price: '£49.99 – £69.99', 
-    image: '/teddy-reversible-red-charcoal.jpg', 
-    hoverImage: '/teddy-reversible-red-charcoal-hover.jpg', 
-    discount: '',
+  {
+    id: 68,
+    name: "Teddy Reversible Duvet Cover and Pillowcase Set – Deep Red/Charcoal",
+    price: "£49.99 – £69.99",
+    image: '/teddy-duvet68.jpg',
+    hoverImage: '/teddy-duvet68-hover.jpg',
+    discount: "",
     isSoldOut: true,
     color: 'Deep Red/Charcoal',
     sizes: {
-      single: false,
-      double: false,
-      king: false,
-      superKing: false
+      single: true,
+      double: true,
+      king: true,
+      superKing: true
     }
   },
-  { 
-    id: 85, 
-    name: 'Teddy Reversible Duvet Cover and Pillowcase Set – Green/Light Green', 
-    price: '£49.99 – £69.99', 
-    image: '/teddy-reversible-green.jpg', 
-    hoverImage: '/teddy-reversible-green-hover.jpg', 
-    discount: '',
+  {
+    id: 69,
+    name: "Teddy Reversible Duvet Cover and Pillowcase Set – Green/Light Green",
+    price: "£49.99 – £69.99",
+    image: '/teddy-duvet69.jpg',
+    hoverImage: '/teddy-duvet69-hover.jpg',
+    discount: "",
     isSoldOut: true,
     color: 'Green/Light Green',
     sizes: {
-      single: false,
-      double: false,
-      king: false,
-      superKing: false
+      single: true,
+      double: true,
+      king: true,
+      superKing: true
     }
   },
-  { 
-    id: 86, 
-    name: 'Teddy Reversible Duvet Cover and Pillowcase Set – Lilac/Grey', 
-    price: '£49.99 – £69.99', 
-    image: '/teddy-reversible-lilac.jpg', 
-    hoverImage: '/teddy-reversible-lilac-hover.jpg', 
-    discount: '',
+  {
+    id: 70,
+    name: "Teddy Reversible Duvet Cover and Pillowcase Set – Lilac/Grey",
+    price: "£49.99 – £69.99",
+    image: '/teddy-duvet70.jpg',
+    hoverImage: '/teddy-duvet70-hover.jpg',
+    discount: "",
     isSoldOut: true,
     color: 'Lilac/Grey',
     sizes: {
-      single: false,
-      double: false,
-      king: false,
-      superKing: false
+      single: true,
+      double: true,
+      king: true,
+      superKing: true
     }
   },
-  { 
-    id: 87, 
-    name: 'Teddy Reversible Duvet Cover and Pillowcase Set – Ochre/Grey', 
-    price: '£49.99 – £69.99', 
-    image: '/teddy-reversible-ochre.jpg', 
-    hoverImage: '/teddy-reversible-ochre-hover.jpg', 
-    discount: '',
+  {
+    id: 71,
+    name: "Teddy Reversible Duvet Cover and Pillowcase Set – Ochre/Grey",
+    price: "£49.99 – £69.99",
+    image: '/teddy-duvet71.jpg',
+    hoverImage: '/teddy-duvet71-hover.jpg',
+    discount: "",
     isSoldOut: true,
     color: 'Ochre/Grey',
     sizes: {
-      single: false,
-      double: false,
-      king: false,
-      superKing: false
+      single: true,
+      double: true,
+      king: true,
+      superKing: true
     }
   },
-  { 
-    id: 88, 
-    name: 'Teddy Reversible Duvet Cover and Pillowcase Set – Rust/Grey', 
-    price: '£49.99 – £69.99', 
-    image: '/teddy-reversible-rust.jpg', 
-    hoverImage: '/teddy-reversible-rust-hover.jpg', 
-    discount: '',
+  {
+    id: 72,
+    name: "Teddy Reversible Duvet Cover and Pillowcase Set – Rust/Grey",
+    price: "£49.99 – £69.99",
+    image: '/teddy-duvet72.jpg',
+    hoverImage: '/teddy-duvet72-hover.jpg',
+    discount: "",
     isSoldOut: true,
     color: 'Rust/Grey',
     sizes: {
-      single: false,
-      double: false,
-      king: false,
-      superKing: false
+      single: true,
+      double: true,
+      king: true,
+      superKing: true
     }
   },
-  { 
-    id: 89, 
-    name: 'Teddy Star Duvet Cover and Pillowcase Set – Grey', 
-    price: '£49.99 – £69.99', 
-    image: '/teddy-star-grey.jpg', 
-    hoverImage: '/teddy-star-grey-hover.jpg', 
-    discount: '',
+  {
+    id: 73,
+    name: "Teddy Star Duvet Cover and Pillowcase Set – Grey",
+    price: "£49.99 – £69.99",
+    image: '/teddy-duvet73.jpg',
+    hoverImage: '/teddy-duvet73-hover.jpg',
+    discount: "",
+    isSoldOut: false,
     color: 'Grey',
     sizes: {
       single: true,
@@ -1403,13 +1193,14 @@ const products: Product[] = [
       superKing: true
     }
   },
-  { 
-    id: 90, 
-    name: 'Teddy Star Duvet Cover and Pillowcase Set – Navy', 
-    price: '£49.99 – £69.99', 
-    image: '/teddy-star-navy.jpg', 
-    hoverImage: '/teddy-star-navy-hover.jpg', 
-    discount: '',
+  {
+    id: 74,
+    name: "Teddy Star Duvet Cover and Pillowcase Set – Navy",
+    price: "£49.99 – £69.99",
+    image: '/teddy-duvet74.jpg',
+    hoverImage: '/teddy-duvet74-hover.jpg',
+    discount: "",
+    isSoldOut: false,
     color: 'Navy',
     sizes: {
       single: true,
@@ -1418,29 +1209,30 @@ const products: Product[] = [
       superKing: true
     }
   },
-  { 
-    id: 91, 
-    name: 'Teddy Star Duvet Cover and Pillowcase Set – Red', 
-    price: '£49.99 – £69.99', 
-    image: '/teddy-star-red.jpg', 
-    hoverImage: '/teddy-star-red-hover.jpg', 
-    discount: '',
+  {
+    id: 75,
+    name: "Teddy Star Duvet Cover and Pillowcase Set – Red",
+    price: "£49.99 – £69.99",
+    image: '/teddy-duvet75.jpg',
+    hoverImage: '/teddy-duvet75-hover.jpg',
+    discount: "",
     isSoldOut: true,
     color: 'Red',
     sizes: {
-      single: false,
-      double: false,
-      king: false,
-      superKing: false
+      single: true,
+      double: true,
+      king: true,
+      superKing: true
     }
   },
-  { 
-    id: 92, 
-    name: 'Unicorn Star Foil Duvet Cover and Pillowcase Set – Charcoal', 
-    price: '£19.02 – £28.97', 
-    image: '/unicorn-star-charcoal.jpg', 
-    hoverImage: '/unicorn-star-charcoal-hover.jpg', 
-    discount: '-62%',
+  {
+    id: 76,
+    name: "Unicorn Star Foil Duvet Cover and Pillowcase Set – Charcoal",
+    price: "£19.02 – £28.97",
+    image: '/teddy-duvet76.jpg',
+    hoverImage: '/teddy-duvet76-hover.jpg',
+    discount: "-62%",
+    isSoldOut: false,
     color: 'Charcoal',
     sizes: {
       single: true,
@@ -1449,13 +1241,14 @@ const products: Product[] = [
       superKing: true
     }
   },
-  { 
-    id: 93, 
-    name: 'Unicorn Star Foil Duvet Cover and Pillowcase Set – Cream', 
-    price: '£19.02 – £28.97', 
-    image: '/unicorn-star-cream.jpg', 
-    hoverImage: '/unicorn-star-cream-hover.jpg', 
-    discount: '-62%',
+  {
+    id: 77,
+    name: "Unicorn Star Foil Duvet Cover and Pillowcase Set – Cream",
+    price: "£19.02 – £28.97",
+    image: '/teddy-duvet77.jpg',
+    hoverImage: '/teddy-duvet77-hover.jpg',
+    discount: "-62%",
+    isSoldOut: false,
     color: 'Cream',
     sizes: {
       single: true,
@@ -1464,29 +1257,30 @@ const products: Product[] = [
       superKing: true
     }
   },
-  { 
-    id: 94, 
-    name: 'Unicorn Star Foil Duvet Cover and Pillowcase Set – Grey', 
-    price: '£19.02 – £28.97', 
-    image: '/unicorn-star-grey.jpg', 
-    hoverImage: '/unicorn-star-grey-hover.jpg', 
-    discount: '-62%',
+  {
+    id: 78,
+    name: "Unicorn Star Foil Duvet Cover and Pillowcase Set – Grey",
+    price: "£19.02 – £28.97",
+    image: '/teddy-duvet78.jpg',
+    hoverImage: '/teddy-duvet78-hover.jpg',
+    discount: "-62%",
     isSoldOut: true,
     color: 'Grey',
     sizes: {
-      single: false,
-      double: false,
-      king: false,
-      superKing: false
+      single: true,
+      double: true,
+      king: true,
+      superKing: true
     }
   },
-  { 
-    id: 95, 
-    name: 'Unicorn Star Foil Duvet Cover and Pillowcase Set – Natural', 
-    price: '£19.02 – £28.97', 
-    image: '/unicorn-star-natural.jpg', 
-    hoverImage: '/unicorn-star-natural-hover.jpg', 
-    discount: '-62%',
+  {
+    id: 79,
+    name: "Unicorn Star Foil Duvet Cover and Pillowcase Set – Natural",
+    price: "£19.02 – £28.97",
+    image: '/teddy-duvet79.jpg',
+    hoverImage: '/teddy-duvet79-hover.jpg',
+    discount: "-62%",
+    isSoldOut: false,
     color: 'Natural',
     sizes: {
       single: true,
@@ -1495,13 +1289,14 @@ const products: Product[] = [
       superKing: true
     }
   },
-  { 
-    id: 96, 
-    name: 'Unicorn Star Foil Duvet Cover and Pillowcase Set – Pink', 
-    price: '£19.02 – £28.97', 
-    image: '/unicorn-star-pink.jpg', 
-    hoverImage: '/unicorn-star-pink-hover.jpg', 
-    discount: '-62%',
+  {
+    id: 80,
+    name: "Unicorn Star Foil Duvet Cover and Pillowcase Set – Pink",
+    price: "£19.02 – £28.97",
+    image: '/teddy-duvet80.jpg',
+    hoverImage: '/teddy-duvet80-hover.jpg',
+    discount: "-62%",
+    isSoldOut: false,
     color: 'Pink',
     sizes: {
       single: true,
@@ -1510,13 +1305,14 @@ const products: Product[] = [
       superKing: true
     }
   },
-  { 
-    id: 97, 
-    name: 'Unicorn Star Foil Duvet Cover and Pillowcase Set – Purple', 
-    price: '£19.02 – £28.97', 
-    image: '/unicorn-star-purple.jpg', 
-    hoverImage: '/unicorn-star-purple-hover.jpg', 
-    discount: '-62%',
+  {
+    id: 81,
+    name: "Unicorn Star Foil Duvet Cover and Pillowcase Set – Purple",
+    price: "£19.02 – £28.97",
+    image: '/teddy-duvet81.jpg',
+    hoverImage: '/teddy-duvet81-hover.jpg',
+    discount: "-62%",
+    isSoldOut: false,
     color: 'Purple',
     sizes: {
       single: true,

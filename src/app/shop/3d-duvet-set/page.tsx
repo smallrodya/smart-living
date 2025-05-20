@@ -53,21 +53,7 @@ const products: Product[] = [
       king: true
     }
   },
-  { 
-    id: 3, 
-    name: '3D Duvet Cover and Pillowcase Set – Bulldog', 
-    price: '£14.99 – £17.72', 
-    image: '/3d-bulldog.jpg', 
-    hoverImage: '/3d-bulldog.jpg', 
-    discount: '-71%',
-    isSoldOut: true,
-    color: 'Bulldog',
-    sizes: {
-      single: false,
-      double: false,
-      king: false
-    }
-  },
+
   { 
     id: 4, 
     name: '3D Duvet Cover and Pillowcase Set – Cat', 
@@ -122,21 +108,6 @@ const products: Product[] = [
       single: true,
       double: true,
       king: true
-    }
-  },
-  { 
-    id: 8, 
-    name: '3D Duvet Cover and Pillowcase Set – Penguin', 
-    price: '£14.99 – £17.72', 
-    image: '/3d-penguin.jpg', 
-    hoverImage: '/3d-penguin.jpg', 
-    discount: '-71%',
-    isSoldOut: true,
-    color: 'Penguin',
-    sizes: {
-      single: false,
-      double: false,
-      king: false
     }
   },
   { 
@@ -211,21 +182,6 @@ const products: Product[] = [
     }
   },
   { 
-    id: 14, 
-    name: '3D Duvet Cover and Pillowcase Set – Tiger Face Brown', 
-    price: '£14.99 – £17.72', 
-    image: '/3d-tiger-face-brown.jpg', 
-    hoverImage: '/3d-tiger-face-brown.jpg', 
-    discount: '-71%',
-    isSoldOut: true,
-    color: 'Tiger Face Brown',
-    sizes: {
-      single: false,
-      double: false,
-      king: false
-    }
-  },
-  { 
     id: 15, 
     name: '3D Duvet Cover and Pillowcase Set – Tiger Face White', 
     price: '£14.99 – £17.72', 
@@ -238,20 +194,6 @@ const products: Product[] = [
       single: false,
       double: false,
       king: false
-    }
-  },
-  { 
-    id: 16, 
-    name: '3D Duvet Cover and Pillowcase Set – White Tiger', 
-    price: '£14.99 – £17.72', 
-    image: '/3d-white-tiger.jpg', 
-    hoverImage: '/3d-white-tiger.jpg', 
-    discount: '-71%',
-    color: 'White Tiger',
-    sizes: {
-      single: true,
-      double: true,
-      king: true
     }
   },
   { 
