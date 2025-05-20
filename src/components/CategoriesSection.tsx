@@ -6,7 +6,7 @@ import styles from './CategoriesSection.module.css';
 
 interface MenuColumn {
   title?: string;
-  items: Array<{ label: string; href?: string; color?: string; img?: string; description?: string }>;
+  items: Array<{ label: string; href?: string; color?: string; img?: string; description?: string; labelColor?: string }>;
 }
 
 interface MegaMenu {
@@ -19,25 +19,22 @@ const megaMenus: MegaMenu[] = [
     name: 'BEDDING',
     columns: [
       {
-        title: 'SHOP BY CATEGORY',
+        title: 'CATEGORY',
         items: [
-          { label: 'Shop Duvet Set by Type', href: '/shop-duvet-set-by-type' },
-          { label: 'Shop Kids collection by type', href: '/kids-collection-by-type' },
-          { label: 'Shop by Sheet Type', href: '/shop-by-sheet-type' },
-          { label: 'Shop all', href: '/shop-all-bedding' },
-          
-        ],
-      },
-      {
-        title: 'DUVETS & PILLOWS',
-        items: [
-          { label: 'Duvets', href: '/category/bedding/duvets' },
+          { label: 'Duvet Covers', href: '/category/bedding/duvet-covers' },
+          { label: 'Fitted Sheets', href: '/category/bedding/fitted-sheets' },
+          { label: 'Pillowcases', href: '/category/bedding/pillowcases' },
+          { label: 'Duvets & Pillows', href: '/category/bedding/duvets-pillows' },
           { label: 'Coverless Duvets', href: '/category/bedding/coverless-duvets' },
-          { label: 'Pillows', href: '/category/bedding/pillows' },
+          { label: 'Mattresses & Protector', href: '/category/bedding/mattresses-protector' },
+          { label: 'Fleece Bedding', href: '/category/bedding/fleece' },
+          { label: 'Plain Dye Bedding', href: '/category/bedding/plain-dye' },
+          { label: 'Weighted Blankets', href: '/category/bedding/weighted-blankets' },
+          { label: 'Kids Bedding', href: '/category/bedding/kids' },
         ],
       },
       {
-        title: 'SHOP BY STYLE',
+        title: 'STYLE',
         items: [
           { label: 'Fleece', href: '/category/bedding/fleece' },
           { label: 'Plain', href: '/category/bedding/plain' },
@@ -47,7 +44,7 @@ const megaMenus: MegaMenu[] = [
         ],
       },
       {
-        title: 'SHOP BY SIZE',
+        title: 'SIZE',
         items: [
           { label: 'Single', href: '/category/bedding/single' },
           { label: 'Double', href: '/category/bedding/double' },
@@ -56,7 +53,7 @@ const megaMenus: MegaMenu[] = [
         ],
       },
       {
-        title: 'POPULAR COLOURS',
+        title: 'TRENDING COLOURS',
         items: [
           { label: 'Black', color: '#222' },
           { label: 'Grey', color: '#888' },
@@ -74,8 +71,8 @@ const megaMenus: MegaMenu[] = [
       },
       {
         items: [
-          { img: '/printed-duvet68.jpg', label: 'Printed Duvet', description: 'Shop Now', href: '/shop/printed-duvet-set' },
-          { img: '/premium-duvet139.jpg', label: 'Premium Duvet', description: 'Shop Now', href: '/shop-duvet-set-by-type/premium-duvet-set' },
+          { img: '/printed-duvet68.jpg', label: 'New in summer collection', labelColor: 'red', description: 'Shop Now', href: '/shop/printed-duvet-set' },
+          { img: '/premium-duvet139.jpg', label: 'Summer sale upto 70% off', labelColor: 'red', description: 'Shop Now', href: '/shop-duvet-set-by-type/premium-duvet-set' },
         ],
       },
     ],
@@ -84,24 +81,56 @@ const megaMenus: MegaMenu[] = [
     name: 'RUGS & MATS',
     columns: [
       {
-        title: 'MATS',
+        title: 'MATS TYPES',
         items: [
-          { label: 'Shop Mats by Colour', href: '/category/rugs-mats/mats-colour' },
-          { label: 'Shop Mats by Design', href: '/category/rugs-mats/mats-design' },
-          { label: 'Shop Mats from £5.49', href: '/category/rugs-mats/mats-from-5.49' },
-          { label: 'Shop All', href: '/category/rugs-mats' },
+          { label: 'Bath Mats', href: '/category/rugs-mats/mats/bath-mats' },
+          { label: 'Door Mats', href: '/category/rugs-mats/mats/door-mats' },
+          { label: 'Kitchen Mats', href: '/category/rugs-mats/mats/kitchen-mats' },
+          { label: 'Anti-Fatigue Mats', href: '/category/rugs-mats/mats/anti-fatigue-mats' },
+          { label: 'Outdoor Mats', href: '/category/rugs-mats/mats/outdoor-mats' },
+          { label: 'Hallway Runners', href: '/category/rugs-mats/mats/hallway-runners' },
         ],
       },
       {
-        title: 'RUGS',
+        title: 'RUGS TYPES',
         items: [
-          { label: 'Shop Rugs by Type', href: '/category/rugs/rugtype' },
-          { label: 'Shop Rugs by Colour', href: '/category/rugs-mats/rugs-colour' },
-          { label: 'Shop Rugs from £10.99', href: '/category/rugs-mats/rugs-from-10.99' },
-          { label: 'Shop All', href: '/category/rugs-mats' },
-          { label: 'Carved Rugs from £12.99', href: '/category/rugs/rugtype/carved-rugs' },
-          { label: 'Shaggy Rugs from £11.98', href: '/category/rugs/rugtype/shaggy-rugs' },
-          { label: 'Non Slip Mats from £5.49', href: '/category/rugs/rugtype/non-slip-mats' },
+          { label: 'Shaggy Rugs', href: '/category/rugs/rugtype/shaggy-rugs' },
+          { label: 'Carved Rugs', href: '/category/rugs/rugtype/carved-rugs' },
+          { label: 'Reversible Rugs', href: '/category/rugs/rugtype/reversible-rugs' },
+          { label: 'Polyester shaggy rugs', href: '/category/rugs/rugtype/polyester-shag-rugs' },
+          { label: 'Soft Shaggy Rugs', href: '/category/rugs/rugtype/soft-shaggy-rugs' },
+        ],
+      },
+      {
+        title: 'SHOP BY SIZE',
+        items: [
+          { label: 'Small', href: '/category/rugs-mats/small' },
+          { label: 'Medium', href: '/category/rugs-mats/medium' },
+          { label: 'Large', href: '/category/rugs-mats/large' },
+          { label: 'Runner', href: '/category/rugs-mats/runner' },
+        ],
+      },
+      {
+        title: 'TRENDING COLOURS',
+        items: [
+          { label: 'Black', color: '#222' },
+          { label: 'Grey', color: '#888' },
+          { label: 'White', color: '#fff' },
+          { label: 'Cream', color: '#f5f5dc' },
+          { label: 'Pink', color: '#f7d6e0' },
+          { label: 'Red', color: '#e53935' },
+          { label: 'Orange', color: '#ff9800' },
+          { label: 'Yellow', color: '#ffe066' },
+          { label: 'Green', color: '#4caf50' },
+          { label: 'Teal', color: '#00bfae' },
+          { label: 'Purple', color: '#9c27b0' },
+          { label: 'Brown', color: '#795548' },
+        ],
+      },
+      {
+        items: [
+          { img: '/carved15.jpg', label: 'Explore our range of stylish rugs for every room!', labelColor: 'red', description: 'Shop Now', href: '/category/rugs-mats/rugs' },
+          { img: '/carved16.jpg', label: 'Find the perfect mat for your hallway or bathroom.', labelColor: 'red', description: 'Shop Now', href: '/category/rugs-mats/mats' },
         ],
       },
     ],
@@ -197,6 +226,16 @@ const megaMenus: MegaMenu[] = [
       },
     ],
   },
+  {
+    name: 'CLEARANCE',
+    columns: [
+      {
+        items: [
+          { label: 'Clearance', href: '/category/clearance', labelColor: 'red' },
+        ],
+      },
+    ],
+  },
 ];
 
 const CategoriesSection = () => {
@@ -231,14 +270,19 @@ const CategoriesSection = () => {
             aria-expanded={hoveredIdx === idx && dropdownOpen}
             role="menuitem"
           >
-            <span className={styles.menuTitle}>{cat.name}</span>
+            <span
+              className={styles.menuTitle}
+              style={cat.name === 'CLEARANCE' ? { color: 'red' } : undefined}
+            >
+              {cat.name}
+            </span>
             {hoveredIdx === idx && dropdownOpen && (
               <div className={styles.dropdown} role="menu">
                 <div className={styles.dropdownContent}>
                   {cat.columns.map((col, colIdx) => (
                     <div key={colIdx} className={styles.dropdownCol}>
                       {col.title && <div className={styles.dropdownColTitle}>{col.title}</div>}
-                      {col.title === 'POPULAR COLOURS' ? (
+                      {col.title === 'TRENDING COLOURS' ? (
                         <div className={styles.colorDotsGrid}>
                           {col.items.map((item, itemIdx) => (
                             <span key={itemIdx} className={styles.colorDot} title={item.label} style={{ background: item.color }}></span>
@@ -251,7 +295,7 @@ const CategoriesSection = () => {
                               <div key={itemIdx} className={styles.promoBlock}>
                                 <Link href={item.href || '#'}>
                                   <Image src={item.img ?? '/placeholder.jpg'} alt={item.label} width={180} height={120} className={styles.promoImg} />
-                                  <div className={styles.promoText}>{item.label}</div>
+                                  <div className={styles.promoText} style={item.labelColor ? { color: item.labelColor } : undefined}>{item.label}</div>
                                   <div className={styles.promoDesc}>{item.description}</div>
                                 </Link>
                               </div>
