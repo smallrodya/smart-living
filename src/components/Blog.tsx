@@ -400,8 +400,8 @@ export default function Blog() {
             aria-label="Previous blog" 
             style={{
               position: 'absolute',
-              left: '20%',
-              top: '50%',
+              left: '7%',
+              top: '52%',
               transform: 'translate(-50%, -50%)',
               background: 'rgba(255,255,255,0.9)',
               border: 'none',
@@ -425,8 +425,8 @@ export default function Blog() {
             aria-label="Next blog" 
             style={{
               position: 'absolute',
-              right: '20%',
-              top: '50%',
+              right: '7%',
+              top: '52%',
               transform: 'translate(50%, -50%)',
               background: 'rgba(255,255,255,0.9)',
               border: 'none',
@@ -436,7 +436,7 @@ export default function Blog() {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+              boxShadow: '0 4px 12px rgba(255, 0, 0, 0.1)',
               cursor: 'pointer',
               zIndex: 3,
             }}

@@ -25,8 +25,8 @@ interface Product {
 }
 
 const products: Product[] = [
-  {
-    id: 1,
+  { 
+    id: 1, 
     name: "Chiswick Pintuck Duvet Cover and Pillowcase Set – Blush Pink",
     price: "£22.05 – £31.13",
     image: '/teddy-duvet1.jpg',
@@ -1346,16 +1346,8 @@ const TeddyDuvetSetPage = () => {
   });
 
   const isInWishlist = (productId: number) => {
-    try {
-      const savedWishlist = localStorage.getItem('wishlist');
-      if (savedWishlist) {
-        const items = JSON.parse(savedWishlist);
-        return Array.isArray(items) && items.some(item => item.id === `teddy_${productId}`);
-      }
-    } catch (error) {
-      console.error('Error checking wishlist:', error);
-    }
-    return false;
+    const prefixedId = `teddy_${productId}`;
+    return wishlist.includes(prefixedId);
   };
 
   useEffect(() => {

@@ -2057,31 +2057,44 @@ export default function PrintedDuvetSet() {
   // Extract unique colors from products
   const uniqueColors = Array.from(new Set(products.map(p => p.color)));
 
-  // Filter products based on price, color and size
-  const filteredProducts = products.filter(product => {
-    const [minPrice, maxPrice] = priceRange;
-    const price = parseFloat(product.price.split('£')[1].split('–')[0].trim());
-    const colorMatch = selectedColors.length === 0 || selectedColors.includes(product.color);
-    const sizeMatch = selectedSizes.length === 0 || selectedSizes.some(size => 
-      size === 'single' ? product.sizes.single :
-      size === 'double' ? product.sizes.double :
-      size === 'king' ? product.sizes.king :
-      size === 'superKing' ? product.sizes.superKing : false
-    );
-    return price >= minPrice && price <= maxPrice && colorMatch && sizeMatch;
-  });
+  const isInWishlist = (productId: number) => {
+    try {
+      const savedWishlist = localStorage.getItem('wishlist');
+      if (savedWishlist) {
+        const items = JSON.parse(savedWishlist);
+        return Array.isArray(items) && items.some(item => item.id === `printed_duvet_${productId}`);
+      }
+    } catch (error) {
+      console.error('Error checking wishlist:', error);
+    }
+    return false;
+  };
 
   useEffect(() => {
     const savedWishlist = localStorage.getItem('wishlist');
     if (savedWishlist) {
-      const items = JSON.parse(savedWishlist);
-      setWishlist(items.map((item: any) => item.id));
+      try {
+        const items = JSON.parse(savedWishlist);
+        if (Array.isArray(items)) {
+          const printedDuvetItems = items.filter(item => 
+            item && 
+            typeof item === 'object' && 
+            'id' in item && 
+            typeof item.id === 'string' && 
+            item.id.startsWith('printed_duvet_')
+          );
+          setWishlist(printedDuvetItems.map(item => item.id));
+        }
+      } catch (error) {
+        console.error('Error parsing wishlist:', error);
+        setWishlist([]);
+      }
     }
   }, []);
 
   const toggleWishlist = (id: number) => {
     try {
-      const prefixedId = `printed_${id}`;
+      const prefixedId = `printed_duvet_${id}`;
       const savedWishlist = localStorage.getItem('wishlist');
       const existingItems = savedWishlist ? JSON.parse(savedWishlist) : [];
       
@@ -2119,6 +2132,20 @@ export default function PrintedDuvetSet() {
       console.error('Error toggling wishlist:', error);
     }
   };
+
+  // Filter products based on price, color and size
+  const filteredProducts = products.filter(product => {
+    const [minPrice, maxPrice] = priceRange;
+    const price = parseFloat(product.price.split('£')[1].split('–')[0].trim());
+    const colorMatch = selectedColors.length === 0 || selectedColors.includes(product.color);
+    const sizeMatch = selectedSizes.length === 0 || selectedSizes.some(size => 
+      size === 'single' ? product.sizes.single :
+      size === 'double' ? product.sizes.double :
+      size === 'king' ? product.sizes.king :
+      size === 'superKing' ? product.sizes.superKing : false
+    );
+    return price >= minPrice && price <= maxPrice && colorMatch && sizeMatch;
+  });
 
   return (
     <>
@@ -2571,7 +2598,7 @@ export default function PrintedDuvetSet() {
                       cursor: 'pointer',
                       boxShadow: '0 2px 12px rgba(0,0,0,0.15)',
                       transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                      transform: wishlist.includes(`printed_duvet_${product.id}`) ? 'scale(1.1)' : 'scale(1)',
+                      transform: isInWishlist(product.id) ? 'scale(1.1)' : 'scale(1)',
                       backdropFilter: 'blur(4px)'
                     }}
                     onMouseEnter={() => setHoveredButton(product.id)}
@@ -2581,7 +2608,7 @@ export default function PrintedDuvetSet() {
                       width="24"
                       height="24"
                       viewBox="0 0 24 24"
-                      fill={wishlist.includes(`printed_duvet_${product.id}`) ? '#e53935' : 'none'}
+                      fill={isInWishlist(product.id) ? '#e53935' : 'none'}
                       stroke="#e53935"
                       strokeWidth="2"
                       strokeLinecap="round"

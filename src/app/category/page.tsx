@@ -27,41 +27,33 @@ const categories: Category[] = [
         name: 'DUVET SET',
         links: [
           { label: 'Shop Duvet Set by Type', href: '/shop-duvet-set-by-type' },
-          { label: 'Shop Duvet Set by Colour', href: '/category/bedding/duvet-colour' },
-          { label: 'Shop Duvet Set under £10', href: '/category/bedding/duvet-under-10' },
-          { label: 'Clearance', href: '/category/bedding/clearance' },
           { label: 'Shop All', href: '/category/bedding/all' },
-          { label: 'Duvet Covers from £9.99', href: '/category/bedding/duvet-covers' },
         ],
       },
       {
         name: 'BED SHEETS',
         links: [
           { label: 'Shop by Sheet Type', href: '/category/bedding/sheets-type' },
-          { label: 'Shop by Sheet Colour', href: '/category/bedding/sheets-colour' },
-          { label: 'Shop from £4.49', href: '/category/bedding/sheets-sale' },
           { label: 'Shop All', href: '/category/bedding/sheets-all' },
         ],
       },
       {
         name: 'KIDS COLLECTION',
         links: [
-          { label: 'Kids collection by type', href: '/category/bedding/kids-type' },
-          { label: 'Shop by Colour', href: '/category/bedding/kids-colour' },
-          { label: 'Shop by Material', href: '/category/bedding/kids-material' },
+          { label: 'Shop Kids collection by type', href: '/category/bedding/kids-type' },
           { label: 'Shop All', href: '/category/bedding/kids-all' },
         ],
       },
       {
         name: 'BED LINEN',
         links: [
-          { label: 'Bed Linen from £4.49', href: '/category/bedding/bed-linen-sale' },
+          { label: 'Shop Bed Linen from £4.49', href: '/category/bedding/bed-linen-sale' },
         ],
       },
       {
         name: 'TEDDY SETS',
         links: [
-          { label: 'Teddy Sets from £11.99', href: '/category/bedding/teddy-sets' },
+          { label: 'Shop Teddy Sets from £11.99', href: '/category/bedding/teddy-sets' },
         ],
       },
     ],
@@ -73,9 +65,6 @@ const categories: Category[] = [
       {
         name: 'MATS',
         links: [
-          { label: 'Shop Mats by Colour', href: '/category/rugs/mats-colour' },
-          { label: 'Shop Mats by Design', href: '/category/rugs/mats-design' },
-          { label: 'Shop Mats from £5.49', href: '/category/rugs/mats-sale' },
           { label: 'Shop All', href: '/category/rugs/mats-all' },
         ],
       },
@@ -83,12 +72,7 @@ const categories: Category[] = [
         name: 'RUGS',
         links: [
           { label: 'Shop Rugs by Type', href: '/category/rugs/rugtype' },
-          { label: 'Shop Rugs by Colour', href: '/category/rugs/rugs-colour' },
-          { label: 'Shop Rugs from £10.99', href: '/category/rugs/rugs-sale' },
           { label: 'Shop All', href: '/category/rugs/rugs-all' },
-          { label: 'Carved Rugs from £12.99', href: '/category/rugs/rugtype/carved-rugs' },
-          { label: 'Shaggy Rugs from £11.98', href: '/category/rugs/rugtype/shaggy-rugs' },
-          { label: 'Non Slip Mats from £5.49', href: '/category/rugs/non-slip-mats' },
         ],
       },
     ],
@@ -101,18 +85,14 @@ const categories: Category[] = [
         name: 'TOWELS',
         links: [
           { label: 'Shop Towels by Design', href: '/category/throws/towels-design' },
-          { label: 'Shop Towel by Colour', href: '/category/throws/towels-colour' },
           { label: 'Shop All', href: '/category/throws/towels-all' },
-          { label: 'Towel Bales From £8.99', href: '/category/throws/towels-sale' },
         ],
       },
       {
         name: 'THROWS',
         links: [
           { label: 'Shop Throw by Type', href: '/category/throws/throw-type' },
-          { label: 'Shop Throw by Colour', href: '/category/throws/throw-colour' },
           { label: 'Shop All', href: '/category/throws/throw-all' },
-          { label: 'Throws from £11.99', href: '/category/throws/throw-sale' },
         ],
       },
     ],
@@ -137,7 +117,6 @@ const categories: Category[] = [
         name: 'CURTAINS',
         links: [
           { label: 'Shop by Curtain Type', href: '/category/curtains/curtain-type' },
-          { label: 'Shop by Curtain Colour', href: '/category/curtains/curtain-colour' },
           { label: 'Shop All', href: '/category/curtains/curtain-all' },
         ],
       },
