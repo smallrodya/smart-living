@@ -22,8 +22,6 @@ const Banner = () => {
   if (isMobile) {
     return <MobileBanner />;
   }
-  
-  width: '100%',
   const bannerStyles: React.CSSProperties = { 
     width: '100%',
     height: '800px',

@@ -4,7 +4,7 @@ import json
 import time
 
 def parse_premium_duvet_sets():
-    base_url = ""
+    base_url = "https://smart-living.co.uk/category/rugs-mats/mats/bath-mats/"
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
     }
