@@ -557,43 +557,31 @@ export default function Blog() {
                 textAlign: 'left',
               }}>
                 {selectedPost.content.split('\n\n').map((section, index) => {
-                  if (section.startsWith('1.') || section.startsWith('2.') || 
-                      section.startsWith('3.') || section.startsWith('4.') || 
-                      section.startsWith('5.') || section.startsWith('6.')) {
+                  if (/^\d+\./.test(section)) {
                     const [title, ...points] = section.split('\n');
                     return (
                       <div key={index} style={{ marginBottom: 40 }}>
                         <h3 style={{
-                          fontSize: 24,
-                          fontWeight: 600,
+                          fontSize: 22,
+                          fontWeight: 700,
                           color: '#111',
-                          marginBottom: 20,
-                          paddingBottom: 12,
+                          marginBottom: 16,
+                          paddingBottom: 10,
                           borderBottom: '2px solid #f0f0f0',
-                        }}>
-                          {title}
-                        </h3>
+                        }}>{title}</h3>
                         <ul style={{
-                          listStyle: 'none',
-                          padding: 0,
+                          listStyle: 'disc',
+                          paddingLeft: 28,
                           margin: 0,
                         }}>
-                          {points.map((point, pointIndex) => (
+                          {points.filter(Boolean).map((point, pointIndex) => (
                             <li key={pointIndex} style={{
-                              marginBottom: 12,
-                              paddingLeft: 24,
-                              position: 'relative',
+                              marginBottom: 10,
+                              fontSize: 17,
+                              color: '#333',
+                              lineHeight: 1.7,
                             }}>
-                              <span style={{
-                                position: 'absolute',
-                                left: 0,
-                                top: 8,
-                                width: 6,
-                                height: 6,
-                                borderRadius: '50%',
-                                background: '#111',
-                              }}/>
-                              {point.replace('- ', '')}
+                              {point.replace(/^- /, '')}
                             </li>
                           ))}
                         </ul>
@@ -622,8 +610,9 @@ export default function Blog() {
                     return (
                       <p key={index} style={{
                         marginBottom: 24,
-                        fontSize: 18,
+                        fontSize: 17,
                         lineHeight: 1.7,
+                        color: '#333',
                       }}>
                         {section}
                       </p>
