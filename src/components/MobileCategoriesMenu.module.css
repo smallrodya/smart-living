@@ -1,0 +1,160 @@
+.container {
+  width: 100%;
+  min-height: 100vh;
+  background: #f8f8f8;
+  padding: 16px;
+}
+
+.header {
+  margin-bottom: 24px;
+  padding: 16px 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.backButton {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #1a1a1a;
+  text-decoration: none;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.header h1 {
+  font-size: 24px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0;
+  text-align: center;
+}
+
+.categoriesList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.categoryItem {
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  border: 1px solid #1a1a1a;
+  background: #fff;
+  margin-bottom: 8px;
+}
+
+.categoryHeader {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  cursor: pointer;
+  position: relative;
+  background: #fff;
+}
+
+.categoryImageWrapper {
+  width: 40px;
+  height: 40px;
+  border-radius: 6px;
+  overflow: hidden;
+  margin-right: 12px;
+  flex-shrink: 0;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.categoryImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.categoryName {
+  font-size: 14px;
+  font-weight: 500;
+  color: #1a1a1a;
+  flex: 1;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.arrow {
+  font-size: 20px;
+  color: #666;
+  transition: transform 0.3s ease;
+  transform: rotate(90deg);
+  margin-left: 8px;
+}
+
+.arrowUp {
+  transform: rotate(-90deg);
+}
+
+.subcategories {
+  background: rgba(255, 255, 255, 0.9);
+  padding: 4px 12px 12px;
+}
+
+.column {
+  margin-bottom: 12px;
+}
+
+.columnHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 0;
+  cursor: pointer;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.columnTitle {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.columnItems {
+  padding: 4px 0;
+}
+
+.columnItem {
+  display: block;
+  padding: 8px 12px;
+  color: #444;
+  text-decoration: none;
+  font-size: 13px;
+  border-radius: 6px;
+}
+
+.colorDotsGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 6px 0;
+}
+
+.colorDot {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+}
+
+@media (min-width: 768px) {
+  .container {
+    display: none;
+  }
+} 

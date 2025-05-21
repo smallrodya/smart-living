@@ -139,21 +139,49 @@ const megaMenus: MegaMenu[] = [
     name: 'THROWS & TOWELS',
     columns: [
       {
-        title: 'TOWELS',
+        title: 'CATEGORY',
         items: [
-          { label: 'Shop Towels by Design', href: '/category/throws-towels/towels-design' },
-          { label: 'Shop Towel by Colour', href: '/category/throws-towels/towel-colour' },
-          { label: 'Shop All', href: '/category/throws-towels' },
-          { label: 'Towel Bales From £8.99', href: '/category/towels' },
+          { label: 'Bath Towels', href: '/category/throws-towels/bath-towels' },
+          { label: 'Hand Towels', href: '/category/throws-towels/hand-towels' },
+          { label: 'Beach Towels', href: '/category/throws-towels/beach-towels' },
+          { label: 'Kitchen Towels', href: '/category/throws-towels/kitchen-towels' },
+          { label: 'Throws & Blankets', href: '/category/throws-towels/throws-blankets' },
+          { label: 'Weighted Blankets', href: '/category/throws-towels/weighted-blankets' },
+          { label: 'Kids Towels', href: '/category/throws-towels/kids-towels' },
+          { label: 'Towel Sets', href: '/category/throws-towels/towel-sets' },
         ],
       },
       {
-        title: 'THROWS',
+        title: 'STYLE',
         items: [
-          { label: 'Shop Throw by Type', href: '/category/throws-towels/throw-type' },
-          { label: 'Shop Throw by Colour', href: '/category/throws-towels/throw-colour' },
-          { label: 'Shop All', href: '/category/throws-towels' },
-          { label: 'Throws from £11.99', href: '/category/throws' },
+          { label: 'Plain', href: '/category/throws-towels/plain' },
+          { label: 'Patterned', href: '/category/throws-towels/patterned' },
+          { label: 'Striped', href: '/category/throws-towels/striped' },
+          { label: 'Embroidered', href: '/category/throws-towels/embroidered' },
+          { label: 'Luxury', href: '/category/throws-towels/luxury' },
+        ],
+      },
+      {
+        title: 'TRENDING COLOURS',
+        items: [
+          { label: 'Black', color: '#222' },
+          { label: 'Grey', color: '#888' },
+          { label: 'White', color: '#fff' },
+          { label: 'Cream', color: '#f5f5dc' },
+          { label: 'Pink', color: '#f7d6e0' },
+          { label: 'Red', color: '#e53935' },
+          { label: 'Orange', color: '#ff9800' },
+          { label: 'Yellow', color: '#ffe066' },
+          { label: 'Green', color: '#4caf50' },
+          { label: 'Teal', color: '#00bfae' },
+          { label: 'Purple', color: '#9c27b0' },
+          { label: 'Brown', color: '#795548' },
+        ],
+      },
+      {
+        items: [
+          { img: '/throws-main.jpg', label: 'New in summer collection', labelColor: 'red', description: 'Shop Now', href: '/shop/throws-collection' },
+          { img: '/towels-main.jpg', label: 'Summer sale upto 70% off', labelColor: 'red', description: 'Shop Now', href: '/shop-towels' },
         ],
       },
     ],
@@ -162,9 +190,15 @@ const megaMenus: MegaMenu[] = [
     name: 'OUTDOOR',
     columns: [
       {
-        title: 'CHAIRS',
+        title: 'CATEGORY',
         items: [
-          { label: 'Shop all', href: '/category/outdoor/chairs' },
+          { label: 'Shop all', href: '/category/outdoor/shop-all' },
+        ],
+      },
+      {
+        items: [
+          { img: '/outdoor-main.jpg', label: 'New summer collection', labelColor: 'red', description: 'Shop Now', href: '/shop/outdoor-collection' },
+          { img: '/garden-main.jpg', label: 'Summer sale upto 70% off', labelColor: 'red', description: 'Shop Now', href: '/shop-garden' },
         ],
       },
     ],
@@ -173,11 +207,52 @@ const megaMenus: MegaMenu[] = [
     name: 'CURTAINS',
     columns: [
       {
-        title: 'CURTAINS',
+        title: 'CATEGORY',
         items: [
-          { label: 'Shop by Curtain Type', href: '/category/curtains/curtain-type' },
-          { label: 'Shop by Curtain Colour', href: '/category/curtains/curtain-colour' },
-          { label: 'Shop All', href: '/category/curtains' },
+          { label: 'Living Room Curtains', href: '/category/curtains/living-room' },
+          { label: 'Bedroom Curtains', href: '/category/curtains/bedroom' },
+          { label: 'Kitchen Curtains', href: '/category/curtains/kitchen' },
+          { label: 'Blackout Curtains', href: '/category/curtains/blackout' },
+          { label: 'Sheer Curtains', href: '/category/curtains/sheer' },
+          { label: 'Curtain Sets', href: '/category/curtains/sets' },
+        ],
+      },
+      {
+        title: 'STYLE',
+        items: [
+          { label: 'Modern', href: '/category/curtains/modern' },
+          { label: 'Classic', href: '/category/curtains/classic' },
+          { label: 'Patterned', href: '/category/curtains/patterned' },
+          { label: 'Plain', href: '/category/curtains/plain' },
+          { label: 'Luxury', href: '/category/curtains/luxury' },
+        ],
+      },
+      {
+        title: 'SIZE',
+        items: [
+          { label: 'Small', href: '/category/curtains/small' },
+          { label: 'Medium', href: '/category/curtains/medium' },
+          { label: 'Large', href: '/category/curtains/large' },
+          { label: 'Extra Large', href: '/category/curtains/extra-large' },
+        ],
+      },
+      {
+        title: 'TRENDING COLOURS',
+        items: [
+          { label: 'Black', color: '#222' },
+          { label: 'Grey', color: '#888' },
+          { label: 'White', color: '#fff' },
+          { label: 'Cream', color: '#f5f5dc' },
+          { label: 'Blue', color: '#2196f3' },
+          { label: 'Green', color: '#4caf50' },
+          { label: 'Pink', color: '#f7d6e0' },
+          { label: 'Purple', color: '#9c27b0' },
+        ],
+      },
+      {
+        items: [
+          { img: '/curtains-main.jpg', label: 'New collection', labelColor: 'red', description: 'Shop Now', href: '/shop/curtains-collection' },
+          { img: '/curtains-sale.jpg', label: 'Sale upto 70% off', labelColor: 'red', description: 'Shop Now', href: '/shop-curtains' },
         ],
       },
     ],
@@ -186,19 +261,29 @@ const megaMenus: MegaMenu[] = [
     name: 'CLOTHING',
     columns: [
       {
-        title: 'MEN',
+        title: 'CATEGORY',
         items: [
-          { label: 'Hoodie', href: '/category/clothing/men/hoodie' },
-          { label: 'Sweatshirt', href: '/category/clothing/men/sweatshirt' },
+          { label: 'Men\'s Collection', href: '/category/clothing/men' },
+          { label: 'Women\'s Collection', href: '/category/clothing/women' },
         ],
       },
       {
-        title: 'WOMEN',
+        title: 'TRENDING COLOURS',
         items: [
-          { label: 'Denim', href: '/category/clothing/women/denim' },
-          { label: 'Jersey', href: '/category/clothing/women/jersey' },
-          { label: 'Jogger', href: '/category/clothing/women/jogger' },
-          { label: 'Lounge & Nightwear', href: '/category/clothing/women/lounge-nightwear' },
+          { label: 'Black', color: '#222' },
+          { label: 'Grey', color: '#888' },
+          { label: 'White', color: '#fff' },
+          { label: 'Navy', color: '#1a237e' },
+          { label: 'Red', color: '#e53935' },
+          { label: 'Green', color: '#4caf50' },
+          { label: 'Blue', color: '#2196f3' },
+          { label: 'Purple', color: '#9c27b0' },
+        ],
+      },
+      {
+        items: [
+          { img: '/clothing-main.jpg', label: 'New season collection', labelColor: 'red', description: 'Shop Now', href: '/shop/clothing-collection' },
+          { img: '/clothing-sale.jpg', label: 'Sale upto 70% off', labelColor: 'red', description: 'Shop Now', href: '/shop-clothing' },
         ],
       },
     ],
@@ -207,21 +292,27 @@ const megaMenus: MegaMenu[] = [
     name: 'FOOTWEAR',
     columns: [
       {
-        title: 'BOOTIES',
+        title: 'CATEGORY',
         items: [
-          { label: 'Shop All', href: '/category/footwear/booties' },
+          { label: 'Booties', href: '/category/footwear/booties' },
+          { label: 'Slippers', href: '/category/footwear/slippers' },
+          { label: 'Socks', href: '/category/footwear/socks' },
         ],
       },
       {
-        title: 'SLIPPERS',
+        title: 'SIZE',
         items: [
-          { label: 'Shop All', href: '/category/footwear/slippers' },
+          { label: 'UK 3-4', href: '/category/footwear/uk-3-4' },
+          { label: 'UK 5-6', href: '/category/footwear/uk-5-6' },
+          { label: 'UK 7-8', href: '/category/footwear/uk-7-8' },
+          { label: 'UK 9-10', href: '/category/footwear/uk-9-10' },
+          { label: 'UK 11-12', href: '/category/footwear/uk-11-12' },
         ],
       },
       {
-        title: 'SOCKS',
         items: [
-          { label: 'Shop all', href: '/category/footwear/socks' },
+          { img: '/footwear-main.jpg', label: 'New collection', labelColor: 'red', description: 'Shop Now', href: '/shop/footwear-collection' },
+          { img: '/footwear-sale.jpg', label: 'Sale upto 70% off', labelColor: 'red', description: 'Shop Now', href: '/shop-footwear' },
         ],
       },
     ],

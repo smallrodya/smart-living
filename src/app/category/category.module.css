@@ -152,4 +152,16 @@
   .categoryName {
     font-size: 15px;
   }
+}
+
+.pageContainer {
+  width: 100%;
+  min-height: 100vh;
+  background: #f8f8f8;
+}
+
+@media (min-width: 768px) {
+  .pageContainer {
+    display: none;
+  }
 } 
