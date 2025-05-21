@@ -1,8 +1,14 @@
 .container {
   width: 100%;
   min-height: 100vh;
-  background: #f8f8f8;
-  padding: 16px;
+  background: #fff;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  padding-top: 60px;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .header {

@@ -78,7 +78,7 @@ export default function ShopDuvetSetByType() {
           }}>
             <div style={{
               position: 'absolute',
-              top: '40px',
+              top: '80px',
               left: '40px',
               zIndex: 10
             }}>

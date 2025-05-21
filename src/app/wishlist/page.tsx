@@ -70,7 +70,8 @@ const WishlistPage = () => {
           maxWidth: '1200px',
           margin: '0 auto',
           padding: '40px 20px',
-          minHeight: '100vh'
+          minHeight: '100vh',
+          marginTop: '40px'
         }}>
           <div style={{
             display: 'flex',

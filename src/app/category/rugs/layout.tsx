@@ -3,7 +3,7 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
 
-export default function ShopDuvetSetLayout({
+export default function RugsLayout({
   children,
 }: {
   children: React.ReactNode;
