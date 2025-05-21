@@ -14,10 +14,10 @@ interface WishlistItem {
 }
 
 const images = [
-  { src: '/reduce1.jpg', hoverSrc: '/reduce1-hover.jpg', title: '2 in 1 Reclining Gravity Chair and Lay Flat Sun lounger- Dark Green', price: '£34.99', discount: '-65%' },
-  { src: '/reduce2.jpg', hoverSrc: '/reduce2-hover.jpg', title: '2 in 1 Reclining Gravity Chair and Lay Flat Sun lounger- Grey', price: '£34.90', discount: '-65%' },
-  { src: '/reduce3.jpg', hoverSrc: '/reduce3-hover.jpg', title: 'Zero Gravity Chair with Cushion & Pillow – Black', price: '£60.99', discount: '-49%' },
-  { src: '/reduce4.jpg', hoverSrc: '/reduce4-hover.jpg', title: 'Zero Gravity Chair with Cushion & Pillow – Grey', price: '£60.99', discount: '-49%' },
+  { src: '/reduce1.jpg', hoverSrc: '/reduce1-hover.jpg', title: '2 in 1 Reclining Gravity Chair and Lay Flat Sun lounger- Dark Green', price: '£34.99', oldPrice: '£99.99', discount: '-65%' },
+  { src: '/reduce2.jpg', hoverSrc: '/reduce2-hover.jpg', title: '2 in 1 Reclining Gravity Chair and Lay Flat Sun lounger- Grey', price: '£34.90', oldPrice: '£99.99', discount: '-65%' },
+  { src: '/reduce3.jpg', hoverSrc: '/reduce3-hover.jpg', title: 'Zero Gravity Chair with Cushion & Pillow – Black', price: '£60.99', oldPrice: '£119.99', discount: '-49%' },
+  { src: '/reduce4.jpg', hoverSrc: '/reduce4-hover.jpg', title: 'Zero Gravity Chair with Cushion & Pillow – Grey', price: '£60.99', oldPrice: '£119.99', discount: '-49%' },
 ];
 
 const basketIcon = (
@@ -215,7 +215,27 @@ const DesktopReduceSpaceCarousel = () => {
             </div>
             <div style={{padding: '14px 10px 10px 10px', width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
               <div style={{fontWeight: 600, fontSize: 15, marginBottom: 6, textAlign: 'center', letterSpacing: 0.1}}>{images[i].title}</div>
-              <div style={{color: '#e53935', fontWeight: 700, fontSize: 16, marginBottom: 8}}>{images[i].price}</div>
+              <div style={{ 
+                display: 'flex', 
+                alignItems: 'center', 
+                gap: '8px',
+                marginTop: '8px'
+              }}>
+                <span style={{ 
+                  textDecoration: 'line-through',
+                  color: '#999',
+                  fontSize: '14px'
+                }}>
+                  {images[i].oldPrice}
+                </span>
+                <span style={{ 
+                  fontWeight: '600',
+                  fontSize: '16px',
+                  color: '#e53935'
+                }}>
+                  {images[i].price}
+                </span>
+              </div>
             </div>
             <span style={{
               position: 'absolute',

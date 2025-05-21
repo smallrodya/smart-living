@@ -422,7 +422,6 @@ const MobileBestSellersSlider = () => {
             
             <div style={{
               color: '#e53935',
-              fontWeight: 700,
               fontSize: 14,
               marginBottom: 6
             }}>{currentProduct.price}</div>

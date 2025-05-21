@@ -343,7 +343,6 @@ const DesktopBestSellersSlider = () => {
                 
                 <p style={{
                   fontSize: 20,
-                  fontWeight: 700,
                   color: '#e53935',
                   marginBottom: 16,
                 }}>{product.price}</p>
