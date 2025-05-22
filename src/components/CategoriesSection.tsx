@@ -21,26 +21,25 @@ const megaMenus: MegaMenu[] = [
       {
         title: 'CATEGORY',
         items: [
-          { label: 'Duvet Covers', href: '/category/bedding/duvet-covers' },
+          { label: 'Duvet Cover Sets', href: '/' },
+          { label: 'Complete Bedding Sets', href: 'shop-duvet-set-by-type' },
           { label: 'Fitted Sheets', href: '/category/bedding/fitted-sheets' },
           { label: 'Pillowcases', href: '/category/bedding/pillowcases' },
-          { label: 'Duvets & Pillows', href: '/category/bedding/duvets-pillows' },
-          { label: 'Coverless Duvets', href: '/category/bedding/coverless-duvets' },
-          { label: 'Mattresses & Protector', href: '/category/bedding/mattresses-protector' },
           { label: 'Fleece Bedding', href: '/category/bedding/fleece' },
-          { label: 'Plain Dye Bedding', href: '/category/bedding/plain-dye' },
           { label: 'Weighted Blankets', href: '/category/bedding/weighted-blankets' },
-          { label: 'Kids Bedding', href: '/category/bedding/kids' },
+          { label: 'Kids Beding', href: '/category/bedding/kids' },
+          { label: 'Bedspreads', href: '/category/bedding/bedspreads' },
+          { label: 'Electric Underblankets', href: '/category/bedding/electric-underblankets' },
         ],
       },
       {
         title: 'STYLE',
         items: [
-          { label: 'Fleece', href: '/category/bedding/fleece' },
+          { label: 'Printed', href: '/shop/printed-duvet-set' },
           { label: 'Plain', href: '/category/bedding/plain' },
-          { label: 'Reversible', href: '/category/bedding/reversible' },
-          { label: 'Striped', href: '/category/bedding/striped' },
+          { label: '3D', href: '/category/bedding/3d' },
           { label: 'Teddy', href: '/category/bedding/teddy' },
+          { label: 'Hotel Quality', href: '/category/bedding/hotel-quality' },
         ],
       },
       {
@@ -50,6 +49,7 @@ const megaMenus: MegaMenu[] = [
           { label: 'Double', href: '/category/bedding/double' },
           { label: 'King', href: '/category/bedding/king' },
           { label: 'Super King', href: '/category/bedding/super-king' },
+          { label: 'Crib', href: '/category/bedding/crib' },
         ],
       },
       {
@@ -81,32 +81,31 @@ const megaMenus: MegaMenu[] = [
     name: 'RUGS & MATS',
     columns: [
       {
-        title: 'MATS TYPES',
-        items: [
-          { label: 'Bath Mats', href: '/category/rugs-mats/mats/bath-mats' },
-          { label: 'Door Mats', href: '/category/rugs-mats/mats/door-mats' },
-          { label: 'Kitchen Mats', href: '/category/rugs-mats/mats/kitchen-mats' },
-          { label: 'Anti-Fatigue Mats', href: '/category/rugs-mats/mats/anti-fatigue-mats' },
-          { label: 'Outdoor Mats', href: '/category/rugs-mats/mats/outdoor-mats' },
-          { label: 'Hallway Runners', href: '/category/rugs-mats/mats/hallway-runners' },
-        ],
-      },
-      {
-        title: 'RUGS TYPES',
+        title: 'RUG TYPES',
         items: [
           { label: 'Shaggy Rugs', href: '/category/rugs/rugtype/shaggy-rugs' },
           { label: 'Carved Rugs', href: '/category/rugs/rugtype/carved-rugs' },
           { label: 'Reversible Rugs', href: '/category/rugs/rugtype/reversible-rugs' },
-          { label: 'Polyester shaggy rugs', href: '/category/rugs/rugtype/polyester-shag-rugs' },
-          { label: 'Soft Shaggy Rugs', href: '/category/rugs/rugtype/soft-shaggy-rugs' },
+          { label: 'Hallway Runner', href: '/category/rugs/rugtype/hallway-runner' },
+          { label: 'Table Runner', href: '/category/rugs/rugtype/table-runner' },
         ],
       },
       {
-        title: 'SHOP BY SIZE',
+        title: 'MAT TYPES',
+        items: [
+          { label: 'Door Mat', href: '/category/rugs-mats/mats/door-mat' },
+          { label: 'Kitchen Mat', href: '/category/rugs-mats/mats/kitchen-mat' },
+          { label: 'Hallway Runner', href: '/category/rugs-mats/mats/hallway-runner' },
+          { label: 'Table Placemat', href: '/category/rugs-mats/mats/table-placemat' },
+        ],
+      },
+      {
+        title: 'SIZE',
         items: [
           { label: 'Small', href: '/category/rugs-mats/small' },
           { label: 'Medium', href: '/category/rugs-mats/medium' },
           { label: 'Large', href: '/category/rugs-mats/large' },
+          { label: 'Xlarge', href: '/category/rugs-mats/xlarge' },
           { label: 'Runner', href: '/category/rugs-mats/runner' },
         ],
       },
@@ -141,24 +140,20 @@ const megaMenus: MegaMenu[] = [
       {
         title: 'CATEGORY',
         items: [
-          { label: 'Bath Towels', href: '/category/throws-towels/bath-towels' },
-          { label: 'Hand Towels', href: '/category/throws-towels/hand-towels' },
-          { label: 'Beach Towels', href: '/category/throws-towels/beach-towels' },
-          { label: 'Kitchen Towels', href: '/category/throws-towels/kitchen-towels' },
-          { label: 'Throws & Blankets', href: '/category/throws-towels/throws-blankets' },
+          { label: 'Tea Towels', href: '/category/throws-towels/tea-towels' },
+          { label: '8Pc Towel Bale Set', href: '/category/throws-towels/8pc-towel-bale-set' },
+          { label: '10Pc Towel Bale Set', href: '/category/throws-towels/10pc-towel-bale-set' },
           { label: 'Weighted Blankets', href: '/category/throws-towels/weighted-blankets' },
-          { label: 'Kids Towels', href: '/category/throws-towels/kids-towels' },
-          { label: 'Towel Sets', href: '/category/throws-towels/towel-sets' },
+          { label: 'Throws', href: '/category/throws-towels/throws' },
         ],
       },
       {
         title: 'STYLE',
         items: [
+          { label: 'Fleece', href: '/category/throws-towels/fleece' },
           { label: 'Plain', href: '/category/throws-towels/plain' },
-          { label: 'Patterned', href: '/category/throws-towels/patterned' },
-          { label: 'Striped', href: '/category/throws-towels/striped' },
-          { label: 'Embroidered', href: '/category/throws-towels/embroidered' },
-          { label: 'Luxury', href: '/category/throws-towels/luxury' },
+          { label: '3D', href: '/category/throws-towels/3d' },
+          { label: 'Chunky Hand Knitted', href: '/category/throws-towels/chunky-hand-knitted' },
         ],
       },
       {
@@ -209,50 +204,7 @@ const megaMenus: MegaMenu[] = [
       {
         title: 'CATEGORY',
         items: [
-          { label: 'Living Room Curtains', href: '/category/curtains/living-room' },
-          { label: 'Bedroom Curtains', href: '/category/curtains/bedroom' },
-          { label: 'Kitchen Curtains', href: '/category/curtains/kitchen' },
-          { label: 'Blackout Curtains', href: '/category/curtains/blackout' },
-          { label: 'Sheer Curtains', href: '/category/curtains/sheer' },
-          { label: 'Curtain Sets', href: '/category/curtains/sets' },
-        ],
-      },
-      {
-        title: 'STYLE',
-        items: [
-          { label: 'Modern', href: '/category/curtains/modern' },
-          { label: 'Classic', href: '/category/curtains/classic' },
-          { label: 'Patterned', href: '/category/curtains/patterned' },
-          { label: 'Plain', href: '/category/curtains/plain' },
-          { label: 'Luxury', href: '/category/curtains/luxury' },
-        ],
-      },
-      {
-        title: 'SIZE',
-        items: [
-          { label: 'Small', href: '/category/curtains/small' },
-          { label: 'Medium', href: '/category/curtains/medium' },
-          { label: 'Large', href: '/category/curtains/large' },
-          { label: 'Extra Large', href: '/category/curtains/extra-large' },
-        ],
-      },
-      {
-        title: 'TRENDING COLOURS',
-        items: [
-          { label: 'Black', color: '#222' },
-          { label: 'Grey', color: '#888' },
-          { label: 'White', color: '#fff' },
-          { label: 'Cream', color: '#f5f5dc' },
-          { label: 'Blue', color: '#2196f3' },
-          { label: 'Green', color: '#4caf50' },
-          { label: 'Pink', color: '#f7d6e0' },
-          { label: 'Purple', color: '#9c27b0' },
-        ],
-      },
-      {
-        items: [
-          { img: '/curtains-main.jpg', label: 'New collection', labelColor: 'red', description: 'Shop Now', href: '/shop/curtains-collection' },
-          { img: '/curtains-sale.jpg', label: 'Sale upto 70% off', labelColor: 'red', description: 'Shop Now', href: '/shop-curtains' },
+          { label: 'In the near future.', href: '/category/curtains/living-room' },
         ],
       },
     ],
@@ -263,8 +215,20 @@ const megaMenus: MegaMenu[] = [
       {
         title: 'CATEGORY',
         items: [
-          { label: 'Men\'s Collection', href: '/category/clothing/men' },
-          { label: 'Women\'s Collection', href: '/category/clothing/women' },
+          { label: "Men's", href: '/category/clothing/men' },
+          { label: "Women's", href: '/category/clothing/women' },
+          { label: "Kid's", href: '/category/clothing/kids' },
+        ],
+      },
+      {
+        title: 'STYLE',
+        items: [
+          { label: 'Jeans', href: '/category/clothing/jeans' },
+          { label: 'Joggers', href: '/category/clothing/joggers' },
+          { label: 'Hoodies', href: '/category/clothing/hoodies' },
+          { label: 'Polo Shirts', href: '/category/clothing/polo-shirts' },
+          { label: 'Loungewear', href: '/category/clothing/loungewear' },
+          { label: 'Bathrobes', href: '/category/clothing/bathrobes' },
         ],
       },
       {
@@ -307,6 +271,9 @@ const megaMenus: MegaMenu[] = [
           { label: 'UK 7-8', href: '/category/footwear/uk-7-8' },
           { label: 'UK 9-10', href: '/category/footwear/uk-9-10' },
           { label: 'UK 11-12', href: '/category/footwear/uk-11-12' },
+          { label: 'Small', href: '/category/footwear/small' },
+          { label: 'Medium', href: '/category/footwear/medium' },
+          { label: 'Large', href: '/category/footwear/large' },
         ],
       },
       {

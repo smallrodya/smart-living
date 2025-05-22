@@ -52,6 +52,7 @@ const ProductPageBestSeller: React.FC<ProductPageBestSellerProps> = ({ product }
   const [isHovered, setIsHovered] = useState(false);
   const [quantity, setQuantity] = useState(1);
   const [isMobile, setIsMobile] = useState(false);
+  const [added, setAdded] = useState(false);
 
   useEffect(() => {
     const checkMobile = () => {
@@ -80,6 +81,34 @@ const ProductPageBestSeller: React.FC<ProductPageBestSellerProps> = ({ product }
 
   const handleNextImage = () => {
     setSelectedImage((prev) => (prev === product.images.length - 1 ? 0 : prev + 1));
+  };
+
+  const handleAddToBasket = () => {
+    if (typeof window === 'undefined') return;
+    const priceNum = parseFloat((product.price || '').replace(/[^\d.]/g, ''));
+    const basketRaw = window.localStorage.getItem('basket');
+    let basket = [];
+    try {
+      basket = basketRaw ? JSON.parse(basketRaw) : [];
+    } catch {
+      basket = [];
+    }
+    const itemId = `${product.title}_${product.selectedSize}`;
+    const existing = basket.find((item: any) => item.id === itemId);
+    if (existing) {
+      existing.quantity += quantity;
+    } else {
+      basket.push({
+        id: itemId,
+        title: product.title,
+        size: product.selectedSize,
+        price: priceNum,
+        quantity
+      });
+    }
+    window.localStorage.setItem('basket', JSON.stringify(basket));
+    setAdded(true);
+    setTimeout(() => setAdded(false), 1500);
   };
 
   return (
@@ -318,6 +347,22 @@ const ProductPageBestSeller: React.FC<ProductPageBestSellerProps> = ({ product }
             }}>
               {product.oldPrice}
             </span>
+            {(() => {
+              const priceNum = parseFloat((product.price || '').replace(/[^\d.]/g, ''));
+              if (!isNaN(priceNum) && quantity > 1) {
+                return (
+                  <span style={{
+                    fontSize: isMobile ? 18 : 22,
+                    color: '#222',
+                    fontWeight: 600,
+                    marginLeft: 16,
+                  }}>
+                    = £{(priceNum * quantity).toFixed(2)}
+                  </span>
+                );
+              }
+              return null;
+            })()}
           </div>
 
           {/* Size Selection */}
@@ -447,29 +492,38 @@ const ProductPageBestSeller: React.FC<ProductPageBestSellerProps> = ({ product }
             flexDirection: 'column',
             gap: 12,
           }}>
-            <button
-              style={{
-                padding: '16px 24px',
-                background: '#e53935',
-                color: '#fff',
-                border: 'none',
-                borderRadius: 8,
-                fontSize: 16,
-                fontWeight: 600,
-                cursor: 'pointer',
-                transition: 'all 0.3s ease',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = '#d32f2f';
-                e.currentTarget.style.transform = 'translateY(-2px)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = '#e53935';
-                e.currentTarget.style.transform = 'translateY(0)';
-              }}
-            >
-              Add to Basket
-            </button>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+              <button
+                style={{
+                  padding: '16px 24px',
+                  background: '#e53935',
+                  color: '#fff',
+                  border: 'none',
+                  borderRadius: 8,
+                  fontSize: 16,
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease',
+                }}
+                onClick={handleAddToBasket}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = '#d32f2f';
+                  e.currentTarget.style.transform = 'translateY(-2px)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = '#e53935';
+                  e.currentTarget.style.transform = 'translateY(0)';
+                }}
+              >
+                Add to Basket
+              </button>
+              {added && (
+                <span style={{ color: '#43a047', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 6, fontSize: 16 }}>
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#43a047" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 10 18 4 12" /></svg>
+                  Added to basket!
+                </span>
+              )}
+            </div>
             <button
               style={{
                 padding: '16px 24px',

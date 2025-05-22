@@ -16,9 +16,15 @@ export default function Page({ params }: PageProps) {
   const [selectedSize, setSelectedSize] = useState('single');
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
+  // Динамическая цена в зависимости от размера
+  let price = '';
+  if (selectedSize === 'single') price = '£14.99';
+  else if (selectedSize === 'double') price = '£15.99';
+  else if (selectedSize === 'king') price = '£17.72';
+
   const product = {
     title: '3D Duvet Cover and Pillowcase Set – Black Panther',
-    price: '£14.99 - £17.72',
+    price,
     oldPrice: '',
     discount: '-71%',
     images: [

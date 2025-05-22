@@ -25,26 +25,25 @@ const categories: Category[] = [
       {
         title: 'CATEGORY',
         items: [
-          { label: 'Duvet Covers', href: '/category/bedding/duvet-covers' },
+          { label: 'Duvet Cover Sets', href: '/' },
+          { label: 'Complete Bedding Sets', href: 'shop-duvet-set-by-type' },
           { label: 'Fitted Sheets', href: '/category/bedding/fitted-sheets' },
           { label: 'Pillowcases', href: '/category/bedding/pillowcases' },
-          { label: 'Duvets & Pillows', href: '/category/bedding/duvets-pillows' },
-          { label: 'Coverless Duvets', href: '/category/bedding/coverless-duvets' },
-          { label: 'Mattresses & Protector', href: '/category/bedding/mattresses-protector' },
           { label: 'Fleece Bedding', href: '/category/bedding/fleece' },
-          { label: 'Plain Dye Bedding', href: '/category/bedding/plain-dye' },
           { label: 'Weighted Blankets', href: '/category/bedding/weighted-blankets' },
-          { label: 'Kids Bedding', href: '/category/bedding/kids' },
+          { label: 'Kids Beding', href: '/category/bedding/kids' },
+          { label: 'Bedspreads', href: '/category/bedding/bedspreads' },
+          { label: 'Electric Underblankets', href: '/category/bedding/electric-underblankets' },
         ],
       },
       {
         title: 'STYLE',
         items: [
-          { label: 'Fleece', href: '/category/bedding/fleece' },
+          { label: 'Printed', href: '/shop/printed-duvet-set' },
           { label: 'Plain', href: '/category/bedding/plain' },
-          { label: 'Reversible', href: '/category/bedding/reversible' },
-          { label: 'Striped', href: '/category/bedding/striped' },
+          { label: '3D', href: '/category/bedding/3d' },
           { label: 'Teddy', href: '/category/bedding/teddy' },
+          { label: 'Hotel Quality', href: '/category/bedding/hotel-quality' },
         ],
       },
       {
@@ -54,6 +53,7 @@ const categories: Category[] = [
           { label: 'Double', href: '/category/bedding/double' },
           { label: 'King', href: '/category/bedding/king' },
           { label: 'Super King', href: '/category/bedding/super-king' },
+          { label: 'Crib', href: '/category/bedding/crib' },
         ],
       },
       {
@@ -81,32 +81,31 @@ const categories: Category[] = [
     color: '#F5DEB3',
     columns: [
       {
-        title: 'MATS TYPES',
-        items: [
-          { label: 'Bath Mats', href: '/category/rugs-mats/mats/bath-mats' },
-          { label: 'Door Mats', href: '/category/rugs-mats/mats/door-mats' },
-          { label: 'Kitchen Mats', href: '/category/rugs-mats/mats/kitchen-mats' },
-          { label: 'Anti-Fatigue Mats', href: '/category/rugs-mats/mats/anti-fatigue-mats' },
-          { label: 'Outdoor Mats', href: '/category/rugs-mats/mats/outdoor-mats' },
-          { label: 'Hallway Runners', href: '/category/rugs-mats/mats/hallway-runners' },
-        ],
-      },
-      {
-        title: 'RUGS TYPES',
+        title: 'RUG TYPES',
         items: [
           { label: 'Shaggy Rugs', href: '/category/rugs/rugtype/shaggy-rugs' },
           { label: 'Carved Rugs', href: '/category/rugs/rugtype/carved-rugs' },
           { label: 'Reversible Rugs', href: '/category/rugs/rugtype/reversible-rugs' },
-          { label: 'Polyester shaggy rugs', href: '/category/rugs/rugtype/polyester-shag-rugs' },
-          { label: 'Soft Shaggy Rugs', href: '/category/rugs/rugtype/soft-shaggy-rugs' },
+          { label: 'Hallway Runner', href: '/category/rugs/rugtype/hallway-runner' },
+          { label: 'Table Runner', href: '/category/rugs/rugtype/table-runner' },
         ],
       },
       {
-        title: 'SHOP BY SIZE',
+        title: 'MAT TYPES',
+        items: [
+          { label: 'Door Mat', href: '/category/rugs-mats/mats/door-mat' },
+          { label: 'Kitchen Mat', href: '/category/rugs-mats/mats/kitchen-mat' },
+          { label: 'Hallway Runner', href: '/category/rugs-mats/mats/hallway-runner' },
+          { label: 'Table Placemat', href: '/category/rugs-mats/mats/table-placemat' },
+        ],
+      },
+      {
+        title: 'SIZE',
         items: [
           { label: 'Small', href: '/category/rugs-mats/small' },
           { label: 'Medium', href: '/category/rugs-mats/medium' },
           { label: 'Large', href: '/category/rugs-mats/large' },
+          { label: 'Xlarge', href: '/category/rugs-mats/xlarge' },
           { label: 'Runner', href: '/category/rugs-mats/runner' },
         ],
       },
@@ -135,21 +134,39 @@ const categories: Category[] = [
     color: '#d7d7f7',
     columns: [
       {
-        title: 'TOWELS',
+        title: 'CATEGORY',
         items: [
-          { label: 'Shop Towels by Design', href: '/category/throws-towels/towels-design' },
-          { label: 'Shop Towel by Colour', href: '/category/throws-towels/towel-colour' },
-          { label: 'Shop All', href: '/category/throws-towels' },
-          { label: 'Towel Bales From £8.99', href: '/category/towels' },
+          { label: 'Tea Towels', href: '/category/throws-towels/tea-towels' },
+          { label: '8Pc Towel Bale Set', href: '/category/throws-towels/8pc-towel-bale-set' },
+          { label: '10Pc Towel Bale Set', href: '/category/throws-towels/10pc-towel-bale-set' },
+          { label: 'Weighted Blankets', href: '/category/throws-towels/weighted-blankets' },
+          { label: 'Throws', href: '/category/throws-towels/throws' },
         ],
       },
       {
-        title: 'THROWS',
+        title: 'STYLE',
         items: [
-          { label: 'Shop Throw by Type', href: '/category/throws-towels/throw-type' },
-          { label: 'Shop Throw by Colour', href: '/category/throws-towels/throw-colour' },
-          { label: 'Shop All', href: '/category/throws-towels' },
-          { label: 'Throws from £11.99', href: '/category/throws' },
+          { label: 'Fleece', href: '/category/throws-towels/fleece' },
+          { label: 'Plain', href: '/category/throws-towels/plain' },
+          { label: '3D', href: '/category/throws-towels/3d' },
+          { label: 'Chunky Hand Knitted', href: '/category/throws-towels/chunky-hand-knitted' },
+        ],
+      },
+      {
+        title: 'TRENDING COLOURS',
+        items: [
+          { label: 'Black', color: '#222' },
+          { label: 'Grey', color: '#888' },
+          { label: 'White', color: '#fff' },
+          { label: 'Cream', color: '#f5f5dc' },
+          { label: 'Pink', color: '#f7d6e0' },
+          { label: 'Red', color: '#e53935' },
+          { label: 'Orange', color: '#ff9800' },
+          { label: 'Yellow', color: '#ffe066' },
+          { label: 'Green', color: '#4caf50' },
+          { label: 'Teal', color: '#00bfae' },
+          { label: 'Purple', color: '#9c27b0' },
+          { label: 'Brown', color: '#795548' },
         ],
       },
     ],
@@ -160,9 +177,9 @@ const categories: Category[] = [
     color: '#89f591',
     columns: [
       {
-        title: 'CHAIRS',
+        title: 'CATEGORY',
         items: [
-          { label: 'Shop all', href: '/category/outdoor/chairs' },
+          { label: 'Shop all', href: '/category/outdoor/shop-all' },
         ],
       },
     ],
@@ -173,11 +190,9 @@ const categories: Category[] = [
     color: '#FFB6C1',
     columns: [
       {
-        title: 'CURTAINS',
+        title: 'CATEGORY',
         items: [
-          { label: 'Shop by Curtain Type', href: '/category/curtains/curtain-type' },
-          { label: 'Shop by Curtain Colour', href: '/category/curtains/curtain-colour' },
-          { label: 'Shop All', href: '/category/curtains' },
+          { label: 'In the near future.', href: '/category/curtains/living-room' },
         ],
       },
     ],
@@ -188,19 +203,35 @@ const categories: Category[] = [
     color: '#D8BFD8',
     columns: [
       {
-        title: 'MEN',
+        title: 'CATEGORY',
         items: [
-          { label: 'Hoodie', href: '/category/clothing/men/hoodie' },
-          { label: 'Sweatshirt', href: '/category/clothing/men/sweatshirt' },
+          { label: "Men's", href: '/category/clothing/men' },
+          { label: "Women's", href: '/category/clothing/women' },
+          { label: "Kid's", href: '/category/clothing/kids' },
         ],
       },
       {
-        title: 'WOMEN',
+        title: 'STYLE',
         items: [
-          { label: 'Denim', href: '/category/clothing/women/denim' },
-          { label: 'Jersey', href: '/category/clothing/women/jersey' },
-          { label: 'Jogger', href: '/category/clothing/women/jogger' },
-          { label: 'Lounge & Nightwear', href: '/category/clothing/women/lounge-nightwear' },
+          { label: 'Jeans', href: '/category/clothing/jeans' },
+          { label: 'Joggers', href: '/category/clothing/joggers' },
+          { label: 'Hoodies', href: '/category/clothing/hoodies' },
+          { label: 'Polo Shirts', href: '/category/clothing/polo-shirts' },
+          { label: 'Loungewear', href: '/category/clothing/loungewear' },
+          { label: 'Bathrobes', href: '/category/clothing/bathrobes' },
+        ],
+      },
+      {
+        title: 'TRENDING COLOURS',
+        items: [
+          { label: 'Black', color: '#222' },
+          { label: 'Grey', color: '#888' },
+          { label: 'White', color: '#fff' },
+          { label: 'Navy', color: '#1a237e' },
+          { label: 'Red', color: '#e53935' },
+          { label: 'Green', color: '#4caf50' },
+          { label: 'Blue', color: '#2196f3' },
+          { label: 'Purple', color: '#9c27b0' },
         ],
       },
     ],
@@ -211,21 +242,24 @@ const categories: Category[] = [
     color: '#6deded',
     columns: [
       {
-        title: 'BOOTIES',
+        title: 'CATEGORY',
         items: [
-          { label: 'Shop All', href: '/category/footwear/booties' },
+          { label: 'Booties', href: '/category/footwear/booties' },
+          { label: 'Slippers', href: '/category/footwear/slippers' },
+          { label: 'Socks', href: '/category/footwear/socks' },
         ],
       },
       {
-        title: 'SLIPPERS',
+        title: 'SIZE',
         items: [
-          { label: 'Shop All', href: '/category/footwear/slippers' },
-        ],
-      },
-      {
-        title: 'SOCKS',
-        items: [
-          { label: 'Shop all', href: '/category/footwear/socks' },
+          { label: 'UK 3-4', href: '/category/footwear/uk-3-4' },
+          { label: 'UK 5-6', href: '/category/footwear/uk-5-6' },
+          { label: 'UK 7-8', href: '/category/footwear/uk-7-8' },
+          { label: 'UK 9-10', href: '/category/footwear/uk-9-10' },
+          { label: 'UK 11-12', href: '/category/footwear/uk-11-12' },
+          { label: 'Small', href: '/category/footwear/small' },
+          { label: 'Medium', href: '/category/footwear/medium' },
+          { label: 'Large', href: '/category/footwear/large' },
         ],
       },
     ],
