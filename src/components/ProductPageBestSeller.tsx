@@ -491,11 +491,15 @@ const ProductPageBestSeller: React.FC<ProductPageBestSellerProps> = ({ product }
             display: 'flex',
             flexDirection: 'column',
             gap: 12,
+            alignItems: isMobile ? 'stretch' : 'flex-start',
+            width: isMobile ? '100%' : 'auto',
           }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 16, width: isMobile ? '100%' : 'auto' }}>
               <button
                 style={{
-                  padding: '16px 24px',
+                  width: isMobile ? '100%' : 220,
+                  minWidth: 180,
+                  padding: '16px 0',
                   background: '#e53935',
                   color: '#fff',
                   border: 'none',
@@ -504,6 +508,7 @@ const ProductPageBestSeller: React.FC<ProductPageBestSellerProps> = ({ product }
                   fontWeight: 600,
                   cursor: 'pointer',
                   transition: 'all 0.3s ease',
+                  display: 'block',
                 }}
                 onClick={handleAddToBasket}
                 onMouseEnter={(e) => {
@@ -526,7 +531,9 @@ const ProductPageBestSeller: React.FC<ProductPageBestSellerProps> = ({ product }
             </div>
             <button
               style={{
-                padding: '16px 24px',
+                width: isMobile ? '100%' : 220,
+                minWidth: 180,
+                padding: '16px 0',
                 background: '#fff',
                 color: '#e53935',
                 border: '2px solid #e53935',
@@ -535,6 +542,7 @@ const ProductPageBestSeller: React.FC<ProductPageBestSellerProps> = ({ product }
                 fontWeight: 600,
                 cursor: 'pointer',
                 transition: 'all 0.3s ease',
+                display: 'block',
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.background = '#fff5f5';

@@ -39,6 +39,7 @@ const ProductPage: React.FC<ProductPageProps> = ({ product }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [quantity, setQuantity] = useState(1);
   const [isMobile, setIsMobile] = useState(false);
+  const [added, setAdded] = useState(false);
 
   useEffect(() => {
     const checkMobile = () => {
@@ -67,6 +68,33 @@ const ProductPage: React.FC<ProductPageProps> = ({ product }) => {
 
   const handleNextImage = () => {
     setSelectedImage((prev) => (prev === product.images.length - 1 ? 0 : prev + 1));
+  };
+
+  const handleAddToBasket = () => {
+    if (typeof window === 'undefined') return;
+    const priceNum = parseFloat((product.price || '').replace(/[^\d.]/g, ''));
+    const basketRaw = window.localStorage.getItem('basket');
+    let basket = [];
+    try {
+      basket = basketRaw ? JSON.parse(basketRaw) : [];
+    } catch {
+      basket = [];
+    }
+    const itemId = `${product.title}`;
+    const existing = basket.find((item: any) => item.id === itemId);
+    if (existing) {
+      existing.quantity += quantity;
+    } else {
+      basket.push({
+        id: itemId,
+        title: product.title,
+        price: priceNum,
+        quantity
+      });
+    }
+    window.localStorage.setItem('basket', JSON.stringify(basket));
+    setAdded(true);
+    setTimeout(() => setAdded(false), 1500);
   };
 
   return (
@@ -398,56 +426,69 @@ const ProductPage: React.FC<ProductPageProps> = ({ product }) => {
                 +
               </button>
             </div>
-            <button
-              style={{
-                flex: 1,
-                padding: '16px 0',
-                background: '#222',
-                color: '#fff',
-                border: 'none',
-                borderRadius: 8,
-                fontSize: 16,
-                fontWeight: 600,
-                cursor: 'pointer',
-                transition: 'all 0.3s ease',
-                width: isMobile ? '100%' : 'auto',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'translateY(-2px)';
-                e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = 'translateY(0)';
-                e.currentTarget.style.boxShadow = 'none';
-              }}
-            >
-              Add to Basket
-            </button>
-            <button
-              style={{
-                flex: 1,
-                padding: '16px 0',
-                background: '#e53935',
-                color: '#fff',
-                border: 'none',
-                borderRadius: 8,
-                fontSize: 16,
-                fontWeight: 600,
-                cursor: 'pointer',
-                transition: 'all 0.3s ease',
-                width: isMobile ? '100%' : 'auto',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'translateY(-2px)';
-                e.currentTarget.style.boxShadow = '0 4px 12px rgba(229,57,53,0.2)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = 'translateY(0)';
-                e.currentTarget.style.boxShadow = 'none';
-              }}
-            >
-              Buy Now
-            </button>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 12, alignItems: isMobile ? 'stretch' : 'flex-start', width: isMobile ? '100%' : 'auto' }}>
+              <div style={{ display: 'flex', gap: 16, alignItems: 'center', width: isMobile ? '100%' : 'auto' }}>
+                <button
+                  style={{
+                    width: isMobile ? '100%' : 220,
+                    minWidth: 180,
+                    padding: '16px 0',
+                    background: '#222',
+                    color: '#fff',
+                    border: 'none',
+                    borderRadius: 8,
+                    fontSize: 16,
+                    fontWeight: 600,
+                    cursor: 'pointer',
+                    transition: 'all 0.3s ease',
+                    display: 'block',
+                  }}
+                  onClick={handleAddToBasket}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = 'translateY(-2px)';
+                    e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.boxShadow = 'none';
+                  }}
+                >
+                  Add to Basket
+                </button>
+                {added && (
+                  <span style={{ color: '#43a047', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 6, fontSize: 16 }}>
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#43a047" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 10 18 4 12" /></svg>
+                    Added to basket!
+                  </span>
+                )}
+              </div>
+              <button
+                style={{
+                  width: isMobile ? '100%' : 220,
+                  minWidth: 180,
+                  padding: '16px 0',
+                  background: '#e53935',
+                  color: '#fff',
+                  border: 'none',
+                  borderRadius: 8,
+                  fontSize: 16,
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease',
+                  display: 'block',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-2px)';
+                  e.currentTarget.style.boxShadow = '0 4px 12px rgba(229,57,53,0.2)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow = 'none';
+                }}
+              >
+                Buy Now
+              </button>
+            </div>
           </div>
 
           <div style={{
