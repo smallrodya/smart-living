@@ -75,15 +75,16 @@ const Header = () => {
             style={{ 
               display: 'flex', 
               alignItems: 'center', 
-              gap: '10px',
+              gap: '8px',
               flex: 1,
-              maxWidth: '600px'
+              maxWidth: '400px',
+              position: 'relative'
             }}
           >
             <input 
               type="text" 
               className="s" 
-              placeholder="Search for products" 
+              placeholder="Search products..." 
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               name="s" 
@@ -91,16 +92,57 @@ const Header = () => {
               title="Search for products" 
               required 
               style={{ 
-                padding: '12px 20px',
+                padding: '8px 16px',
                 width: '100%',
                 border: '1px solid #eee',
-                borderRadius: '4px',
-                fontSize: '16px',
-                boxShadow: '0 2px 4px rgba(0,0,0,0.05)',
+                borderRadius: '20px',
+                fontSize: '14px',
+                boxShadow: '0 2px 4px rgba(0,0,0,0.03)',
                 transition: 'all 0.3s ease',
-                outline: 'none'
+                outline: 'none',
+                background: '#f8f8f8',
+                height: '36px'
+              }}
+              onFocus={(e) => {
+                e.target.style.background = '#fff';
+                e.target.style.boxShadow = '0 2px 8px rgba(0,0,0,0.08)';
+                e.target.style.borderColor = '#ddd';
+              }}
+              onBlur={(e) => {
+                e.target.style.background = '#f8f8f8';
+                e.target.style.boxShadow = '0 2px 4px rgba(0,0,0,0.03)';
+                e.target.style.borderColor = '#eee';
               }}
             />
+            <button
+              type="submit"
+              style={{
+                position: 'absolute',
+                right: '8px',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                background: 'none',
+                border: 'none',
+                padding: '4px',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: '#666',
+                transition: 'all 0.3s ease'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.color = '#e53935';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.color = '#666';
+              }}
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="11" cy="11" r="8"/>
+                <path d="M21 21l-4.35-4.35"/>
+              </svg>
+            </button>
             <input type="hidden" name="post_type" value="product" />
           </form>
         </div>
