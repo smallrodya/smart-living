@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { Magnifier } from 'react-image-magnifiers';
+import ImageMagnifier from './ImageMagnifier';
 
 interface ProductDimensions {
   open: string;
@@ -185,19 +185,13 @@ const ProductPage: React.FC<ProductPageProps> = ({ product }) => {
                 onMouseLeave={() => setIsHovered(false)}
               />
             ) : (
-              <Magnifier
-                imageSrc={product.images[selectedImage]}
-                imageAlt={product.title}
-                mouseActivation="hover"
-                dragToMove={false}
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover',
-                }}
-                magnifierSize="50%"
-                magnifierBorderSize={2}
-                magnifierBorderColor="#e53935"
+              <ImageMagnifier
+                src={product.images[selectedImage]}
+                alt={product.title}
+                width={600}
+                height={600}
+                magnifierSize={350}
+                zoomLevel={2.5}
               />
             )}
             {product.images.length > 1 && (
