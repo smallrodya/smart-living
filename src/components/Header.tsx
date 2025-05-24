@@ -110,7 +110,7 @@ const Header = () => {
           alignItems: 'center'
         }}>
           <Link 
-            href="/my-account" 
+            href="/login" 
             style={{ 
               color: '#000',
               textDecoration: 'none',

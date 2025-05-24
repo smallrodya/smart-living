@@ -40,7 +40,7 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 git add .
 
 # Создать коммит с описанием изменений
-git commit -m "Update:  раздел premium duvet set обновил все фотографии раздела продуктов"
+git commit -m "Update: Обновлены финальные категории создал страницу корзины.2"
 
 # Отправить изменения в удаленный репозиторий
 git push origin main
