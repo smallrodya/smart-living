@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { Magnifier } from 'react-image-magnifiers';
 
 interface ProductDimensions {
   open: string;
@@ -164,24 +165,41 @@ const ProductPage: React.FC<ProductPageProps> = ({ product }) => {
             borderRadius: 12,
             overflow: 'hidden',
           }}>
-            <Image
-              src={product.images[selectedImage]}
-              alt={product.title}
-              width={600}
-              height={600}
-              style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                width: '100%',
-                height: '100%',
-                objectFit: 'cover',
-                transition: 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                transform: isHovered ? 'scale(1.05)' : 'scale(1)',
-              }}
-              onMouseEnter={() => setIsHovered(true)}
-              onMouseLeave={() => setIsHovered(false)}
-            />
+            {isMobile ? (
+              <Image
+                src={product.images[selectedImage]}
+                alt={product.title}
+                width={600}
+                height={600}
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                  transition: 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                  transform: isHovered ? 'scale(1.05)' : 'scale(1)',
+                }}
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={() => setIsHovered(false)}
+              />
+            ) : (
+              <Magnifier
+                imageSrc={product.images[selectedImage]}
+                imageAlt={product.title}
+                mouseActivation="hover"
+                dragToMove={false}
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                }}
+                magnifierSize="50%"
+                magnifierBorderSize={2}
+                magnifierBorderColor="#e53935"
+              />
+            )}
             {product.images.length > 1 && (
               <>
                 <button
