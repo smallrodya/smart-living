@@ -15,62 +15,166 @@ const categories = [
   'OUTDOOR',
   'CURTAINS',
   'CLOTHING',
-  'FOOTWEAR'
+  'FOOTWEAR',
+  'CLEARANCE',
 ];
 
 const beddingSubcategories = [
   'Duvet Cover Sets',
   'Complete Bedding Sets',
+  'Fitted Sheets',
   'Pillowcases',
-  'Bed Sheets',
+  'Fleece Bedding',
+  'Weighted Blankets',
+  'Kids Beding',
   'Bedspreads',
-  'Blankets',
+  'Electric Underblankets',
+];
+
+const rugsMatsSubcategories = {
+  RUGS: [
+    'Shaggy Rugs',
+    'Carved Rugs',
+    'Reversible Rugs',
+    'Hallway Runner',
+    'Table Runner'
+  ],
+  MATS: [
+    'Door Mat',
+    'Kitchen Mat',
+    'Hallway Runner',
+    'Table Placemat'
+  ]
+};
+
+const throwsTowelsSubcategories = [
+  'Tea Towels',
+  '8Pc Towel Bale Set',
+  '10Pc Towel Bale Set',
+  'Weighted Blankets',
   'Throws'
 ];
 
-const rugsMatsSubcategories = [
-  'Shaggy Rugs',
-  'Bathroom Mats',
-  'Door Mats',
-  'Kitchen Mats',
-  'Runner Rugs',
-  'Area Rugs'
+const throwsTowelsStyles = [
+  'Fleece',
+  'Plain',
+  '3D',
+  'Chunky Hand Knitted'
 ];
 
-const throwsTowelsSubcategories = [
-  'Throws',
-  'Bath Towels',
-  'Hand Towels',
-  'Beach Towels',
-  'Kitchen Towels'
+const throwsTowelsColors = [
+  'White',
+  'Black',
+  'Grey',
+  'Blue',
+  'Pink',
+  'Green',
+  'Yellow',
+  'Red',
+  'Purple',
+  'Beige',
+  'Brown',
+  'Multi'
 ];
+
+const beddingSizes = ['Single', 'Double', 'King', 'Super King', 'Crib'];
+const beddingStyles = ['Printed', 'Plain', '3D', 'Teddy', 'Hotel Quality'];
+const beddingColors = ['White', 'Black', 'Grey', 'Blue', 'Pink', 'Green', 'Yellow', 'Red', 'Purple', 'Beige'];
+
+const rugsMatsSizes = ['Small', 'Medium', 'Large', 'Xlarge', 'Runner'];
+const rugsMatsColors = ['White', 'Black', 'Grey', 'Blue', 'Pink', 'Green', 'Yellow', 'Red', 'Purple', 'Beige', 'Brown', 'Multi'];
 
 const outdoorSubcategories = [
-  'Garden Furniture',
-  'Outdoor Cushions',
-  'Outdoor Rugs',
-  'Garden Decor'
+  'Shop all'
 ];
 
 const curtainsSubcategories = [
-  'Blackout Curtains',
-  'Sheer Curtains',
-  'Thermal Curtains',
-  'Curtain Accessories'
+  'Coming Soon'
+];
+
+const curtainsSizes = [
+  'Small',
+  'Medium',
+  'Large',
+  'Extra Large',
+  'Custom'
+];
+
+const curtainsColors = [
+  'White',
+  'Black',
+  'Grey',
+  'Blue',
+  'Pink',
+  'Green',
+  'Yellow',
+  'Red',
+  'Purple',
+  'Beige',
+  'Brown',
+  'Multi'
 ];
 
 const clothingSubcategories = [
-  'Dresses',
-  'Tops',
-  'Bottoms',
-  'Accessories'
+  "Men's",
+  "Women's",
+  "Kid's"
+];
+
+const clothingStyles = [
+  'Jeans',
+  'Joggers',
+  'Hoodies',
+  'Polo Shirts',
+  'Loungewear',
+  'Bathrobes'
+];
+
+const clothingColors = [
+  'White',
+  'Black',
+  'Grey',
+  'Blue',
+  'Pink',
+  'Green',
+  'Yellow',
+  'Red',
+  'Purple',
+  'Beige',
+  'Brown',
+  'Multi'
 ];
 
 const footwearSubcategories = [
+  'Booties',
   'Slippers',
-  'Sandals',
-  'Shoes',
-  'Boots'
+  'Socks'
+];
+
+const footwearSizes = [
+  'UK 3-4',
+  'UK 5-6',
+  'UK 7-8',
+  'UK 9-10',
+  'UK 11-12',
+  'Small',
+  'Medium',
+  'Large'
+];
+
+const footwearColors = [
+  'White',
+  'Black',
+  'Grey',
+  'Blue',
+  'Pink',
+  'Green',
+  'Yellow',
+  'Red',
+  'Purple',
+  'Beige',
+  'Brown',
+  'Multi'
 ];
 
 export default function EditProductModal({ open, onClose, product, onProductEdited }: EditProductModalProps) {
@@ -90,6 +194,7 @@ export default function EditProductModal({ open, onClose, product, onProductEdit
     beddingStyles: [] as string[],
     beddingColors: [] as string[],
     // Rugs & Mats specific
+    rugsMatsType: '' as 'RUGS' | 'MATS' | '',
     rugsMatsSizes: [] as string[],
     rugsMatsColors: [] as string[],
     // Throws & Towels specific
@@ -122,6 +227,7 @@ export default function EditProductModal({ open, onClose, product, onProductEdit
         beddingSizes: product.beddingSizes || [],
         beddingStyles: product.beddingStyles || [],
         beddingColors: product.beddingColors || [],
+        rugsMatsType: product.rugsMatsType || '',
         rugsMatsSizes: product.rugsMatsSizes || [],
         rugsMatsColors: product.rugsMatsColors || [],
         throwsTowelsStyles: product.throwsTowelsStyles || [],
@@ -299,18 +405,75 @@ export default function EditProductModal({ open, onClose, product, onProductEdit
           {formData.category === 'RUGS & MATS' && (
             <>
               <div>
-                <label className="block text-sm font-medium text-gray-700">Subcategory</label>
+                <label className="block text-sm font-medium text-gray-700">Type</label>
                 <select
-                  value={formData.subcategory}
-                  onChange={(e) => setFormData(prev => ({ ...prev, subcategory: e.target.value }))}
+                  value={formData.rugsMatsType}
+                  onChange={(e) => setFormData(prev => ({ ...prev, rugsMatsType: e.target.value as 'RUGS' | 'MATS' | '' }))}
                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                   required
                 >
-                  <option value="">Select a subcategory</option>
-                  {rugsMatsSubcategories.map(subcategory => (
-                    <option key={subcategory} value={subcategory}>{subcategory}</option>
-                  ))}
+                  <option value="">Select a type</option>
+                  <option value="RUGS">Rugs</option>
+                  <option value="MATS">Mats</option>
                 </select>
+              </div>
+              {formData.rugsMatsType && (
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">Subcategory</label>
+                  <select
+                    value={formData.subcategory}
+                    onChange={(e) => setFormData(prev => ({ ...prev, subcategory: e.target.value }))}
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                    required
+                  >
+                    <option value="">Select a subcategory</option>
+                    {rugsMatsSubcategories[formData.rugsMatsType as 'RUGS' | 'MATS'].map(subcategory => (
+                      <option key={subcategory} value={subcategory}>{subcategory}</option>
+                    ))}
+                  </select>
+                </div>
+              )}
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Sizes</label>
+                <div className="mt-2 space-y-2">
+                  {rugsMatsSizes.map(size => (
+                    <label key={size} className="inline-flex items-center mr-4">
+                      <input
+                        type="checkbox"
+                        checked={formData.rugsMatsSizes.includes(size)}
+                        onChange={(e) => {
+                          const newSizes = e.target.checked
+                            ? [...formData.rugsMatsSizes, size]
+                            : formData.rugsMatsSizes.filter(s => s !== size);
+                          setFormData(prev => ({ ...prev, rugsMatsSizes: newSizes }));
+                        }}
+                        className="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                      />
+                      <span className="ml-2">{size}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Colors</label>
+                <div className="mt-2 space-y-2">
+                  {rugsMatsColors.map(color => (
+                    <label key={color} className="inline-flex items-center mr-4">
+                      <input
+                        type="checkbox"
+                        checked={formData.rugsMatsColors.includes(color)}
+                        onChange={(e) => {
+                          const newColors = e.target.checked
+                            ? [...formData.rugsMatsColors, color]
+                            : formData.rugsMatsColors.filter(c => c !== color);
+                          setFormData(prev => ({ ...prev, rugsMatsColors: newColors }));
+                        }}
+                        className="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                      />
+                      <span className="ml-2">{color}</span>
+                    </label>
+                  ))}
+                </div>
               </div>
             </>
           )}
