@@ -1,6 +1,10 @@
+'use client';
+import React from 'react';
 import ProductPage from '@/components/ProductPage';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+
+export const dynamic = 'force-dynamic';
 
 const Page = () => {
   const product = {

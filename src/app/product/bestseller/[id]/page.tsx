@@ -4,7 +4,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ProductPageBestSeller from '@/components/ProductPageBestSeller';
 
-
+export const dynamic = 'force-dynamic';
 
 interface PageProps {
   params: {

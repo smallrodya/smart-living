@@ -3,6 +3,8 @@ import { MongoClient } from 'mongodb';
 import { Product } from '@/models/Product';
 import { ObjectId } from 'mongodb';
 
+export const dynamic = 'force-dynamic';
+
 const uri = process.env.MONGODB_URI;
 const client = new MongoClient(uri!);
 

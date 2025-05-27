@@ -2,6 +2,8 @@ import ProductPage from '@/components/ProductPage';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
+export const dynamic = 'force-dynamic';
+
 export default function Page() {
   const product = {
     title: '2 in 1 Reclining Gravity Chair and Lay Flat Sun lounger- Dark Green',

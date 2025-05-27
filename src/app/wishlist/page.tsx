@@ -6,6 +6,8 @@ import Footer from '@/components/Footer';
 import CookieBanner from '@/components/CookieBanner';
 import { useRouter } from 'next/navigation';
 
+export const dynamic = 'force-dynamic';
+
 interface WishlistItem {
   id: string;
   name?: string;
