@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
-import AddProductModal from '@/components/AddProductModal';
-import EditProductModal from '@/components/EditProductModal';
+import AddProductModal from '../../../components/AddProductModal';
+import EditProductModal from '../../../components/EditProductModal';
 
 export const dynamic = 'force-dynamic';
 
