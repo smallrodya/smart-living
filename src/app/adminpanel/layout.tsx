@@ -5,11 +5,11 @@ import { usePathname } from 'next/navigation';
 import AdminAuthGuard from '@/components/AdminAuthGuard';
 
 const menuItems = [
-  { name: 'Статистика', path: '/adminpanel', icon: '📊' },
-  { name: 'Товары', path: '/adminpanel/products', icon: '📦' },
-  { name: 'Категории', path: '/adminpanel/categories', icon: '📑' },
-  { name: 'Заказы', path: '/adminpanel/orders', icon: '🛒' },
-  { name: 'Пользователи', path: '/adminpanel/users', icon: '👥' },
+  { name: 'Statistics', path: '/adminpanel', icon: '📊' },
+  { name: 'Products', path: '/adminpanel/products', icon: '📦' },
+  { name: 'Categories', path: '/adminpanel/categories', icon: '📑' },
+  { name: 'Orders', path: '/adminpanel/orders', icon: '🛒' },
+  { name: 'Users', path: '/adminpanel/users', icon: '👥' },
 ];
 
 export default function AdminLayout({
@@ -19,6 +19,11 @@ export default function AdminLayout({
 }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const pathname = usePathname();
+
+  // Если мы на странице входа, не показываем layout админ-панели
+  if (pathname === '/adminpanel/login') {
+    return <>{children}</>;
+  }
 
   const handleLogout = () => {
     localStorage.removeItem('adminAuth');
@@ -72,7 +77,7 @@ export default function AdminLayout({
                 className="w-full flex items-center p-3 rounded-lg text-red-600 hover:bg-red-50"
               >
                 <span className="text-xl">🚪</span>
-                {isSidebarOpen && <span className="ml-3">Выйти</span>}
+                {isSidebarOpen && <span className="ml-3">Logout</span>}
               </button>
             </div>
           </div>

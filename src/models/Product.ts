@@ -33,6 +33,8 @@ export interface Product {
   additional: ProductAdditional;
   category: string;
   isBestSeller: boolean;
+  isSoldOut: boolean;
+  isHot: boolean;
   createdAt: Date;
   updatedAt: Date;
 } 
