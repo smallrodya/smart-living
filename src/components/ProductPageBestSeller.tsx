@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import ImageMagnifier from './ImageMagnifier';
+import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
 
 interface ProductDimensions {
   single: string;
@@ -199,14 +199,48 @@ const ProductPageBestSeller: React.FC<ProductPageBestSellerProps> = ({ product }
                 onMouseLeave={() => setIsHovered(false)}
               />
             ) : (
-              <ImageMagnifier
-                src={product.images[selectedImage]}
-                alt={product.title}
-                width={600}
-                height={600}
-                magnifierSize={350}
-                zoomLevel={2.5}
-              />
+              <div
+                style={{
+                  position: 'relative',
+                  width: '100%',
+                  height: '100%',
+                  overflow: 'hidden',
+                  cursor: 'zoom-in',
+                }}
+                onMouseMove={(e) => {
+                  const { left, top, width, height } = e.currentTarget.getBoundingClientRect();
+                  const x = (e.clientX - left) / width;
+                  const y = (e.clientY - top) / height;
+                  
+                  const image = e.currentTarget.querySelector('img');
+                  if (image) {
+                    image.style.transform = `scale(2)`;
+                    image.style.transformOrigin = `${x * 100}% ${y * 100}%`;
+                    e.currentTarget.style.cursor = 'zoom-out';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  const image = e.currentTarget.querySelector('img');
+                  if (image) {
+                    image.style.transform = 'scale(1)';
+                    image.style.transformOrigin = 'center';
+                    e.currentTarget.style.cursor = 'zoom-in';
+                  }
+                }}
+              >
+                <Image
+                  src={product.images[selectedImage]}
+                  alt={product.title}
+                  width={600}
+                  height={600}
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                    transition: 'transform 0.1s ease-out',
+                  }}
+                />
+              </div>
             )}
             {product.images.length > 1 && (
               <>
