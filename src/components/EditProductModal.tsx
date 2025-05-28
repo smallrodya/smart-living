@@ -518,8 +518,380 @@ export default function EditProductModal({ open, onClose, product, onProductEdit
             </div>
           )}
 
-          {/* Similar styling for other category-specific sections */}
-          {/* ... existing category-specific sections with updated styling ... */}
+          {formData.category === 'RUGS & MATS' && (
+            <div className="bg-gray-50 p-6 rounded-xl space-y-6">
+              <h3 className="text-lg font-semibold text-gray-900">Rugs & Mats Details</h3>
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Type</label>
+                <select
+                  value={formData.rugsMatsType}
+                  onChange={(e) => setFormData(prev => ({ ...prev, rugsMatsType: e.target.value as 'RUGS' | 'MATS' | '' }))}
+                  className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                  required
+                >
+                  <option value="">Select a type</option>
+                  <option value="RUGS">Rugs</option>
+                  <option value="MATS">Mats</option>
+                </select>
+              </div>
+              {formData.rugsMatsType && (
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Subcategory</label>
+                  <select
+                    value={formData.subcategory}
+                    onChange={(e) => setFormData(prev => ({ ...prev, subcategory: e.target.value }))}
+                    className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                    required
+                  >
+                    <option value="">Select a subcategory</option>
+                    {rugsMatsSubcategories[formData.rugsMatsType as 'RUGS' | 'MATS'].map(subcategory => (
+                      <option key={subcategory} value={subcategory}>{subcategory}</option>
+                    ))}
+                  </select>
+                </div>
+              )}
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Sizes</label>
+                  <div className="flex flex-wrap gap-3">
+                    {rugsMatsSizes.map(size => (
+                      <label key={size} className={`inline-flex items-center px-4 py-2 rounded-full bg-white border transition-all cursor-pointer ${
+                        formData.rugsMatsSizes.includes(size) 
+                          ? 'border-red-500 text-red-500' 
+                          : 'border-gray-300 hover:border-gray-400 text-gray-700'
+                      }`}>
+                        <input
+                          type="checkbox"
+                          checked={formData.rugsMatsSizes.includes(size)}
+                          onChange={(e) => {
+                            const newSizes = e.target.checked
+                              ? [...formData.rugsMatsSizes, size]
+                              : formData.rugsMatsSizes.filter(s => s !== size);
+                            setFormData(prev => ({ ...prev, rugsMatsSizes: newSizes }));
+                          }}
+                          className="hidden"
+                        />
+                        <span>{size}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Colors</label>
+                  <div className="flex flex-wrap gap-3">
+                    {rugsMatsColors.map(color => (
+                      <label key={color} className={`inline-flex items-center px-4 py-2 rounded-full bg-white border transition-all cursor-pointer ${
+                        formData.rugsMatsColors.includes(color) 
+                          ? 'border-red-500 text-red-500' 
+                          : 'border-gray-300 hover:border-gray-400 text-gray-700'
+                      }`}>
+                        <input
+                          type="checkbox"
+                          checked={formData.rugsMatsColors.includes(color)}
+                          onChange={(e) => {
+                            const newColors = e.target.checked
+                              ? [...formData.rugsMatsColors, color]
+                              : formData.rugsMatsColors.filter(c => c !== color);
+                            setFormData(prev => ({ ...prev, rugsMatsColors: newColors }));
+                          }}
+                          className="hidden"
+                        />
+                        <span>{color}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {formData.category === 'THROWS & TOWELS' && (
+            <div className="bg-gray-50 p-6 rounded-xl space-y-6">
+              <h3 className="text-lg font-semibold text-gray-900">Throws & Towels Details</h3>
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Subcategory</label>
+                <select
+                  value={formData.subcategory}
+                  onChange={(e) => setFormData(prev => ({ ...prev, subcategory: e.target.value }))}
+                  className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                  required
+                >
+                  <option value="">Select a subcategory</option>
+                  {throwsTowelsSubcategories.map(subcategory => (
+                    <option key={subcategory} value={subcategory}>{subcategory}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Styles</label>
+                  <div className="flex flex-wrap gap-3">
+                    {throwsTowelsStyles.map(style => (
+                      <label key={style} className={`inline-flex items-center px-4 py-2 rounded-full bg-white border transition-all cursor-pointer ${
+                        formData.throwsTowelsStyles.includes(style) 
+                          ? 'border-red-500 text-red-500' 
+                          : 'border-gray-300 hover:border-gray-400 text-gray-700'
+                      }`}>
+                        <input
+                          type="checkbox"
+                          checked={formData.throwsTowelsStyles.includes(style)}
+                          onChange={(e) => {
+                            const newStyles = e.target.checked
+                              ? [...formData.throwsTowelsStyles, style]
+                              : formData.throwsTowelsStyles.filter(s => s !== style);
+                            setFormData(prev => ({ ...prev, throwsTowelsStyles: newStyles }));
+                          }}
+                          className="hidden"
+                        />
+                        <span>{style}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Colors</label>
+                  <div className="flex flex-wrap gap-3">
+                    {throwsTowelsColors.map(color => (
+                      <label key={color} className={`inline-flex items-center px-4 py-2 rounded-full bg-white border transition-all cursor-pointer ${
+                        formData.throwsTowelsColors.includes(color) 
+                          ? 'border-red-500 text-red-500' 
+                          : 'border-gray-300 hover:border-gray-400 text-gray-700'
+                      }`}>
+                        <input
+                          type="checkbox"
+                          checked={formData.throwsTowelsColors.includes(color)}
+                          onChange={(e) => {
+                            const newColors = e.target.checked
+                              ? [...formData.throwsTowelsColors, color]
+                              : formData.throwsTowelsColors.filter(c => c !== color);
+                            setFormData(prev => ({ ...prev, throwsTowelsColors: newColors }));
+                          }}
+                          className="hidden"
+                        />
+                        <span>{color}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {formData.category === 'CURTAINS' && (
+            <div className="bg-gray-50 p-6 rounded-xl space-y-6">
+              <h3 className="text-lg font-semibold text-gray-900">Curtains Details</h3>
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Subcategory</label>
+                <select
+                  value={formData.subcategory}
+                  onChange={(e) => setFormData(prev => ({ ...prev, subcategory: e.target.value }))}
+                  className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                  required
+                >
+                  <option value="">Select a subcategory</option>
+                  {curtainsSubcategories.map(subcategory => (
+                    <option key={subcategory} value={subcategory}>{subcategory}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Sizes</label>
+                  <div className="flex flex-wrap gap-3">
+                    {curtainsSizes.map(size => (
+                      <label key={size} className={`inline-flex items-center px-4 py-2 rounded-full bg-white border transition-all cursor-pointer ${
+                        formData.curtainsSizes.includes(size) 
+                          ? 'border-red-500 text-red-500' 
+                          : 'border-gray-300 hover:border-gray-400 text-gray-700'
+                      }`}>
+                        <input
+                          type="checkbox"
+                          checked={formData.curtainsSizes.includes(size)}
+                          onChange={(e) => {
+                            const newSizes = e.target.checked
+                              ? [...formData.curtainsSizes, size]
+                              : formData.curtainsSizes.filter(s => s !== size);
+                            setFormData(prev => ({ ...prev, curtainsSizes: newSizes }));
+                          }}
+                          className="hidden"
+                        />
+                        <span>{size}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Colors</label>
+                  <div className="flex flex-wrap gap-3">
+                    {curtainsColors.map(color => (
+                      <label key={color} className={`inline-flex items-center px-4 py-2 rounded-full bg-white border transition-all cursor-pointer ${
+                        formData.curtainsColors.includes(color) 
+                          ? 'border-red-500 text-red-500' 
+                          : 'border-gray-300 hover:border-gray-400 text-gray-700'
+                      }`}>
+                        <input
+                          type="checkbox"
+                          checked={formData.curtainsColors.includes(color)}
+                          onChange={(e) => {
+                            const newColors = e.target.checked
+                              ? [...formData.curtainsColors, color]
+                              : formData.curtainsColors.filter(c => c !== color);
+                            setFormData(prev => ({ ...prev, curtainsColors: newColors }));
+                          }}
+                          className="hidden"
+                        />
+                        <span>{color}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {formData.category === 'CLOTHING' && (
+            <div className="bg-gray-50 p-6 rounded-xl space-y-6">
+              <h3 className="text-lg font-semibold text-gray-900">Clothing Details</h3>
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Subcategory</label>
+                <select
+                  value={formData.subcategory}
+                  onChange={(e) => setFormData(prev => ({ ...prev, subcategory: e.target.value }))}
+                  className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                  required
+                >
+                  <option value="">Select a subcategory</option>
+                  {clothingSubcategories.map(subcategory => (
+                    <option key={subcategory} value={subcategory}>{subcategory}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Styles</label>
+                  <div className="flex flex-wrap gap-3">
+                    {clothingStyles.map(style => (
+                      <label key={style} className={`inline-flex items-center px-4 py-2 rounded-full bg-white border transition-all cursor-pointer ${
+                        formData.clothingStyles.includes(style) 
+                          ? 'border-red-500 text-red-500' 
+                          : 'border-gray-300 hover:border-gray-400 text-gray-700'
+                      }`}>
+                        <input
+                          type="checkbox"
+                          checked={formData.clothingStyles.includes(style)}
+                          onChange={(e) => {
+                            const newStyles = e.target.checked
+                              ? [...formData.clothingStyles, style]
+                              : formData.clothingStyles.filter(s => s !== style);
+                            setFormData(prev => ({ ...prev, clothingStyles: newStyles }));
+                          }}
+                          className="hidden"
+                        />
+                        <span>{style}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Colors</label>
+                  <div className="flex flex-wrap gap-3">
+                    {clothingColors.map(color => (
+                      <label key={color} className={`inline-flex items-center px-4 py-2 rounded-full bg-white border transition-all cursor-pointer ${
+                        formData.clothingColors.includes(color) 
+                          ? 'border-red-500 text-red-500' 
+                          : 'border-gray-300 hover:border-gray-400 text-gray-700'
+                      }`}>
+                        <input
+                          type="checkbox"
+                          checked={formData.clothingColors.includes(color)}
+                          onChange={(e) => {
+                            const newColors = e.target.checked
+                              ? [...formData.clothingColors, color]
+                              : formData.clothingColors.filter(c => c !== color);
+                            setFormData(prev => ({ ...prev, clothingColors: newColors }));
+                          }}
+                          className="hidden"
+                        />
+                        <span>{color}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {formData.category === 'FOOTWEAR' && (
+            <div className="bg-gray-50 p-6 rounded-xl space-y-6">
+              <h3 className="text-lg font-semibold text-gray-900">Footwear Details</h3>
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Subcategory</label>
+                <select
+                  value={formData.subcategory}
+                  onChange={(e) => setFormData(prev => ({ ...prev, subcategory: e.target.value }))}
+                  className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                  required
+                >
+                  <option value="">Select a subcategory</option>
+                  {footwearSubcategories.map(subcategory => (
+                    <option key={subcategory} value={subcategory}>{subcategory}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Sizes</label>
+                  <div className="flex flex-wrap gap-3">
+                    {footwearSizes.map(size => (
+                      <label key={size} className={`inline-flex items-center px-4 py-2 rounded-full bg-white border transition-all cursor-pointer ${
+                        formData.footwearSizes.includes(size) 
+                          ? 'border-red-500 text-red-500' 
+                          : 'border-gray-300 hover:border-gray-400 text-gray-700'
+                      }`}>
+                        <input
+                          type="checkbox"
+                          checked={formData.footwearSizes.includes(size)}
+                          onChange={(e) => {
+                            const newSizes = e.target.checked
+                              ? [...formData.footwearSizes, size]
+                              : formData.footwearSizes.filter(s => s !== size);
+                            setFormData(prev => ({ ...prev, footwearSizes: newSizes }));
+                          }}
+                          className="hidden"
+                        />
+                        <span>{size}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Colors</label>
+                  <div className="flex flex-wrap gap-3">
+                    {footwearColors.map(color => (
+                      <label key={color} className={`inline-flex items-center px-4 py-2 rounded-full bg-white border transition-all cursor-pointer ${
+                        formData.footwearColors.includes(color) 
+                          ? 'border-red-500 text-red-500' 
+                          : 'border-gray-300 hover:border-gray-400 text-gray-700'
+                      }`}>
+                        <input
+                          type="checkbox"
+                          checked={formData.footwearColors.includes(color)}
+                          onChange={(e) => {
+                            const newColors = e.target.checked
+                              ? [...formData.footwearColors, color]
+                              : formData.footwearColors.filter(c => c !== color);
+                            setFormData(prev => ({ ...prev, footwearColors: newColors }));
+                          }}
+                          className="hidden"
+                        />
+                        <span>{color}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
 
           <div className="bg-gray-50 p-6 rounded-xl">
             <label className="block text-sm font-semibold text-gray-700 mb-4">Images</label>
