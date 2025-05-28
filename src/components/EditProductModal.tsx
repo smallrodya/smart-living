@@ -5,6 +5,8 @@ interface SizePrice {
   size: string;
   regularPrice: number;
   salePrice: number;
+  sku: string;
+  stock: number;
 }
 
 interface EditProductModalProps {
@@ -194,8 +196,6 @@ export default function EditProductModal({ open, onClose, product, onProductEdit
     images: [] as string[],
     isSoldOut: false,
     isHot: false,
-    sku: '',
-    stock: 0,
     // Bedding specific
     beddingSizes: [] as SizePrice[],
     beddingStyles: [] as string[],
@@ -230,12 +230,12 @@ export default function EditProductModal({ open, onClose, product, onProductEdit
         images: product.images || [],
         isSoldOut: product.isSoldOut || false,
         isHot: product.isHot || false,
-        sku: product.sku || '',
-        stock: product.stock || 0,
         beddingSizes: product.beddingSizes?.map((size: any) => ({
           size: typeof size === 'string' ? size : size.size,
           regularPrice: typeof size === 'string' ? 0 : size.regularPrice || 0,
-          salePrice: typeof size === 'string' ? 0 : size.salePrice || 0
+          salePrice: typeof size === 'string' ? 0 : size.salePrice || 0,
+          sku: typeof size === 'string' ? '' : size.sku || '',
+          stock: typeof size === 'string' ? 0 : size.stock || 0
         })) || [],
         beddingStyles: product.beddingStyles || [],
         beddingColors: product.beddingColors || [],
@@ -243,7 +243,9 @@ export default function EditProductModal({ open, onClose, product, onProductEdit
         rugsMatsSizes: product.rugsMatsSizes?.map((size: any) => ({
           size: typeof size === 'string' ? size : size.size,
           regularPrice: typeof size === 'string' ? 0 : size.regularPrice || 0,
-          salePrice: typeof size === 'string' ? 0 : size.salePrice || 0
+          salePrice: typeof size === 'string' ? 0 : size.salePrice || 0,
+          sku: typeof size === 'string' ? '' : size.sku || '',
+          stock: typeof size === 'string' ? 0 : size.stock || 0
         })) || [],
         rugsMatsColors: product.rugsMatsColors || [],
         throwsTowelsStyles: product.throwsTowelsStyles || [],
@@ -251,7 +253,9 @@ export default function EditProductModal({ open, onClose, product, onProductEdit
         curtainsSizes: product.curtainsSizes?.map((size: any) => ({
           size: typeof size === 'string' ? size : size.size,
           regularPrice: typeof size === 'string' ? 0 : size.regularPrice || 0,
-          salePrice: typeof size === 'string' ? 0 : size.salePrice || 0
+          salePrice: typeof size === 'string' ? 0 : size.salePrice || 0,
+          sku: typeof size === 'string' ? '' : size.sku || '',
+          stock: typeof size === 'string' ? 0 : size.stock || 0
         })) || [],
         curtainsColors: product.curtainsColors || [],
         clothingStyles: product.clothingStyles || [],
@@ -259,15 +263,17 @@ export default function EditProductModal({ open, onClose, product, onProductEdit
         footwearSizes: product.footwearSizes?.map((size: any) => ({
           size: typeof size === 'string' ? size : size.size,
           regularPrice: typeof size === 'string' ? 0 : size.regularPrice || 0,
-          salePrice: typeof size === 'string' ? 0 : size.salePrice || 0
+          salePrice: typeof size === 'string' ? 0 : size.salePrice || 0,
+          sku: typeof size === 'string' ? '' : size.sku || '',
+          stock: typeof size === 'string' ? 0 : size.stock || 0
         })) || [],
         footwearColors: product.footwearColors || []
       });
     }
   }, [product]);
 
-  const handleSizePriceChange = (category: string, size: string, regularPrice: number, salePrice: number) => {
-    const sizePrice: SizePrice = { size, regularPrice, salePrice };
+  const handleSizePriceChange = (category: string, size: string, regularPrice: number, salePrice: number, sku: string, stock: number) => {
+    const sizePrice: SizePrice = { size, regularPrice, salePrice, sku, stock };
     const sizesField = `${category.toLowerCase()}Sizes`;
     
     setFormData(prev => {
@@ -427,28 +433,6 @@ export default function EditProductModal({ open, onClose, product, onProductEdit
                 required
               />
             </div>
-
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">SKU</label>
-              <input
-                type="text"
-                value={formData.sku}
-                onChange={(e) => setFormData(prev => ({ ...prev, sku: e.target.value }))}
-                className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
-                required
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Stock</label>
-              <input
-                type="number"
-                value={formData.stock}
-                onChange={(e) => setFormData(prev => ({ ...prev, stock: parseInt(e.target.value) || 0 }))}
-                className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
-                min="0"
-                required
-              />
-            </div>
           </div>
 
           <div>
@@ -526,7 +510,7 @@ export default function EditProductModal({ open, onClose, product, onProductEdit
                               checked={!!sizePrice}
                               onChange={(e) => {
                                 if (e.target.checked) {
-                                  handleSizePriceChange('bedding', size, 0, 0);
+                                  handleSizePriceChange('bedding', size, 0, 0, '', 0);
                                 } else {
                                   removeSize('bedding', size);
                                 }
@@ -537,29 +521,56 @@ export default function EditProductModal({ open, onClose, product, onProductEdit
                           </label>
                           {sizePrice && (
                             <div className="flex items-center gap-2">
-                              <div className="flex items-center gap-1">
+                              <div className="flex flex-col gap-1">
+                                <label className="text-xs text-gray-500">SKU</label>
                                 <input
-                                  type="number"
-                                  value={sizePrice.regularPrice}
-                                  onChange={(e) => handleSizePriceChange('bedding', size, parseFloat(e.target.value), sizePrice.salePrice)}
-                                  className="w-24 px-3 py-1 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
-                                  placeholder="Regular"
-                                  min="0"
-                                  step="0.01"
+                                  type="text"
+                                  value={sizePrice.sku}
+                                  onChange={(e) => handleSizePriceChange('bedding', size, sizePrice.regularPrice, sizePrice.salePrice, e.target.value, sizePrice.stock)}
+                                  className="w-32 px-3 py-1 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                                  placeholder="SKU"
                                 />
-                                <span className="text-gray-500">£</span>
                               </div>
-                              <div className="flex items-center gap-1">
+                              <div className="flex flex-col gap-1">
+                                <label className="text-xs text-gray-500">Regular Price</label>
+                                <div className="flex items-center gap-1">
+                                  <input
+                                    type="number"
+                                    value={sizePrice.regularPrice}
+                                    onChange={(e) => handleSizePriceChange('bedding', size, parseFloat(e.target.value), sizePrice.salePrice, sizePrice.sku, sizePrice.stock)}
+                                    className="w-24 px-3 py-1 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                                    placeholder="Regular"
+                                    min="0"
+                                    step="0.01"
+                                  />
+                                  <span className="text-gray-500">£</span>
+                                </div>
+                              </div>
+                              <div className="flex flex-col gap-1">
+                                <label className="text-xs text-gray-500">Sale Price</label>
+                                <div className="flex items-center gap-1">
+                                  <input
+                                    type="number"
+                                    value={sizePrice.salePrice}
+                                    onChange={(e) => handleSizePriceChange('bedding', size, sizePrice.regularPrice, parseFloat(e.target.value), sizePrice.sku, sizePrice.stock)}
+                                    className="w-24 px-3 py-1 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                                    placeholder="Sale"
+                                    min="0"
+                                    step="0.01"
+                                  />
+                                  <span className="text-gray-500">£</span>
+                                </div>
+                              </div>
+                              <div className="flex flex-col gap-1">
+                                <label className="text-xs text-gray-500">Stock</label>
                                 <input
                                   type="number"
-                                  value={sizePrice.salePrice}
-                                  onChange={(e) => handleSizePriceChange('bedding', size, sizePrice.regularPrice, parseFloat(e.target.value))}
-                                  className="w-24 px-3 py-1 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
-                                  placeholder="Sale"
+                                  value={sizePrice.stock}
+                                  onChange={(e) => handleSizePriceChange('bedding', size, sizePrice.regularPrice, sizePrice.salePrice, sizePrice.sku, parseInt(e.target.value) || 0)}
+                                  className="w-20 px-3 py-1 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                                  placeholder="Stock"
                                   min="0"
-                                  step="0.01"
                                 />
-                                <span className="text-gray-500">£</span>
                               </div>
                             </div>
                           )}
@@ -670,7 +681,7 @@ export default function EditProductModal({ open, onClose, product, onProductEdit
                               checked={!!sizePrice}
                               onChange={(e) => {
                                 if (e.target.checked) {
-                                  handleSizePriceChange('rugsMats', size, 0, 0);
+                                  handleSizePriceChange('rugsMats', size, 0, 0, '', 0);
                                 } else {
                                   removeSize('rugsMats', size);
                                 }
@@ -681,29 +692,56 @@ export default function EditProductModal({ open, onClose, product, onProductEdit
                           </label>
                           {sizePrice && (
                             <div className="flex items-center gap-2">
-                              <div className="flex items-center gap-1">
+                              <div className="flex flex-col gap-1">
+                                <label className="text-xs text-gray-500">SKU</label>
                                 <input
-                                  type="number"
-                                  value={sizePrice.regularPrice}
-                                  onChange={(e) => handleSizePriceChange('rugsMats', size, parseFloat(e.target.value), sizePrice.salePrice)}
-                                  className="w-24 px-3 py-1 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
-                                  placeholder="Regular"
-                                  min="0"
-                                  step="0.01"
+                                  type="text"
+                                  value={sizePrice.sku}
+                                  onChange={(e) => handleSizePriceChange('rugsMats', size, sizePrice.regularPrice, sizePrice.salePrice, e.target.value, sizePrice.stock)}
+                                  className="w-32 px-3 py-1 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                                  placeholder="SKU"
                                 />
-                                <span className="text-gray-500">£</span>
                               </div>
-                              <div className="flex items-center gap-1">
+                              <div className="flex flex-col gap-1">
+                                <label className="text-xs text-gray-500">Regular Price</label>
+                                <div className="flex items-center gap-1">
+                                  <input
+                                    type="number"
+                                    value={sizePrice.regularPrice}
+                                    onChange={(e) => handleSizePriceChange('rugsMats', size, parseFloat(e.target.value), sizePrice.salePrice, sizePrice.sku, sizePrice.stock)}
+                                    className="w-24 px-3 py-1 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                                    placeholder="Regular"
+                                    min="0"
+                                    step="0.01"
+                                  />
+                                  <span className="text-gray-500">£</span>
+                                </div>
+                              </div>
+                              <div className="flex flex-col gap-1">
+                                <label className="text-xs text-gray-500">Sale Price</label>
+                                <div className="flex items-center gap-1">
+                                  <input
+                                    type="number"
+                                    value={sizePrice.salePrice}
+                                    onChange={(e) => handleSizePriceChange('rugsMats', size, sizePrice.regularPrice, parseFloat(e.target.value), sizePrice.sku, sizePrice.stock)}
+                                    className="w-24 px-3 py-1 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                                    placeholder="Sale"
+                                    min="0"
+                                    step="0.01"
+                                  />
+                                  <span className="text-gray-500">£</span>
+                                </div>
+                              </div>
+                              <div className="flex flex-col gap-1">
+                                <label className="text-xs text-gray-500">Stock</label>
                                 <input
                                   type="number"
-                                  value={sizePrice.salePrice}
-                                  onChange={(e) => handleSizePriceChange('rugsMats', size, sizePrice.regularPrice, parseFloat(e.target.value))}
-                                  className="w-24 px-3 py-1 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
-                                  placeholder="Sale"
+                                  value={sizePrice.stock}
+                                  onChange={(e) => handleSizePriceChange('rugsMats', size, sizePrice.regularPrice, sizePrice.salePrice, sizePrice.sku, parseInt(e.target.value) || 0)}
+                                  className="w-20 px-3 py-1 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                                  placeholder="Stock"
                                   min="0"
-                                  step="0.01"
                                 />
-                                <span className="text-gray-500">£</span>
                               </div>
                             </div>
                           )}
@@ -846,7 +884,7 @@ export default function EditProductModal({ open, onClose, product, onProductEdit
                               checked={!!sizePrice}
                               onChange={(e) => {
                                 if (e.target.checked) {
-                                  handleSizePriceChange('curtains', size, 0, 0);
+                                  handleSizePriceChange('curtains', size, 0, 0, '', 0);
                                 } else {
                                   removeSize('curtains', size);
                                 }
@@ -857,29 +895,56 @@ export default function EditProductModal({ open, onClose, product, onProductEdit
                           </label>
                           {sizePrice && (
                             <div className="flex items-center gap-2">
-                              <div className="flex items-center gap-1">
+                              <div className="flex flex-col gap-1">
+                                <label className="text-xs text-gray-500">SKU</label>
                                 <input
-                                  type="number"
-                                  value={sizePrice.regularPrice}
-                                  onChange={(e) => handleSizePriceChange('curtains', size, parseFloat(e.target.value), sizePrice.salePrice)}
-                                  className="w-24 px-3 py-1 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
-                                  placeholder="Regular"
-                                  min="0"
-                                  step="0.01"
+                                  type="text"
+                                  value={sizePrice.sku}
+                                  onChange={(e) => handleSizePriceChange('curtains', size, sizePrice.regularPrice, sizePrice.salePrice, e.target.value, sizePrice.stock)}
+                                  className="w-32 px-3 py-1 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                                  placeholder="SKU"
                                 />
-                                <span className="text-gray-500">£</span>
                               </div>
-                              <div className="flex items-center gap-1">
+                              <div className="flex flex-col gap-1">
+                                <label className="text-xs text-gray-500">Regular Price</label>
+                                <div className="flex items-center gap-1">
+                                  <input
+                                    type="number"
+                                    value={sizePrice.regularPrice}
+                                    onChange={(e) => handleSizePriceChange('curtains', size, parseFloat(e.target.value), sizePrice.salePrice, sizePrice.sku, sizePrice.stock)}
+                                    className="w-24 px-3 py-1 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                                    placeholder="Regular"
+                                    min="0"
+                                    step="0.01"
+                                  />
+                                  <span className="text-gray-500">£</span>
+                                </div>
+                              </div>
+                              <div className="flex flex-col gap-1">
+                                <label className="text-xs text-gray-500">Sale Price</label>
+                                <div className="flex items-center gap-1">
+                                  <input
+                                    type="number"
+                                    value={sizePrice.salePrice}
+                                    onChange={(e) => handleSizePriceChange('curtains', size, sizePrice.regularPrice, parseFloat(e.target.value), sizePrice.sku, sizePrice.stock)}
+                                    className="w-24 px-3 py-1 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                                    placeholder="Sale"
+                                    min="0"
+                                    step="0.01"
+                                  />
+                                  <span className="text-gray-500">£</span>
+                                </div>
+                              </div>
+                              <div className="flex flex-col gap-1">
+                                <label className="text-xs text-gray-500">Stock</label>
                                 <input
                                   type="number"
-                                  value={sizePrice.salePrice}
-                                  onChange={(e) => handleSizePriceChange('curtains', size, sizePrice.regularPrice, parseFloat(e.target.value))}
-                                  className="w-24 px-3 py-1 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
-                                  placeholder="Sale"
+                                  value={sizePrice.stock}
+                                  onChange={(e) => handleSizePriceChange('curtains', size, sizePrice.regularPrice, sizePrice.salePrice, sizePrice.sku, parseInt(e.target.value) || 0)}
+                                  className="w-20 px-3 py-1 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                                  placeholder="Stock"
                                   min="0"
-                                  step="0.01"
                                 />
-                                <span className="text-gray-500">£</span>
                               </div>
                             </div>
                           )}
@@ -1022,7 +1087,7 @@ export default function EditProductModal({ open, onClose, product, onProductEdit
                               checked={!!sizePrice}
                               onChange={(e) => {
                                 if (e.target.checked) {
-                                  handleSizePriceChange('footwear', size, 0, 0);
+                                  handleSizePriceChange('footwear', size, 0, 0, '', 0);
                                 } else {
                                   removeSize('footwear', size);
                                 }
@@ -1033,29 +1098,56 @@ export default function EditProductModal({ open, onClose, product, onProductEdit
                           </label>
                           {sizePrice && (
                             <div className="flex items-center gap-2">
-                              <div className="flex items-center gap-1">
+                              <div className="flex flex-col gap-1">
+                                <label className="text-xs text-gray-500">SKU</label>
                                 <input
-                                  type="number"
-                                  value={sizePrice.regularPrice}
-                                  onChange={(e) => handleSizePriceChange('footwear', size, parseFloat(e.target.value), sizePrice.salePrice)}
-                                  className="w-24 px-3 py-1 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
-                                  placeholder="Regular"
-                                  min="0"
-                                  step="0.01"
+                                  type="text"
+                                  value={sizePrice.sku}
+                                  onChange={(e) => handleSizePriceChange('footwear', size, sizePrice.regularPrice, sizePrice.salePrice, e.target.value, sizePrice.stock)}
+                                  className="w-32 px-3 py-1 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                                  placeholder="SKU"
                                 />
-                                <span className="text-gray-500">£</span>
                               </div>
-                              <div className="flex items-center gap-1">
+                              <div className="flex flex-col gap-1">
+                                <label className="text-xs text-gray-500">Regular Price</label>
+                                <div className="flex items-center gap-1">
+                                  <input
+                                    type="number"
+                                    value={sizePrice.regularPrice}
+                                    onChange={(e) => handleSizePriceChange('footwear', size, parseFloat(e.target.value), sizePrice.salePrice, sizePrice.sku, sizePrice.stock)}
+                                    className="w-24 px-3 py-1 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                                    placeholder="Regular"
+                                    min="0"
+                                    step="0.01"
+                                  />
+                                  <span className="text-gray-500">£</span>
+                                </div>
+                              </div>
+                              <div className="flex flex-col gap-1">
+                                <label className="text-xs text-gray-500">Sale Price</label>
+                                <div className="flex items-center gap-1">
+                                  <input
+                                    type="number"
+                                    value={sizePrice.salePrice}
+                                    onChange={(e) => handleSizePriceChange('footwear', size, sizePrice.regularPrice, parseFloat(e.target.value), sizePrice.sku, sizePrice.stock)}
+                                    className="w-24 px-3 py-1 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                                    placeholder="Sale"
+                                    min="0"
+                                    step="0.01"
+                                  />
+                                  <span className="text-gray-500">£</span>
+                                </div>
+                              </div>
+                              <div className="flex flex-col gap-1">
+                                <label className="text-xs text-gray-500">Stock</label>
                                 <input
                                   type="number"
-                                  value={sizePrice.salePrice}
-                                  onChange={(e) => handleSizePriceChange('footwear', size, sizePrice.regularPrice, parseFloat(e.target.value))}
-                                  className="w-24 px-3 py-1 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
-                                  placeholder="Sale"
+                                  value={sizePrice.stock}
+                                  onChange={(e) => handleSizePriceChange('footwear', size, sizePrice.regularPrice, sizePrice.salePrice, sizePrice.sku, parseInt(e.target.value) || 0)}
+                                  className="w-20 px-3 py-1 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                                  placeholder="Stock"
                                   min="0"
-                                  step="0.01"
                                 />
-                                <span className="text-gray-500">£</span>
                               </div>
                             </div>
                           )}

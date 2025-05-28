@@ -198,6 +198,7 @@ export default function ProductsPage() {
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<any>(null);
   const [loading, setLoading] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const fetchProducts = async () => {
     setLoading(true);
@@ -225,184 +226,196 @@ export default function ProductsPage() {
     setEditModalOpen(true);
   };
 
-  const formatSizes = (sizes: any[]) => {
-    if (!sizes || sizes.length === 0) return 'N/A';
-    return sizes.map(size => {
-      if (typeof size === 'string') return size;
-      return `${size.size} (Regular: £${size.regularPrice}, Sale: £${size.salePrice})`;
-    }).join(', ');
-  };
+  const filteredProducts = products.filter(product => {
+    const searchLower = searchQuery.toLowerCase();
+    return (
+      product.title.toLowerCase().includes(searchLower) ||
+      product.category.toLowerCase().includes(searchLower) ||
+      product.subcategory?.toLowerCase().includes(searchLower) ||
+      product.sku?.toLowerCase().includes(searchLower)
+    );
+  });
 
-  const formatPrice = (price: string) => {
-    if (!price) return 'N/A';
-    return price.startsWith('£') ? price : `£${price}`;
-  };
-
-  const renderBeddingDetails = (product: any) => {
-    if (product.category === 'BEDDING') {
-      return (
-        <div className="text-sm text-gray-600 space-y-1">
-          <div><strong>SKU:</strong> {product.sku || 'N/A'}</div>
-          <div><strong>Stock:</strong> {product.stock || 0}</div>
-          <div><strong>Subcategory:</strong> {product.subcategory || 'N/A'}</div>
-          <div><strong>Sizes:</strong> {formatSizes(product.beddingSizes)}</div>
-          <div><strong>Styles:</strong> {product.beddingStyles?.join(', ') || 'N/A'}</div>
-          <div><strong>Colors:</strong> {product.beddingColors?.join(', ') || 'N/A'}</div>
-          <div><strong>Features:</strong> {product.features || 'N/A'}</div>
-          <div><strong>Status:</strong> {product.isSoldOut ? 'Sold Out' : 'In Stock'}</div>
-          <div><strong>Hot:</strong> {product.isHot ? 'Yes' : 'No'}</div>
+  const renderProductSizes = (sizes: any[]) => {
+    if (!sizes || sizes.length === 0) return null;
+    return (
+      <div className="mt-2">
+        <h4 className="text-sm font-medium text-gray-700 mb-1">Available Sizes:</h4>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+          {sizes.map((size, index) => (
+            <div key={index} className="bg-gray-50 p-2 rounded">
+              <div className="flex justify-between items-center">
+                <span className="font-medium">{size.size}</span>
+                <span className="text-sm text-gray-500">SKU: {size.sku || 'N/A'}</span>
+              </div>
+              <div className="flex justify-between items-center mt-1">
+                <span className="text-sm text-gray-600">Stock: {size.stock || 0}</span>
+                <div className="text-sm">
+                  <span className="text-gray-500 line-through mr-2">£{size.regularPrice}</span>
+                  <span className="text-green-600 font-medium">£{size.salePrice}</span>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
-      );
-    }
-    
-    if (product.category === 'RUGS & MATS') {
-      return (
-        <div className="text-sm text-gray-600 space-y-1">
-          <div><strong>SKU:</strong> {product.sku || 'N/A'}</div>
-          <div><strong>Stock:</strong> {product.stock || 0}</div>
-          <div><strong>Type:</strong> {product.rugsMatsType || 'N/A'}</div>
-          <div><strong>Subcategory:</strong> {product.subcategory || 'N/A'}</div>
-          <div><strong>Sizes:</strong> {formatSizes(product.rugsMatsSizes)}</div>
-          <div><strong>Colors:</strong> {product.rugsMatsColors?.join(', ') || 'N/A'}</div>
-          <div><strong>Features:</strong> {product.features || 'N/A'}</div>
-          <div><strong>Status:</strong> {product.isSoldOut ? 'Sold Out' : 'In Stock'}</div>
-          <div><strong>Hot:</strong> {product.isHot ? 'Yes' : 'No'}</div>
-        </div>
-      );
-    }
-
-    if (product.category === 'THROWS & TOWELS') {
-      return (
-        <div className="text-sm text-gray-600 space-y-1">
-          <div><strong>SKU:</strong> {product.sku || 'N/A'}</div>
-          <div><strong>Stock:</strong> {product.stock || 0}</div>
-          <div><strong>Subcategory:</strong> {product.subcategory || 'N/A'}</div>
-          <div><strong>Styles:</strong> {product.throwsTowelsStyles?.join(', ') || 'N/A'}</div>
-          <div><strong>Colors:</strong> {product.throwsTowelsColors?.join(', ') || 'N/A'}</div>
-          <div><strong>Features:</strong> {product.features || 'N/A'}</div>
-          <div><strong>Status:</strong> {product.isSoldOut ? 'Sold Out' : 'In Stock'}</div>
-          <div><strong>Hot:</strong> {product.isHot ? 'Yes' : 'No'}</div>
-        </div>
-      );
-    }
-
-    if (product.category === 'OUTDOOR') {
-      return (
-        <div className="text-sm text-gray-600 space-y-1">
-          <div><strong>SKU:</strong> {product.sku || 'N/A'}</div>
-          <div><strong>Stock:</strong> {product.stock || 0}</div>
-          <div><strong>Subcategory:</strong> {product.subcategory || 'N/A'}</div>
-          <div><strong>Features:</strong> {product.features || 'N/A'}</div>
-          <div><strong>Status:</strong> {product.isSoldOut ? 'Sold Out' : 'In Stock'}</div>
-          <div><strong>Hot:</strong> {product.isHot ? 'Yes' : 'No'}</div>
-        </div>
-      );
-    }
-
-    if (product.category === 'CURTAINS') {
-      return (
-        <div className="text-sm text-gray-600 space-y-1">
-          <div><strong>SKU:</strong> {product.sku || 'N/A'}</div>
-          <div><strong>Stock:</strong> {product.stock || 0}</div>
-          <div><strong>Subcategory:</strong> {product.subcategory || 'N/A'}</div>
-          <div><strong>Sizes:</strong> {formatSizes(product.curtainsSizes)}</div>
-          <div><strong>Colors:</strong> {product.curtainsColors?.join(', ') || 'N/A'}</div>
-          <div><strong>Features:</strong> {product.features || 'N/A'}</div>
-          <div><strong>Status:</strong> {product.isSoldOut ? 'Sold Out' : 'In Stock'}</div>
-          <div><strong>Hot:</strong> {product.isHot ? 'Yes' : 'No'}</div>
-        </div>
-      );
-    }
-
-    if (product.category === 'CLOTHING') {
-      return (
-        <div className="text-sm text-gray-600 space-y-1">
-          <div><strong>SKU:</strong> {product.sku || 'N/A'}</div>
-          <div><strong>Stock:</strong> {product.stock || 0}</div>
-          <div><strong>Subcategory:</strong> {product.subcategory || 'N/A'}</div>
-          <div><strong>Styles:</strong> {product.clothingStyles?.join(', ') || 'N/A'}</div>
-          <div><strong>Colors:</strong> {product.clothingColors?.join(', ') || 'N/A'}</div>
-          <div><strong>Features:</strong> {product.features || 'N/A'}</div>
-          <div><strong>Status:</strong> {product.isSoldOut ? 'Sold Out' : 'In Stock'}</div>
-          <div><strong>Hot:</strong> {product.isHot ? 'Yes' : 'No'}</div>
-        </div>
-      );
-    }
-
-    if (product.category === 'FOOTWEAR') {
-      return (
-        <div className="text-sm text-gray-600 space-y-1">
-          <div><strong>SKU:</strong> {product.sku || 'N/A'}</div>
-          <div><strong>Stock:</strong> {product.stock || 0}</div>
-          <div><strong>Subcategory:</strong> {product.subcategory || 'N/A'}</div>
-          <div><strong>Sizes:</strong> {formatSizes(product.footwearSizes)}</div>
-          <div><strong>Colors:</strong> {product.footwearColors?.join(', ') || 'N/A'}</div>
-          <div><strong>Features:</strong> {product.features || 'N/A'}</div>
-          <div><strong>Status:</strong> {product.isSoldOut ? 'Sold Out' : 'In Stock'}</div>
-          <div><strong>Hot:</strong> {product.isHot ? 'Yes' : 'No'}</div>
-        </div>
-      );
-    }
-
-    return null;
+      </div>
+    );
   };
 
   return (
-    <div>
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <AddProductModal open={modalOpen} onClose={() => setModalOpen(false)} onProductAdded={fetchProducts} />
       <EditProductModal open={editModalOpen} onClose={() => setEditModalOpen(false)} product={editingProduct} onProductEdited={fetchProducts} />
-      <div className="flex items-center justify-between mb-8">
-        <h1 className="text-3xl font-bold">Products</h1>
-        <button
-          className="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 transition-colors"
-          onClick={() => setModalOpen(true)}
-        >
-          Add Product
-        </button>
+      
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8 gap-4">
+        <h1 className="text-2xl font-bold text-gray-900">Products Management</h1>
+        <div className="flex items-center gap-4">
+          <div className="relative">
+            <input
+              type="text"
+              placeholder="Search products..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full md:w-64 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+            />
+            <svg
+              className="absolute right-3 top-2.5 h-5 w-5 text-gray-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+              />
+            </svg>
+          </div>
+          <button
+            className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors"
+            onClick={() => setModalOpen(true)}
+          >
+            Add Product
+          </button>
+        </div>
       </div>
-      <div className="bg-white rounded-lg shadow p-6">
+
+      <div className="bg-white rounded-lg shadow overflow-hidden">
         {loading ? (
-          <div className="text-gray-500 text-center py-8">Loading...</div>
-        ) : products.length === 0 ? (
-          <div className="text-gray-500 text-center py-8">No products yet.</div>
+          <div className="text-center py-8">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600 mx-auto"></div>
+            <p className="mt-2 text-gray-600">Loading products...</p>
+          </div>
+        ) : filteredProducts.length === 0 ? (
+          <div className="text-center py-8">
+            <p className="text-gray-500">No products found.</p>
+          </div>
         ) : (
-          <table className="w-full text-left">
-            <thead>
-              <tr>
-                <th className="py-2 px-4">Name</th>
-                <th className="py-2 px-4">Category</th>
-                <th className="py-2 px-4">Price</th>
-                <th className="py-2 px-4">Details</th>
-                <th className="py-2 px-4">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {products.map((product) => (
-                <tr key={product._id} className="border-t">
-                  <td className="py-2 px-4">{product.title}</td>
-                  <td className="py-2 px-4">{product.category}</td>
-                  <td className="py-2 px-4">{formatPrice(product.price)}</td>
-                  <td className="py-2 px-4">
-                    {renderBeddingDetails(product)}
-                  </td>
-                  <td className="py-2 px-4 flex gap-2">
-                    <button
-                      className="text-blue-600 hover:underline"
-                      onClick={() => handleEdit(product)}
-                    >
-                      Edit
-                    </button>
-                    <button
-                      className="text-red-600 hover:underline"
-                      onClick={() => handleDelete(product._id)}
-                    >
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <div className="divide-y divide-gray-200">
+            {filteredProducts.map((product) => (
+              <div key={product._id} className="p-6 hover:bg-gray-50 transition-colors">
+                <div className="flex flex-col md:flex-row gap-6">
+                  {/* Product Image */}
+                  {product.images && product.images.length > 0 && (
+                    <div className="w-full md:w-48 h-48 relative rounded-lg overflow-hidden">
+                      <img
+                        src={product.images[0]}
+                        alt={product.title}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  )}
+
+                  {/* Product Details */}
+                  <div className="flex-1">
+                    <div className="flex justify-between items-start mb-4">
+                      <div>
+                        <h3 className="text-lg font-semibold text-gray-900">{product.title}</h3>
+                        <div className="flex items-center gap-2 mt-1">
+                          <span className="text-sm text-gray-500">{product.category}</span>
+                          {product.subcategory && (
+                            <>
+                              <span className="text-gray-300">•</span>
+                              <span className="text-sm text-gray-500">{product.subcategory}</span>
+                            </>
+                          )}
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <button
+                          className="text-indigo-600 hover:text-indigo-800 text-sm font-medium"
+                          onClick={() => handleEdit(product)}
+                        >
+                          Edit
+                        </button>
+                        <button
+                          className="text-red-600 hover:text-red-800 text-sm font-medium"
+                          onClick={() => handleDelete(product._id)}
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Product Status */}
+                    <div className="flex items-center gap-4 mb-4">
+                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                        product.isSoldOut ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'
+                      }`}>
+                        {product.isSoldOut ? 'Sold Out' : 'In Stock'}
+                      </span>
+                      {product.isHot && (
+                        <span className="px-2 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
+                          Hot
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Product Details */}
+                    <div className="space-y-4">
+                      {/* Sizes */}
+                      {product.beddingSizes && renderProductSizes(product.beddingSizes)}
+
+                      {/* Styles */}
+                      {product.beddingStyles && product.beddingStyles.length > 0 && (
+                        <div>
+                          <h4 className="text-sm font-medium text-gray-700 mb-1">Styles:</h4>
+                          <div className="flex flex-wrap gap-2">
+                            {product.beddingStyles.map((style: string, index: number) => (
+                              <span
+                                key={index}
+                                className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-sm"
+                              >
+                                {style}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Colors */}
+                      {product.beddingColors && product.beddingColors.length > 0 && (
+                        <div>
+                          <h4 className="text-sm font-medium text-gray-700 mb-1">Colors:</h4>
+                          <div className="flex flex-wrap gap-2">
+                            {product.beddingColors.map((color: string, index: number) => (
+                              <span
+                                key={index}
+                                className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-sm"
+                              >
+                                {color}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
         )}
       </div>
     </div>

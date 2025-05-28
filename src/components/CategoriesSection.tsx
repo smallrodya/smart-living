@@ -35,21 +35,21 @@ const megaMenus: MegaMenu[] = [
       {
         title: 'STYLE',
         items: [
-          { label: 'Printed', href: '/shop/printed-duvet-set' },
-          { label: 'Plain', href: '/shop/plain-bedding' },
-          { label: '3D', href: '/shop/3d-bedding' },
-          { label: 'Teddy', href: '/shop/teddy-bedding' },
-          { label: 'Hotel Quality', href: '/shop/hotel-quality-bedding' },
+          { label: 'Printed', href: '/shop/printed' },
+          { label: 'Plain', href: '/shop/plain' },
+          { label: '3D', href: '/shop/3d' },
+          { label: 'Teddy', href: '/shop/teddy' },
+          { label: 'Hotel Quality', href: '/shop/hotel-quality' },
         ],
       },
       {
         title: 'SIZE',
         items: [
-          { label: 'Single', href: '/shop/single-bedding' },
-          { label: 'Double', href: '/shop/double-bedding' },
-          { label: 'King', href: '/shop/king-bedding' },
-          { label: 'Super King', href: '/shop/super-king-bedding' },
-          { label: 'Crib', href: '/shop/crib-bedding' },
+          { label: 'Single', href: '/shop/single' },
+          { label: 'Double', href: '/shop/double' },
+          { label: 'King', href: '/shop/king' },
+          { label: 'Super King', href: '/shop/super-king' },
+          { label: 'Crib', href: '/shop/crib' },
         ],
       },
       {
