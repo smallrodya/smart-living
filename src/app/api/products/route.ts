@@ -63,22 +63,48 @@ export async function POST(request: Request) {
 
 export async function PUT(request: Request) {
   try {
+    const { searchParams } = new URL(request.url);
+    const id = searchParams.get('id');
+    
+    if (!id) {
+      return NextResponse.json({ error: 'Product ID is required' }, { status: 400 });
+    }
+
     const body = await request.json();
+    console.log('Получены данные для обновления:', body);
+    
+    // Удаляем _id из данных обновления
     const { _id, ...updateData } = body;
     
     await client.connect();
     const database = client.db('smartliving');
     const products = database.collection('products');
     
-    await products.updateOne(
-      { _id: new ObjectId(_id) },
-      { $set: updateData }
+    const updateResult = await products.updateOne(
+      { _id: new ObjectId(id) },
+      { 
+        $set: {
+          ...updateData,
+          updatedAt: new Date()
+        }
+      }
     );
+
+    if (updateResult.matchedCount === 0) {
+      return NextResponse.json({ error: 'Product not found' }, { status: 404 });
+    }
+
+    if (updateResult.modifiedCount === 0) {
+      return NextResponse.json({ error: 'No changes were made' }, { status: 400 });
+    }
+    
+    // Получаем обновленный товар
+    const updatedProduct = await products.findOne({ _id: new ObjectId(id) });
     
     // Уведомляем всех клиентов об обновлении
     notifyClients('products-updated');
     
-    return NextResponse.json({ success: true });
+    return NextResponse.json({ success: true, product: updatedProduct });
   } catch (error) {
     console.error('Database error:', error);
     return NextResponse.json({ error: 'Failed to update product' }, { status: 500 });

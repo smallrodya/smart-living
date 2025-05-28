@@ -2,10 +2,10 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Header from '@/components/Header';
-import CategoriesSection from '@/components/CategoriesSection';
 import Footer from '@/components/Footer';
 import CookieBanner from '@/components/CookieBanner';
 import { useRouter } from 'next/navigation';
+import CategoriesSection from '@/components/CategoriesSection';
 
 export const dynamic = 'force-dynamic';
 
