@@ -8,7 +8,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Smart Living",
-  description: "Smart Living - ваш умный дом",
+  description: "Smart Living - The best place to buy homeware",
 };
 
 export default function RootLayout({
