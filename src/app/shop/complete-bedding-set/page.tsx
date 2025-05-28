@@ -5,6 +5,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import CookieBanner from '@/components/CookieBanner';
 import { useRouter } from 'next/navigation';
+import CategoriesSection from '@/components/CategoriesSection';
 
 export const dynamic = 'force-dynamic';
 
@@ -13,11 +14,13 @@ interface Product {
   title: string;
   description: string;
   features: string;
-  price: number;
+  price: string;
   category: string;
   subcategory: string;
-  beddingSizes: string[]; // Размеры постельного белья
-  beddingColors: string[]; // Цвета постельного белья
+  sku: string;
+  beddingSizes: Array<{ size: string; price: number; salePrice: number }>;
+  beddingColors: string[];
+  beddingStyles: string[];
   images?: string[];
   discount?: number;
   isSoldOut?: boolean;
@@ -66,14 +69,17 @@ export default function CompleteBeddingSetPage() {
     }
   };
 
-  const allSizes = Array.from(new Set(products.flatMap(p => p.beddingSizes || [])));
+  const allSizes = Array.from(new Set(products.flatMap(p => p.beddingSizes.map(s => s.size))));
   const allColors = Array.from(new Set(products.flatMap(p => p.beddingColors || [])));
 
   const filteredProducts = products.filter(product => {
-    const matchesSize = !selectedSize || product.beddingSizes?.includes(selectedSize);
-    const matchesColor = !selectedColor || product.beddingColors?.includes(selectedColor);
+    const matchesSize = !selectedSize || product.beddingSizes.some(s => s.size === selectedSize);
+    const matchesColor = !selectedColor || product.beddingColors.includes(selectedColor);
     const [minPrice, maxPrice] = priceRange;
-    return matchesSize && matchesColor && product.price >= minPrice && product.price <= maxPrice;
+    const productPrices = product.beddingSizes.map(s => s.salePrice);
+    const productMinPrice = Math.min(...productPrices);
+    const productMaxPrice = Math.max(...productPrices);
+    return matchesSize && matchesColor && productMinPrice >= minPrice && productMaxPrice <= maxPrice;
   });
 
   const clearFilters = () => {
@@ -108,7 +114,7 @@ export default function CompleteBeddingSetPage() {
             src: item.images?.[0] || '',
             hoverSrc: item.images?.[1] || item.images?.[0] || '',
             title: item.title,
-            price: `£${item.price}`,
+            price: formatPrice(item.beddingSizes[0].salePrice),
             discount: item.discount ? `-${item.discount}%` : ''
           }));
         
@@ -120,6 +126,23 @@ export default function CompleteBeddingSetPage() {
         return newWishlist;
       }
     });
+  };
+
+  const getProductPrice = (product: Product) => {
+    if (!product.beddingSizes || product.beddingSizes.length === 0) return 0;
+    return product.beddingSizes[0].salePrice;
+  };
+
+  const formatPrice = (price: number) => {
+    return `£${price.toFixed(2)}`;
+  };
+
+  const formatPriceRange = (product: Product) => {
+    if (!product.beddingSizes || product.beddingSizes.length === 0) return '£0.00';
+    const prices = product.beddingSizes.map(size => size.salePrice);
+    const min = Math.min(...prices);
+    const max = Math.max(...prices);
+    return min === max ? formatPrice(min) : `${formatPrice(min)} - ${formatPrice(max)}`;
   };
 
   if (loading) {
@@ -134,6 +157,7 @@ export default function CompleteBeddingSetPage() {
     <>
       <Header />
       <main>
+        <CategoriesSection />
         {/* Category Image Section */}
         <div style={{
           width: '100%',
@@ -142,7 +166,7 @@ export default function CompleteBeddingSetPage() {
           marginBottom: '60px'
         }}>
           <Image
-            src="/bedding-banner.jpg"
+            src="/premium-duvet40.jpg"
             alt="Complete Bedding Sets"
             fill
             style={{
@@ -168,7 +192,7 @@ export default function CompleteBeddingSetPage() {
               zIndex: 10
             }}>
               <button
-                onClick={() => router.push('/category/bedding/beddingtype')}
+                onClick={() => router.push('/')}
                 style={{
                   background: 'rgba(255, 255, 255, 0.9)',
                   border: 'none',
@@ -677,56 +701,102 @@ export default function CompleteBeddingSetPage() {
                   }}>
                     {product.discount ? (
                       <>
-                        £{(product.price * (1 - product.discount / 100)).toFixed(2)}
+                        {formatPriceRange(product)}
                         <span style={{
                           color: '#999',
                           textDecoration: 'line-through',
                           marginLeft: '8px',
                           fontSize: '16px'
                         }}>
-                          £{product.price}
+                          {formatPriceRange({ ...product, discount: undefined })}
                         </span>
                       </>
                     ) : (
-                      `£${product.price}`
+                      formatPriceRange(product)
                     )}
                   </div>
                   {!product.isSoldOut && (
-                    <button
-                      onClick={() => {/* Add to basket logic */}}
-                      style={{
-                        position: 'absolute',
-                        top: '64px',
-                        right: '12px',
-                        background: 'rgba(255, 255, 255, 0.95)',
-                        border: 'none',
-                        borderRadius: '50%',
-                        width: '44px',
-                        height: '44px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        cursor: 'pointer',
-                        boxShadow: '0 2px 12px rgba(0,0,0,0.15)',
-                        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                        backdropFilter: 'blur(4px)'
-                      }}
-                    >
-                      <svg
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="#000"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
+                    <div style={{
+                      display: 'flex',
+                      gap: '12px',
+                      marginTop: '16px'
+                    }}>
+                      <button
+                        onClick={() => {/* Add to basket logic */}}
+                        style={{
+                          flex: 1,
+                          padding: '12px 24px',
+                          background: '#222',
+                          color: '#fff',
+                          border: 'none',
+                          borderRadius: '8px',
+                          fontSize: '14px',
+                          fontWeight: 600,
+                          cursor: 'pointer',
+                          transition: 'all 0.2s ease',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          gap: '8px'
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.background = '#333';
+                          e.currentTarget.style.transform = 'translateY(-2px)';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.background = '#222';
+                          e.currentTarget.style.transform = 'translateY(0)';
+                        }}
                       >
-                        <circle cx="9" cy="21" r="1"/>
-                        <circle cx="20" cy="21" r="1"/>
-                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
-                      </svg>
-                    </button>
+                        <svg
+                          width="20"
+                          height="20"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <circle cx="9" cy="21" r="1"/>
+                          <circle cx="20" cy="21" r="1"/>
+                          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+                        </svg>
+                        Add to Cart
+                      </button>
+                      <button
+                        onClick={() => {/* Quick view logic */}}
+                        style={{
+                          padding: '12px',
+                          background: '#f5f5f5',
+                          color: '#222',
+                          border: 'none',
+                          borderRadius: '8px',
+                          cursor: 'pointer',
+                          transition: 'all 0.2s ease'
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.background = '#eee';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.background = '#f5f5f5';
+                        }}
+                      >
+                        <svg
+                          width="20"
+                          height="20"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                          <circle cx="12" cy="12" r="3"/>
+                        </svg>
+                      </button>
+                    </div>
                   )}
                 </div>
               </div>

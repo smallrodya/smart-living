@@ -130,6 +130,7 @@ export default function ShaggyRugsPage() {
     <>
       <Header />
       <main>
+        <CategoriesSection />
         {/* Category Image Section */}
         <div style={{
           width: '100%',

@@ -4,8 +4,10 @@ import Image from 'next/image';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import CookieBanner from '@/components/CookieBanner';
-import { useRouter } from 'next/navigation';
 import CategoriesSection from '@/components/CategoriesSection';
+import { useRouter } from 'next/navigation';
+
+export const dynamic = 'force-dynamic';
 
 interface Product {
   _id: string;
@@ -25,16 +27,15 @@ interface Product {
   isHot?: boolean;
 }
 
-export default function DuvetSetPage() {
+export default function PillowcasesPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedSize, setSelectedSize] = useState<string>('');
   const [selectedColor, setSelectedColor] = useState<string>('');
-  const [selectedStyle, setSelectedStyle] = useState<string>('');
   const [showFilters, setShowFilters] = useState(false);
   const [hoveredProduct, setHoveredProduct] = useState<string | null>(null);
   const [wishlist, setWishlist] = useState<string[]>([]);
-  const [priceRange, setPriceRange] = useState<[number, number]>([0, 1000]);
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, 200]);
   const router = useRouter();
 
   useEffect(() => {
@@ -51,16 +52,16 @@ export default function DuvetSetPage() {
       const res = await fetch('/api/products');
       const data = await res.json();
       console.log('All products:', data.products); // Для отладки
-      const duvetSets = data.products.filter(
+      const pillowcases = data.products.filter(
         (product: Product) => {
           console.log('Product category:', product.category); // Для отладки
           console.log('Product subcategory:', product.subcategory); // Для отладки
           return product.category === 'BEDDING' && 
-                 product.subcategory === 'Duvet Cover Sets';
+                 product.subcategory === 'Pillowcases';
         }
       );
-      console.log('Filtered duvet sets:', duvetSets); // Для отладки
-      setProducts(duvetSets);
+      console.log('Filtered pillowcases:', pillowcases); // Для отладки
+      setProducts(pillowcases);
     } catch (error) {
       console.error('Error fetching products:', error);
     } finally {
@@ -68,9 +69,64 @@ export default function DuvetSetPage() {
     }
   };
 
-  const allSizes = Array.from(new Set(products.flatMap(p => p.beddingSizes?.map(s => s.size) || [])));
+  const allSizes = Array.from(new Set(products.flatMap(p => p.beddingSizes.map(s => s.size))));
   const allColors = Array.from(new Set(products.flatMap(p => p.beddingColors || [])));
-  const allStyles = Array.from(new Set(products.flatMap(p => p.beddingStyles || [])));
+
+  const filteredProducts = products.filter(product => {
+    const matchesSize = !selectedSize || product.beddingSizes.some(s => s.size === selectedSize);
+    const matchesColor = !selectedColor || product.beddingColors.includes(selectedColor);
+    const [minPrice, maxPrice] = priceRange;
+    const productPrices = product.beddingSizes.map(s => s.salePrice);
+    const productMinPrice = Math.min(...productPrices);
+    const productMaxPrice = Math.max(...productPrices);
+    return matchesSize && matchesColor && productMinPrice >= minPrice && productMaxPrice <= maxPrice;
+  });
+
+  const clearFilters = () => {
+    setSelectedSize('');
+    setSelectedColor('');
+    setPriceRange([0, 200]);
+  };
+
+  const toggleWishlist = (id: string) => {
+    setWishlist(prev => {
+      const prefixedId = `pillowcase_${id}`;
+      const newWishlist = prev.includes(prefixedId) 
+        ? prev.filter(i => i !== prefixedId)
+        : [...prev, prefixedId];
+      
+      try {
+        const existingItems = JSON.parse(localStorage.getItem('wishlist') || '[]');
+        const validItems = Array.isArray(existingItems) 
+          ? existingItems.filter(item => 
+              item && 
+              typeof item === 'object' && 
+              'id' in item && 
+              typeof item.id === 'string' && 
+              !item.id.startsWith('pillowcase_')
+            )
+          : [];
+        
+        const newItems = products
+          .filter((p) => newWishlist.includes(`pillowcase_${p._id}`))
+          .map((item) => ({
+            id: `pillowcase_${item._id}`,
+            src: item.images?.[0] || '',
+            hoverSrc: item.images?.[1] || item.images?.[0] || '',
+            title: item.title,
+            price: formatPriceRange(item),
+            discount: item.discount ? `-${item.discount}%` : ''
+          }));
+        
+        const wishlistItems = [...validItems, ...newItems];
+        localStorage.setItem('wishlist', JSON.stringify(wishlistItems));
+        return newWishlist;
+      } catch (error) {
+        console.error('Error handling wishlist:', error);
+        return newWishlist;
+      }
+    });
+  };
 
   const getProductPrice = (product: Product) => {
     if (!product.beddingSizes || product.beddingSizes.length === 0) return 0;
@@ -87,64 +143,6 @@ export default function DuvetSetPage() {
     const min = Math.min(...prices);
     const max = Math.max(...prices);
     return min === max ? formatPrice(min) : `${formatPrice(min)} - ${formatPrice(max)}`;
-  };
-
-  const filteredProducts = products.filter(product => {
-    const matchesSize = !selectedSize || product.beddingSizes?.some(s => s.size === selectedSize);
-    const matchesColor = !selectedColor || product.beddingColors?.includes(selectedColor);
-    const matchesStyle = !selectedStyle || product.beddingStyles?.includes(selectedStyle);
-    const [minPrice, maxPrice] = priceRange;
-    const productPrices = product.beddingSizes?.map(s => s.salePrice) || [];
-    const productMinPrice = Math.min(...productPrices);
-    const productMaxPrice = Math.max(...productPrices);
-    return matchesSize && matchesColor && matchesStyle && productMinPrice >= minPrice && productMaxPrice <= maxPrice;
-  });
-
-  const clearFilters = () => {
-    setSelectedSize('');
-    setSelectedColor('');
-    setSelectedStyle('');
-    setPriceRange([0, 1000]);
-  };
-
-  const toggleWishlist = (id: string) => {
-    setWishlist(prev => {
-      const prefixedId = `duvet_${id}`;
-      const newWishlist = prev.includes(prefixedId) 
-        ? prev.filter(i => i !== prefixedId)
-        : [...prev, prefixedId];
-      
-      try {
-        const existingItems = JSON.parse(localStorage.getItem('wishlist') || '[]');
-        const validItems = Array.isArray(existingItems) 
-          ? existingItems.filter(item => 
-              item && 
-              typeof item === 'object' && 
-              'id' in item && 
-              typeof item.id === 'string' && 
-              !item.id.startsWith('duvet_')
-            )
-          : [];
-        
-        const newItems = products
-          .filter((p) => newWishlist.includes(`duvet_${p._id}`))
-          .map((item) => ({
-            id: `duvet_${item._id}`,
-            src: item.images?.[0] || '',
-            hoverSrc: item.images?.[1] || item.images?.[0] || '',
-            title: item.title,
-            price: `£${item.price}`,
-            discount: item.discount ? `-${item.discount}%` : ''
-          }));
-        
-        const wishlistItems = [...validItems, ...newItems];
-        localStorage.setItem('wishlist', JSON.stringify(wishlistItems));
-        return newWishlist;
-      } catch (error) {
-        console.error('Error handling wishlist:', error);
-        return newWishlist;
-      }
-    });
   };
 
   if (loading) {
@@ -168,8 +166,8 @@ export default function DuvetSetPage() {
           marginBottom: '60px'
         }}>
           <Image
-            src="/printed-duvet107.jpg"
-            alt="Duvet Cover Sets"
+            src="/printed-duvet67.jpg"
+            alt="Pillowcases"
             fill
             style={{
               objectFit: 'cover',
@@ -244,7 +242,7 @@ export default function DuvetSetPage() {
                 textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
                 lineHeight: '1.2',
                 marginBottom: '20px'
-              }}>Duvet Cover Sets</h1>
+              }}>Pillowcases</h1>
               <p style={{
                 color: '#fff',
                 fontSize: '24px',
@@ -254,7 +252,7 @@ export default function DuvetSetPage() {
                 margin: '0 auto',
                 lineHeight: '1.5'
               }}>
-                Discover our luxurious collection of duvet cover sets, perfect for creating your dream bedroom
+                Discover our luxurious collection of pillowcases, perfect for creating your dream bedroom
               </p>
             </div>
           </div>
@@ -316,33 +314,6 @@ export default function DuvetSetPage() {
                 flex: 1,
                 background: 'linear-gradient(to right, #eee, transparent)'
               }} />
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  clearFilters();
-                }}
-                style={{
-                  padding: '8px 16px',
-                  borderRadius: '6px',
-                  border: '1px solid #eee',
-                  background: 'transparent',
-                  color: '#666',
-                  cursor: 'pointer',
-                  transition: 'all 0.2s ease',
-                  fontSize: '14px',
-                  fontWeight: 500
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = '#222';
-                  e.currentTarget.style.color = '#222';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = '#eee';
-                  e.currentTarget.style.color = '#666';
-                }}
-              >
-                Clear Filters
-              </button>
             </div>
 
             {showFilters && (
@@ -376,7 +347,7 @@ export default function DuvetSetPage() {
                     <input
                       type="range"
                       min="0"
-                      max="1000"
+                      max="200"
                       value={priceRange[1]}
                       onChange={(e) => setPriceRange([priceRange[0], parseInt(e.target.value)])}
                       style={{
@@ -398,74 +369,6 @@ export default function DuvetSetPage() {
                       <span>£{priceRange[0]}</span>
                       <span>£{priceRange[1]}</span>
                     </div>
-                  </div>
-                </div>
-
-                {/* Style Filter */}
-                <div style={{
-                  flex: '1',
-                  minWidth: '300px'
-                }}>
-                  <div style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '12px',
-                    marginBottom: '20px'
-                  }}>
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/>
-                    </svg>
-                    <span style={{
-                      fontSize: '16px',
-                      fontWeight: 500,
-                      color: '#444'
-                    }}>Styles</span>
-                  </div>
-                  <div style={{
-                    display: 'flex',
-                    flexWrap: 'wrap',
-                    gap: '8px'
-                  }}>
-                    {allStyles.map(style => (
-                      <button
-                        key={style}
-                        onClick={() => setSelectedStyle(style === selectedStyle ? '' : style)}
-                        style={{
-                          padding: '8px 16px',
-                          borderRadius: '6px',
-                          border: '1px solid',
-                          borderColor: selectedStyle === style ? '#222' : '#eee',
-                          background: selectedStyle === style ? '#222' : 'transparent',
-                          color: selectedStyle === style ? '#fff' : '#444',
-                          cursor: 'pointer',
-                          transition: 'all 0.2s ease',
-                          fontSize: '14px',
-                          fontWeight: 500,
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '6px'
-                        }}
-                        onMouseEnter={(e) => {
-                          if (selectedStyle !== style) {
-                            e.currentTarget.style.borderColor = '#222';
-                            e.currentTarget.style.color = '#222';
-                          }
-                        }}
-                        onMouseLeave={(e) => {
-                          if (selectedStyle !== style) {
-                            e.currentTarget.style.borderColor = '#eee';
-                            e.currentTarget.style.color = '#444';
-                          }
-                        }}
-                      >
-                        {selectedStyle === style && (
-                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                            <path d="M20 6L9 17l-5-5"/>
-                          </svg>
-                        )}
-                        {style}
-                      </button>
-                    ))}
                   </div>
                 </div>
 
@@ -701,7 +604,7 @@ export default function DuvetSetPage() {
                       cursor: 'pointer',
                       boxShadow: '0 2px 12px rgba(0,0,0,0.15)',
                       transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                      transform: wishlist.includes(`duvet_${product._id}`) ? 'scale(1.1)' : 'scale(1)',
+                      transform: wishlist.includes(`pillowcase_${product._id}`) ? 'scale(1.1)' : 'scale(1)',
                       backdropFilter: 'blur(4px)'
                     }}
                   >
@@ -709,7 +612,7 @@ export default function DuvetSetPage() {
                       width="24"
                       height="24"
                       viewBox="0 0 24 24"
-                      fill={wishlist.includes(`duvet_${product._id}`) ? '#e53935' : 'none'}
+                      fill={wishlist.includes(`pillowcase_${product._id}`) ? '#e53935' : 'none'}
                       stroke="#e53935"
                       strokeWidth="2"
                       strokeLinecap="round"
@@ -742,7 +645,7 @@ export default function DuvetSetPage() {
                   {product.isHot && (
                     <span style={{
                       position: 'absolute',
-                      top: product.discount ? '67px' : '12px',
+                      top: '67px',
                       left: '12px',
                       background: '#000',
                       color: '#fff',
@@ -889,8 +792,8 @@ export default function DuvetSetPage() {
                           strokeLinecap="round"
                           strokeLinejoin="round"
                         >
-                          <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                          <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                          <circle cx="12" cy="12" r="3"/>
                         </svg>
                       </button>
                     </div>
@@ -911,7 +814,6 @@ export default function DuvetSetPage() {
           )}
         </div>
       </main>
-      <CategoriesSection />
       <Footer />
       <CookieBanner />
       <style jsx global>{`

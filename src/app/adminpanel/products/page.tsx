@@ -225,73 +225,121 @@ export default function ProductsPage() {
     setEditModalOpen(true);
   };
 
+  const formatSizes = (sizes: any[]) => {
+    if (!sizes || sizes.length === 0) return 'N/A';
+    return sizes.map(size => {
+      if (typeof size === 'string') return size;
+      return `${size.size} (Regular: £${size.regularPrice}, Sale: £${size.salePrice})`;
+    }).join(', ');
+  };
+
+  const formatPrice = (price: string) => {
+    if (!price) return 'N/A';
+    return price.startsWith('£') ? price : `£${price}`;
+  };
+
   const renderBeddingDetails = (product: any) => {
     if (product.category === 'BEDDING') {
       return (
-        <div className="text-sm text-gray-600">
+        <div className="text-sm text-gray-600 space-y-1">
+          <div><strong>SKU:</strong> {product.sku || 'N/A'}</div>
+          <div><strong>Stock:</strong> {product.stock || 0}</div>
           <div><strong>Subcategory:</strong> {product.subcategory || 'N/A'}</div>
-          <div><strong>Sizes:</strong> {product.beddingSizes?.join(', ') || 'N/A'}</div>
+          <div><strong>Sizes:</strong> {formatSizes(product.beddingSizes)}</div>
           <div><strong>Styles:</strong> {product.beddingStyles?.join(', ') || 'N/A'}</div>
           <div><strong>Colors:</strong> {product.beddingColors?.join(', ') || 'N/A'}</div>
+          <div><strong>Features:</strong> {product.features || 'N/A'}</div>
+          <div><strong>Status:</strong> {product.isSoldOut ? 'Sold Out' : 'In Stock'}</div>
+          <div><strong>Hot:</strong> {product.isHot ? 'Yes' : 'No'}</div>
         </div>
       );
     }
     
     if (product.category === 'RUGS & MATS') {
       return (
-        <div className="text-sm text-gray-600">
+        <div className="text-sm text-gray-600 space-y-1">
+          <div><strong>SKU:</strong> {product.sku || 'N/A'}</div>
+          <div><strong>Stock:</strong> {product.stock || 0}</div>
           <div><strong>Type:</strong> {product.rugsMatsType || 'N/A'}</div>
           <div><strong>Subcategory:</strong> {product.subcategory || 'N/A'}</div>
-          <div><strong>Sizes:</strong> {product.rugsMatsSizes?.join(', ') || 'N/A'}</div>
+          <div><strong>Sizes:</strong> {formatSizes(product.rugsMatsSizes)}</div>
           <div><strong>Colors:</strong> {product.rugsMatsColors?.join(', ') || 'N/A'}</div>
+          <div><strong>Features:</strong> {product.features || 'N/A'}</div>
+          <div><strong>Status:</strong> {product.isSoldOut ? 'Sold Out' : 'In Stock'}</div>
+          <div><strong>Hot:</strong> {product.isHot ? 'Yes' : 'No'}</div>
         </div>
       );
     }
 
     if (product.category === 'THROWS & TOWELS') {
       return (
-        <div className="text-sm text-gray-600">
+        <div className="text-sm text-gray-600 space-y-1">
+          <div><strong>SKU:</strong> {product.sku || 'N/A'}</div>
+          <div><strong>Stock:</strong> {product.stock || 0}</div>
           <div><strong>Subcategory:</strong> {product.subcategory || 'N/A'}</div>
           <div><strong>Styles:</strong> {product.throwsTowelsStyles?.join(', ') || 'N/A'}</div>
           <div><strong>Colors:</strong> {product.throwsTowelsColors?.join(', ') || 'N/A'}</div>
+          <div><strong>Features:</strong> {product.features || 'N/A'}</div>
+          <div><strong>Status:</strong> {product.isSoldOut ? 'Sold Out' : 'In Stock'}</div>
+          <div><strong>Hot:</strong> {product.isHot ? 'Yes' : 'No'}</div>
         </div>
       );
     }
 
     if (product.category === 'OUTDOOR') {
       return (
-        <div className="text-sm text-gray-600">
+        <div className="text-sm text-gray-600 space-y-1">
+          <div><strong>SKU:</strong> {product.sku || 'N/A'}</div>
+          <div><strong>Stock:</strong> {product.stock || 0}</div>
           <div><strong>Subcategory:</strong> {product.subcategory || 'N/A'}</div>
+          <div><strong>Features:</strong> {product.features || 'N/A'}</div>
+          <div><strong>Status:</strong> {product.isSoldOut ? 'Sold Out' : 'In Stock'}</div>
+          <div><strong>Hot:</strong> {product.isHot ? 'Yes' : 'No'}</div>
         </div>
       );
     }
 
     if (product.category === 'CURTAINS') {
       return (
-        <div className="text-sm text-gray-600">
+        <div className="text-sm text-gray-600 space-y-1">
+          <div><strong>SKU:</strong> {product.sku || 'N/A'}</div>
+          <div><strong>Stock:</strong> {product.stock || 0}</div>
           <div><strong>Subcategory:</strong> {product.subcategory || 'N/A'}</div>
-          <div><strong>Sizes:</strong> {product.curtainsSizes?.join(', ') || 'N/A'}</div>
+          <div><strong>Sizes:</strong> {formatSizes(product.curtainsSizes)}</div>
           <div><strong>Colors:</strong> {product.curtainsColors?.join(', ') || 'N/A'}</div>
+          <div><strong>Features:</strong> {product.features || 'N/A'}</div>
+          <div><strong>Status:</strong> {product.isSoldOut ? 'Sold Out' : 'In Stock'}</div>
+          <div><strong>Hot:</strong> {product.isHot ? 'Yes' : 'No'}</div>
         </div>
       );
     }
 
     if (product.category === 'CLOTHING') {
       return (
-        <div className="text-sm text-gray-600">
+        <div className="text-sm text-gray-600 space-y-1">
+          <div><strong>SKU:</strong> {product.sku || 'N/A'}</div>
+          <div><strong>Stock:</strong> {product.stock || 0}</div>
           <div><strong>Subcategory:</strong> {product.subcategory || 'N/A'}</div>
           <div><strong>Styles:</strong> {product.clothingStyles?.join(', ') || 'N/A'}</div>
           <div><strong>Colors:</strong> {product.clothingColors?.join(', ') || 'N/A'}</div>
+          <div><strong>Features:</strong> {product.features || 'N/A'}</div>
+          <div><strong>Status:</strong> {product.isSoldOut ? 'Sold Out' : 'In Stock'}</div>
+          <div><strong>Hot:</strong> {product.isHot ? 'Yes' : 'No'}</div>
         </div>
       );
     }
 
     if (product.category === 'FOOTWEAR') {
       return (
-        <div className="text-sm text-gray-600">
+        <div className="text-sm text-gray-600 space-y-1">
+          <div><strong>SKU:</strong> {product.sku || 'N/A'}</div>
+          <div><strong>Stock:</strong> {product.stock || 0}</div>
           <div><strong>Subcategory:</strong> {product.subcategory || 'N/A'}</div>
-          <div><strong>Sizes:</strong> {product.footwearSizes?.join(', ') || 'N/A'}</div>
+          <div><strong>Sizes:</strong> {formatSizes(product.footwearSizes)}</div>
           <div><strong>Colors:</strong> {product.footwearColors?.join(', ') || 'N/A'}</div>
+          <div><strong>Features:</strong> {product.features || 'N/A'}</div>
+          <div><strong>Status:</strong> {product.isSoldOut ? 'Sold Out' : 'In Stock'}</div>
+          <div><strong>Hot:</strong> {product.isHot ? 'Yes' : 'No'}</div>
         </div>
       );
     }
@@ -333,7 +381,7 @@ export default function ProductsPage() {
                 <tr key={product._id} className="border-t">
                   <td className="py-2 px-4">{product.title}</td>
                   <td className="py-2 px-4">{product.category}</td>
-                  <td className="py-2 px-4">£{product.price}</td>
+                  <td className="py-2 px-4">{formatPrice(product.price)}</td>
                   <td className="py-2 px-4">
                     {renderBeddingDetails(product)}
                   </td>

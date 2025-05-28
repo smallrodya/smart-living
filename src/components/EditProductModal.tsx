@@ -1,6 +1,12 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 
+interface SizePrice {
+  size: string;
+  regularPrice: number;
+  salePrice: number;
+}
+
 interface EditProductModalProps {
   open: boolean;
   onClose: () => void;
@@ -186,28 +192,29 @@ export default function EditProductModal({ open, onClose, product, onProductEdit
     category: '',
     subcategory: '',
     images: [] as string[],
-    discount: '',
     isSoldOut: false,
     isHot: false,
+    sku: '',
+    stock: 0,
     // Bedding specific
-    beddingSizes: [] as string[],
+    beddingSizes: [] as SizePrice[],
     beddingStyles: [] as string[],
     beddingColors: [] as string[],
     // Rugs & Mats specific
     rugsMatsType: '' as 'RUGS' | 'MATS' | '',
-    rugsMatsSizes: [] as string[],
+    rugsMatsSizes: [] as SizePrice[],
     rugsMatsColors: [] as string[],
     // Throws & Towels specific
     throwsTowelsStyles: [] as string[],
     throwsTowelsColors: [] as string[],
     // Curtains specific
-    curtainsSizes: [] as string[],
+    curtainsSizes: [] as SizePrice[],
     curtainsColors: [] as string[],
     // Clothing specific
     clothingStyles: [] as string[],
     clothingColors: [] as string[],
     // Footwear specific
-    footwearSizes: [] as string[],
+    footwearSizes: [] as SizePrice[],
     footwearColors: [] as string[]
   });
 
@@ -221,31 +228,97 @@ export default function EditProductModal({ open, onClose, product, onProductEdit
         category: product.category || '',
         subcategory: product.subcategory || '',
         images: product.images || [],
-        discount: product.discount || '',
         isSoldOut: product.isSoldOut || false,
         isHot: product.isHot || false,
-        beddingSizes: product.beddingSizes || [],
+        sku: product.sku || '',
+        stock: product.stock || 0,
+        beddingSizes: product.beddingSizes?.map((size: any) => ({
+          size: typeof size === 'string' ? size : size.size,
+          regularPrice: typeof size === 'string' ? 0 : size.regularPrice || 0,
+          salePrice: typeof size === 'string' ? 0 : size.salePrice || 0
+        })) || [],
         beddingStyles: product.beddingStyles || [],
         beddingColors: product.beddingColors || [],
         rugsMatsType: product.rugsMatsType || '',
-        rugsMatsSizes: product.rugsMatsSizes || [],
+        rugsMatsSizes: product.rugsMatsSizes?.map((size: any) => ({
+          size: typeof size === 'string' ? size : size.size,
+          regularPrice: typeof size === 'string' ? 0 : size.regularPrice || 0,
+          salePrice: typeof size === 'string' ? 0 : size.salePrice || 0
+        })) || [],
         rugsMatsColors: product.rugsMatsColors || [],
         throwsTowelsStyles: product.throwsTowelsStyles || [],
         throwsTowelsColors: product.throwsTowelsColors || [],
-        curtainsSizes: product.curtainsSizes || [],
+        curtainsSizes: product.curtainsSizes?.map((size: any) => ({
+          size: typeof size === 'string' ? size : size.size,
+          regularPrice: typeof size === 'string' ? 0 : size.regularPrice || 0,
+          salePrice: typeof size === 'string' ? 0 : size.salePrice || 0
+        })) || [],
         curtainsColors: product.curtainsColors || [],
         clothingStyles: product.clothingStyles || [],
         clothingColors: product.clothingColors || [],
-        footwearSizes: product.footwearSizes || [],
+        footwearSizes: product.footwearSizes?.map((size: any) => ({
+          size: typeof size === 'string' ? size : size.size,
+          regularPrice: typeof size === 'string' ? 0 : size.regularPrice || 0,
+          salePrice: typeof size === 'string' ? 0 : size.salePrice || 0
+        })) || [],
         footwearColors: product.footwearColors || []
       });
     }
   }, [product]);
 
+  const handleSizePriceChange = (category: string, size: string, regularPrice: number, salePrice: number) => {
+    const sizePrice: SizePrice = { size, regularPrice, salePrice };
+    const sizesField = `${category.toLowerCase()}Sizes`;
+    
+    setFormData(prev => {
+      const currentSizes = prev[sizesField as keyof typeof prev] as SizePrice[];
+      const existingSizeIndex = currentSizes.findIndex(s => s.size === size);
+      
+      if (existingSizeIndex >= 0) {
+        const newSizes = [...currentSizes];
+        newSizes[existingSizeIndex] = sizePrice;
+        return { ...prev, [sizesField]: newSizes };
+      } else {
+        return { ...prev, [sizesField]: [...currentSizes, sizePrice] };
+      }
+    });
+  };
+
+  const getPriceRange = (sizes: SizePrice[]) => {
+    if (sizes.length === 0) return '';
+    if (sizes.length === 1) return `£${sizes[0].salePrice}`;
+    
+    const prices = sizes.map(s => s.salePrice);
+    const minPrice = Math.min(...prices);
+    const maxPrice = Math.max(...prices);
+    
+    return minPrice === maxPrice ? `£${minPrice}` : `£${minPrice} - £${maxPrice}`;
+  };
+
+  const removeSize = (category: string, size: string) => {
+    const sizesField = `${category.toLowerCase()}Sizes`;
+    setFormData(prev => {
+      const currentSizes = prev[sizesField as keyof typeof prev] as SizePrice[];
+      return {
+        ...prev,
+        [sizesField]: currentSizes.filter(s => s.size !== size)
+      };
+    });
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      console.log('Отправка данных для обновления:', formData);
+      const formDataToSubmit = {
+        ...formData,
+        price: getPriceRange(formData.beddingSizes) || 
+               getPriceRange(formData.rugsMatsSizes) || 
+               getPriceRange(formData.curtainsSizes) || 
+               getPriceRange(formData.footwearSizes) || 
+               formData.price
+      };
+
+      console.log('Отправка данных для обновления:', formDataToSubmit);
       
       const response = await fetch(`/api/products?id=${product._id}`, {
         method: 'PUT',
@@ -253,8 +326,8 @@ export default function EditProductModal({ open, onClose, product, onProductEdit
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          ...formData,
-          _id: product._id // Добавляем ID товара в тело запроса
+          ...formDataToSubmit,
+          _id: product._id
         }),
       });
 
@@ -266,7 +339,7 @@ export default function EditProductModal({ open, onClose, product, onProductEdit
       const updatedProduct = await response.json();
       console.log('Товар успешно обновлен:', updatedProduct);
 
-      onProductEdited(); // Вызываем callback для обновления списка товаров
+      onProductEdited();
       onClose();
     } catch (error) {
       console.error('Ошибка при обновлении товара:', error);
@@ -356,12 +429,23 @@ export default function EditProductModal({ open, onClose, product, onProductEdit
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Price</label>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">SKU</label>
+              <input
+                type="text"
+                value={formData.sku}
+                onChange={(e) => setFormData(prev => ({ ...prev, sku: e.target.value }))}
+                className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">Stock</label>
               <input
                 type="number"
-                value={formData.price}
-                onChange={(e) => setFormData(prev => ({ ...prev, price: e.target.value }))}
+                value={formData.stock}
+                onChange={(e) => setFormData(prev => ({ ...prev, stock: parseInt(e.target.value) || 0 }))}
                 className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                min="0"
                 required
               />
             </div>
@@ -404,18 +488,6 @@ export default function EditProductModal({ open, onClose, product, onProductEdit
                 ))}
               </select>
             </div>
-
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Discount (%)</label>
-              <input
-                type="number"
-                value={formData.discount}
-                onChange={(e) => setFormData(prev => ({ ...prev, discount: e.target.value }))}
-                className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
-                min="0"
-                max="100"
-              />
-            </div>
           </div>
 
           {/* Category-specific fields */}
@@ -440,28 +512,60 @@ export default function EditProductModal({ open, onClose, product, onProductEdit
               </div>
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Sizes</label>
-                  <div className="flex flex-wrap gap-3">
-                    {beddingSizes.map(size => (
-                      <label key={size} className={`inline-flex items-center px-4 py-2 rounded-full bg-white border transition-all cursor-pointer ${
-                        formData.beddingSizes.includes(size) 
-                          ? 'border-red-500 text-red-500' 
-                          : 'border-gray-300 hover:border-gray-400 text-gray-700'
-                      }`}>
-                        <input
-                          type="checkbox"
-                          checked={formData.beddingSizes.includes(size)}
-                          onChange={(e) => {
-                            const newSizes = e.target.checked
-                              ? [...formData.beddingSizes, size]
-                              : formData.beddingSizes.filter(s => s !== size);
-                            setFormData(prev => ({ ...prev, beddingSizes: newSizes }));
-                          }}
-                          className="hidden"
-                        />
-                        <span>{size}</span>
-                      </label>
-                    ))}
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Sizes and Prices</label>
+                  <div className="space-y-3">
+                    {beddingSizes.map(size => {
+                      const sizePrice = formData.beddingSizes.find(s => s.size === size);
+                      return (
+                        <div key={size} className="flex items-center gap-3">
+                          <label className={`inline-flex items-center px-4 py-2 rounded-full bg-white border transition-all cursor-pointer ${
+                            sizePrice ? 'border-red-500 text-red-500' : 'border-gray-300 hover:border-gray-400 text-gray-700'
+                          }`}>
+                            <input
+                              type="checkbox"
+                              checked={!!sizePrice}
+                              onChange={(e) => {
+                                if (e.target.checked) {
+                                  handleSizePriceChange('bedding', size, 0, 0);
+                                } else {
+                                  removeSize('bedding', size);
+                                }
+                              }}
+                              className="hidden"
+                            />
+                            <span>{size}</span>
+                          </label>
+                          {sizePrice && (
+                            <div className="flex items-center gap-2">
+                              <div className="flex items-center gap-1">
+                                <input
+                                  type="number"
+                                  value={sizePrice.regularPrice}
+                                  onChange={(e) => handleSizePriceChange('bedding', size, parseFloat(e.target.value), sizePrice.salePrice)}
+                                  className="w-24 px-3 py-1 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                                  placeholder="Regular"
+                                  min="0"
+                                  step="0.01"
+                                />
+                                <span className="text-gray-500">£</span>
+                              </div>
+                              <div className="flex items-center gap-1">
+                                <input
+                                  type="number"
+                                  value={sizePrice.salePrice}
+                                  onChange={(e) => handleSizePriceChange('bedding', size, sizePrice.regularPrice, parseFloat(e.target.value))}
+                                  className="w-24 px-3 py-1 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                                  placeholder="Sale"
+                                  min="0"
+                                  step="0.01"
+                                />
+                                <span className="text-gray-500">£</span>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
                 <div>
@@ -552,28 +656,60 @@ export default function EditProductModal({ open, onClose, product, onProductEdit
               )}
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Sizes</label>
-                  <div className="flex flex-wrap gap-3">
-                    {rugsMatsSizes.map(size => (
-                      <label key={size} className={`inline-flex items-center px-4 py-2 rounded-full bg-white border transition-all cursor-pointer ${
-                        formData.rugsMatsSizes.includes(size) 
-                          ? 'border-red-500 text-red-500' 
-                          : 'border-gray-300 hover:border-gray-400 text-gray-700'
-                      }`}>
-                        <input
-                          type="checkbox"
-                          checked={formData.rugsMatsSizes.includes(size)}
-                          onChange={(e) => {
-                            const newSizes = e.target.checked
-                              ? [...formData.rugsMatsSizes, size]
-                              : formData.rugsMatsSizes.filter(s => s !== size);
-                            setFormData(prev => ({ ...prev, rugsMatsSizes: newSizes }));
-                          }}
-                          className="hidden"
-                        />
-                        <span>{size}</span>
-                      </label>
-                    ))}
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Sizes and Prices</label>
+                  <div className="space-y-3">
+                    {rugsMatsSizes.map(size => {
+                      const sizePrice = formData.rugsMatsSizes.find(s => s.size === size);
+                      return (
+                        <div key={size} className="flex items-center gap-3">
+                          <label className={`inline-flex items-center px-4 py-2 rounded-full bg-white border transition-all cursor-pointer ${
+                            sizePrice ? 'border-red-500 text-red-500' : 'border-gray-300 hover:border-gray-400 text-gray-700'
+                          }`}>
+                            <input
+                              type="checkbox"
+                              checked={!!sizePrice}
+                              onChange={(e) => {
+                                if (e.target.checked) {
+                                  handleSizePriceChange('rugsMats', size, 0, 0);
+                                } else {
+                                  removeSize('rugsMats', size);
+                                }
+                              }}
+                              className="hidden"
+                            />
+                            <span>{size}</span>
+                          </label>
+                          {sizePrice && (
+                            <div className="flex items-center gap-2">
+                              <div className="flex items-center gap-1">
+                                <input
+                                  type="number"
+                                  value={sizePrice.regularPrice}
+                                  onChange={(e) => handleSizePriceChange('rugsMats', size, parseFloat(e.target.value), sizePrice.salePrice)}
+                                  className="w-24 px-3 py-1 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                                  placeholder="Regular"
+                                  min="0"
+                                  step="0.01"
+                                />
+                                <span className="text-gray-500">£</span>
+                              </div>
+                              <div className="flex items-center gap-1">
+                                <input
+                                  type="number"
+                                  value={sizePrice.salePrice}
+                                  onChange={(e) => handleSizePriceChange('rugsMats', size, sizePrice.regularPrice, parseFloat(e.target.value))}
+                                  className="w-24 px-3 py-1 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                                  placeholder="Sale"
+                                  min="0"
+                                  step="0.01"
+                                />
+                                <span className="text-gray-500">£</span>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
                 <div>
@@ -696,28 +832,60 @@ export default function EditProductModal({ open, onClose, product, onProductEdit
               </div>
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Sizes</label>
-                  <div className="flex flex-wrap gap-3">
-                    {curtainsSizes.map(size => (
-                      <label key={size} className={`inline-flex items-center px-4 py-2 rounded-full bg-white border transition-all cursor-pointer ${
-                        formData.curtainsSizes.includes(size) 
-                          ? 'border-red-500 text-red-500' 
-                          : 'border-gray-300 hover:border-gray-400 text-gray-700'
-                      }`}>
-                        <input
-                          type="checkbox"
-                          checked={formData.curtainsSizes.includes(size)}
-                          onChange={(e) => {
-                            const newSizes = e.target.checked
-                              ? [...formData.curtainsSizes, size]
-                              : formData.curtainsSizes.filter(s => s !== size);
-                            setFormData(prev => ({ ...prev, curtainsSizes: newSizes }));
-                          }}
-                          className="hidden"
-                        />
-                        <span>{size}</span>
-                      </label>
-                    ))}
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Sizes and Prices</label>
+                  <div className="space-y-3">
+                    {curtainsSizes.map(size => {
+                      const sizePrice = formData.curtainsSizes.find(s => s.size === size);
+                      return (
+                        <div key={size} className="flex items-center gap-3">
+                          <label className={`inline-flex items-center px-4 py-2 rounded-full bg-white border transition-all cursor-pointer ${
+                            sizePrice ? 'border-red-500 text-red-500' : 'border-gray-300 hover:border-gray-400 text-gray-700'
+                          }`}>
+                            <input
+                              type="checkbox"
+                              checked={!!sizePrice}
+                              onChange={(e) => {
+                                if (e.target.checked) {
+                                  handleSizePriceChange('curtains', size, 0, 0);
+                                } else {
+                                  removeSize('curtains', size);
+                                }
+                              }}
+                              className="hidden"
+                            />
+                            <span>{size}</span>
+                          </label>
+                          {sizePrice && (
+                            <div className="flex items-center gap-2">
+                              <div className="flex items-center gap-1">
+                                <input
+                                  type="number"
+                                  value={sizePrice.regularPrice}
+                                  onChange={(e) => handleSizePriceChange('curtains', size, parseFloat(e.target.value), sizePrice.salePrice)}
+                                  className="w-24 px-3 py-1 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                                  placeholder="Regular"
+                                  min="0"
+                                  step="0.01"
+                                />
+                                <span className="text-gray-500">£</span>
+                              </div>
+                              <div className="flex items-center gap-1">
+                                <input
+                                  type="number"
+                                  value={sizePrice.salePrice}
+                                  onChange={(e) => handleSizePriceChange('curtains', size, sizePrice.regularPrice, parseFloat(e.target.value))}
+                                  className="w-24 px-3 py-1 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                                  placeholder="Sale"
+                                  min="0"
+                                  step="0.01"
+                                />
+                                <span className="text-gray-500">£</span>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
                 <div>
@@ -840,28 +1008,60 @@ export default function EditProductModal({ open, onClose, product, onProductEdit
               </div>
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Sizes</label>
-                  <div className="flex flex-wrap gap-3">
-                    {footwearSizes.map(size => (
-                      <label key={size} className={`inline-flex items-center px-4 py-2 rounded-full bg-white border transition-all cursor-pointer ${
-                        formData.footwearSizes.includes(size) 
-                          ? 'border-red-500 text-red-500' 
-                          : 'border-gray-300 hover:border-gray-400 text-gray-700'
-                      }`}>
-                        <input
-                          type="checkbox"
-                          checked={formData.footwearSizes.includes(size)}
-                          onChange={(e) => {
-                            const newSizes = e.target.checked
-                              ? [...formData.footwearSizes, size]
-                              : formData.footwearSizes.filter(s => s !== size);
-                            setFormData(prev => ({ ...prev, footwearSizes: newSizes }));
-                          }}
-                          className="hidden"
-                        />
-                        <span>{size}</span>
-                      </label>
-                    ))}
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Sizes and Prices</label>
+                  <div className="space-y-3">
+                    {footwearSizes.map(size => {
+                      const sizePrice = formData.footwearSizes.find(s => s.size === size);
+                      return (
+                        <div key={size} className="flex items-center gap-3">
+                          <label className={`inline-flex items-center px-4 py-2 rounded-full bg-white border transition-all cursor-pointer ${
+                            sizePrice ? 'border-red-500 text-red-500' : 'border-gray-300 hover:border-gray-400 text-gray-700'
+                          }`}>
+                            <input
+                              type="checkbox"
+                              checked={!!sizePrice}
+                              onChange={(e) => {
+                                if (e.target.checked) {
+                                  handleSizePriceChange('footwear', size, 0, 0);
+                                } else {
+                                  removeSize('footwear', size);
+                                }
+                              }}
+                              className="hidden"
+                            />
+                            <span>{size}</span>
+                          </label>
+                          {sizePrice && (
+                            <div className="flex items-center gap-2">
+                              <div className="flex items-center gap-1">
+                                <input
+                                  type="number"
+                                  value={sizePrice.regularPrice}
+                                  onChange={(e) => handleSizePriceChange('footwear', size, parseFloat(e.target.value), sizePrice.salePrice)}
+                                  className="w-24 px-3 py-1 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                                  placeholder="Regular"
+                                  min="0"
+                                  step="0.01"
+                                />
+                                <span className="text-gray-500">£</span>
+                              </div>
+                              <div className="flex items-center gap-1">
+                                <input
+                                  type="number"
+                                  value={sizePrice.salePrice}
+                                  onChange={(e) => handleSizePriceChange('footwear', size, sizePrice.regularPrice, parseFloat(e.target.value))}
+                                  className="w-24 px-3 py-1 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                                  placeholder="Sale"
+                                  min="0"
+                                  step="0.01"
+                                />
+                                <span className="text-gray-500">£</span>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
                 <div>
