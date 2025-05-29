@@ -911,7 +911,6 @@ export default function DuvetSetPage() {
           )}
         </div>
       </main>
-      <CategoriesSection />
       <Footer />
       <CookieBanner />
       <style jsx global>{`

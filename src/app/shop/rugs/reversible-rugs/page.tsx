@@ -6,7 +6,6 @@ import Footer from '@/components/Footer';
 import CookieBanner from '@/components/CookieBanner';
 import { useRouter } from 'next/navigation';
 import CategoriesSection from '@/components/CategoriesSection';
-export const dynamic = 'force-dynamic';
 
 interface Product {
   _id: string;
@@ -17,16 +16,15 @@ interface Product {
   category: string;
   subcategory: string;
   sku: string;
-  beddingSizes: Array<{ size: string; price: number; salePrice: number }>;
-  beddingColors: string[];
-  beddingStyles: string[];
+  rugsMatsSizes: Array<{ size: string; price: number; salePrice: number }>;
+  rugsMatsColors: string[];
   images?: string[];
   discount?: number;
   isSoldOut?: boolean;
   isHot?: boolean;
 }
 
-export default function FleeceBeddingPage() {
+export default function ReversibleRugsPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedSize, setSelectedSize] = useState<string>('');
@@ -34,7 +32,7 @@ export default function FleeceBeddingPage() {
   const [showFilters, setShowFilters] = useState(false);
   const [hoveredProduct, setHoveredProduct] = useState<string | null>(null);
   const [wishlist, setWishlist] = useState<string[]>([]);
-  const [priceRange, setPriceRange] = useState<[number, number]>([0, 200]);
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, 1000]);
   const router = useRouter();
 
   useEffect(() => {
@@ -51,16 +49,16 @@ export default function FleeceBeddingPage() {
       const res = await fetch('/api/products');
       const data = await res.json();
       console.log('All products:', data.products); // Для отладки
-      const fleeceBedding = data.products.filter(
+      const reversibleRugs = data.products.filter(
         (product: Product) => {
           console.log('Product category:', product.category); // Для отладки
           console.log('Product subcategory:', product.subcategory); // Для отладки
-          return product.category === 'BEDDING' && 
-                 product.subcategory === 'Fleece Bedding';
+          return product.category === 'RUGS & MATS' && 
+                 product.subcategory === 'Reversible Rugs';
         }
       );
-      console.log('Filtered fleece bedding:', fleeceBedding); // Для отладки
-      setProducts(fleeceBedding);
+      console.log('Filtered reversible rugs:', reversibleRugs); // Для отладки
+      setProducts(reversibleRugs);
     } catch (error) {
       console.error('Error fetching products:', error);
     } finally {
@@ -68,14 +66,31 @@ export default function FleeceBeddingPage() {
     }
   };
 
-  const allSizes = Array.from(new Set(products.flatMap(p => p.beddingSizes.map(s => s.size))));
-  const allColors = Array.from(new Set(products.flatMap(p => p.beddingColors || [])));
+  const allSizes = Array.from(new Set(products.flatMap(p => p.rugsMatsSizes?.map(s => s.size) || [])));
+  const allColors = Array.from(new Set(products.flatMap(p => p.rugsMatsColors || [])));
+
+  const getProductPrice = (product: Product) => {
+    if (!product.rugsMatsSizes || product.rugsMatsSizes.length === 0) return 0;
+    return product.rugsMatsSizes[0].salePrice;
+  };
+
+  const formatPrice = (price: number) => {
+    return `£${price.toFixed(2)}`;
+  };
+
+  const formatPriceRange = (product: Product) => {
+    if (!product.rugsMatsSizes || product.rugsMatsSizes.length === 0) return '£0.00';
+    const prices = product.rugsMatsSizes.map(size => size.salePrice);
+    const min = Math.min(...prices);
+    const max = Math.max(...prices);
+    return min === max ? formatPrice(min) : `${formatPrice(min)} - ${formatPrice(max)}`;
+  };
 
   const filteredProducts = products.filter(product => {
-    const matchesSize = !selectedSize || product.beddingSizes.some(s => s.size === selectedSize);
-    const matchesColor = !selectedColor || product.beddingColors.includes(selectedColor);
+    const matchesSize = !selectedSize || product.rugsMatsSizes?.some(s => s.size === selectedSize);
+    const matchesColor = !selectedColor || product.rugsMatsColors?.includes(selectedColor);
     const [minPrice, maxPrice] = priceRange;
-    const productPrices = product.beddingSizes.map(s => s.salePrice);
+    const productPrices = product.rugsMatsSizes?.map(s => s.salePrice) || [];
     const productMinPrice = Math.min(...productPrices);
     const productMaxPrice = Math.max(...productPrices);
     return matchesSize && matchesColor && productMinPrice >= minPrice && productMaxPrice <= maxPrice;
@@ -84,12 +99,12 @@ export default function FleeceBeddingPage() {
   const clearFilters = () => {
     setSelectedSize('');
     setSelectedColor('');
-    setPriceRange([0, 200]);
+    setPriceRange([0, 1000]);
   };
 
   const toggleWishlist = (id: string) => {
     setWishlist(prev => {
-      const prefixedId = `fleece_${id}`;
+      const prefixedId = `reversible_${id}`;
       const newWishlist = prev.includes(prefixedId) 
         ? prev.filter(i => i !== prefixedId)
         : [...prev, prefixedId];
@@ -102,18 +117,18 @@ export default function FleeceBeddingPage() {
               typeof item === 'object' && 
               'id' in item && 
               typeof item.id === 'string' && 
-              !item.id.startsWith('fleece_')
+              !item.id.startsWith('reversible_')
             )
           : [];
         
         const newItems = products
-          .filter((p) => newWishlist.includes(`fleece_${p._id}`))
+          .filter((p) => newWishlist.includes(`reversible_${p._id}`))
           .map((item) => ({
-            id: `fleece_${item._id}`,
+            id: `reversible_${item._id}`,
             src: item.images?.[0] || '',
             hoverSrc: item.images?.[1] || item.images?.[0] || '',
             title: item.title,
-            price: formatPrice(item.beddingSizes[0].salePrice),
+            price: `£${item.price}`,
             discount: item.discount ? `-${item.discount}%` : ''
           }));
         
@@ -125,23 +140,6 @@ export default function FleeceBeddingPage() {
         return newWishlist;
       }
     });
-  };
-
-  const getProductPrice = (product: Product) => {
-    if (!product.beddingSizes || product.beddingSizes.length === 0) return 0;
-    return product.beddingSizes[0].salePrice;
-  };
-
-  const formatPrice = (price: number) => {
-    return `£${price.toFixed(2)}`;
-  };
-
-  const formatPriceRange = (product: Product) => {
-    if (!product.beddingSizes || product.beddingSizes.length === 0) return '£0.00';
-    const prices = product.beddingSizes.map(size => size.salePrice);
-    const min = Math.min(...prices);
-    const max = Math.max(...prices);
-    return min === max ? formatPrice(min) : `${formatPrice(min)} - ${formatPrice(max)}`;
   };
 
   if (loading) {
@@ -165,8 +163,8 @@ export default function FleeceBeddingPage() {
           marginBottom: '60px'
         }}>
           <Image
-            src="/printed-duvet46.jpg"
-            alt="Fleece Bedding"
+            src="/reversible-mustard2.jpg"
+            alt="Reversible Rugs Category"
             fill
             style={{
               objectFit: 'cover',
@@ -191,7 +189,7 @@ export default function FleeceBeddingPage() {
               zIndex: 10
             }}>
               <button
-                onClick={() => router.push('/')}
+                onClick={() => router.push('/category/rugs/rugtype')}
                 style={{
                   background: 'rgba(255, 255, 255, 0.9)',
                   border: 'none',
@@ -241,7 +239,7 @@ export default function FleeceBeddingPage() {
                 textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
                 lineHeight: '1.2',
                 marginBottom: '20px'
-              }}>Fleece Bedding</h1>
+              }}>Reversible Rugs</h1>
               <p style={{
                 color: '#fff',
                 fontSize: '24px',
@@ -251,7 +249,7 @@ export default function FleeceBeddingPage() {
                 margin: '0 auto',
                 lineHeight: '1.5'
               }}>
-                Experience ultimate comfort with our premium fleece bedding collection
+                Discover our collection of versatile reversible rugs, offering two beautiful designs in one
               </p>
             </div>
           </div>
@@ -313,6 +311,33 @@ export default function FleeceBeddingPage() {
                 flex: 1,
                 background: 'linear-gradient(to right, #eee, transparent)'
               }} />
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  clearFilters();
+                }}
+                style={{
+                  padding: '8px 16px',
+                  borderRadius: '6px',
+                  border: '1px solid #eee',
+                  background: 'transparent',
+                  color: '#666',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease',
+                  fontSize: '14px',
+                  fontWeight: 500
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = '#222';
+                  e.currentTarget.style.color = '#222';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = '#eee';
+                  e.currentTarget.style.color = '#666';
+                }}
+              >
+                Clear Filters
+              </button>
             </div>
 
             {showFilters && (
@@ -346,7 +371,7 @@ export default function FleeceBeddingPage() {
                     <input
                       type="range"
                       min="0"
-                      max="200"
+                      max="1000"
                       value={priceRange[1]}
                       onChange={(e) => setPriceRange([priceRange[0], parseInt(e.target.value)])}
                       style={{
@@ -603,7 +628,7 @@ export default function FleeceBeddingPage() {
                       cursor: 'pointer',
                       boxShadow: '0 2px 12px rgba(0,0,0,0.15)',
                       transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                      transform: wishlist.includes(`fleece_${product._id}`) ? 'scale(1.1)' : 'scale(1)',
+                      transform: wishlist.includes(`reversible_${product._id}`) ? 'scale(1.1)' : 'scale(1)',
                       backdropFilter: 'blur(4px)'
                     }}
                   >
@@ -611,7 +636,7 @@ export default function FleeceBeddingPage() {
                       width="24"
                       height="24"
                       viewBox="0 0 24 24"
-                      fill={wishlist.includes(`fleece_${product._id}`) ? '#e53935' : 'none'}
+                      fill={wishlist.includes(`reversible_${product._id}`) ? '#e53935' : 'none'}
                       stroke="#e53935"
                       strokeWidth="2"
                       strokeLinecap="round"
@@ -791,8 +816,8 @@ export default function FleeceBeddingPage() {
                           strokeLinecap="round"
                           strokeLinejoin="round"
                         >
-                          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                          <circle cx="12" cy="12" r="3"/>
+                          <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                          <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
                         </svg>
                       </button>
                     </div>

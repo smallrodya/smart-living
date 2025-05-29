@@ -199,6 +199,7 @@ export default function ProductsPage() {
   const [editingProduct, setEditingProduct] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [expandedProducts, setExpandedProducts] = useState<Set<string>>(new Set());
 
   const fetchProducts = async () => {
     setLoading(true);
@@ -235,6 +236,18 @@ export default function ProductsPage() {
       product.sku?.toLowerCase().includes(searchLower)
     );
   });
+
+  const toggleProductExpand = (productId: string) => {
+    setExpandedProducts(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(productId)) {
+        newSet.delete(productId);
+      } else {
+        newSet.add(productId);
+      }
+      return newSet;
+    });
+  };
 
   const renderProductSizes = (sizes: any[]) => {
     if (!sizes || sizes.length === 0) return null;
@@ -315,7 +328,10 @@ export default function ProductsPage() {
           <div className="divide-y divide-gray-200">
             {filteredProducts.map((product) => (
               <div key={product._id} className="p-6 hover:bg-gray-50 transition-colors">
-                <div className="flex flex-col md:flex-row gap-6">
+                <div 
+                  className="flex flex-col md:flex-row gap-6 cursor-pointer"
+                  onClick={() => toggleProductExpand(product._id)}
+                >
                   {/* Product Image */}
                   {product.images && product.images.length > 0 && (
                     <div className="w-full md:w-48 h-48 relative rounded-lg overflow-hidden">
@@ -327,7 +343,7 @@ export default function ProductsPage() {
                     </div>
                   )}
 
-                  {/* Product Details */}
+                  {/* Product Header */}
                   <div className="flex-1">
                     <div className="flex justify-between items-start mb-4">
                       <div>
@@ -344,14 +360,20 @@ export default function ProductsPage() {
                       </div>
                       <div className="flex items-center gap-2">
                         <button
-                          className="text-indigo-600 hover:text-indigo-800 text-sm font-medium"
-                          onClick={() => handleEdit(product)}
+                          className="px-2 py-1 text-xs border border-indigo-600 text-indigo-600 hover:bg-indigo-50 rounded transition-colors"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleEdit(product);
+                          }}
                         >
                           Edit
                         </button>
                         <button
-                          className="text-red-600 hover:text-red-800 text-sm font-medium"
-                          onClick={() => handleDelete(product._id)}
+                          className="px-2 py-1 text-xs border border-red-600 text-red-600 hover:bg-red-50 rounded transition-colors"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleDelete(product._id);
+                          }}
                         >
                           Delete
                         </button>
@@ -372,10 +394,15 @@ export default function ProductsPage() {
                       )}
                     </div>
 
-                    {/* Product Details */}
-                    <div className="space-y-4">
+                    {/* Expandable Content */}
+                    <div 
+                      className={`space-y-4 overflow-hidden transition-all duration-300 ease-in-out ${
+                        expandedProducts.has(product._id) ? 'max-h-[1000px] opacity-100' : 'max-h-0 opacity-0'
+                      }`}
+                    >
                       {/* Sizes */}
                       {product.beddingSizes && renderProductSizes(product.beddingSizes)}
+                      {product.rugsMatsSizes && renderProductSizes(product.rugsMatsSizes)}
 
                       {/* Styles */}
                       {product.beddingStyles && product.beddingStyles.length > 0 && (
@@ -410,6 +437,48 @@ export default function ProductsPage() {
                           </div>
                         </div>
                       )}
+
+                      {/* Rugs & Mats Colors */}
+                      {product.rugsMatsColors && product.rugsMatsColors.length > 0 && (
+                        <div>
+                          <h4 className="text-sm font-medium text-gray-700 mb-1">Colors:</h4>
+                          <div className="flex flex-wrap gap-2">
+                            {product.rugsMatsColors.map((color: string, index: number) => (
+                              <span
+                                key={index}
+                                className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-sm"
+                              >
+                                {color}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Type for Rugs & Mats */}
+                      {product.rugsMatsType && (
+                        <div>
+                          <h4 className="text-sm font-medium text-gray-700 mb-1">Type:</h4>
+                          <div className="flex flex-wrap gap-2">
+                            <span className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-sm">
+                              {product.rugsMatsType}
+                            </span>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Open Product Button */}
+                    <div className="mt-[60px] flex justify-center">
+                      <button
+                        className="text-sm text-gray-900 hover:text-gray-700 transition-colors -ml-[200px] border border-gray-900 px-3 py-1 rounded"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          toggleProductExpand(product._id);
+                        }}
+                      >
+                        Open Product
+                      </button>
                     </div>
                   </div>
                 </div>

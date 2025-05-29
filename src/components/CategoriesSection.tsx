@@ -93,10 +93,10 @@ const megaMenus: MegaMenu[] = [
       {
         title: 'MAT TYPES',
         items: [
-          { label: 'Door Mat', href: '/shop/rugs-mats/mats/door-mat' },
-          { label: 'Kitchen Mat', href: '/shop/rugs-mats/mats/kitchen-mat' },
-          { label: 'Hallway Runner', href: '/shop/rugs-mats/mats/hallway-runner' },
-          { label: 'Table Placemat', href: '/shop/rugs-mats/mats/table-placemat' },
+          { label: 'Door Mat', href: '/shop/mats/door-mat' },
+          { label: 'Kitchen Mat', href: '/shop/mats/kitchen-mat' },
+          { label: 'Hallway Runner', href: '/shop/mats/hallway-runner' },
+          { label: 'Table Placemat', href: '/shop/mats/table-placemat' },
         ],
       },
       {

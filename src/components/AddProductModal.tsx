@@ -15,6 +15,38 @@ interface AddProductModalProps {
   onProductAdded: () => void;
 }
 
+interface FormData {
+  title: string;
+  description: string;
+  features: string;
+  price: string;
+  category: string;
+  subcategory: string;
+  images: string[];
+  isSoldOut: boolean;
+  isHot: boolean;
+  // Bedding specific
+  beddingSizes: SizePrice[];
+  beddingStyles: string[];
+  beddingColors: string[];
+  // Rugs & Mats specific
+  rugsMatsType: 'RUGS' | 'MATS' | '';
+  rugsMatsSizes: SizePrice[];
+  rugsMatsColors: string[];
+  // Throws & Towels specific
+  throwsTowelsStyles: string[];
+  throwsTowelsColors: string[];
+  // Curtains specific
+  curtainsSizes: SizePrice[];
+  curtainsColors: string[];
+  // Clothing specific
+  clothingStyles: string[];
+  clothingColors: string[];
+  // Footwear specific
+  footwearSizes: SizePrice[];
+  footwearColors: string[];
+}
+
 const categories = [
   'BEDDING',
   'RUGS & MATS',
@@ -185,53 +217,60 @@ const footwearColors = [
 ];
 
 export default function AddProductModal({ open, onClose, onProductAdded }: AddProductModalProps) {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     title: '',
     description: '',
     features: '',
     price: '',
     category: '',
     subcategory: '',
-    images: [] as string[],
+    images: [],
     isSoldOut: false,
     isHot: false,
     // Bedding specific
-    beddingSizes: [] as SizePrice[],
-    beddingStyles: [] as string[],
-    beddingColors: [] as string[],
+    beddingSizes: [],
+    beddingStyles: [],
+    beddingColors: [],
     // Rugs & Mats specific
-    rugsMatsType: '' as 'RUGS' | 'MATS' | '',
-    rugsMatsSizes: [] as SizePrice[],
-    rugsMatsColors: [] as string[],
+    rugsMatsType: '',
+    rugsMatsSizes: [],
+    rugsMatsColors: [],
     // Throws & Towels specific
-    throwsTowelsStyles: [] as string[],
-    throwsTowelsColors: [] as string[],
+    throwsTowelsStyles: [],
+    throwsTowelsColors: [],
     // Curtains specific
-    curtainsSizes: [] as SizePrice[],
-    curtainsColors: [] as string[],
+    curtainsSizes: [],
+    curtainsColors: [],
     // Clothing specific
-    clothingStyles: [] as string[],
-    clothingColors: [] as string[],
+    clothingStyles: [],
+    clothingColors: [],
     // Footwear specific
-    footwearSizes: [] as SizePrice[],
-    footwearColors: [] as string[]
+    footwearSizes: [],
+    footwearColors: []
   });
 
   const handleSizePriceChange = (category: string, size: string, regularPrice: number, salePrice: number, sku: string, stock: number) => {
     const sizePrice: SizePrice = { size, regularPrice, salePrice, sku, stock };
-    const sizesField = `${category.toLowerCase()}Sizes`;
     
     setFormData(prev => {
-      const currentSizes = (prev[sizesField as keyof typeof prev] as SizePrice[]) || [];
-      const existingSizeIndex = currentSizes.findIndex(s => s.size === size);
-      
-      if (existingSizeIndex >= 0) {
-        const newSizes = [...currentSizes];
-        newSizes[existingSizeIndex] = sizePrice;
-        return { ...prev, [sizesField]: newSizes };
-      } else {
-        return { ...prev, [sizesField]: [...currentSizes, sizePrice] };
+      if (category === 'bedding') {
+        const existingSizeIndex = prev.beddingSizes.findIndex(s => s.size === size);
+        if (existingSizeIndex >= 0) {
+          const newSizes = [...prev.beddingSizes];
+          newSizes[existingSizeIndex] = sizePrice;
+          return { ...prev, beddingSizes: newSizes };
+        }
+        return { ...prev, beddingSizes: [...prev.beddingSizes, sizePrice] };
+      } else if (category === 'rugsMats') {
+        const existingSizeIndex = prev.rugsMatsSizes.findIndex(s => s.size === size);
+        if (existingSizeIndex >= 0) {
+          const newSizes = [...prev.rugsMatsSizes];
+          newSizes[existingSizeIndex] = sizePrice;
+          return { ...prev, rugsMatsSizes: newSizes };
+        }
+        return { ...prev, rugsMatsSizes: [...prev.rugsMatsSizes, sizePrice] };
       }
+      return prev;
     });
   };
 
@@ -333,13 +372,19 @@ export default function AddProductModal({ open, onClose, onProductAdded }: AddPr
   };
 
   const removeSize = (category: string, size: string) => {
-    const sizesField = `${category.toLowerCase()}Sizes`;
     setFormData(prev => {
-      const currentSizes = prev[sizesField as keyof typeof prev] as SizePrice[];
-      return {
-        ...prev,
-        [sizesField]: currentSizes.filter(s => s.size !== size)
-      };
+      if (category === 'bedding') {
+        return {
+          ...prev,
+          beddingSizes: prev.beddingSizes.filter(s => s.size !== size)
+        };
+      } else if (category === 'rugsMats') {
+        return {
+          ...prev,
+          rugsMatsSizes: prev.rugsMatsSizes.filter(s => s.size !== size)
+        };
+      }
+      return prev;
     });
   };
 
@@ -572,146 +617,151 @@ export default function AddProductModal({ open, onClose, onProductAdded }: AddPr
           )}
 
           {formData.category === 'RUGS & MATS' && (
-            <>
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Type</label>
-                <select
-                  value={formData.rugsMatsType}
-                  onChange={(e) => setFormData(prev => ({ ...prev, rugsMatsType: e.target.value as 'RUGS' | 'MATS' | '' }))}
-                  className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
-                  required
-                >
-                  <option value="">Select a type</option>
-                  <option value="RUGS">Rugs</option>
-                  <option value="MATS">Mats</option>
-                </select>
-              </div>
-              {formData.rugsMatsType && (
+            <div className="bg-gray-50 p-6 rounded-xl space-y-6">
+              <h3 className="text-lg font-semibold text-gray-900">Rugs & Mats Details</h3>
+              <div className="grid grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Subcategory</label>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Type</label>
                   <select
-                    value={formData.subcategory}
-                    onChange={(e) => setFormData(prev => ({ ...prev, subcategory: e.target.value }))}
+                    value={formData.rugsMatsType}
+                    onChange={(e) => setFormData(prev => ({ ...prev, rugsMatsType: e.target.value as 'RUGS' | 'MATS' | '' }))}
                     className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
                     required
                   >
-                    <option value="">Select a subcategory</option>
-                    {rugsMatsSubcategories[formData.rugsMatsType as 'RUGS' | 'MATS'].map(subcategory => (
-                      <option key={subcategory} value={subcategory}>{subcategory}</option>
-                    ))}
+                    <option value="">Select a type</option>
+                    <option value="RUGS">Rugs</option>
+                    <option value="MATS">Mats</option>
                   </select>
                 </div>
-              )}
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Sizes and Prices</label>
-                <div className="space-y-3">
-                  {rugsMatsSizes.map(size => {
-                    const sizePrice = formData.rugsMatsSizes.find(s => s.size === size);
-                    return (
-                      <div key={size} className="flex items-center gap-3">
-                        <label className={`inline-flex items-center px-4 py-2 rounded-full bg-white border transition-all cursor-pointer ${
-                          sizePrice ? 'border-red-500 text-red-500' : 'border-gray-300 hover:border-gray-400 text-gray-700'
-                        }`}>
-                          <input
-                            type="checkbox"
-                            checked={!!sizePrice}
-                            onChange={(e) => {
-                              if (e.target.checked) {
-                                handleSizePriceChange('rugsMats', size, 0, 0, '', 0);
-                              } else {
-                                removeSize('rugsMats', size);
-                              }
-                            }}
-                            className="hidden"
-                          />
-                          <span>{size}</span>
-                        </label>
-                        {sizePrice && (
-                          <div className="flex items-center gap-2">
-                            <div className="flex flex-col gap-1">
-                              <label className="text-xs text-gray-500">SKU</label>
-                              <input
-                                type="text"
-                                value={sizePrice.sku}
-                                onChange={(e) => handleSizePriceChange('rugsMats', size, sizePrice.regularPrice, sizePrice.salePrice, e.target.value, sizePrice.stock)}
-                                className="w-32 px-3 py-1 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
-                                placeholder="SKU"
-                              />
-                            </div>
-                            <div className="flex flex-col gap-1">
-                              <label className="text-xs text-gray-500">Regular Price</label>
-                              <div className="flex items-center gap-1">
+                {formData.rugsMatsType && (
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">Subcategory</label>
+                    <select
+                      value={formData.subcategory}
+                      onChange={(e) => setFormData(prev => ({ ...prev, subcategory: e.target.value }))}
+                      className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                      required
+                    >
+                      <option value="">Select a subcategory</option>
+                      {rugsMatsSubcategories[formData.rugsMatsType as 'RUGS' | 'MATS'].map(subcategory => (
+                        <option key={subcategory} value={subcategory}>{subcategory}</option>
+                      ))}
+                    </select>
+                  </div>
+                )}
+              </div>
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Sizes and Prices</label>
+                  <div className="space-y-3">
+                    {rugsMatsSizes.map(size => {
+                      const sizePrice = formData.rugsMatsSizes.find(s => s.size === size);
+                      return (
+                        <div key={size} className="flex items-center gap-3">
+                          <label className={`inline-flex items-center px-4 py-2 rounded-full bg-white border transition-all cursor-pointer ${
+                            sizePrice ? 'border-red-500 text-red-500' : 'border-gray-300 hover:border-gray-400 text-gray-700'
+                          }`}>
+                            <input
+                              type="checkbox"
+                              checked={!!sizePrice}
+                              onChange={(e) => {
+                                if (e.target.checked) {
+                                  handleSizePriceChange('rugsMats', size, 0, 0, '', 0);
+                                } else {
+                                  removeSize('rugsMats', size);
+                                }
+                              }}
+                              className="hidden"
+                            />
+                            <span>{size}</span>
+                          </label>
+                          {sizePrice && (
+                            <div className="flex items-center gap-2">
+                              <div className="flex flex-col gap-1">
+                                <label className="text-xs text-gray-500">SKU</label>
+                                <input
+                                  type="text"
+                                  value={sizePrice.sku}
+                                  onChange={(e) => handleSizePriceChange('rugsMats', size, sizePrice.regularPrice, sizePrice.salePrice, e.target.value, sizePrice.stock)}
+                                  className="w-32 px-3 py-1 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                                  placeholder="SKU"
+                                />
+                              </div>
+                              <div className="flex flex-col gap-1">
+                                <label className="text-xs text-gray-500">Regular Price</label>
+                                <div className="flex items-center gap-1">
+                                  <input
+                                    type="number"
+                                    value={sizePrice.regularPrice}
+                                    onChange={(e) => handleSizePriceChange('rugsMats', size, parseFloat(e.target.value), sizePrice.salePrice, sizePrice.sku, sizePrice.stock)}
+                                    className="w-24 px-3 py-1 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                                    placeholder="Regular"
+                                    min="0"
+                                    step="0.01"
+                                  />
+                                  <span className="text-gray-500">£</span>
+                                </div>
+                              </div>
+                              <div className="flex flex-col gap-1">
+                                <label className="text-xs text-gray-500">Sale Price</label>
+                                <div className="flex items-center gap-1">
+                                  <input
+                                    type="number"
+                                    value={sizePrice.salePrice}
+                                    onChange={(e) => handleSizePriceChange('rugsMats', size, sizePrice.regularPrice, parseFloat(e.target.value), sizePrice.sku, sizePrice.stock)}
+                                    className="w-24 px-3 py-1 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                                    placeholder="Sale"
+                                    min="0"
+                                    step="0.01"
+                                  />
+                                  <span className="text-gray-500">£</span>
+                                </div>
+                              </div>
+                              <div className="flex flex-col gap-1">
+                                <label className="text-xs text-gray-500">Stock</label>
                                 <input
                                   type="number"
-                                  value={sizePrice.regularPrice}
-                                  onChange={(e) => handleSizePriceChange('rugsMats', size, parseFloat(e.target.value), sizePrice.salePrice, sizePrice.sku, sizePrice.stock)}
-                                  className="w-24 px-3 py-1 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
-                                  placeholder="Regular"
+                                  value={sizePrice.stock}
+                                  onChange={(e) => handleSizePriceChange('rugsMats', size, sizePrice.regularPrice, sizePrice.salePrice, sizePrice.sku, parseInt(e.target.value) || 0)}
+                                  className="w-20 px-3 py-1 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                                  placeholder="Stock"
                                   min="0"
-                                  step="0.01"
                                 />
-                                <span className="text-gray-500">£</span>
                               </div>
                             </div>
-                            <div className="flex flex-col gap-1">
-                              <label className="text-xs text-gray-500">Sale Price</label>
-                              <div className="flex items-center gap-1">
-                                <input
-                                  type="number"
-                                  value={sizePrice.salePrice}
-                                  onChange={(e) => handleSizePriceChange('rugsMats', size, sizePrice.regularPrice, parseFloat(e.target.value), sizePrice.sku, sizePrice.stock)}
-                                  className="w-24 px-3 py-1 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
-                                  placeholder="Sale"
-                                  min="0"
-                                  step="0.01"
-                                />
-                                <span className="text-gray-500">£</span>
-                              </div>
-                            </div>
-                            <div className="flex flex-col gap-1">
-                              <label className="text-xs text-gray-500">Stock</label>
-                              <input
-                                type="number"
-                                value={sizePrice.stock}
-                                onChange={(e) => handleSizePriceChange('rugsMats', size, sizePrice.regularPrice, sizePrice.salePrice, sizePrice.sku, parseInt(e.target.value) || 0)}
-                                className="w-20 px-3 py-1 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
-                                placeholder="Stock"
-                                min="0"
-                              />
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    );
-                  })}
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Colors</label>
+                  <div className="flex flex-wrap gap-3">
+                    {rugsMatsColors.map(color => (
+                      <label key={color} className={`inline-flex items-center px-4 py-2 rounded-full bg-white border transition-all cursor-pointer ${
+                        formData.rugsMatsColors.includes(color) 
+                          ? 'border-red-500 text-red-500' 
+                          : 'border-gray-300 hover:border-gray-400 text-gray-700'
+                      }`}>
+                        <input
+                          type="checkbox"
+                          checked={formData.rugsMatsColors.includes(color)}
+                          onChange={(e) => {
+                            const newColors = e.target.checked
+                              ? [...formData.rugsMatsColors, color]
+                              : formData.rugsMatsColors.filter(c => c !== color);
+                            setFormData(prev => ({ ...prev, rugsMatsColors: newColors }));
+                          }}
+                          className="hidden"
+                        />
+                        <span>{color}</span>
+                      </label>
+                    ))}
+                  </div>
                 </div>
               </div>
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Colors</label>
-                <div className="flex flex-wrap gap-3">
-                  {rugsMatsColors.map(color => (
-                    <label key={color} className={`inline-flex items-center px-4 py-2 rounded-full bg-white border transition-all cursor-pointer ${
-                      formData.rugsMatsColors.includes(color) 
-                        ? 'border-red-500 text-red-500' 
-                        : 'border-gray-300 hover:border-gray-400 text-gray-700'
-                    }`}>
-                      <input
-                        type="checkbox"
-                        checked={formData.rugsMatsColors.includes(color)}
-                        onChange={(e) => {
-                          const newColors = e.target.checked
-                            ? [...formData.rugsMatsColors, color]
-                            : formData.rugsMatsColors.filter(c => c !== color);
-                          setFormData(prev => ({ ...prev, rugsMatsColors: newColors }));
-                        }}
-                        className="hidden"
-                      />
-                      <span className={`${formData.rugsMatsColors.includes(color) ? 'text-indigo-600' : 'text-gray-700'}`}>{color}</span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-            </>
+            </div>
           )}
 
           {formData.category === 'THROWS & TOWELS' && (

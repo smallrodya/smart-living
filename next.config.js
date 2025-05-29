@@ -39,6 +39,17 @@ const nextConfig = {
       {
         source: '/category/:path*/shop-duvet-set-by-type',
         destination: '/shop-duvet-set-by-type',
+      },
+      {
+        source: '/adminpanel/login',
+        destination: '/adminpanel/login',
+        has: [
+          {
+            type: 'header',
+            key: 'x-requested-with',
+            value: '(?!XMLHttpRequest).*',
+          },
+        ],
       }
     ];
   },

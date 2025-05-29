@@ -14,10 +14,11 @@ interface Product {
   title: string;
   description: string;
   features: string;
-  price: number;
+  price: string;
   category: string;
   subcategory: string;
-  rugsMatsSizes: string[];
+  sku: string;
+  rugsMatsSizes: Array<{ size: string; price: number; salePrice: number }>;
   rugsMatsColors: string[];
   images?: string[];
   discount?: number;
@@ -33,7 +34,7 @@ export default function ShaggyRugsPage() {
   const [showFilters, setShowFilters] = useState(false);
   const [hoveredProduct, setHoveredProduct] = useState<string | null>(null);
   const [wishlist, setWishlist] = useState<string[]>([]);
-  const [priceRange, setPriceRange] = useState<[number, number]>([0, 200]);
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, 1000]);
   const router = useRouter();
 
   useEffect(() => {
@@ -49,11 +50,16 @@ export default function ShaggyRugsPage() {
     try {
       const res = await fetch('/api/products');
       const data = await res.json();
+      console.log('All products:', data.products); // Для отладки
       const shaggyRugs = data.products.filter(
-        (product: Product) => 
-          product.category === 'RUGS & MATS' && 
-          product.subcategory === 'Shaggy Rugs'
+        (product: Product) => {
+          console.log('Product category:', product.category); // Для отладки
+          console.log('Product subcategory:', product.subcategory); // Для отладки
+          return product.category === 'RUGS & MATS' && 
+                 product.subcategory === 'Shaggy Rugs';
+        }
       );
+      console.log('Filtered shaggy rugs:', shaggyRugs); // Для отладки
       setProducts(shaggyRugs);
     } catch (error) {
       console.error('Error fetching products:', error);
@@ -62,20 +68,40 @@ export default function ShaggyRugsPage() {
     }
   };
 
-  const allSizes = Array.from(new Set(products.flatMap(p => p.rugsMatsSizes || [])));
+  const allSizes = Array.from(new Set(products.flatMap(p => p.rugsMatsSizes?.map(s => s.size) || [])));
   const allColors = Array.from(new Set(products.flatMap(p => p.rugsMatsColors || [])));
 
+  const getProductPrice = (product: Product) => {
+    if (!product.rugsMatsSizes || product.rugsMatsSizes.length === 0) return 0;
+    return product.rugsMatsSizes[0].salePrice;
+  };
+
+  const formatPrice = (price: number) => {
+    return `£${price.toFixed(2)}`;
+  };
+
+  const formatPriceRange = (product: Product) => {
+    if (!product.rugsMatsSizes || product.rugsMatsSizes.length === 0) return '£0.00';
+    const prices = product.rugsMatsSizes.map(size => size.salePrice);
+    const min = Math.min(...prices);
+    const max = Math.max(...prices);
+    return min === max ? formatPrice(min) : `${formatPrice(min)} - ${formatPrice(max)}`;
+  };
+
   const filteredProducts = products.filter(product => {
-    const matchesSize = !selectedSize || product.rugsMatsSizes?.includes(selectedSize);
+    const matchesSize = !selectedSize || product.rugsMatsSizes?.some(s => s.size === selectedSize);
     const matchesColor = !selectedColor || product.rugsMatsColors?.includes(selectedColor);
     const [minPrice, maxPrice] = priceRange;
-    return matchesSize && matchesColor && product.price >= minPrice && product.price <= maxPrice;
+    const productPrices = product.rugsMatsSizes?.map(s => s.salePrice) || [];
+    const productMinPrice = Math.min(...productPrices);
+    const productMaxPrice = Math.max(...productPrices);
+    return matchesSize && matchesColor && productMinPrice >= minPrice && productMaxPrice <= maxPrice;
   });
 
   const clearFilters = () => {
     setSelectedSize('');
     setSelectedColor('');
-    setPriceRange([0, 200]);
+    setPriceRange([0, 1000]);
   };
 
   const toggleWishlist = (id: string) => {
@@ -287,6 +313,33 @@ export default function ShaggyRugsPage() {
                 flex: 1,
                 background: 'linear-gradient(to right, #eee, transparent)'
               }} />
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  clearFilters();
+                }}
+                style={{
+                  padding: '8px 16px',
+                  borderRadius: '6px',
+                  border: '1px solid #eee',
+                  background: 'transparent',
+                  color: '#666',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease',
+                  fontSize: '14px',
+                  fontWeight: 500
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = '#222';
+                  e.currentTarget.style.color = '#222';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = '#eee';
+                  e.currentTarget.style.color = '#666';
+                }}
+              >
+                Clear Filters
+              </button>
             </div>
 
             {showFilters && (
@@ -320,7 +373,7 @@ export default function ShaggyRugsPage() {
                     <input
                       type="range"
                       min="0"
-                      max="200"
+                      max="1000"
                       value={priceRange[1]}
                       onChange={(e) => setPriceRange([priceRange[0], parseInt(e.target.value)])}
                       style={{
@@ -618,7 +671,7 @@ export default function ShaggyRugsPage() {
                   {product.isHot && (
                     <span style={{
                       position: 'absolute',
-                      top: '67px',
+                      top: product.discount ? '67px' : '12px',
                       left: '12px',
                       background: '#000',
                       color: '#fff',
@@ -674,56 +727,102 @@ export default function ShaggyRugsPage() {
                   }}>
                     {product.discount ? (
                       <>
-                        £{(product.price * (1 - product.discount / 100)).toFixed(2)}
+                        {formatPriceRange(product)}
                         <span style={{
                           color: '#999',
                           textDecoration: 'line-through',
                           marginLeft: '8px',
                           fontSize: '16px'
                         }}>
-                          £{product.price}
+                          {formatPriceRange({ ...product, discount: undefined })}
                         </span>
                       </>
                     ) : (
-                      `£${product.price}`
+                      formatPriceRange(product)
                     )}
                   </div>
                   {!product.isSoldOut && (
-                    <button
-                      onClick={() => {/* Add to basket logic */}}
-                      style={{
-                        position: 'absolute',
-                        top: '64px',
-                        right: '12px',
-                        background: 'rgba(255, 255, 255, 0.95)',
-                        border: 'none',
-                        borderRadius: '50%',
-                        width: '44px',
-                        height: '44px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        cursor: 'pointer',
-                        boxShadow: '0 2px 12px rgba(0,0,0,0.15)',
-                        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                        backdropFilter: 'blur(4px)'
-                      }}
-                    >
-                      <svg
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="#000"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
+                    <div style={{
+                      display: 'flex',
+                      gap: '12px',
+                      marginTop: '16px'
+                    }}>
+                      <button
+                        onClick={() => {/* Add to basket logic */}}
+                        style={{
+                          flex: 1,
+                          padding: '12px 24px',
+                          background: '#222',
+                          color: '#fff',
+                          border: 'none',
+                          borderRadius: '8px',
+                          fontSize: '14px',
+                          fontWeight: 600,
+                          cursor: 'pointer',
+                          transition: 'all 0.2s ease',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          gap: '8px'
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.background = '#333';
+                          e.currentTarget.style.transform = 'translateY(-2px)';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.background = '#222';
+                          e.currentTarget.style.transform = 'translateY(0)';
+                        }}
                       >
-                        <circle cx="9" cy="21" r="1"/>
-                        <circle cx="20" cy="21" r="1"/>
-                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
-                      </svg>
-                    </button>
+                        <svg
+                          width="20"
+                          height="20"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <circle cx="9" cy="21" r="1"/>
+                          <circle cx="20" cy="21" r="1"/>
+                          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+                        </svg>
+                        Add to Cart
+                      </button>
+                      <button
+                        onClick={() => {/* Quick view logic */}}
+                        style={{
+                          padding: '12px',
+                          background: '#f5f5f5',
+                          color: '#222',
+                          border: 'none',
+                          borderRadius: '8px',
+                          cursor: 'pointer',
+                          transition: 'all 0.2s ease'
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.background = '#eee';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.background = '#f5f5f5';
+                        }}
+                      >
+                        <svg
+                          width="20"
+                          height="20"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                          <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                        </svg>
+                      </button>
+                    </div>
                   )}
                 </div>
               </div>

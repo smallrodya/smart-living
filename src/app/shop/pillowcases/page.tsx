@@ -645,7 +645,7 @@ export default function PillowcasesPage() {
                   {product.isHot && (
                     <span style={{
                       position: 'absolute',
-                      top: '67px',
+                      top: product.discount ? '67px' : '12px',
                       left: '12px',
                       background: '#000',
                       color: '#fff',
