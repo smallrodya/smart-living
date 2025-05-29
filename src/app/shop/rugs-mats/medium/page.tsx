@@ -4,34 +4,30 @@ import Image from 'next/image';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import CookieBanner from '@/components/CookieBanner';
-import CategoriesSection from '@/components/CategoriesSection';
 import { useRouter } from 'next/navigation';
-
-export const dynamic = 'force-dynamic';
+import CategoriesSection from '@/components/CategoriesSection';
 
 interface Product {
   _id: string;
   title: string;
   description: string;
-  images: string[];
+  features: string;
+  price: string;
   category: string;
   subcategory: string;
   sku: string;
-  beddingSizes: Array<{ size: string; regularPrice: number; salePrice: number }>;
-  beddingColors: string[];
-  beddingStyles: string[];
-  features: string;
-  isSoldOut: boolean;
-  isHot: boolean;
+  rugsMatsSizes: Array<{ size: string; price: number; salePrice: number }>;
+  rugsMatsColors: string[];
+  images?: string[];
   discount?: number;
+  isSoldOut?: boolean;
+  isHot?: boolean;
 }
 
-export default function WeightedBlanketsPage() {
+export default function MediumSizePage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedSize, setSelectedSize] = useState<string>('');
   const [selectedColor, setSelectedColor] = useState<string>('');
-  const [selectedStyle, setSelectedStyle] = useState<string>('');
   const [showFilters, setShowFilters] = useState(false);
   const [hoveredProduct, setHoveredProduct] = useState<string | null>(null);
   const [wishlist, setWishlist] = useState<string[]>([]);
@@ -52,16 +48,16 @@ export default function WeightedBlanketsPage() {
       const res = await fetch('/api/products');
       const data = await res.json();
       console.log('All products:', data.products); // Для отладки
-      const weightedBlankets = data.products.filter(
+      const mediumProducts = data.products.filter(
         (product: Product) => {
           console.log('Product category:', product.category); // Для отладки
-          console.log('Product subcategory:', product.subcategory); // Для отладки
-          return product.category === 'BEDDING' && 
-                 product.subcategory === 'Weighted Blankets';
+          console.log('Product sizes:', product.rugsMatsSizes); // Для отладки
+          return product.category === 'RUGS & MATS' && 
+                 product.rugsMatsSizes?.some(size => size.size === 'Medium');
         }
       );
-      console.log('Filtered weighted blankets:', weightedBlankets); // Для отладки
-      setProducts(weightedBlankets);
+      console.log('Filtered medium products:', mediumProducts); // Для отладки
+      setProducts(mediumProducts);
     } catch (error) {
       console.error('Error fetching products:', error);
     } finally {
@@ -69,29 +65,35 @@ export default function WeightedBlanketsPage() {
     }
   };
 
-  const allSizes = Array.from(new Set(products.flatMap(p => p.beddingSizes.map(s => s.size))));
-  const allColors = Array.from(new Set(products.flatMap(p => p.beddingColors || [])));
+  const allColors = Array.from(new Set(products.flatMap(p => p.rugsMatsColors || [])));
+
+  const formatPrice = (price: number) => {
+    return `£${price.toFixed(2)}`;
+  };
+
+  const formatPriceRange = (product: Product) => {
+    if (!product.rugsMatsSizes || product.rugsMatsSizes.length === 0) return '£0.00';
+    const mediumSize = product.rugsMatsSizes.find(size => size.size === 'Medium');
+    if (!mediumSize) return '£0.00';
+    return formatPrice(mediumSize.salePrice);
+  };
 
   const filteredProducts = products.filter(product => {
-    const matchesSize = !selectedSize || product.beddingSizes.some(s => s.size === selectedSize);
-    const matchesColor = !selectedColor || product.beddingColors.includes(selectedColor);
+    const matchesColor = !selectedColor || product.rugsMatsColors?.includes(selectedColor);
     const [minPrice, maxPrice] = priceRange;
-    const productPrices = product.beddingSizes.map(s => s.salePrice);
-    const productMinPrice = Math.min(...productPrices);
-    const productMaxPrice = Math.max(...productPrices);
-    const matchesPrice = productMinPrice >= minPrice && productMaxPrice <= maxPrice;
-    return matchesSize && matchesColor && matchesPrice;
+    const mediumSize = product.rugsMatsSizes?.find(size => size.size === 'Medium');
+    const productPrice = mediumSize?.salePrice || 0;
+    return matchesColor && productPrice >= minPrice && productPrice <= maxPrice;
   });
 
   const clearFilters = () => {
-    setSelectedSize('');
     setSelectedColor('');
     setPriceRange([0, 1000]);
   };
 
   const toggleWishlist = (id: string) => {
     setWishlist(prev => {
-      const prefixedId = `weighted_${id}`;
+      const prefixedId = `medium_${id}`;
       const newWishlist = prev.includes(prefixedId) 
         ? prev.filter(i => i !== prefixedId)
         : [...prev, prefixedId];
@@ -104,14 +106,14 @@ export default function WeightedBlanketsPage() {
               typeof item === 'object' && 
               'id' in item && 
               typeof item.id === 'string' && 
-              !item.id.startsWith('weighted_')
+              !item.id.startsWith('medium_')
             )
           : [];
         
         const newItems = products
-          .filter((p) => newWishlist.includes(`weighted_${p._id}`))
+          .filter((p) => newWishlist.includes(`medium_${p._id}`))
           .map((item) => ({
-            id: `weighted_${item._id}`,
+            id: `medium_${item._id}`,
             src: item.images?.[0] || '',
             hoverSrc: item.images?.[1] || item.images?.[0] || '',
             title: item.title,
@@ -127,23 +129,6 @@ export default function WeightedBlanketsPage() {
         return newWishlist;
       }
     });
-  };
-
-  const getProductPrice = (product: Product) => {
-    if (!product.beddingSizes || product.beddingSizes.length === 0) return 0;
-    return product.beddingSizes[0].salePrice;
-  };
-
-  const formatPrice = (price: number) => {
-    return `£${price.toFixed(2)}`;
-  };
-
-  const formatPriceRange = (product: Product) => {
-    if (!product.beddingSizes || product.beddingSizes.length === 0) return '£0.00';
-    const prices = product.beddingSizes.map(size => size.salePrice);
-    const min = Math.min(...prices);
-    const max = Math.max(...prices);
-    return min === max ? formatPrice(min) : `${formatPrice(min)} - ${formatPrice(max)}`;
   };
 
   if (loading) {
@@ -167,14 +152,13 @@ export default function WeightedBlanketsPage() {
           marginBottom: '60px'
         }}>
           <Image
-            src="/images/weighted-blankets-banner.jpg"
-            alt="Weighted Blankets"
+            src="/medium-size.jpg"
+            alt="Medium Size Category"
             fill
             style={{
               objectFit: 'cover',
               objectPosition: 'center'
             }}
-            priority
           />
           <div style={{
             position: 'absolute',
@@ -194,7 +178,7 @@ export default function WeightedBlanketsPage() {
               zIndex: 10
             }}>
               <button
-                onClick={() => router.push('/')}
+                onClick={() => router.push('/category/rugs/rugtype')}
                 style={{
                   background: 'rgba(255, 255, 255, 0.9)',
                   border: 'none',
@@ -244,7 +228,7 @@ export default function WeightedBlanketsPage() {
                 textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
                 lineHeight: '1.2',
                 marginBottom: '20px'
-              }}>Weighted Blankets</h1>
+              }}>Medium Size Collection</h1>
               <p style={{
                 color: '#fff',
                 fontSize: '24px',
@@ -254,7 +238,7 @@ export default function WeightedBlanketsPage() {
                 margin: '0 auto',
                 lineHeight: '1.5'
               }}>
-                Experience the comfort and therapeutic benefits of our premium weighted blankets
+                Explore our versatile collection of medium-sized rugs and mats, perfect for creating balanced spaces
               </p>
             </div>
           </div>
@@ -398,75 +382,6 @@ export default function WeightedBlanketsPage() {
                       <span>£{priceRange[0]}</span>
                       <span>£{priceRange[1]}</span>
                     </div>
-                  </div>
-                </div>
-
-                {/* Size Filter */}
-                <div style={{
-                  flex: '1',
-                  minWidth: '300px'
-                }}>
-                  <div style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '12px',
-                    marginBottom: '20px'
-                  }}>
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
-                    </svg>
-                    <span style={{
-                      fontSize: '16px',
-                      fontWeight: 500,
-                      color: '#444'
-                    }}>Sizes</span>
-                  </div>
-                  <div style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '8px'
-                  }}>
-                    {allSizes.map(size => (
-                      <button
-                        key={size}
-                        onClick={() => setSelectedSize(size === selectedSize ? '' : size)}
-                        style={{
-                          padding: '8px 16px',
-                          borderRadius: '6px',
-                          border: '1px solid',
-                          borderColor: selectedSize === size ? '#222' : '#eee',
-                          background: selectedSize === size ? '#222' : 'transparent',
-                          color: selectedSize === size ? '#fff' : '#444',
-                          cursor: 'pointer',
-                          transition: 'all 0.2s ease',
-                          fontSize: '14px',
-                          fontWeight: 500,
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '6px',
-                          textAlign: 'left'
-                        }}
-                        onMouseEnter={(e) => {
-                          if (selectedSize !== size) {
-                            e.currentTarget.style.borderColor = '#222';
-                            e.currentTarget.style.color = '#222';
-                          }
-                        }}
-                        onMouseLeave={(e) => {
-                          if (selectedSize !== size) {
-                            e.currentTarget.style.borderColor = '#eee';
-                            e.currentTarget.style.color = '#444';
-                          }
-                        }}
-                      >
-                        {selectedSize === size && (
-                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                            <path d="M20 6L9 17l-5-5"/>
-                          </svg>
-                        )}
-                        {size}
-                      </button>
-                    ))}
                   </div>
                 </div>
 
@@ -633,7 +548,7 @@ export default function WeightedBlanketsPage() {
                       cursor: 'pointer',
                       boxShadow: '0 2px 12px rgba(0,0,0,0.15)',
                       transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                      transform: wishlist.includes(`weighted_${product._id}`) ? 'scale(1.1)' : 'scale(1)',
+                      transform: wishlist.includes(`medium_${product._id}`) ? 'scale(1.1)' : 'scale(1)',
                       backdropFilter: 'blur(4px)'
                     }}
                   >
@@ -641,7 +556,7 @@ export default function WeightedBlanketsPage() {
                       width="24"
                       height="24"
                       viewBox="0 0 24 24"
-                      fill={wishlist.includes(`weighted_${product._id}`) ? '#e53935' : 'none'}
+                      fill={wishlist.includes(`medium_${product._id}`) ? '#e53935' : 'none'}
                       stroke="#e53935"
                       strokeWidth="2"
                       strokeLinecap="round"

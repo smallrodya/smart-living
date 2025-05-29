@@ -185,37 +185,75 @@ const footwearColors = [
   'Multi'
 ];
 
+interface FormData {
+  title: string;
+  description: string;
+  features: string;
+  price: string;
+  category: string;
+  subcategory: string;
+  images: string[];
+  isSoldOut: boolean;
+  isHot: boolean;
+  // Bedding specific
+  beddingSizes: SizePrice[];
+  beddingStyles: string[];
+  beddingColors: string[];
+  // Rugs & Mats specific
+  rugsMatsType: 'RUGS' | 'MATS' | '';
+  rugsMatsSizes: SizePrice[];
+  rugsMatsColors: string[];
+  // Throws & Towels specific
+  throwsTowelsStyles: string[];
+  throwsTowelsColors: string[];
+  // Curtains specific
+  curtainsSizes: SizePrice[];
+  curtainsColors: string[];
+  // Clothing specific
+  clothingStyles: string[];
+  clothingColors: string[];
+  // Footwear specific
+  footwearSizes: SizePrice[];
+  footwearColors: string[];
+  // Clearance specific
+  isClearance: boolean;
+  clearanceDiscount: number;
+}
+
 export default function EditProductModal({ open, onClose, product, onProductEdited }: EditProductModalProps) {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     title: '',
     description: '',
     features: '',
     price: '',
     category: '',
     subcategory: '',
-    images: [] as string[],
+    images: [],
     isSoldOut: false,
     isHot: false,
     // Bedding specific
-    beddingSizes: [] as SizePrice[],
-    beddingStyles: [] as string[],
-    beddingColors: [] as string[],
+    beddingSizes: [],
+    beddingStyles: [],
+    beddingColors: [],
     // Rugs & Mats specific
-    rugsMatsType: '' as 'RUGS' | 'MATS' | '',
-    rugsMatsSizes: [] as SizePrice[],
-    rugsMatsColors: [] as string[],
+    rugsMatsType: '',
+    rugsMatsSizes: [],
+    rugsMatsColors: [],
     // Throws & Towels specific
-    throwsTowelsStyles: [] as string[],
-    throwsTowelsColors: [] as string[],
+    throwsTowelsStyles: [],
+    throwsTowelsColors: [],
     // Curtains specific
-    curtainsSizes: [] as SizePrice[],
-    curtainsColors: [] as string[],
+    curtainsSizes: [],
+    curtainsColors: [],
     // Clothing specific
-    clothingStyles: [] as string[],
-    clothingColors: [] as string[],
+    clothingStyles: [],
+    clothingColors: [],
     // Footwear specific
-    footwearSizes: [] as SizePrice[],
-    footwearColors: [] as string[]
+    footwearSizes: [],
+    footwearColors: [],
+    // Clearance specific
+    isClearance: false,
+    clearanceDiscount: 0
   });
 
   useEffect(() => {
@@ -267,26 +305,52 @@ export default function EditProductModal({ open, onClose, product, onProductEdit
           sku: typeof size === 'string' ? '' : size.sku || '',
           stock: typeof size === 'string' ? 0 : size.stock || 0
         })) || [],
-        footwearColors: product.footwearColors || []
+        footwearColors: product.footwearColors || [],
+        // Clearance specific
+        isClearance: product.isClearance || false,
+        clearanceDiscount: product.clearanceDiscount || 0
       });
     }
   }, [product]);
 
   const handleSizePriceChange = (category: string, size: string, regularPrice: number, salePrice: number, sku: string, stock: number) => {
     const sizePrice: SizePrice = { size, regularPrice, salePrice, sku, stock };
-    const sizesField = `${category.toLowerCase()}Sizes`;
     
     setFormData(prev => {
-      const currentSizes = prev[sizesField as keyof typeof prev] as SizePrice[];
-      const existingSizeIndex = currentSizes.findIndex(s => s.size === size);
-      
-      if (existingSizeIndex >= 0) {
-        const newSizes = [...currentSizes];
-        newSizes[existingSizeIndex] = sizePrice;
-        return { ...prev, [sizesField]: newSizes };
-      } else {
-        return { ...prev, [sizesField]: [...currentSizes, sizePrice] };
+      if (category === 'bedding') {
+        const existingSizeIndex = prev.beddingSizes.findIndex(s => s.size === size);
+        if (existingSizeIndex >= 0) {
+          const newSizes = [...prev.beddingSizes];
+          newSizes[existingSizeIndex] = sizePrice;
+          return { ...prev, beddingSizes: newSizes };
+        }
+        return { ...prev, beddingSizes: [...prev.beddingSizes, sizePrice] };
+      } else if (category === 'rugsMats') {
+        const existingSizeIndex = prev.rugsMatsSizes.findIndex(s => s.size === size);
+        if (existingSizeIndex >= 0) {
+          const newSizes = [...prev.rugsMatsSizes];
+          newSizes[existingSizeIndex] = sizePrice;
+          return { ...prev, rugsMatsSizes: newSizes };
+        }
+        return { ...prev, rugsMatsSizes: [...prev.rugsMatsSizes, sizePrice] };
+      } else if (category === 'curtains') {
+        const existingSizeIndex = prev.curtainsSizes.findIndex(s => s.size === size);
+        if (existingSizeIndex >= 0) {
+          const newSizes = [...prev.curtainsSizes];
+          newSizes[existingSizeIndex] = sizePrice;
+          return { ...prev, curtainsSizes: newSizes };
+        }
+        return { ...prev, curtainsSizes: [...prev.curtainsSizes, sizePrice] };
+      } else if (category === 'footwear') {
+        const existingSizeIndex = prev.footwearSizes.findIndex(s => s.size === size);
+        if (existingSizeIndex >= 0) {
+          const newSizes = [...prev.footwearSizes];
+          newSizes[existingSizeIndex] = sizePrice;
+          return { ...prev, footwearSizes: newSizes };
+        }
+        return { ...prev, footwearSizes: [...prev.footwearSizes, sizePrice] };
       }
+      return prev;
     });
   };
 
@@ -302,13 +366,29 @@ export default function EditProductModal({ open, onClose, product, onProductEdit
   };
 
   const removeSize = (category: string, size: string) => {
-    const sizesField = `${category.toLowerCase()}Sizes`;
     setFormData(prev => {
-      const currentSizes = prev[sizesField as keyof typeof prev] as SizePrice[];
-      return {
-        ...prev,
-        [sizesField]: currentSizes.filter(s => s.size !== size)
-      };
+      if (category === 'bedding') {
+        return {
+          ...prev,
+          beddingSizes: prev.beddingSizes.filter(s => s.size !== size)
+        };
+      } else if (category === 'rugsMats') {
+        return {
+          ...prev,
+          rugsMatsSizes: prev.rugsMatsSizes.filter(s => s.size !== size)
+        };
+      } else if (category === 'curtains') {
+        return {
+          ...prev,
+          curtainsSizes: prev.curtainsSizes.filter(s => s.size !== size)
+        };
+      } else if (category === 'footwear') {
+        return {
+          ...prev,
+          footwearSizes: prev.footwearSizes.filter(s => s.size !== size)
+        };
+      }
+      return prev;
     });
   };
 
@@ -636,35 +716,37 @@ export default function EditProductModal({ open, onClose, product, onProductEdit
           {formData.category === 'RUGS & MATS' && (
             <div className="bg-gray-50 p-6 rounded-xl space-y-6">
               <h3 className="text-lg font-semibold text-gray-900">Rugs & Mats Details</h3>
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Type</label>
-                <select
-                  value={formData.rugsMatsType}
-                  onChange={(e) => setFormData(prev => ({ ...prev, rugsMatsType: e.target.value as 'RUGS' | 'MATS' | '' }))}
-                  className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
-                  required
-                >
-                  <option value="">Select a type</option>
-                  <option value="RUGS">Rugs</option>
-                  <option value="MATS">Mats</option>
-                </select>
-              </div>
-              {formData.rugsMatsType && (
+              <div className="grid grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Subcategory</label>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Type</label>
                   <select
-                    value={formData.subcategory}
-                    onChange={(e) => setFormData(prev => ({ ...prev, subcategory: e.target.value }))}
+                    value={formData.rugsMatsType}
+                    onChange={(e) => setFormData(prev => ({ ...prev, rugsMatsType: e.target.value as 'RUGS' | 'MATS' | '' }))}
                     className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
                     required
                   >
-                    <option value="">Select a subcategory</option>
-                    {rugsMatsSubcategories[formData.rugsMatsType as 'RUGS' | 'MATS'].map(subcategory => (
-                      <option key={subcategory} value={subcategory}>{subcategory}</option>
-                    ))}
+                    <option value="">Select a type</option>
+                    <option value="RUGS">Rugs</option>
+                    <option value="MATS">Mats</option>
                   </select>
                 </div>
-              )}
+                {formData.rugsMatsType && (
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">Subcategory</label>
+                    <select
+                      value={formData.subcategory}
+                      onChange={(e) => setFormData(prev => ({ ...prev, subcategory: e.target.value }))}
+                      className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                      required
+                    >
+                      <option value="">Select a subcategory</option>
+                      {rugsMatsSubcategories[formData.rugsMatsType as 'RUGS' | 'MATS'].map(subcategory => (
+                        <option key={subcategory} value={subcategory}>{subcategory}</option>
+                      ))}
+                    </select>
+                  </div>
+                )}
+              </div>
               <div className="space-y-4">
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">Sizes and Prices</label>
@@ -1246,7 +1328,39 @@ export default function EditProductModal({ open, onClose, product, onProductEdit
               />
               <span className="ml-2 text-sm font-medium text-gray-700">Hot</span>
             </label>
+            <label className="inline-flex items-center">
+              <input
+                type="checkbox"
+                checked={formData.isClearance}
+                onChange={(e) => setFormData(prev => ({ ...prev, isClearance: e.target.checked }))}
+                className="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
+              />
+              <span className="ml-2 text-sm font-medium text-gray-700">Add to Clearance</span>
+            </label>
           </div>
+
+          {formData.isClearance && (
+            <div className="bg-gray-50 p-6 rounded-xl">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Clearance Details</h3>
+              <div className="grid grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Discount Percentage</label>
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="number"
+                      value={formData.clearanceDiscount}
+                      onChange={(e) => setFormData(prev => ({ ...prev, clearanceDiscount: parseInt(e.target.value) || 0 }))}
+                      className="w-24 px-3 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                      min="0"
+                      max="100"
+                      placeholder="0"
+                    />
+                    <span className="text-gray-500">%</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
 
           <div className="flex justify-end space-x-4 pt-6 border-t">
             <button

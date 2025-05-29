@@ -4,29 +4,35 @@ import Image from 'next/image';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import CookieBanner from '@/components/CookieBanner';
-import CategoriesSection from '@/components/CategoriesSection';
 import { useRouter } from 'next/navigation';
-
-export const dynamic = 'force-dynamic';
+import CategoriesSection from '@/components/CategoriesSection';
 
 interface Product {
   _id: string;
   title: string;
   description: string;
-  images: string[];
+  features: string;
+  price: string;
   category: string;
   subcategory: string;
   sku: string;
-  beddingSizes: Array<{ size: string; regularPrice: number; salePrice: number }>;
+  beddingSizes: Array<{ 
+    size: string; 
+    price: number; 
+    salePrice: number;
+    regularPrice: number;
+  }>;
   beddingColors: string[];
   beddingStyles: string[];
-  features: string;
-  isSoldOut: boolean;
-  isHot: boolean;
+  images?: string[];
   discount?: number;
+  isSoldOut?: boolean;
+  isHot?: boolean;
+  isClearance?: boolean;
+  clearanceDiscount?: number;
 }
 
-export default function WeightedBlanketsPage() {
+export default function ClearancePage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedSize, setSelectedSize] = useState<string>('');
@@ -51,17 +57,10 @@ export default function WeightedBlanketsPage() {
     try {
       const res = await fetch('/api/products');
       const data = await res.json();
-      console.log('All products:', data.products); // Для отладки
-      const weightedBlankets = data.products.filter(
-        (product: Product) => {
-          console.log('Product category:', product.category); // Для отладки
-          console.log('Product subcategory:', product.subcategory); // Для отладки
-          return product.category === 'BEDDING' && 
-                 product.subcategory === 'Weighted Blankets';
-        }
+      const clearanceProducts = data.products.filter(
+        (product: Product) => product.isClearance
       );
-      console.log('Filtered weighted blankets:', weightedBlankets); // Для отладки
-      setProducts(weightedBlankets);
+      setProducts(clearanceProducts);
     } catch (error) {
       console.error('Error fetching products:', error);
     } finally {
@@ -69,65 +68,9 @@ export default function WeightedBlanketsPage() {
     }
   };
 
-  const allSizes = Array.from(new Set(products.flatMap(p => p.beddingSizes.map(s => s.size))));
+  const allSizes = Array.from(new Set(products.flatMap(p => p.beddingSizes?.map(s => s.size) || [])));
   const allColors = Array.from(new Set(products.flatMap(p => p.beddingColors || [])));
-
-  const filteredProducts = products.filter(product => {
-    const matchesSize = !selectedSize || product.beddingSizes.some(s => s.size === selectedSize);
-    const matchesColor = !selectedColor || product.beddingColors.includes(selectedColor);
-    const [minPrice, maxPrice] = priceRange;
-    const productPrices = product.beddingSizes.map(s => s.salePrice);
-    const productMinPrice = Math.min(...productPrices);
-    const productMaxPrice = Math.max(...productPrices);
-    const matchesPrice = productMinPrice >= minPrice && productMaxPrice <= maxPrice;
-    return matchesSize && matchesColor && matchesPrice;
-  });
-
-  const clearFilters = () => {
-    setSelectedSize('');
-    setSelectedColor('');
-    setPriceRange([0, 1000]);
-  };
-
-  const toggleWishlist = (id: string) => {
-    setWishlist(prev => {
-      const prefixedId = `weighted_${id}`;
-      const newWishlist = prev.includes(prefixedId) 
-        ? prev.filter(i => i !== prefixedId)
-        : [...prev, prefixedId];
-      
-      try {
-        const existingItems = JSON.parse(localStorage.getItem('wishlist') || '[]');
-        const validItems = Array.isArray(existingItems) 
-          ? existingItems.filter(item => 
-              item && 
-              typeof item === 'object' && 
-              'id' in item && 
-              typeof item.id === 'string' && 
-              !item.id.startsWith('weighted_')
-            )
-          : [];
-        
-        const newItems = products
-          .filter((p) => newWishlist.includes(`weighted_${p._id}`))
-          .map((item) => ({
-            id: `weighted_${item._id}`,
-            src: item.images?.[0] || '',
-            hoverSrc: item.images?.[1] || item.images?.[0] || '',
-            title: item.title,
-            price: formatPriceRange(item),
-            discount: item.discount ? `-${item.discount}%` : ''
-          }));
-        
-        const wishlistItems = [...validItems, ...newItems];
-        localStorage.setItem('wishlist', JSON.stringify(wishlistItems));
-        return newWishlist;
-      } catch (error) {
-        console.error('Error handling wishlist:', error);
-        return newWishlist;
-      }
-    });
-  };
+  const allStyles = Array.from(new Set(products.flatMap(p => p.beddingStyles || [])));
 
   const getProductPrice = (product: Product) => {
     if (!product.beddingSizes || product.beddingSizes.length === 0) return 0;
@@ -140,10 +83,82 @@ export default function WeightedBlanketsPage() {
 
   const formatPriceRange = (product: Product) => {
     if (!product.beddingSizes || product.beddingSizes.length === 0) return '£0.00';
+    const prices = product.beddingSizes.map(size => {
+      if (product.clearanceDiscount) {
+        const discountedPrice = size.salePrice * (1 - product.clearanceDiscount / 100);
+        return discountedPrice;
+      }
+      return size.salePrice;
+    });
+    const min = Math.min(...prices);
+    const max = Math.max(...prices);
+    return min === max ? formatPrice(min) : `${formatPrice(min)} - ${formatPrice(max)}`;
+  };
+
+  const getOriginalPriceRange = (product: Product) => {
+    if (!product.beddingSizes || product.beddingSizes.length === 0) return '£0.00';
     const prices = product.beddingSizes.map(size => size.salePrice);
     const min = Math.min(...prices);
     const max = Math.max(...prices);
     return min === max ? formatPrice(min) : `${formatPrice(min)} - ${formatPrice(max)}`;
+  };
+
+  const filteredProducts = products.filter(product => {
+    const matchesSize = !selectedSize || product.beddingSizes?.some(s => s.size === selectedSize);
+    const matchesColor = !selectedColor || product.beddingColors?.includes(selectedColor);
+    const matchesStyle = !selectedStyle || product.beddingStyles?.includes(selectedStyle);
+    const [minPrice, maxPrice] = priceRange;
+    const productPrices = product.beddingSizes?.map(s => s.salePrice) || [];
+    const productMinPrice = Math.min(...productPrices);
+    const productMaxPrice = Math.max(...productPrices);
+    return matchesSize && matchesColor && matchesStyle && productMinPrice >= minPrice && productMaxPrice <= maxPrice;
+  });
+
+  const clearFilters = () => {
+    setSelectedSize('');
+    setSelectedColor('');
+    setSelectedStyle('');
+    setPriceRange([0, 1000]);
+  };
+
+  const toggleWishlist = (id: string) => {
+    setWishlist(prev => {
+      const prefixedId = `clearance_${id}`;
+      const newWishlist = prev.includes(prefixedId) 
+        ? prev.filter(i => i !== prefixedId)
+        : [...prev, prefixedId];
+      
+      try {
+        const existingItems = JSON.parse(localStorage.getItem('wishlist') || '[]');
+        const validItems = Array.isArray(existingItems) 
+          ? existingItems.filter(item => 
+              item && 
+              typeof item === 'object' && 
+              'id' in item && 
+              typeof item.id === 'string' && 
+              !item.id.startsWith('clearance_')
+            )
+          : [];
+        
+        const newItems = products
+          .filter((p) => newWishlist.includes(`clearance_${p._id}`))
+          .map((item) => ({
+            id: `clearance_${item._id}`,
+            src: item.images?.[0] || '',
+            hoverSrc: item.images?.[1] || item.images?.[0] || '',
+            title: item.title,
+            price: `£${item.price}`,
+            discount: item.clearanceDiscount ? `-${item.clearanceDiscount}%` : ''
+          }));
+        
+        const wishlistItems = [...validItems, ...newItems];
+        localStorage.setItem('wishlist', JSON.stringify(wishlistItems));
+        return newWishlist;
+      } catch (error) {
+        console.error('Error handling wishlist:', error);
+        return newWishlist;
+      }
+    });
   };
 
   if (loading) {
@@ -167,14 +182,13 @@ export default function WeightedBlanketsPage() {
           marginBottom: '60px'
         }}>
           <Image
-            src="/images/weighted-blankets-banner.jpg"
-            alt="Weighted Blankets"
+            src="/clearance-banner.jpg"
+            alt="Clearance Sale"
             fill
             style={{
               objectFit: 'cover',
               objectPosition: 'center'
             }}
-            priority
           />
           <div style={{
             position: 'absolute',
@@ -244,7 +258,7 @@ export default function WeightedBlanketsPage() {
                 textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
                 lineHeight: '1.2',
                 marginBottom: '20px'
-              }}>Weighted Blankets</h1>
+              }}>Clearance Sale</h1>
               <p style={{
                 color: '#fff',
                 fontSize: '24px',
@@ -254,7 +268,7 @@ export default function WeightedBlanketsPage() {
                 margin: '0 auto',
                 lineHeight: '1.5'
               }}>
-                Experience the comfort and therapeutic benefits of our premium weighted blankets
+                Amazing deals on selected items. Limited time offers with up to 70% off!
               </p>
             </div>
           </div>
@@ -401,7 +415,7 @@ export default function WeightedBlanketsPage() {
                   </div>
                 </div>
 
-                {/* Size Filter */}
+                {/* Style Filter */}
                 <div style={{
                   flex: '1',
                   minWidth: '300px'
@@ -413,58 +427,57 @@ export default function WeightedBlanketsPage() {
                     marginBottom: '20px'
                   }}>
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                      <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/>
                     </svg>
                     <span style={{
                       fontSize: '16px',
                       fontWeight: 500,
                       color: '#444'
-                    }}>Sizes</span>
+                    }}>Styles</span>
                   </div>
                   <div style={{
                     display: 'flex',
-                    flexDirection: 'column',
+                    flexWrap: 'wrap',
                     gap: '8px'
                   }}>
-                    {allSizes.map(size => (
+                    {allStyles.map(style => (
                       <button
-                        key={size}
-                        onClick={() => setSelectedSize(size === selectedSize ? '' : size)}
+                        key={style}
+                        onClick={() => setSelectedStyle(style === selectedStyle ? '' : style)}
                         style={{
                           padding: '8px 16px',
                           borderRadius: '6px',
                           border: '1px solid',
-                          borderColor: selectedSize === size ? '#222' : '#eee',
-                          background: selectedSize === size ? '#222' : 'transparent',
-                          color: selectedSize === size ? '#fff' : '#444',
+                          borderColor: selectedStyle === style ? '#222' : '#eee',
+                          background: selectedStyle === style ? '#222' : 'transparent',
+                          color: selectedStyle === style ? '#fff' : '#444',
                           cursor: 'pointer',
                           transition: 'all 0.2s ease',
                           fontSize: '14px',
                           fontWeight: 500,
                           display: 'flex',
                           alignItems: 'center',
-                          gap: '6px',
-                          textAlign: 'left'
+                          gap: '6px'
                         }}
                         onMouseEnter={(e) => {
-                          if (selectedSize !== size) {
+                          if (selectedStyle !== style) {
                             e.currentTarget.style.borderColor = '#222';
                             e.currentTarget.style.color = '#222';
                           }
                         }}
                         onMouseLeave={(e) => {
-                          if (selectedSize !== size) {
+                          if (selectedStyle !== style) {
                             e.currentTarget.style.borderColor = '#eee';
                             e.currentTarget.style.color = '#444';
                           }
                         }}
                       >
-                        {selectedSize === size && (
+                        {selectedStyle === style && (
                           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                             <path d="M20 6L9 17l-5-5"/>
                           </svg>
                         )}
-                        {size}
+                        {style}
                       </button>
                     ))}
                   </div>
@@ -533,6 +546,75 @@ export default function WeightedBlanketsPage() {
                           </svg>
                         )}
                         {color}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Size Filter */}
+                <div style={{
+                  flex: '1',
+                  minWidth: '300px'
+                }}>
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '12px',
+                    marginBottom: '20px'
+                  }}>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                    </svg>
+                    <span style={{
+                      fontSize: '16px',
+                      fontWeight: 500,
+                      color: '#444'
+                    }}>Sizes</span>
+                  </div>
+                  <div style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '8px'
+                  }}>
+                    {allSizes.map(size => (
+                      <button
+                        key={size}
+                        onClick={() => setSelectedSize(size === selectedSize ? '' : size)}
+                        style={{
+                          padding: '8px 16px',
+                          borderRadius: '6px',
+                          border: '1px solid',
+                          borderColor: selectedSize === size ? '#222' : '#eee',
+                          background: selectedSize === size ? '#222' : 'transparent',
+                          color: selectedSize === size ? '#fff' : '#444',
+                          cursor: 'pointer',
+                          transition: 'all 0.2s ease',
+                          fontSize: '14px',
+                          fontWeight: 500,
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '6px',
+                          textAlign: 'left'
+                        }}
+                        onMouseEnter={(e) => {
+                          if (selectedSize !== size) {
+                            e.currentTarget.style.borderColor = '#222';
+                            e.currentTarget.style.color = '#222';
+                          }
+                        }}
+                        onMouseLeave={(e) => {
+                          if (selectedSize !== size) {
+                            e.currentTarget.style.borderColor = '#eee';
+                            e.currentTarget.style.color = '#444';
+                          }
+                        }}
+                      >
+                        {selectedSize === size && (
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <path d="M20 6L9 17l-5-5"/>
+                          </svg>
+                        )}
+                        {size}
                       </button>
                     ))}
                   </div>
@@ -633,7 +715,7 @@ export default function WeightedBlanketsPage() {
                       cursor: 'pointer',
                       boxShadow: '0 2px 12px rgba(0,0,0,0.15)',
                       transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                      transform: wishlist.includes(`weighted_${product._id}`) ? 'scale(1.1)' : 'scale(1)',
+                      transform: wishlist.includes(`clearance_${product._id}`) ? 'scale(1.1)' : 'scale(1)',
                       backdropFilter: 'blur(4px)'
                     }}
                   >
@@ -641,7 +723,7 @@ export default function WeightedBlanketsPage() {
                       width="24"
                       height="24"
                       viewBox="0 0 24 24"
-                      fill={wishlist.includes(`weighted_${product._id}`) ? '#e53935' : 'none'}
+                      fill={wishlist.includes(`clearance_${product._id}`) ? '#e53935' : 'none'}
                       stroke="#e53935"
                       strokeWidth="2"
                       strokeLinecap="round"
@@ -650,7 +732,7 @@ export default function WeightedBlanketsPage() {
                       <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
                     </svg>
                   </button>
-                  {product.discount && (
+                  {product.clearanceDiscount && (
                     <span style={{
                       position: 'absolute',
                       top: '12px',
@@ -668,13 +750,13 @@ export default function WeightedBlanketsPage() {
                       boxShadow: '0 2px 8px rgba(229,57,53,0.2)',
                       backdropFilter: 'blur(4px)'
                     }}>
-                      -{product.discount}%
+                      -{product.clearanceDiscount}%
                     </span>
                   )}
                   {product.isHot && (
                     <span style={{
                       position: 'absolute',
-                      top: product.discount ? '67px' : '12px',
+                      top: product.clearanceDiscount ? '67px' : '12px',
                       left: '12px',
                       background: '#000',
                       color: '#fff',
@@ -728,7 +810,7 @@ export default function WeightedBlanketsPage() {
                     fontSize: '20px',
                     marginBottom: '20px'
                   }}>
-                    {product.discount ? (
+                    {product.clearanceDiscount ? (
                       <>
                         {formatPriceRange(product)}
                         <span style={{
@@ -737,7 +819,7 @@ export default function WeightedBlanketsPage() {
                           marginLeft: '8px',
                           fontSize: '16px'
                         }}>
-                          {formatPriceRange({ ...product, discount: undefined })}
+                          {getOriginalPriceRange(product)}
                         </span>
                       </>
                     ) : (

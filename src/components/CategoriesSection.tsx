@@ -104,7 +104,7 @@ const megaMenus: MegaMenu[] = [
         items: [
           { label: 'Small', href: '/shop/rugs-mats/small' },
           { label: 'Medium', href: '/shop/rugs-mats/medium' },
-          { label: 'Large', href: '/shop/rugs-mats/large' },
+          { label: 'Large', href: '/shop/rugs-mats/Large' },
           { label: 'Xlarge', href: '/shop/rugs-mats/xlarge' },
           { label: 'Runner', href: '/shop/rugs-mats/runner' },
         ],
