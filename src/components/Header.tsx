@@ -268,7 +268,6 @@ const Header = () => {
           <a 
             href="/track-order" 
             style={{ 
-              background: '#000',
               color: '#fff',
               padding: '12px 24px',
               borderRadius: '4px',
@@ -279,80 +278,75 @@ const Header = () => {
               alignItems: 'center',
               justifyContent: 'center',
               gap: '8px',
-              transition: 'all 0.3s ease',
               position: 'relative',
               overflow: 'hidden',
               minWidth: '160px',
-              width: '100%'
-            }}
+              width: '100%',
+              '--button-bg': '#000',
+              '--button-hover-bg': '#333',
+              '--animation-duration': '1.5s',
+              '--car-size': '24px',
+              '--car-start': '-30px',
+              '--car-end': 'calc(100% + 30px)',
+              '--car-center': '50%',
+              '--car-scale': '1',
+              '--car-scale-large': '1.2',
+              transition: 'background-color 0.3s ease',
+              backgroundColor: 'var(--button-bg)'
+            } as React.CSSProperties}
             onMouseEnter={(e) => {
-              const text = e.currentTarget.querySelector('span');
-              const car = e.currentTarget.querySelector('img');
               const button = e.currentTarget;
-              
-              if (text && car && button.dataset.animating !== 'true') {
+              if (!button.dataset.animating) {
                 button.dataset.animating = 'true';
-                button.style.background = '#333';
+                button.style.background = 'var(--button-hover-bg)';
                 
-                car.style.left = '-30px';
-                car.style.transform = 'scale(0.8)';
-                car.style.opacity = '0';
+                // Сбрасываем анимацию при каждом наведении
+                const car = button.querySelector('img');
+                const text = button.querySelector('span');
                 
-                text.style.opacity = '0';
-                text.style.transform = 'translateX(100px)';
-                
-                setTimeout(() => {
-                  car.style.opacity = '1';
-                  car.style.transform = 'scale(1)';
+                if (car && text) {
+                  // Сбрасываем стили
+                  car.style.animation = 'none';
+                  text.style.animation = 'none';
                   
+                  // Принудительный reflow
+                  void car.offsetWidth;
+                  void text.offsetWidth;
+                  
+                  // Запускаем анимации
+                  car.style.animation = 'carAnimation var(--animation-duration) ease-in-out forwards';
+                  text.style.animation = 'textAnimation var(--animation-duration) ease-in-out forwards';
+                  
+                  // Сбрасываем флаг анимации после её завершения
                   setTimeout(() => {
-                    car.style.left = '50%';
-                    car.style.transform = 'translateX(-50%) scale(1)';
-                    
-                    setTimeout(() => {
-                      car.style.transform = 'translateX(-50%) scale(1.2)';
-                      
-                      setTimeout(() => {
-                        car.style.transform = 'translateX(-50%) scale(1)';
-                        car.style.left = 'calc(100% + 30px)';
-                        
-                        setTimeout(() => {
-                          text.style.opacity = '1';
-                          text.style.transform = 'translateX(0)';
-                          car.style.opacity = '0';
-                          button.style.background = '#000';
-                          delete button.dataset.animating;
-                        }, 500);
-                      }, 500);
-                    }, 500);
-                  }, 100);
-                }, 50);
+                    delete button.dataset.animating;
+                    button.style.background = 'var(--button-bg)';
+                  }, 1500);
+                }
               }
             }}
             onMouseLeave={(e) => {
               const button = e.currentTarget;
-              if (button.dataset.animating !== 'true') {
-                const text = button.querySelector('span');
+              if (!button.dataset.animating) {
                 const car = button.querySelector('img');
-                if (text && car) {
-                  text.style.opacity = '1';
-                  text.style.transform = 'translateX(0)';
-                  car.style.opacity = '0';
-                  car.style.left = '-30px';
-                  car.style.transform = 'scale(0.8)';
-                  button.style.background = '#000';
+                const text = button.querySelector('span');
+                
+                if (car && text) {
+                  car.style.animation = 'none';
+                  text.style.animation = 'none';
+                  button.style.background = 'var(--button-bg)';
                 }
               }
             }}
           >
             <span style={{
               display: 'inline-block',
-              transition: 'all 0.5s ease',
-              opacity: 1,
               position: 'relative',
               zIndex: 1,
               width: '100%',
-              textAlign: 'center'
+              textAlign: 'center',
+              opacity: 1,
+              transform: 'translateX(0)'
             }}>
               Track Order
             </span>
@@ -363,15 +357,60 @@ const Header = () => {
               height={24}
               style={{
                 position: 'absolute',
-                left: '-30px',
-                opacity: 0,
-                transition: 'all 0.5s ease',
-                transform: 'scale(0.8)',
+                left: 'var(--car-start)',
+                opacity: 1,
+                transform: 'scale(var(--car-scale))',
                 filter: 'invert(1)',
                 zIndex: 2,
-                pointerEvents: 'none'
+                pointerEvents: 'none',
+                width: 'var(--car-size)',
+                height: 'var(--car-size)'
               }}
             />
+            <style jsx>{`
+              @keyframes carAnimation {
+                0% {
+                  left: var(--car-start);
+                  transform: scale(0.8);
+                }
+                10% {
+                  transform: scale(1);
+                }
+                40% {
+                  left: var(--car-center);
+                  transform: translateX(-50%) scale(1);
+                }
+                50% {
+                  transform: translateX(-50%) scale(1.2);
+                }
+                60% {
+                  transform: translateX(-50%) scale(1);
+                }
+                100% {
+                  left: var(--car-end);
+                  transform: translateX(-50%) scale(1);
+                }
+              }
+
+              @keyframes textAnimation {
+                0% {
+                  opacity: 1;
+                  transform: translateX(0);
+                }
+                10% {
+                  opacity: 0;
+                  transform: translateX(100px);
+                }
+                90% {
+                  opacity: 0;
+                  transform: translateX(100px);
+                }
+                100% {
+                  opacity: 1;
+                  transform: translateX(0);
+                }
+              }
+            `}</style>
           </a>
         </div>
       </div>
