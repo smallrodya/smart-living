@@ -507,9 +507,6 @@ export default function ProductsPage() {
                               <div className="flex justify-between items-start mb-4">
                                 <div>
                                   <h3 className="text-lg font-semibold text-gray-900">{product.title}</h3>
-                                  <div className="flex items-center gap-2 mt-1">
-                                    <span className="text-sm text-gray-500">SKU: {product.sku || 'N/A'}</span>
-                                  </div>
                                 </div>
                                 <div className="flex items-center gap-2">
                                   <button
