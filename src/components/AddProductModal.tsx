@@ -15,6 +15,7 @@ interface AddProductModalProps {
   open: boolean;
   onClose: () => void;
   onProductAdded: () => void;
+  validateUniqueSku: (product: any) => { isValid: boolean; error?: string };
 }
 
 interface FormData {
@@ -292,7 +293,7 @@ const footwearColors = [
 
 const throwsTowelsSizes = ['Small', 'Medium', 'Large', 'XLarge', 'Custom'];
 
-export default function AddProductModal({ open, onClose, onProductAdded }: AddProductModalProps) {
+export default function AddProductModal({ open, onClose, onProductAdded, validateUniqueSku }: AddProductModalProps) {
   const [formData, setFormData] = useState<FormData>({
     title: '',
     description: '',
@@ -331,6 +332,7 @@ export default function AddProductModal({ open, onClose, onProductAdded }: AddPr
 
   const [images, setImages] = useState<string[]>([]);
   const [uploading, setUploading] = useState(false);
+  const [skuError, setSkuError] = useState<string | null>(null);
 
   const handleSizePriceChange = (category: string, size: string, regularPrice: number, salePrice: number, sku: string, stock: number) => {
     const sizePrice: SizePrice = { size, regularPrice, salePrice, sku, stock };
@@ -395,6 +397,15 @@ export default function AddProductModal({ open, onClose, onProductAdded }: AddPr
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Проверяем уникальность SKU перед отправкой
+    const validationResult = validateUniqueSku(formData);
+    if (!validationResult.isValid) {
+      setSkuError(validationResult.error || 'Invalid SKU');
+      return; // Прерываем отправку, если есть дубликаты SKU
+    }
+    setSkuError(null);
+
     try {
       const formDataToSubmit = {
         ...formData,
@@ -424,6 +435,7 @@ export default function AddProductModal({ open, onClose, onProductAdded }: AddPr
 
       onProductAdded();
       onClose();
+
     } catch (error) {
       console.error('Error adding product:', error);
       alert('Failed to add product. Please try again.');
@@ -517,6 +529,16 @@ export default function AddProductModal({ open, onClose, onProductAdded }: AddPr
             </svg>
           </button>
         </div>
+        {skuError && (
+          <div className="mb-6 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+            <div className="flex items-center">
+              <svg className="h-5 w-5 text-red-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+              </svg>
+              <p className="font-medium">{skuError}</p>
+            </div>
+          </div>
+        )}
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-2 gap-6">
             <div>

@@ -16,6 +16,7 @@ interface EditProductModalProps {
   onClose: () => void;
   product: any;
   onProductEdited: () => void;
+  validateUniqueSku: (product: any, isEditing: boolean) => { isValid: boolean; error?: string };
 }
 
 const categories = [
@@ -275,7 +276,7 @@ interface FormData {
   clearanceDiscount: number;
 }
 
-export default function EditProductModal({ open, onClose, product, onProductEdited }: EditProductModalProps) {
+export default function EditProductModal({ open, onClose, product, onProductEdited, validateUniqueSku }: EditProductModalProps) {
   const [formData, setFormData] = useState<FormData>({
     title: '',
     description: '',
@@ -311,7 +312,9 @@ export default function EditProductModal({ open, onClose, product, onProductEdit
     isClearance: false,
     clearanceDiscount: 0
   });
+  const [images, setImages] = useState<string[]>([]);
   const [uploading, setUploading] = useState(false);
+  const [skuError, setSkuError] = useState<string | null>(null);
 
   useEffect(() => {
     if (product) {
@@ -481,6 +484,15 @@ export default function EditProductModal({ open, onClose, product, onProductEdit
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Проверяем уникальность SKU перед отправкой
+    const validationResult = validateUniqueSku(formData, true);
+    if (!validationResult.isValid) {
+      setSkuError(validationResult.error || 'Invalid SKU');
+      return; // Прерываем отправку, если есть дубликаты SKU
+    }
+    setSkuError(null);
+
     try {
       const formDataToSubmit = {
         ...formData,
@@ -579,6 +591,16 @@ export default function EditProductModal({ open, onClose, product, onProductEdit
             </svg>
           </button>
         </div>
+        {skuError && (
+          <div className="mb-6 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+            <div className="flex items-center">
+              <svg className="h-5 w-5 text-red-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+              </svg>
+              <p className="font-medium">{skuError}</p>
+            </div>
+          </div>
+        )}
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-2 gap-6">
             <div>

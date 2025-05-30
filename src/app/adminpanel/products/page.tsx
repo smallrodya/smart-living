@@ -1,7 +1,10 @@
 "use client";
 import { useState, useEffect } from "react";
+import { Plus, Search, Loader2 } from 'lucide-react';
 import AddProductModal from '../../../components/AddProductModal';
 import EditProductModal from '../../../components/EditProductModal';
+import ReactConfetti from 'react-confetti';
+import { toast } from 'react-hot-toast';
 
 export const dynamic = 'force-dynamic';
 
@@ -223,6 +226,7 @@ export default function ProductsPage() {
   const [expandedProducts, setExpandedProducts] = useState<Set<string>>(new Set());
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedSubcategory, setSelectedSubcategory] = useState('');
+  const [showConfetti, setShowConfetti] = useState(false);
 
   const fetchProducts = async () => {
     setLoading(true);
@@ -243,6 +247,69 @@ export default function ProductsPage() {
     if (!window.confirm('Are you sure you want to delete this product?')) return;
     await fetch(`/api/products?id=${id}`, { method: 'DELETE' });
     fetchProducts();
+  };
+
+  // Функция для проверки уникальности SKU
+  const validateUniqueSku = (product: any, isEditing: boolean = false) => {
+    const allSkus = new Set<string>();
+    const duplicateSkus = new Set<string>();
+
+    // Собираем все SKU из всех продуктов
+    products.forEach(p => {
+      if (p._id !== product._id) { // Исключаем текущий продукт при редактировании
+        if (p.beddingSizes) {
+          p.beddingSizes.forEach((size: any) => {
+            if (size.sku) {
+              if (allSkus.has(size.sku)) {
+                duplicateSkus.add(size.sku);
+              } else {
+                allSkus.add(size.sku);
+              }
+            }
+          });
+        }
+        if (p.rugsMatsSizes) {
+          p.rugsMatsSizes.forEach((size: any) => {
+            if (size.sku) {
+              if (allSkus.has(size.sku)) {
+                duplicateSkus.add(size.sku);
+              } else {
+                allSkus.add(size.sku);
+              }
+            }
+          });
+        }
+      }
+    });
+
+    // Проверяем SKU нового продукта
+    if (product.beddingSizes) {
+      product.beddingSizes.forEach((size: any) => {
+        if (size.sku) {
+          if (allSkus.has(size.sku)) {
+            duplicateSkus.add(size.sku);
+          }
+        }
+      });
+    }
+    if (product.rugsMatsSizes) {
+      product.rugsMatsSizes.forEach((size: any) => {
+        if (size.sku) {
+          if (allSkus.has(size.sku)) {
+            duplicateSkus.add(size.sku);
+          }
+        }
+      });
+    }
+
+    if (duplicateSkus.size > 0) {
+      return {
+        isValid: false,
+        error: `Duplicate SKU found: ${Array.from(duplicateSkus).join(', ')}. Please use unique SKU for each product.`
+      };
+    }
+
+    return { isValid: true };
   };
 
   const handleEdit = (product: any) => {
@@ -362,10 +429,48 @@ export default function ProductsPage() {
   // Получаем сгруппированные товары
   const groupedProducts = groupProductsByCategory(filteredProducts);
 
+  const handleProductAdded = () => {
+    fetchProducts();
+    setShowConfetti(true);
+    toast.success('Product added successfully!', {
+      duration: 3000,
+      position: 'top-right',
+      style: {
+        background: '#10B981',
+        color: '#fff',
+        padding: '16px',
+        borderRadius: '8px',
+      },
+    });
+    setTimeout(() => {
+      setShowConfetti(false);
+    }, 3000);
+  };
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <AddProductModal open={modalOpen} onClose={() => setModalOpen(false)} onProductAdded={fetchProducts} />
-      <EditProductModal open={editModalOpen} onClose={() => setEditModalOpen(false)} product={editingProduct} onProductEdited={fetchProducts} />
+      {showConfetti && (
+        <ReactConfetti
+          width={window.innerWidth}
+          height={window.innerHeight}
+          recycle={false}
+          numberOfPieces={500}
+          gravity={0.2}
+        />
+      )}
+      <AddProductModal 
+        open={modalOpen} 
+        onClose={() => setModalOpen(false)} 
+        onProductAdded={handleProductAdded}
+        validateUniqueSku={validateUniqueSku}
+      />
+      <EditProductModal 
+        open={editModalOpen} 
+        onClose={() => setEditModalOpen(false)} 
+        product={editingProduct} 
+        onProductEdited={fetchProducts}
+        validateUniqueSku={validateUniqueSku}
+      />
       
       <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8 gap-4">
         <h1 className="text-2xl font-bold text-gray-900">Products Management</h1>
