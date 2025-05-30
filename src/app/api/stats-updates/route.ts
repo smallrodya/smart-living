@@ -8,17 +8,32 @@ export async function GET() {
     const encoder = new TextEncoder();
     const stream = new ReadableStream({
       start(controller) {
+        let isControllerClosed = false;
+
         // Отправляем начальное сообщение
         controller.enqueue(encoder.encode('data: {"type":"connected"}\n\n'));
 
         // Устанавливаем интервал для отправки обновлений
         const interval = setInterval(() => {
-          controller.enqueue(encoder.encode('data: {"type":"ping"}\n\n'));
-        }, 15000); // Отправляем пинг каждые 15 секунд
+          if (!isControllerClosed) {
+            try {
+              controller.enqueue(encoder.encode('data: {"type":"ping"}\n\n'));
+            } catch (error) {
+              isControllerClosed = true;
+              clearInterval(interval);
+            }
+          }
+        }, 15000);
 
-        // Очищаем интервал при закрытии соединения
+        // Обработчик закрытия соединения
         return () => {
+          isControllerClosed = true;
           clearInterval(interval);
+          try {
+            controller.close();
+          } catch (error) {
+            console.error('Error closing controller:', error);
+          }
         };
       },
     });
