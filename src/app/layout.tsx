@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import PopupBanner from '@/components/PopupBanner';
 import MobileLayout from '@/components/MobileLayout';
+import { Toaster } from 'react-hot-toast';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -23,6 +24,7 @@ export default function RootLayout({
           {children}
           <PopupBanner />
         </MobileLayout>
+        <Toaster position="top-right" />
       </body>
     </html>
   );

@@ -1,66 +1,46 @@
 import { NextResponse } from 'next/server';
-import { writeFile, mkdir } from 'fs/promises';
-import { join } from 'path';
-import { existsSync } from 'fs';
+import cloudinary from '@/lib/cloudinary';
 
 export const dynamic = 'force-dynamic';
 
 export async function POST(request: Request) {
   try {
     const formData = await request.formData();
-    const file = formData.get('file');
+    const file = formData.get('file') as File;
 
-    if (!file || !(file instanceof File)) {
+    if (!file) {
       return NextResponse.json(
-        { error: 'Файл не найден или имеет неверный формат' },
+        { error: 'No file uploaded' },
         { status: 400 }
       );
     }
 
-    // Проверяем тип файла
-    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
-    if (!allowedTypes.includes(file.type)) {
-      return NextResponse.json(
-        { error: 'Недопустимый формат файла. Разрешены только: JPEG, PNG, WebP' },
-        { status: 400 }
-      );
-    }
-
-    // Проверяем размер файла (5MB)
-    const maxSize = 5 * 1024 * 1024;
-    if (file.size > maxSize) {
-      return NextResponse.json(
-        { error: 'Файл слишком большой. Максимальный размер: 5MB' },
-        { status: 400 }
-      );
-    }
-
+    // Конвертируем File в Buffer
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
-    // Создаем уникальное имя файла
-    const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1E9)}`;
-    const filename = `${uniqueSuffix}-${file.name}`;
-    
-    // Путь для сохранения файла
-    const uploadDir = join(process.cwd(), 'public', 'uploads');
-    
-    // Создаем директорию, если она не существует
-    if (!existsSync(uploadDir)) {
-      await mkdir(uploadDir, { recursive: true });
-    }
+    // Загружаем файл в Cloudinary
+    const result = await new Promise((resolve, reject) => {
+      cloudinary.uploader.upload_stream(
+        {
+          folder: 'smartliving',
+          resource_type: 'auto',
+        },
+        (error, result) => {
+          if (error) reject(error);
+          resolve(result);
+        }
+      ).end(buffer);
+    });
 
-    const filepath = join(uploadDir, filename);
-
-    // Сохраняем файл
-    await writeFile(filepath, buffer);
-
-    // Возвращаем URL файла
-    return NextResponse.json({ url: `/uploads/${filename}` });
+    return NextResponse.json({
+      url: (result as any).secure_url,
+      public_id: (result as any).public_id
+    });
   } catch (error) {
-    console.error('Ошибка при загрузке файла:', error);
+    console.error('Error uploading file:', error);
     return NextResponse.json(
-      { error: 'Ошибка при загрузке файла' },
+      { error: 'Error uploading file' },
       { status: 500 }
     );
   }
