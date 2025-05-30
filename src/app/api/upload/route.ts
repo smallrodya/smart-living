@@ -1,7 +1,14 @@
 import { NextResponse } from 'next/server';
-import cloudinary from '@/lib/cloudinary';
+import { v2 as cloudinary } from 'cloudinary';
 
 export const dynamic = 'force-dynamic';
+
+// Конфигурируем Cloudinary
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 export async function POST(request: Request) {
   try {
@@ -12,6 +19,19 @@ export async function POST(request: Request) {
       return NextResponse.json(
         { error: 'No file uploaded' },
         { status: 400 }
+      );
+    }
+
+    // Проверяем конфигурацию Cloudinary
+    if (!process.env.CLOUDINARY_CLOUD_NAME || !process.env.CLOUDINARY_API_KEY || !process.env.CLOUDINARY_API_SECRET) {
+      console.error('Cloudinary configuration missing:', {
+        cloud_name: !!process.env.CLOUDINARY_CLOUD_NAME,
+        api_key: !!process.env.CLOUDINARY_API_KEY,
+        api_secret: !!process.env.CLOUDINARY_API_SECRET
+      });
+      return NextResponse.json(
+        { error: 'Cloudinary configuration is missing' },
+        { status: 500 }
       );
     }
 
@@ -27,7 +47,10 @@ export async function POST(request: Request) {
           resource_type: 'auto',
         },
         (error, result) => {
-          if (error) reject(error);
+          if (error) {
+            console.error('Cloudinary upload error:', error);
+            reject(error);
+          }
           resolve(result);
         }
       ).end(buffer);
@@ -40,7 +63,7 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error('Error uploading file:', error);
     return NextResponse.json(
-      { error: 'Error uploading file' },
+      { error: `Error uploading file: ${error.message}` },
       { status: 500 }
     );
   }
