@@ -20,6 +20,7 @@ cloudinary.config({
   cloud_name: cloudName,
   api_key: apiKey,
   api_secret: apiSecret,
+  secure: true // Принудительно используем HTTPS
 });
 
 export async function POST(request: Request) {
@@ -52,26 +53,25 @@ export async function POST(request: Request) {
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
-    // Загружаем файл в Cloudinary
-    const result = await new Promise((resolve, reject) => {
-      cloudinary.uploader.upload_stream(
-        {
-          folder: 'smartliving',
-          resource_type: 'auto',
-        },
-        (error, result) => {
-          if (error) {
-            console.error('Cloudinary upload error:', error);
-            reject(error);
-          }
-          resolve(result);
-        }
-      ).end(buffer);
+    // Создаем base64 строку из буфера
+    const base64String = buffer.toString('base64');
+    const dataURI = `data:${file.type};base64,${base64String}`;
+
+    // Загружаем файл в Cloudinary используя upload
+    const result = await cloudinary.uploader.upload(dataURI, {
+      folder: 'smartliving',
+      resource_type: 'auto',
+      use_filename: true,
+      unique_filename: true,
     });
 
+    if (!result || !result.secure_url) {
+      throw new Error('Failed to upload file to Cloudinary');
+    }
+
     return NextResponse.json({
-      url: (result as any).secure_url,
-      public_id: (result as any).public_id
+      url: result.secure_url,
+      public_id: result.public_id
     });
   } catch (error: any) {
     console.error('Error uploading file:', error);
