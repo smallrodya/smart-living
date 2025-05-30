@@ -250,57 +250,55 @@ export default function ProductsPage() {
   };
 
   // Функция для проверки уникальности SKU
-  const validateUniqueSku = (product: any, isEditing: boolean = false) => {
+  const validateUniqueSku = (product: any, isEditing: boolean = false, currentProductId?: string) => {
     const allSkus = new Set<string>();
     const duplicateSkus = new Set<string>();
 
-    // Собираем все SKU из всех продуктов
+    // Собираем все SKU из всех продуктов, исключая текущий редактируемый продукт
     products.forEach(p => {
-      if (p._id !== product._id) { // Исключаем текущий продукт при редактировании
-        if (p.beddingSizes) {
-          p.beddingSizes.forEach((size: any) => {
-            if (size.sku) {
-              if (allSkus.has(size.sku)) {
-                duplicateSkus.add(size.sku);
-              } else {
-                allSkus.add(size.sku);
-              }
-            }
-          });
-        }
-        if (p.rugsMatsSizes) {
-          p.rugsMatsSizes.forEach((size: any) => {
-            if (size.sku) {
-              if (allSkus.has(size.sku)) {
-                duplicateSkus.add(size.sku);
-              } else {
-                allSkus.add(size.sku);
-              }
-            }
-          });
-        }
+      // Пропускаем текущий продукт при редактировании
+      if (isEditing && p._id === currentProductId) {
+        return;
       }
+
+      // Собираем SKU из всех типов размеров
+      const collectSkus = (sizes: any[]) => {
+        if (!sizes) return;
+        sizes.forEach((size: any) => {
+          if (size.sku) {
+            if (allSkus.has(size.sku)) {
+              duplicateSkus.add(size.sku);
+            } else {
+              allSkus.add(size.sku);
+            }
+          }
+        });
+      };
+
+      collectSkus(p.beddingSizes);
+      collectSkus(p.rugsMatsSizes);
+      collectSkus(p.throwsTowelsStylePrices);
+      collectSkus(p.curtainsSizes);
+      collectSkus(p.footwearSizes);
     });
 
     // Проверяем SKU нового продукта
-    if (product.beddingSizes) {
-      product.beddingSizes.forEach((size: any) => {
+    const checkProductSkus = (sizes: any[]) => {
+      if (!sizes) return;
+      sizes.forEach((size: any) => {
         if (size.sku) {
           if (allSkus.has(size.sku)) {
             duplicateSkus.add(size.sku);
           }
         }
       });
-    }
-    if (product.rugsMatsSizes) {
-      product.rugsMatsSizes.forEach((size: any) => {
-        if (size.sku) {
-          if (allSkus.has(size.sku)) {
-            duplicateSkus.add(size.sku);
-          }
-        }
-      });
-    }
+    };
+
+    checkProductSkus(product.beddingSizes);
+    checkProductSkus(product.rugsMatsSizes);
+    checkProductSkus(product.throwsTowelsStylePrices);
+    checkProductSkus(product.curtainsSizes);
+    checkProductSkus(product.footwearSizes);
 
     if (duplicateSkus.size > 0) {
       return {

@@ -102,7 +102,7 @@ const ThrowAndCurtainSection = () => {
               boxShadow: '0 2px 8px rgba(34,34,34,0.10)',
               transition: 'background 0.2s',
             }}
-            onClick={() => window.location.href = '/shop-duvet-set-by-type'}
+            onClick={() => window.location.href = '/shop/duvet-set-by-type'}
             >SHOP NOW</button>
           </div>
         </div>

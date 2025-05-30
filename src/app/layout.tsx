@@ -4,6 +4,7 @@ import "./globals.css";
 import PopupBanner from '@/components/PopupBanner';
 import MobileLayout from '@/components/MobileLayout';
 import { Toaster } from 'react-hot-toast';
+import { BasketProvider } from '@/context/BasketContext';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,10 +21,12 @@ export default function RootLayout({
   return (
     <html lang="ru">
       <body className={inter.className}>
-        <MobileLayout>
-          {children}
-          <PopupBanner />
-        </MobileLayout>
+        <BasketProvider>
+          <MobileLayout>
+            {children}
+            <PopupBanner />
+          </MobileLayout>
+        </BasketProvider>
         <Toaster position="top-right" />
       </body>
     </html>

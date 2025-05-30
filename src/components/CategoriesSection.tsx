@@ -83,20 +83,20 @@ const megaMenus: MegaMenu[] = [
       {
         title: 'RUG TYPES',
         items: [
-          { label: 'Shaggy Rugs', href: '/shop/rugs/shaggy-rugs' },
-          { label: 'Carved Rugs', href: '/shop/rugs/carved-rugs' },
-          { label: 'Reversible Rugs', href: '/shop/rugs/reversible-rugs' },
-          { label: 'Hallway Runner', href: '/shop/rugs/hallway-runner' },
-          { label: 'Table Runner', href: '/shop/rugs/table-runner' },
+          { label: 'Shaggy Rugs', href: '/shop/shaggy-rugs' },
+          { label: 'Carved Rugs', href: '/shop/carved-rugs' },
+          { label: 'Reversible Rugs', href: '/shop/reversible-rugs' },
+          { label: 'Hallway Runner', href: '/shop/hallway-runner' },
+          { label: 'Table Runner', href: '/shop/table-runner' },
         ],
       },
       {
         title: 'MAT TYPES',
         items: [
-          { label: 'Door Mat', href: '/shop/mats/door-mat' },
-          { label: 'Kitchen Mat', href: '/shop/mats/kitchen-mat' },
-          { label: 'Hallway Runner', href: '/shop/mats/hallway-runner' },
-          { label: 'Table Placemat', href: '/shop/mats/table-placemat' },
+          { label: 'Door Mat', href: '/shop/door-mat' },
+          { label: 'Kitchen Mat', href: '/shop/kitchen-mat' },
+          { label: 'Hallway Runner', href: '/shop/hallway-runner' },
+          { label: 'Table Placemat', href: '/shop/table-placemat' },
         ],
       },
       {

@@ -6,6 +6,7 @@ import Footer from '@/components/Footer';
 import CookieBanner from '@/components/CookieBanner';
 import { useRouter } from 'next/navigation';
 import CategoriesSection from '@/components/CategoriesSection';
+import QuickViewModal from '@/components/QuickViewModal';
 
 interface Product {
   _id: string;
@@ -24,7 +25,7 @@ interface Product {
   isHot?: boolean;
 }
 
-export default function CarvedRugsPage() {
+export default function HallwayRunnerPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedSize, setSelectedSize] = useState<string>('');
@@ -32,7 +33,8 @@ export default function CarvedRugsPage() {
   const [showFilters, setShowFilters] = useState(false);
   const [hoveredProduct, setHoveredProduct] = useState<string | null>(null);
   const [wishlist, setWishlist] = useState<string[]>([]);
-  const [priceRange, setPriceRange] = useState<[number, number]>([0, 1000]);
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, 200]);
+  const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -49,16 +51,16 @@ export default function CarvedRugsPage() {
       const res = await fetch('/api/products');
       const data = await res.json();
       console.log('All products:', data.products); // Для отладки
-      const carvedRugs = data.products.filter(
+      const hallwayRunners = data.products.filter(
         (product: Product) => {
           console.log('Product category:', product.category); // Для отладки
           console.log('Product subcategory:', product.subcategory); // Для отладки
           return product.category === 'RUGS & MATS' && 
-                 product.subcategory === 'Carved Rugs';
+                 product.subcategory === 'Hallway Runner';
         }
       );
-      console.log('Filtered carved rugs:', carvedRugs); // Для отладки
-      setProducts(carvedRugs);
+      console.log('Filtered hallway runners:', hallwayRunners); // Для отладки
+      setProducts(hallwayRunners);
     } catch (error) {
       console.error('Error fetching products:', error);
     } finally {
@@ -99,12 +101,12 @@ export default function CarvedRugsPage() {
   const clearFilters = () => {
     setSelectedSize('');
     setSelectedColor('');
-    setPriceRange([0, 1000]);
+    setPriceRange([0, 200]);
   };
 
   const toggleWishlist = (id: string) => {
     setWishlist(prev => {
-      const prefixedId = `carved_${id}`;
+      const prefixedId = `hallway_${id}`;
       const newWishlist = prev.includes(prefixedId) 
         ? prev.filter(i => i !== prefixedId)
         : [...prev, prefixedId];
@@ -117,14 +119,14 @@ export default function CarvedRugsPage() {
               typeof item === 'object' && 
               'id' in item && 
               typeof item.id === 'string' && 
-              !item.id.startsWith('carved_')
+              !item.id.startsWith('hallway_')
             )
           : [];
         
         const newItems = products
-          .filter((p) => newWishlist.includes(`carved_${p._id}`))
+          .filter((p) => newWishlist.includes(`hallway_${p._id}`))
           .map((item) => ({
-            id: `carved_${item._id}`,
+            id: `hallway_${item._id}`,
             src: item.images?.[0] || '',
             hoverSrc: item.images?.[1] || item.images?.[0] || '',
             title: item.title,
@@ -163,8 +165,8 @@ export default function CarvedRugsPage() {
           marginBottom: '60px'
         }}>
           <Image
-            src="/carved22.jpg"
-            alt="Carved Rugs Category"
+            src="/hallway-runner.jpg"
+            alt="Hallway Runner Category"
             fill
             style={{
               objectFit: 'cover',
@@ -239,7 +241,7 @@ export default function CarvedRugsPage() {
                 textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
                 lineHeight: '1.2',
                 marginBottom: '20px'
-              }}>Carved Rugs</h1>
+              }}>Hallway Runner</h1>
               <p style={{
                 color: '#fff',
                 fontSize: '24px',
@@ -249,7 +251,7 @@ export default function CarvedRugsPage() {
                 margin: '0 auto',
                 lineHeight: '1.5'
               }}>
-                Discover our collection of elegant carved rugs, perfect for adding texture and depth to your space
+                Discover our collection of elegant hallway runners, perfect for adding style and comfort to your corridors
               </p>
             </div>
           </div>
@@ -371,7 +373,7 @@ export default function CarvedRugsPage() {
                     <input
                       type="range"
                       min="0"
-                      max="1000"
+                      max="200"
                       value={priceRange[1]}
                       onChange={(e) => setPriceRange([priceRange[0], parseInt(e.target.value)])}
                       style={{
@@ -628,7 +630,7 @@ export default function CarvedRugsPage() {
                       cursor: 'pointer',
                       boxShadow: '0 2px 12px rgba(0,0,0,0.15)',
                       transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                      transform: wishlist.includes(`carved_${product._id}`) ? 'scale(1.1)' : 'scale(1)',
+                      transform: wishlist.includes(`hallway_${product._id}`) ? 'scale(1.1)' : 'scale(1)',
                       backdropFilter: 'blur(4px)'
                     }}
                   >
@@ -636,7 +638,7 @@ export default function CarvedRugsPage() {
                       width="24"
                       height="24"
                       viewBox="0 0 24 24"
-                      fill={wishlist.includes(`carved_${product._id}`) ? '#e53935' : 'none'}
+                      fill={wishlist.includes(`hallway_${product._id}`) ? '#e53935' : 'none'}
                       stroke="#e53935"
                       strokeWidth="2"
                       strokeLinecap="round"
@@ -789,21 +791,24 @@ export default function CarvedRugsPage() {
                         Add to Cart
                       </button>
                       <button
-                        onClick={() => {/* Quick view logic */}}
+                        onClick={() => setQuickViewProduct(product)}
                         style={{
                           padding: '12px',
-                          background: '#f5f5f5',
-                          color: '#222',
+                          background: '#000',
+                          color: '#fff',
                           border: 'none',
                           borderRadius: '8px',
                           cursor: 'pointer',
-                          transition: 'all 0.2s ease'
+                          transition: 'all 0.2s ease',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '8px'
                         }}
                         onMouseEnter={(e) => {
-                          e.currentTarget.style.background = '#eee';
+                          e.currentTarget.style.background = '#333';
                         }}
                         onMouseLeave={(e) => {
-                          e.currentTarget.style.background = '#f5f5f5';
+                          e.currentTarget.style.background = '#000';
                         }}
                       >
                         <svg
@@ -819,6 +824,7 @@ export default function CarvedRugsPage() {
                           <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
                           <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
                         </svg>
+                        View
                       </button>
                     </div>
                   )}
@@ -840,6 +846,10 @@ export default function CarvedRugsPage() {
       </main>
       <Footer />
       <CookieBanner />
+      <QuickViewModal 
+        product={quickViewProduct} 
+        onClose={() => setQuickViewProduct(null)} 
+      />
       <style jsx global>{`
         @keyframes slideDown {
           from {

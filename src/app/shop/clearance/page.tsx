@@ -6,6 +6,7 @@ import Footer from '@/components/Footer';
 import CookieBanner from '@/components/CookieBanner';
 import { useRouter } from 'next/navigation';
 import CategoriesSection from '@/components/CategoriesSection';
+import QuickViewModal from '@/components/QuickViewModal';
 
 interface Product {
   _id: string;
@@ -51,6 +52,7 @@ export default function ClearancePage() {
   const [hoveredProduct, setHoveredProduct] = useState<string | null>(null);
   const [wishlist, setWishlist] = useState<string[]>([]);
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 1000]);
+  const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -210,6 +212,10 @@ export default function ClearancePage() {
         return newWishlist;
       }
     });
+  };
+
+  const handleQuickView = (product: Product) => {
+    setQuickViewProduct(product);
   };
 
   if (loading) {
@@ -927,21 +933,30 @@ export default function ClearancePage() {
                         Add to Cart
                       </button>
                       <button
-                        onClick={() => {/* Quick view logic */}}
+                        onClick={() => handleQuickView(product)}
                         style={{
-                          padding: '12px',
-                          background: '#f5f5f5',
-                          color: '#222',
+                          flex: 1,
+                          padding: '12px 24px',
+                          background: '#222',
+                          color: '#fff',
                           border: 'none',
                           borderRadius: '8px',
+                          fontSize: '14px',
+                          fontWeight: 600,
                           cursor: 'pointer',
-                          transition: 'all 0.2s ease'
+                          transition: 'all 0.2s ease',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          gap: '8px'
                         }}
                         onMouseEnter={(e) => {
-                          e.currentTarget.style.background = '#eee';
+                          e.currentTarget.style.background = '#333';
+                          e.currentTarget.style.transform = 'translateY(-2px)';
                         }}
                         onMouseLeave={(e) => {
-                          e.currentTarget.style.background = '#f5f5f5';
+                          e.currentTarget.style.background = '#222';
+                          e.currentTarget.style.transform = 'translateY(0)';
                         }}
                       >
                         <svg
@@ -957,6 +972,7 @@ export default function ClearancePage() {
                           <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
                           <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
                         </svg>
+                        View
                       </button>
                     </div>
                   )}
@@ -978,6 +994,12 @@ export default function ClearancePage() {
       </main>
       <Footer />
       <CookieBanner />
+      {quickViewProduct && (
+        <QuickViewModal
+          product={quickViewProduct}
+          onClose={() => setQuickViewProduct(null)}
+        />
+      )}
       <style jsx global>{`
         @keyframes slideDown {
           from {

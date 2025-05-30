@@ -6,6 +6,7 @@ import Footer from '@/components/Footer';
 import CookieBanner from '@/components/CookieBanner';
 import { useRouter } from 'next/navigation';
 import CategoriesSection from '@/components/CategoriesSection';
+import QuickViewModal from '@/components/QuickViewModal';
 
 interface Product {
   _id: string;
@@ -35,6 +36,7 @@ export default function ElectricUnderblanketsPage() {
   const [hoveredProduct, setHoveredProduct] = useState<string | null>(null);
   const [wishlist, setWishlist] = useState<string[]>([]);
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 1000]);
+  const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -852,7 +854,7 @@ export default function ElectricUnderblanketsPage() {
                         Add to Cart
                       </button>
                       <button
-                        onClick={() => {/* Quick view logic */}}
+                        onClick={() => setQuickViewProduct(product)}
                         style={{
                           padding: '12px',
                           background: '#f5f5f5',
@@ -903,6 +905,10 @@ export default function ElectricUnderblanketsPage() {
       </main>
       <Footer />
       <CookieBanner />
+      <QuickViewModal 
+        product={quickViewProduct} 
+        onClose={() => setQuickViewProduct(null)} 
+      />
       <style jsx global>{`
         @keyframes slideDown {
           from {

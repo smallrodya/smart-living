@@ -6,8 +6,7 @@ import Footer from '@/components/Footer';
 import CookieBanner from '@/components/CookieBanner';
 import { useRouter } from 'next/navigation';
 import CategoriesSection from '@/components/CategoriesSection';
-
-export const dynamic = 'force-dynamic';
+import QuickViewModal from '@/components/QuickViewModal';
 
 interface Product {
   _id: string;
@@ -26,7 +25,7 @@ interface Product {
   isHot?: boolean;
 }
 
-export default function ShaggyRugsPage() {
+export default function CarvedRugsPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedSize, setSelectedSize] = useState<string>('');
@@ -34,7 +33,8 @@ export default function ShaggyRugsPage() {
   const [showFilters, setShowFilters] = useState(false);
   const [hoveredProduct, setHoveredProduct] = useState<string | null>(null);
   const [wishlist, setWishlist] = useState<string[]>([]);
-  const [priceRange, setPriceRange] = useState<[number, number]>([0, 1000]);
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, 200]);
+  const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -51,16 +51,16 @@ export default function ShaggyRugsPage() {
       const res = await fetch('/api/products');
       const data = await res.json();
       console.log('All products:', data.products); // Для отладки
-      const shaggyRugs = data.products.filter(
+      const carvedRugs = data.products.filter(
         (product: Product) => {
           console.log('Product category:', product.category); // Для отладки
           console.log('Product subcategory:', product.subcategory); // Для отладки
           return product.category === 'RUGS & MATS' && 
-                 product.subcategory === 'Shaggy Rugs';
+                 product.subcategory === 'Carved Rugs';
         }
       );
-      console.log('Filtered shaggy rugs:', shaggyRugs); // Для отладки
-      setProducts(shaggyRugs);
+      console.log('Filtered carved rugs:', carvedRugs); // Для отладки
+      setProducts(carvedRugs);
     } catch (error) {
       console.error('Error fetching products:', error);
     } finally {
@@ -101,12 +101,12 @@ export default function ShaggyRugsPage() {
   const clearFilters = () => {
     setSelectedSize('');
     setSelectedColor('');
-    setPriceRange([0, 1000]);
+    setPriceRange([0, 200]);
   };
 
   const toggleWishlist = (id: string) => {
     setWishlist(prev => {
-      const prefixedId = `shaggy_${id}`;
+      const prefixedId = `carved_${id}`;
       const newWishlist = prev.includes(prefixedId) 
         ? prev.filter(i => i !== prefixedId)
         : [...prev, prefixedId];
@@ -119,14 +119,14 @@ export default function ShaggyRugsPage() {
               typeof item === 'object' && 
               'id' in item && 
               typeof item.id === 'string' && 
-              !item.id.startsWith('shaggy_')
+              !item.id.startsWith('carved_')
             )
           : [];
         
         const newItems = products
-          .filter((p) => newWishlist.includes(`shaggy_${p._id}`))
+          .filter((p) => newWishlist.includes(`carved_${p._id}`))
           .map((item) => ({
-            id: `shaggy_${item._id}`,
+            id: `carved_${item._id}`,
             src: item.images?.[0] || '',
             hoverSrc: item.images?.[1] || item.images?.[0] || '',
             title: item.title,
@@ -165,8 +165,8 @@ export default function ShaggyRugsPage() {
           marginBottom: '60px'
         }}>
           <Image
-            src="/category-banner.jpg"
-            alt="Shaggy Rugs Category"
+            src="/carved22.jpg"
+            alt="Carved Rugs Category"
             fill
             style={{
               objectFit: 'cover',
@@ -241,7 +241,7 @@ export default function ShaggyRugsPage() {
                 textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
                 lineHeight: '1.2',
                 marginBottom: '20px'
-              }}>Shaggy Rugs</h1>
+              }}>Carved Rugs</h1>
               <p style={{
                 color: '#fff',
                 fontSize: '24px',
@@ -251,7 +251,7 @@ export default function ShaggyRugsPage() {
                 margin: '0 auto',
                 lineHeight: '1.5'
               }}>
-                Discover our collection of luxurious shaggy rugs, perfect for adding warmth and texture to any space
+                Discover our collection of elegant carved rugs, perfect for adding texture and depth to your space
               </p>
             </div>
           </div>
@@ -373,7 +373,7 @@ export default function ShaggyRugsPage() {
                     <input
                       type="range"
                       min="0"
-                      max="1000"
+                      max="200"
                       value={priceRange[1]}
                       onChange={(e) => setPriceRange([priceRange[0], parseInt(e.target.value)])}
                       style={{
@@ -630,7 +630,7 @@ export default function ShaggyRugsPage() {
                       cursor: 'pointer',
                       boxShadow: '0 2px 12px rgba(0,0,0,0.15)',
                       transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                      transform: wishlist.includes(`shaggy_${product._id}`) ? 'scale(1.1)' : 'scale(1)',
+                      transform: wishlist.includes(`carved_${product._id}`) ? 'scale(1.1)' : 'scale(1)',
                       backdropFilter: 'blur(4px)'
                     }}
                   >
@@ -638,7 +638,7 @@ export default function ShaggyRugsPage() {
                       width="24"
                       height="24"
                       viewBox="0 0 24 24"
-                      fill={wishlist.includes(`shaggy_${product._id}`) ? '#e53935' : 'none'}
+                      fill={wishlist.includes(`carved_${product._id}`) ? '#e53935' : 'none'}
                       stroke="#e53935"
                       strokeWidth="2"
                       strokeLinecap="round"
@@ -791,21 +791,24 @@ export default function ShaggyRugsPage() {
                         Add to Cart
                       </button>
                       <button
-                        onClick={() => {/* Quick view logic */}}
+                        onClick={() => setQuickViewProduct(product)}
                         style={{
                           padding: '12px',
-                          background: '#f5f5f5',
-                          color: '#222',
+                          background: '#000',
+                          color: '#fff',
                           border: 'none',
                           borderRadius: '8px',
                           cursor: 'pointer',
-                          transition: 'all 0.2s ease'
+                          transition: 'all 0.2s ease',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '8px'
                         }}
                         onMouseEnter={(e) => {
-                          e.currentTarget.style.background = '#eee';
+                          e.currentTarget.style.background = '#333';
                         }}
                         onMouseLeave={(e) => {
-                          e.currentTarget.style.background = '#f5f5f5';
+                          e.currentTarget.style.background = '#000';
                         }}
                       >
                         <svg
@@ -821,6 +824,7 @@ export default function ShaggyRugsPage() {
                           <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
                           <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
                         </svg>
+                        View
                       </button>
                     </div>
                   )}
@@ -842,6 +846,10 @@ export default function ShaggyRugsPage() {
       </main>
       <Footer />
       <CookieBanner />
+      <QuickViewModal 
+        product={quickViewProduct} 
+        onClose={() => setQuickViewProduct(null)} 
+      />
       <style jsx global>{`
         @keyframes slideDown {
           from {

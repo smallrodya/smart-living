@@ -16,7 +16,7 @@ interface EditProductModalProps {
   onClose: () => void;
   product: any;
   onProductEdited: () => void;
-  validateUniqueSku: (product: any, isEditing: boolean) => { isValid: boolean; error?: string };
+  validateUniqueSku: (product: any, isEditing: boolean, currentProductId?: string) => { isValid: boolean; error?: string };
 }
 
 const categories = [
@@ -486,7 +486,7 @@ export default function EditProductModal({ open, onClose, product, onProductEdit
     e.preventDefault();
     
     // Проверяем уникальность SKU перед отправкой
-    const validationResult = validateUniqueSku(formData, true);
+    const validationResult = validateUniqueSku(formData, true, product._id);
     if (!validationResult.isValid) {
       setSkuError(validationResult.error || 'Invalid SKU');
       return; // Прерываем отправку, если есть дубликаты SKU
