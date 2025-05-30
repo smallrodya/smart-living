@@ -5,7 +5,7 @@ export const dynamic = 'force-dynamic';
 
 // Конфигурируем Cloudinary
 cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
@@ -23,9 +23,9 @@ export async function POST(request: Request) {
     }
 
     // Проверяем конфигурацию Cloudinary
-    if (!process.env.CLOUDINARY_CLOUD_NAME || !process.env.CLOUDINARY_API_KEY || !process.env.CLOUDINARY_API_SECRET) {
+    if (!process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || !process.env.CLOUDINARY_API_KEY || !process.env.CLOUDINARY_API_SECRET) {
       console.error('Cloudinary configuration missing:', {
-        cloud_name: !!process.env.CLOUDINARY_CLOUD_NAME,
+        cloud_name: !!process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
         api_key: !!process.env.CLOUDINARY_API_KEY,
         api_secret: !!process.env.CLOUDINARY_API_SECRET
       });
@@ -60,10 +60,10 @@ export async function POST(request: Request) {
       url: (result as any).secure_url,
       public_id: (result as any).public_id
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error uploading file:', error);
     return NextResponse.json(
-      { error: `Error uploading file: ${error.message}` },
+      { error: `Error uploading file: ${error?.message || 'Unknown error'}` },
       { status: 500 }
     );
   }
