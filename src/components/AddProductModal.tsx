@@ -146,7 +146,30 @@ const beddingColors = [
 ];
 
 const rugsMatsSizes = ['Small', 'Medium', 'Large', 'Xlarge', 'Runner'];
-const rugsMatsColors = ['White', 'Black', 'Grey', 'Blue', 'Pink', 'Green', 'Yellow', 'Red', 'Purple', 'Beige', 'Brown', 'Multi'];
+const rugsMatsColors = [
+  'Aubergine',
+  'Black',
+  'Brown',
+  'Cream',
+  'Dark Beige',
+  'Dark Grey',
+  'Duck Egg',
+  'Dusky Pink',
+  'Emerald',
+  'Green',
+  'Ink',
+  'Latte',
+  'Light Beige',
+  'Mauve',
+  'Oatmeal',
+  'Ochre',
+  'Orange',
+  'Red',
+  'Silver/Grey',
+  'Soft Lilac',
+  'Teal',
+  'Terracotta'
+];
 
 const outdoorSubcategories = [
   'Shop all'

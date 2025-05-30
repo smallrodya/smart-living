@@ -337,6 +337,31 @@ export default function ProductsPage() {
     );
   };
 
+  // Функция для группировки товаров
+  const groupProductsByCategory = (products: any[]) => {
+    const grouped: { [key: string]: { [key: string]: any[] } } = {};
+    
+    products.forEach(product => {
+      // Создаем группу для категории, если её нет
+      if (!grouped[product.category]) {
+        grouped[product.category] = {};
+      }
+      
+      // Создаем подгруппу для подкатегории, если её нет
+      if (!grouped[product.category][product.subcategory || 'Uncategorized']) {
+        grouped[product.category][product.subcategory || 'Uncategorized'] = [];
+      }
+      
+      // Добавляем товар в соответствующую подгруппу
+      grouped[product.category][product.subcategory || 'Uncategorized'].push(product);
+    });
+    
+    return grouped;
+  };
+
+  // Получаем сгруппированные товары
+  const groupedProducts = groupProductsByCategory(filteredProducts);
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <AddProductModal open={modalOpen} onClose={() => setModalOpen(false)} onProductAdded={fetchProducts} />
@@ -453,183 +478,189 @@ export default function ProductsPage() {
           </div>
         ) : (
           <div className="divide-y divide-gray-200">
-            {filteredProducts.map((product) => (
-              <div key={product._id} className="p-6 bg-white">
-                <div 
-                  className="flex flex-col md:flex-row gap-6 cursor-pointer"
-                  onClick={() => toggleProductExpand(product._id)}
-                >
-                  {/* Product Image */}
-                  {product.images && product.images.length > 0 && (
-                    <div className="w-full md:w-48 h-48 relative rounded-lg overflow-hidden">
-                      <img
-                        src={product.images[0]}
-                        alt={product.title}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                  )}
-
-                  {/* Product Header */}
-                  <div className="flex-1">
-                    <div className="flex justify-between items-start mb-4">
-                      <div>
-                        <h3 className="text-lg font-semibold text-gray-900">{product.title}</h3>
-                        <div className="flex items-center gap-2 mt-1">
-                          <span className="text-sm text-gray-500">{product.category}</span>
-                          {product.subcategory && (
-                            <>
-                              <span className="text-gray-300">•</span>
-                              <span className="text-sm text-gray-500">{product.subcategory}</span>
-                            </>
-                          )}
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <button
-                          className="px-2 py-1 text-xs border border-indigo-600 text-indigo-600 hover:bg-indigo-50 rounded transition-colors"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleEdit(product);
-                          }}
-                        >
-                          Edit
-                        </button>
-                        <button
-                          className="px-2 py-1 text-xs border border-red-600 text-red-600 hover:bg-red-50 rounded transition-colors"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleDelete(product._id);
-                          }}
-                        >
-                          Delete
-                        </button>
-                      </div>
-                    </div>
-
-                    {/* Product Status */}
-                    <div className="flex items-center gap-4 mb-4">
-                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                        product.isSoldOut ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'
-                      }`}>
-                        {product.isSoldOut ? 'Sold Out' : 'In Stock'}
-                      </span>
-                      {product.isHot && (
-                        <span className="px-2 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
-                          Hot
-                        </span>
-                      )}
-                      {product.isClearance && (
-                        <span className="px-2 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
-                          Clearance {product.clearanceDiscount}% OFF
-                        </span>
-                      )}
-                    </div>
-
-                    {/* Expandable Content */}
-                    <div 
-                      className={`space-y-4 overflow-hidden transition-all duration-300 ease-in-out ${
-                        expandedProducts.has(product._id) ? 'max-h-[1000px] opacity-100' : 'max-h-0 opacity-0'
-                      }`}
-                    >
-                      {/* Clearance Information */}
-                      {product.isClearance && (
-                        <div className="bg-purple-50 p-4 rounded-lg">
-                          <h4 className="text-sm font-medium text-purple-900 mb-2">Clearance Details</h4>
-                          <div className="flex items-center gap-2">
-                            <span className="text-sm text-purple-700">Discount: {product.clearanceDiscount}%</span>
-                            {product.beddingSizes && product.beddingSizes.length > 0 && (
-                              <div className="ml-4">
-                                <span className="text-sm text-purple-700">Original Price: £{product.beddingSizes[0].regularPrice}</span>
-                                <span className="text-sm text-purple-700 ml-2">Sale Price: £{product.beddingSizes[0].salePrice}</span>
+            {Object.entries(groupedProducts).map(([category, subcategories]) => (
+              <div key={category} className="p-6">
+                <h2 className="text-xl font-bold text-gray-900 mb-4">{category}</h2>
+                {Object.entries(subcategories).map(([subcategory, products]) => (
+                  <div key={subcategory} className="mb-6">
+                    <h3 className="text-lg font-semibold text-gray-800 mb-3">{subcategory}</h3>
+                    <div className="space-y-4">
+                      {products.map((product) => (
+                        <div key={product._id} className="p-4 bg-gray-50 rounded-lg">
+                          <div 
+                            className="flex flex-col md:flex-row gap-6 cursor-pointer"
+                            onClick={() => toggleProductExpand(product._id)}
+                          >
+                            {/* Product Image */}
+                            {product.images && product.images.length > 0 && (
+                              <div className="w-full md:w-48 h-48 relative rounded-lg overflow-hidden">
+                                <img
+                                  src={product.images[0]}
+                                  alt={product.title}
+                                  className="w-full h-full object-cover"
+                                />
                               </div>
                             )}
-                          </div>
-                        </div>
-                      )}
-                      
-                      {/* Sizes */}
-                      {product.beddingSizes && renderProductSizes(product.beddingSizes)}
-                      {product.rugsMatsSizes && renderProductSizes(product.rugsMatsSizes)}
 
-                      {/* Styles */}
-                      {product.beddingStyles && product.beddingStyles.length > 0 && (
-                        <div>
-                          <h4 className="text-sm font-medium text-gray-700 mb-1">Styles:</h4>
-                          <div className="flex flex-wrap gap-2">
-                            {product.beddingStyles.map((style: string, index: number) => (
-                              <span
-                                key={index}
-                                className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-sm"
+                            {/* Product Header */}
+                            <div className="flex-1">
+                              <div className="flex justify-between items-start mb-4">
+                                <div>
+                                  <h3 className="text-lg font-semibold text-gray-900">{product.title}</h3>
+                                  <div className="flex items-center gap-2 mt-1">
+                                    <span className="text-sm text-gray-500">SKU: {product.sku || 'N/A'}</span>
+                                  </div>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <button
+                                    className="px-2 py-1 text-xs border border-indigo-600 text-indigo-600 hover:bg-indigo-50 rounded transition-colors"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      handleEdit(product);
+                                    }}
+                                  >
+                                    Edit
+                                  </button>
+                                  <button
+                                    className="px-2 py-1 text-xs border border-red-600 text-red-600 hover:bg-red-50 rounded transition-colors"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      handleDelete(product._id);
+                                    }}
+                                  >
+                                    Delete
+                                  </button>
+                                </div>
+                              </div>
+
+                              {/* Product Status */}
+                              <div className="flex items-center gap-4 mb-4">
+                                <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                                  product.isSoldOut ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'
+                                }`}>
+                                  {product.isSoldOut ? 'Sold Out' : 'In Stock'}
+                                </span>
+                                {product.isHot && (
+                                  <span className="px-2 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
+                                    Hot
+                                  </span>
+                                )}
+                                {product.isClearance && (
+                                  <span className="px-2 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+                                    Clearance {product.clearanceDiscount}% OFF
+                                  </span>
+                                )}
+                              </div>
+
+                              {/* Expandable Content */}
+                              <div 
+                                className={`space-y-4 overflow-hidden transition-all duration-300 ease-in-out ${
+                                  expandedProducts.has(product._id) ? 'max-h-[1000px] opacity-100' : 'max-h-0 opacity-0'
+                                }`}
                               >
-                                {style}
-                              </span>
-                            ))}
+                                {/* Clearance Information */}
+                                {product.isClearance && (
+                                  <div className="bg-purple-50 p-4 rounded-lg">
+                                    <h4 className="text-sm font-medium text-purple-900 mb-2">Clearance Details</h4>
+                                    <div className="flex items-center gap-2">
+                                      <span className="text-sm text-purple-700">Discount: {product.clearanceDiscount}%</span>
+                                      {product.beddingSizes && product.beddingSizes.length > 0 && (
+                                        <div className="ml-4">
+                                          <span className="text-sm text-purple-700">Original Price: £{product.beddingSizes[0].regularPrice}</span>
+                                          <span className="text-sm text-purple-700 ml-2">Sale Price: £{product.beddingSizes[0].salePrice}</span>
+                                        </div>
+                                      )}
+                                    </div>
+                                  </div>
+                                )}
+                                
+                                {/* Sizes */}
+                                {product.beddingSizes && renderProductSizes(product.beddingSizes)}
+                                {product.rugsMatsSizes && renderProductSizes(product.rugsMatsSizes)}
+
+                                {/* Styles */}
+                                {product.beddingStyles && product.beddingStyles.length > 0 && (
+                                  <div>
+                                    <h4 className="text-sm font-medium text-gray-700 mb-1">Styles:</h4>
+                                    <div className="flex flex-wrap gap-2">
+                                      {product.beddingStyles.map((style: string, index: number) => (
+                                        <span
+                                          key={index}
+                                          className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-sm"
+                                        >
+                                          {style}
+                                        </span>
+                                      ))}
+                                    </div>
+                                  </div>
+                                )}
+
+                                {/* Colors */}
+                                {product.beddingColors && product.beddingColors.length > 0 && (
+                                  <div>
+                                    <h4 className="text-sm font-medium text-gray-700 mb-1">Colors:</h4>
+                                    <div className="flex flex-wrap gap-2">
+                                      {product.beddingColors.map((color: string, index: number) => (
+                                        <span
+                                          key={index}
+                                          className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-sm"
+                                        >
+                                          {color}
+                                        </span>
+                                      ))}
+                                    </div>
+                                  </div>
+                                )}
+
+                                {/* Rugs & Mats Colors */}
+                                {product.rugsMatsColors && product.rugsMatsColors.length > 0 && (
+                                  <div>
+                                    <h4 className="text-sm font-medium text-gray-700 mb-1">Colors:</h4>
+                                    <div className="flex flex-wrap gap-2">
+                                      {product.rugsMatsColors.map((color: string, index: number) => (
+                                        <span
+                                          key={index}
+                                          className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-sm"
+                                        >
+                                          {color}
+                                        </span>
+                                      ))}
+                                    </div>
+                                  </div>
+                                )}
+
+                                {/* Type for Rugs & Mats */}
+                                {product.rugsMatsType && (
+                                  <div>
+                                    <h4 className="text-sm font-medium text-gray-700 mb-1">Type:</h4>
+                                    <div className="flex flex-wrap gap-2">
+                                      <span className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-sm">
+                                        {product.rugsMatsType}
+                                      </span>
+                                    </div>
+                                  </div>
+                                )}
+                              </div>
+
+                              {/* Open Product Button */}
+                              <div className="mt-4 flex justify-center">
+                                <button
+                                  className="text-sm text-gray-900 hover:text-gray-700 transition-colors border border-gray-900 px-3 py-1 rounded"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    toggleProductExpand(product._id);
+                                  }}
+                                >
+                                  {expandedProducts.has(product._id) ? 'Close Product' : 'Open Product'}
+                                </button>
+                              </div>
+                            </div>
                           </div>
                         </div>
-                      )}
-
-                      {/* Colors */}
-                      {product.beddingColors && product.beddingColors.length > 0 && (
-                        <div>
-                          <h4 className="text-sm font-medium text-gray-700 mb-1">Colors:</h4>
-                          <div className="flex flex-wrap gap-2">
-                            {product.beddingColors.map((color: string, index: number) => (
-                              <span
-                                key={index}
-                                className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-sm"
-                              >
-                                {color}
-                              </span>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-
-                      {/* Rugs & Mats Colors */}
-                      {product.rugsMatsColors && product.rugsMatsColors.length > 0 && (
-                        <div>
-                          <h4 className="text-sm font-medium text-gray-700 mb-1">Colors:</h4>
-                          <div className="flex flex-wrap gap-2">
-                            {product.rugsMatsColors.map((color: string, index: number) => (
-                              <span
-                                key={index}
-                                className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-sm"
-                              >
-                                {color}
-                              </span>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-
-                      {/* Type for Rugs & Mats */}
-                      {product.rugsMatsType && (
-                        <div>
-                          <h4 className="text-sm font-medium text-gray-700 mb-1">Type:</h4>
-                          <div className="flex flex-wrap gap-2">
-                            <span className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-sm">
-                              {product.rugsMatsType}
-                            </span>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Open Product Button */}
-                    <div className="mt-[60px] flex justify-center">
-                      <button
-                        className="text-sm text-gray-900 hover:text-gray-700 transition-colors -ml-[200px] border border-gray-900 px-3 py-1 rounded"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          toggleProductExpand(product._id);
-                        }}
-                      >
-                        Open Product
-                      </button>
+                      ))}
                     </div>
                   </div>
-                </div>
+                ))}
               </div>
             ))}
           </div>
