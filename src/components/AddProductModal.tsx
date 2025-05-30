@@ -34,6 +34,7 @@ interface FormData {
   rugsMatsSizes: SizePrice[];
   rugsMatsColors: string[];
   // Throws & Towels specific
+  throwsTowelsStylePrices: SizePrice[];
   throwsTowelsStyles: string[];
   throwsTowelsColors: string[];
   // Curtains specific
@@ -219,6 +220,8 @@ const footwearColors = [
   'Multi'
 ];
 
+const throwsTowelsSizes = ['Small', 'Medium', 'Large', 'XLarge', 'Custom'];
+
 export default function AddProductModal({ open, onClose, onProductAdded }: AddProductModalProps) {
   const [formData, setFormData] = useState<FormData>({
     title: '',
@@ -239,6 +242,7 @@ export default function AddProductModal({ open, onClose, onProductAdded }: AddPr
     rugsMatsSizes: [],
     rugsMatsColors: [],
     // Throws & Towels specific
+    throwsTowelsStylePrices: [],
     throwsTowelsStyles: [],
     throwsTowelsColors: [],
     // Curtains specific
@@ -275,6 +279,31 @@ export default function AddProductModal({ open, onClose, onProductAdded }: AddPr
           return { ...prev, rugsMatsSizes: newSizes };
         }
         return { ...prev, rugsMatsSizes: [...prev.rugsMatsSizes, sizePrice] };
+      } else if (category === 'throwsTowels') {
+        const existingSizeIndex = prev.throwsTowelsStylePrices.findIndex(s => s.size === size);
+        if (existingSizeIndex >= 0) {
+          const newSizes = [...prev.throwsTowelsStylePrices];
+          newSizes[existingSizeIndex] = sizePrice;
+          return { ...prev, throwsTowelsStylePrices: newSizes };
+        }
+        return { ...prev, throwsTowelsStylePrices: [...prev.throwsTowelsStylePrices, sizePrice] };
+      }
+      return prev;
+    });
+  };
+
+  const handleStylePriceChange = (category: string, style: string, regularPrice: number, salePrice: number, sku: string, stock: number) => {
+    const stylePrice: SizePrice = { size: style, regularPrice, salePrice, sku, stock };
+    
+    setFormData(prev => {
+      if (category === 'throwsTowels') {
+        const existingStyleIndex = prev.throwsTowelsStylePrices.findIndex(s => s.size === style);
+        if (existingStyleIndex >= 0) {
+          const newStyles = [...prev.throwsTowelsStylePrices];
+          newStyles[existingStyleIndex] = stylePrice;
+          return { ...prev, throwsTowelsStylePrices: newStyles };
+        }
+        return { ...prev, throwsTowelsStylePrices: [...prev.throwsTowelsStylePrices, stylePrice] };
       }
       return prev;
     });
@@ -388,6 +417,23 @@ export default function AddProductModal({ open, onClose, onProductAdded }: AddPr
         return {
           ...prev,
           rugsMatsSizes: prev.rugsMatsSizes.filter(s => s.size !== size)
+        };
+      } else if (category === 'throwsTowels') {
+        return {
+          ...prev,
+          throwsTowelsStylePrices: prev.throwsTowelsStylePrices.filter(s => s.size !== size)
+        };
+      }
+      return prev;
+    });
+  };
+
+  const removeStyle = (category: string, style: string) => {
+    setFormData(prev => {
+      if (category === 'throwsTowels') {
+        return {
+          ...prev,
+          throwsTowelsStylePrices: prev.throwsTowelsStylePrices.filter(s => s.size !== style)
         };
       }
       return prev;
@@ -771,72 +817,136 @@ export default function AddProductModal({ open, onClose, onProductAdded }: AddPr
           )}
 
           {formData.category === 'THROWS & TOWELS' && (
-            <>
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Subcategory</label>
-                <select
-                  value={formData.subcategory}
-                  onChange={(e) => setFormData(prev => ({ ...prev, subcategory: e.target.value }))}
-                  className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
-                  required
-                >
-                  <option value="">Select a subcategory</option>
-                  {throwsTowelsSubcategories.map(subcategory => (
-                    <option key={subcategory} value={subcategory}>{subcategory}</option>
-                  ))}
-                </select>
-              </div>
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Styles</label>
-                <div className="flex flex-wrap gap-3">
-                  {throwsTowelsStyles.map(style => (
-                    <label key={style} className={`inline-flex items-center px-4 py-2 rounded-full bg-white border transition-all cursor-pointer ${
-                      formData.throwsTowelsStyles.includes(style) 
-                        ? 'border-red-500 text-red-500' 
-                        : 'border-gray-300 hover:border-gray-400 text-gray-700'
-                    }`}>
-                      <input
-                        type="checkbox"
-                        checked={formData.throwsTowelsStyles.includes(style)}
-                        onChange={(e) => {
-                          const newStyles = e.target.checked
-                            ? [...formData.throwsTowelsStyles, style]
-                            : formData.throwsTowelsStyles.filter(s => s !== style);
-                          setFormData(prev => ({ ...prev, throwsTowelsStyles: newStyles }));
-                        }}
-                        className="hidden"
-                      />
-                      <span className={`${formData.throwsTowelsStyles.includes(style) ? 'text-indigo-600' : 'text-gray-700'}`}>{style}</span>
-                    </label>
-                  ))}
+            <div className="bg-gray-50 p-6 rounded-xl space-y-6">
+              <h3 className="text-lg font-semibold text-gray-900">Throws & Towels Details</h3>
+              <div className="grid grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Subcategory</label>
+                  <select
+                    value={formData.subcategory}
+                    onChange={(e) => setFormData(prev => ({ ...prev, subcategory: e.target.value }))}
+                    className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                    required
+                  >
+                    <option value="">Select a subcategory</option>
+                    {throwsTowelsSubcategories.map(subcategory => (
+                      <option key={subcategory} value={subcategory}>{subcategory}</option>
+                    ))}
+                  </select>
                 </div>
               </div>
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Colors</label>
-                <div className="flex flex-wrap gap-3">
-                  {throwsTowelsColors.map(color => (
-                    <label key={color} className={`inline-flex items-center px-4 py-2 rounded-full bg-white border transition-all cursor-pointer ${
-                      formData.throwsTowelsColors.includes(color) 
-                        ? 'border-red-500 text-red-500' 
-                        : 'border-gray-300 hover:border-gray-400 text-gray-700'
-                    }`}>
-                      <input
-                        type="checkbox"
-                        checked={formData.throwsTowelsColors.includes(color)}
-                        onChange={(e) => {
-                          const newColors = e.target.checked
-                            ? [...formData.throwsTowelsColors, color]
-                            : formData.throwsTowelsColors.filter(c => c !== color);
-                          setFormData(prev => ({ ...prev, throwsTowelsColors: newColors }));
-                        }}
-                        className="hidden"
-                      />
-                      <span className={`${formData.throwsTowelsColors.includes(color) ? 'text-indigo-600' : 'text-gray-700'}`}>{color}</span>
-                    </label>
-                  ))}
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Styles and Prices</label>
+                  <div className="space-y-3">
+                    {throwsTowelsStyles.map(style => {
+                      const stylePrice = formData.throwsTowelsStylePrices.find(s => s.size === style);
+                      return (
+                        <div key={style} className="flex items-center gap-3">
+                          <label className={`inline-flex items-center px-4 py-2 rounded-full bg-white border transition-all cursor-pointer ${
+                            stylePrice ? 'border-red-500 text-red-500' : 'border-gray-300 hover:border-gray-400 text-gray-700'
+                          }`}>
+                            <input
+                              type="checkbox"
+                              checked={!!stylePrice}
+                              onChange={(e) => {
+                                if (e.target.checked) {
+                                  handleStylePriceChange('throwsTowels', style, 0, 0, '', 0);
+                                } else {
+                                  removeStyle('throwsTowels', style);
+                                }
+                              }}
+                              className="hidden"
+                            />
+                            <span>{style}</span>
+                          </label>
+                          {stylePrice && (
+                            <div className="flex items-center gap-2">
+                              <div className="flex flex-col gap-1">
+                                <label className="text-xs text-gray-500">SKU</label>
+                                <input
+                                  type="text"
+                                  value={stylePrice.sku}
+                                  onChange={(e) => handleStylePriceChange('throwsTowels', style, stylePrice.regularPrice, stylePrice.salePrice, e.target.value, stylePrice.stock)}
+                                  className="w-32 px-3 py-1 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                                  placeholder="SKU"
+                                />
+                              </div>
+                              <div className="flex flex-col gap-1">
+                                <label className="text-xs text-gray-500">Regular Price</label>
+                                <div className="flex items-center gap-1">
+                                  <input
+                                    type="number"
+                                    value={stylePrice.regularPrice}
+                                    onChange={(e) => handleStylePriceChange('throwsTowels', style, parseFloat(e.target.value), stylePrice.salePrice, stylePrice.sku, stylePrice.stock)}
+                                    className="w-24 px-3 py-1 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                                    placeholder="Regular"
+                                    min="0"
+                                    step="0.01"
+                                  />
+                                  <span className="text-gray-500">£</span>
+                                </div>
+                              </div>
+                              <div className="flex flex-col gap-1">
+                                <label className="text-xs text-gray-500">Sale Price</label>
+                                <div className="flex items-center gap-1">
+                                  <input
+                                    type="number"
+                                    value={stylePrice.salePrice}
+                                    onChange={(e) => handleStylePriceChange('throwsTowels', style, stylePrice.regularPrice, parseFloat(e.target.value), stylePrice.sku, stylePrice.stock)}
+                                    className="w-24 px-3 py-1 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                                    placeholder="Sale"
+                                    min="0"
+                                    step="0.01"
+                                  />
+                                  <span className="text-gray-500">£</span>
+                                </div>
+                              </div>
+                              <div className="flex flex-col gap-1">
+                                <label className="text-xs text-gray-500">Stock</label>
+                                <input
+                                  type="number"
+                                  value={stylePrice.stock}
+                                  onChange={(e) => handleStylePriceChange('throwsTowels', style, stylePrice.regularPrice, stylePrice.salePrice, stylePrice.sku, parseInt(e.target.value) || 0)}
+                                  className="w-20 px-3 py-1 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                                  placeholder="Stock"
+                                  min="0"
+                                />
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Colors</label>
+                  <div className="flex flex-wrap gap-3">
+                    {throwsTowelsColors.map(color => (
+                      <label key={color} className={`inline-flex items-center px-4 py-2 rounded-full bg-white border transition-all cursor-pointer ${
+                        formData.throwsTowelsColors.includes(color) 
+                          ? 'border-red-500 text-red-500' 
+                          : 'border-gray-300 hover:border-gray-400 text-gray-700'
+                      }`}>
+                        <input
+                          type="checkbox"
+                          checked={formData.throwsTowelsColors.includes(color)}
+                          onChange={(e) => {
+                            const newColors = e.target.checked
+                              ? [...formData.throwsTowelsColors, color]
+                              : formData.throwsTowelsColors.filter(c => c !== color);
+                            setFormData(prev => ({ ...prev, throwsTowelsColors: newColors }));
+                          }}
+                          className="hidden"
+                        />
+                        <span>{color}</span>
+                      </label>
+                    ))}
+                  </div>
                 </div>
               </div>
-            </>
+            </div>
           )}
 
           {formData.category === 'OUTDOOR' && (

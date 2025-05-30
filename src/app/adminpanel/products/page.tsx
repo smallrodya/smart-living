@@ -200,6 +200,8 @@ export default function ProductsPage() {
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [expandedProducts, setExpandedProducts] = useState<Set<string>>(new Set());
+  const [selectedCategory, setSelectedCategory] = useState('');
+  const [selectedSubcategory, setSelectedSubcategory] = useState('');
 
   const fetchProducts = async () => {
     setLoading(true);
@@ -227,14 +229,50 @@ export default function ProductsPage() {
     setEditModalOpen(true);
   };
 
+  const getSubcategories = (category: string) => {
+    switch (category) {
+      case 'BEDDING':
+        return beddingSubcategories;
+      case 'RUGS & MATS':
+        return [...rugsMatsSubcategories.RUGS, ...rugsMatsSubcategories.MATS];
+      case 'THROWS & TOWELS':
+        return throwsTowelsSubcategories;
+      case 'OUTDOOR':
+        return outdoorSubcategories;
+      case 'CURTAINS':
+        return curtainsSubcategories;
+      case 'CLOTHING':
+        return clothingSubcategories;
+      case 'FOOTWEAR':
+        return footwearSubcategories;
+      default:
+        return [];
+    }
+  };
+
   const filteredProducts = products.filter(product => {
     const searchLower = searchQuery.toLowerCase();
-    return (
+    const matchesSearch = 
       product.title.toLowerCase().includes(searchLower) ||
       product.category.toLowerCase().includes(searchLower) ||
       product.subcategory?.toLowerCase().includes(searchLower) ||
-      product.sku?.toLowerCase().includes(searchLower)
-    );
+      product.sku?.toLowerCase().includes(searchLower);
+    
+    // Если выбрана категория Clearance, показываем все товары с isClearance: true
+    if (selectedCategory === 'CLEARANCE') {
+      return matchesSearch && product.isClearance;
+    }
+
+    // Если выбрана категория Hot, показываем все товары с isHot: true
+    if (selectedCategory === 'HOT') {
+      return matchesSearch && product.isHot;
+    }
+    
+    // Для остальных категорий
+    const matchesCategory = !selectedCategory || product.category === selectedCategory;
+    const matchesSubcategory = !selectedSubcategory || product.subcategory === selectedSubcategory;
+
+    return matchesSearch && matchesCategory && matchesSubcategory;
   });
 
   const toggleProductExpand = (productId: string) => {
@@ -255,21 +293,24 @@ export default function ProductsPage() {
       <div className="mt-2">
         <h4 className="text-sm font-medium text-gray-700 mb-1">Available Sizes:</h4>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-          {sizes.map((size, index) => (
-            <div key={index} className="bg-gray-50 p-2 rounded">
-              <div className="flex justify-between items-center">
-                <span className="font-medium">{size.size}</span>
-                <span className="text-sm text-gray-500">SKU: {size.sku || 'N/A'}</span>
-              </div>
-              <div className="flex justify-between items-center mt-1">
-                <span className="text-sm text-gray-600">Stock: {size.stock || 0}</span>
-                <div className="text-sm">
-                  <span className="text-gray-500 line-through mr-2">£{size.regularPrice}</span>
-                  <span className="text-green-600 font-medium">£{size.salePrice}</span>
+          {sizes.map((size, index) => {
+            const discountedPrice = size.regularPrice * (1 - (size.clearanceDiscount || 0) / 100);
+            return (
+              <div key={index} className="bg-gray-50 p-2 rounded">
+                <div className="flex justify-between items-center">
+                  <span className="font-medium">{size.size}</span>
+                  <span className="text-sm text-gray-500">SKU: {size.sku || 'N/A'}</span>
+                </div>
+                <div className="flex justify-between items-center mt-1">
+                  <span className="text-sm text-gray-600">Stock: {size.stock || 0}</span>
+                  <div className="text-sm">
+                    <span className="text-gray-500 line-through mr-2">£{size.regularPrice}</span>
+                    <span className="text-green-600 font-medium">£{discountedPrice.toFixed(2)}</span>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     );
@@ -314,6 +355,71 @@ export default function ProductsPage() {
         </div>
       </div>
 
+      {/* Filters */}
+      <div className="bg-white rounded-lg shadow p-4 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Category</label>
+            <select
+              value={selectedCategory}
+              onChange={(e) => {
+                setSelectedCategory(e.target.value);
+                setSelectedSubcategory('');
+              }}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+            >
+              <option value="">All Categories</option>
+              {categories.map(category => (
+                <option key={category} value={category}>{category}</option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Subcategory</label>
+            <select
+              value={selectedSubcategory}
+              onChange={(e) => setSelectedSubcategory(e.target.value)}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+              disabled={!selectedCategory || selectedCategory === 'CLEARANCE'}
+            >
+              <option value="">All Subcategories</option>
+              {getSubcategories(selectedCategory).map(subcategory => (
+                <option key={subcategory} value={subcategory}>{subcategory}</option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Status</label>
+            <div className="flex gap-4">
+              <label className="inline-flex items-center">
+                <input
+                  type="checkbox"
+                  checked={selectedCategory === 'CLEARANCE'}
+                  onChange={(e) => {
+                    setSelectedCategory(e.target.checked ? 'CLEARANCE' : '');
+                    setSelectedSubcategory('');
+                  }}
+                  className="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
+                />
+                <span className="ml-2 text-sm text-gray-700">Clearance</span>
+              </label>
+              <label className="inline-flex items-center">
+                <input
+                  type="checkbox"
+                  checked={selectedCategory === 'HOT'}
+                  onChange={(e) => {
+                    setSelectedCategory(e.target.checked ? 'HOT' : '');
+                    setSelectedSubcategory('');
+                  }}
+                  className="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
+                />
+                <span className="ml-2 text-sm text-gray-700">Hot</span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div className="bg-white rounded-lg shadow overflow-hidden">
         {loading ? (
           <div className="text-center py-8">
@@ -327,7 +433,7 @@ export default function ProductsPage() {
         ) : (
           <div className="divide-y divide-gray-200">
             {filteredProducts.map((product) => (
-              <div key={product._id} className="p-6 hover:bg-gray-50 transition-colors">
+              <div key={product._id} className="p-6 bg-white">
                 <div 
                   className="flex flex-col md:flex-row gap-6 cursor-pointer"
                   onClick={() => toggleProductExpand(product._id)}
@@ -392,6 +498,11 @@ export default function ProductsPage() {
                           Hot
                         </span>
                       )}
+                      {product.isClearance && (
+                        <span className="px-2 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+                          Clearance {product.clearanceDiscount}% OFF
+                        </span>
+                      )}
                     </div>
 
                     {/* Expandable Content */}
@@ -400,6 +511,22 @@ export default function ProductsPage() {
                         expandedProducts.has(product._id) ? 'max-h-[1000px] opacity-100' : 'max-h-0 opacity-0'
                       }`}
                     >
+                      {/* Clearance Information */}
+                      {product.isClearance && (
+                        <div className="bg-purple-50 p-4 rounded-lg">
+                          <h4 className="text-sm font-medium text-purple-900 mb-2">Clearance Details</h4>
+                          <div className="flex items-center gap-2">
+                            <span className="text-sm text-purple-700">Discount: {product.clearanceDiscount}%</span>
+                            {product.beddingSizes && product.beddingSizes.length > 0 && (
+                              <div className="ml-4">
+                                <span className="text-sm text-purple-700">Original Price: £{product.beddingSizes[0].regularPrice}</span>
+                                <span className="text-sm text-purple-700 ml-2">Sale Price: £{product.beddingSizes[0].salePrice}</span>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      )}
+                      
                       {/* Sizes */}
                       {product.beddingSizes && renderProductSizes(product.beddingSizes)}
                       {product.rugsMatsSizes && renderProductSizes(product.rugsMatsSizes)}

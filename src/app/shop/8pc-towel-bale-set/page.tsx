@@ -16,37 +16,20 @@ interface Product {
   category: string;
   subcategory: string;
   sku: string;
-  beddingSizes: Array<{ 
-    size: string; 
-    price: number; 
-    salePrice: number;
-    regularPrice: number;
-  }>;
-  throwsTowelsStylePrices: Array<{ 
-    size: string; 
-    regularPrice: number; 
-    salePrice: number; 
-    sku: string; 
-    stock: number 
-  }>;
-  beddingColors: string[];
-  beddingStyles: string[];
+  throwsTowelsStylePrices: Array<{ size: string; regularPrice: number; salePrice: number; sku: string; stock: number }>;
   throwsTowelsColors: string[];
   throwsTowelsStyles: string[];
   images?: string[];
   discount?: number;
   isSoldOut?: boolean;
   isHot?: boolean;
-  isClearance?: boolean;
-  clearanceDiscount?: number;
 }
 
-export default function ClearancePage() {
+export default function TowelBaleSetPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedSize, setSelectedSize] = useState<string>('');
-  const [selectedColor, setSelectedColor] = useState<string>('');
   const [selectedStyle, setSelectedStyle] = useState<string>('');
+  const [selectedColor, setSelectedColor] = useState<string>('');
   const [showFilters, setShowFilters] = useState(false);
   const [hoveredProduct, setHoveredProduct] = useState<string | null>(null);
   const [wishlist, setWishlist] = useState<string[]>([]);
@@ -66,10 +49,12 @@ export default function ClearancePage() {
     try {
       const res = await fetch('/api/products');
       const data = await res.json();
-      const clearanceProducts = data.products.filter(
-        (product: Product) => product.isClearance
+      const towelBaleSets = data.products.filter(
+        (product: Product) => 
+          product.category === 'THROWS & TOWELS' && 
+          product.subcategory === '8Pc Towel Bale Set'
       );
-      setProducts(clearanceProducts);
+      setProducts(towelBaleSets);
     } catch (error) {
       console.error('Error fetching products:', error);
     } finally {
@@ -77,104 +62,40 @@ export default function ClearancePage() {
     }
   };
 
-  const allSizes = Array.from(new Set(products.flatMap(p => p.beddingSizes?.map(s => s.size) || [])));
-  const allColors = Array.from(new Set(products.flatMap(p => p.beddingColors || [])));
-  const allStyles = Array.from(new Set(products.flatMap(p => p.beddingStyles || [])));
-
-  const getProductPrice = (product: Product) => {
-    if (product.category === 'THROWS & TOWELS') {
-      if (!product.throwsTowelsStylePrices || product.throwsTowelsStylePrices.length === 0) return 0;
-      return product.throwsTowelsStylePrices[0].salePrice;
-    }
-    if (!product.beddingSizes || product.beddingSizes.length === 0) return 0;
-    return product.beddingSizes[0].salePrice;
-  };
+  const allStyles = Array.from(new Set(products.flatMap(p => p.throwsTowelsStyles || [])));
+  const allColors = Array.from(new Set(products.flatMap(p => p.throwsTowelsColors || [])));
 
   const formatPrice = (price: number) => {
     return `£${price.toFixed(2)}`;
   };
 
   const formatPriceRange = (product: Product) => {
-    if (product.category === 'THROWS & TOWELS') {
-      if (!product.throwsTowelsStylePrices || product.throwsTowelsStylePrices.length === 0) return '£0.00';
-      const prices = product.throwsTowelsStylePrices.map(style => {
-        if (product.clearanceDiscount) {
-          const discountedPrice = style.salePrice * (1 - product.clearanceDiscount / 100);
-          return discountedPrice;
-        }
-        return style.salePrice;
-      });
-      const min = Math.min(...prices);
-      const max = Math.max(...prices);
-      return min === max ? formatPrice(min) : `${formatPrice(min)} - ${formatPrice(max)}`;
-    }
-
-    if (!product.beddingSizes || product.beddingSizes.length === 0) return '£0.00';
-    const prices = product.beddingSizes.map(size => {
-      if (product.clearanceDiscount) {
-        const discountedPrice = size.salePrice * (1 - product.clearanceDiscount / 100);
-        return discountedPrice;
-      }
-      return size.salePrice;
-    });
-    const min = Math.min(...prices);
-    const max = Math.max(...prices);
-    return min === max ? formatPrice(min) : `${formatPrice(min)} - ${formatPrice(max)}`;
-  };
-
-  const getOriginalPriceRange = (product: Product) => {
-    if (product.category === 'THROWS & TOWELS') {
-      if (!product.throwsTowelsStylePrices || product.throwsTowelsStylePrices.length === 0) return '£0.00';
-      const prices = product.throwsTowelsStylePrices.map(style => style.salePrice);
-      const min = Math.min(...prices);
-      const max = Math.max(...prices);
-      return min === max ? formatPrice(min) : `${formatPrice(min)} - ${formatPrice(max)}`;
-    }
-
-    if (!product.beddingSizes || product.beddingSizes.length === 0) return '£0.00';
-    const prices = product.beddingSizes.map(size => size.salePrice);
+    if (!product.throwsTowelsStylePrices || product.throwsTowelsStylePrices.length === 0) return '£0.00';
+    const prices = product.throwsTowelsStylePrices.map(style => style.salePrice);
     const min = Math.min(...prices);
     const max = Math.max(...prices);
     return min === max ? formatPrice(min) : `${formatPrice(min)} - ${formatPrice(max)}`;
   };
 
   const filteredProducts = products.filter(product => {
-    const matchesSize = !selectedSize || 
-      (product.category === 'THROWS & TOWELS' 
-        ? product.throwsTowelsStylePrices?.some(s => s.size === selectedSize)
-        : product.beddingSizes?.some(s => s.size === selectedSize));
-    const matchesColor = !selectedColor || 
-      (product.category === 'THROWS & TOWELS'
-        ? product.throwsTowelsColors?.includes(selectedColor)
-        : product.beddingColors?.includes(selectedColor));
-    const matchesStyle = !selectedStyle || 
-      (product.category === 'THROWS & TOWELS'
-        ? product.throwsTowelsStyles?.includes(selectedStyle)
-        : product.beddingStyles?.includes(selectedStyle));
+    const matchesStyle = !selectedStyle || product.throwsTowelsStyles?.includes(selectedStyle);
+    const matchesColor = !selectedColor || product.throwsTowelsColors?.includes(selectedColor);
     const [minPrice, maxPrice] = priceRange;
-    
-    let productPrices;
-    if (product.category === 'THROWS & TOWELS') {
-      productPrices = product.throwsTowelsStylePrices?.map(s => s.salePrice) || [];
-    } else {
-      productPrices = product.beddingSizes?.map(s => s.salePrice) || [];
-    }
-    
+    const productPrices = product.throwsTowelsStylePrices?.map(s => s.salePrice) || [];
     const productMinPrice = Math.min(...productPrices);
     const productMaxPrice = Math.max(...productPrices);
-    return matchesSize && matchesColor && matchesStyle && productMinPrice >= minPrice && productMaxPrice <= maxPrice;
+    return matchesStyle && matchesColor && productMinPrice >= minPrice && productMaxPrice <= maxPrice;
   });
 
   const clearFilters = () => {
-    setSelectedSize('');
-    setSelectedColor('');
     setSelectedStyle('');
+    setSelectedColor('');
     setPriceRange([0, 1000]);
   };
 
   const toggleWishlist = (id: string) => {
     setWishlist(prev => {
-      const prefixedId = `clearance_${id}`;
+      const prefixedId = `towel_${id}`;
       const newWishlist = prev.includes(prefixedId) 
         ? prev.filter(i => i !== prefixedId)
         : [...prev, prefixedId];
@@ -187,19 +108,19 @@ export default function ClearancePage() {
               typeof item === 'object' && 
               'id' in item && 
               typeof item.id === 'string' && 
-              !item.id.startsWith('clearance_')
+              !item.id.startsWith('towel_')
             )
           : [];
         
         const newItems = products
-          .filter((p) => newWishlist.includes(`clearance_${p._id}`))
+          .filter((p) => newWishlist.includes(`towel_${p._id}`))
           .map((item) => ({
-            id: `clearance_${item._id}`,
+            id: `towel_${item._id}`,
             src: item.images?.[0] || '',
             hoverSrc: item.images?.[1] || item.images?.[0] || '',
             title: item.title,
-            price: `£${item.price}`,
-            discount: item.clearanceDiscount ? `-${item.clearanceDiscount}%` : ''
+            price: formatPriceRange(item),
+            discount: item.discount ? `-${item.discount}%` : ''
           }));
         
         const wishlistItems = [...validItems, ...newItems];
@@ -233,8 +154,8 @@ export default function ClearancePage() {
           marginBottom: '60px'
         }}>
           <Image
-            src="/clearance-banner.jpg"
-            alt="Clearance Sale"
+            src="/8pc-towel-bale-set.jpg"
+            alt="8Pc Towel Bale Set"
             fill
             style={{
               objectFit: 'cover',
@@ -309,7 +230,7 @@ export default function ClearancePage() {
                 textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
                 lineHeight: '1.2',
                 marginBottom: '20px'
-              }}>Clearance Sale</h1>
+              }}>8Pc Towel Bale Set</h1>
               <p style={{
                 color: '#fff',
                 fontSize: '24px',
@@ -319,7 +240,7 @@ export default function ClearancePage() {
                 margin: '0 auto',
                 lineHeight: '1.5'
               }}>
-                Amazing deals on selected items. Limited time offers with up to 70% off!
+                Complete your bathroom with our luxurious 8-piece towel sets
               </p>
             </div>
           </div>
@@ -601,75 +522,6 @@ export default function ClearancePage() {
                     ))}
                   </div>
                 </div>
-
-                {/* Size Filter */}
-                <div style={{
-                  flex: '1',
-                  minWidth: '300px'
-                }}>
-                  <div style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '12px',
-                    marginBottom: '20px'
-                  }}>
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
-                    </svg>
-                    <span style={{
-                      fontSize: '16px',
-                      fontWeight: 500,
-                      color: '#444'
-                    }}>Sizes</span>
-                  </div>
-                  <div style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '8px'
-                  }}>
-                    {allSizes.map(size => (
-                      <button
-                        key={size}
-                        onClick={() => setSelectedSize(size === selectedSize ? '' : size)}
-                        style={{
-                          padding: '8px 16px',
-                          borderRadius: '6px',
-                          border: '1px solid',
-                          borderColor: selectedSize === size ? '#222' : '#eee',
-                          background: selectedSize === size ? '#222' : 'transparent',
-                          color: selectedSize === size ? '#fff' : '#444',
-                          cursor: 'pointer',
-                          transition: 'all 0.2s ease',
-                          fontSize: '14px',
-                          fontWeight: 500,
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '6px',
-                          textAlign: 'left'
-                        }}
-                        onMouseEnter={(e) => {
-                          if (selectedSize !== size) {
-                            e.currentTarget.style.borderColor = '#222';
-                            e.currentTarget.style.color = '#222';
-                          }
-                        }}
-                        onMouseLeave={(e) => {
-                          if (selectedSize !== size) {
-                            e.currentTarget.style.borderColor = '#eee';
-                            e.currentTarget.style.color = '#444';
-                          }
-                        }}
-                      >
-                        {selectedSize === size && (
-                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                            <path d="M20 6L9 17l-5-5"/>
-                          </svg>
-                        )}
-                        {size}
-                      </button>
-                    ))}
-                  </div>
-                </div>
               </div>
             )}
           </div>
@@ -766,7 +618,7 @@ export default function ClearancePage() {
                       cursor: 'pointer',
                       boxShadow: '0 2px 12px rgba(0,0,0,0.15)',
                       transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                      transform: wishlist.includes(`clearance_${product._id}`) ? 'scale(1.1)' : 'scale(1)',
+                      transform: wishlist.includes(`towel_${product._id}`) ? 'scale(1.1)' : 'scale(1)',
                       backdropFilter: 'blur(4px)'
                     }}
                   >
@@ -774,7 +626,7 @@ export default function ClearancePage() {
                       width="24"
                       height="24"
                       viewBox="0 0 24 24"
-                      fill={wishlist.includes(`clearance_${product._id}`) ? '#e53935' : 'none'}
+                      fill={wishlist.includes(`towel_${product._id}`) ? '#e53935' : 'none'}
                       stroke="#e53935"
                       strokeWidth="2"
                       strokeLinecap="round"
@@ -783,7 +635,7 @@ export default function ClearancePage() {
                       <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
                     </svg>
                   </button>
-                  {product.clearanceDiscount && (
+                  {product.discount && (
                     <span style={{
                       position: 'absolute',
                       top: '12px',
@@ -801,13 +653,13 @@ export default function ClearancePage() {
                       boxShadow: '0 2px 8px rgba(229,57,53,0.2)',
                       backdropFilter: 'blur(4px)'
                     }}>
-                      -{product.clearanceDiscount}%
+                      -{product.discount}%
                     </span>
                   )}
                   {product.isHot && (
                     <span style={{
                       position: 'absolute',
-                      top: product.clearanceDiscount ? '67px' : '12px',
+                      top: product.discount ? '67px' : '12px',
                       left: '12px',
                       background: '#000',
                       color: '#fff',
@@ -861,7 +713,7 @@ export default function ClearancePage() {
                     fontSize: '20px',
                     marginBottom: '20px'
                   }}>
-                    {product.clearanceDiscount ? (
+                    {product.discount ? (
                       <>
                         {formatPriceRange(product)}
                         <span style={{
@@ -870,7 +722,7 @@ export default function ClearancePage() {
                           marginLeft: '8px',
                           fontSize: '16px'
                         }}>
-                          {getOriginalPriceRange(product)}
+                          {formatPriceRange({ ...product, discount: undefined })}
                         </span>
                       </>
                     ) : (

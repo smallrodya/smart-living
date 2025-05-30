@@ -140,11 +140,11 @@ const megaMenus: MegaMenu[] = [
       {
         title: 'CATEGORY',
         items: [
-          { label: 'Tea Towels', href: '/shop/throws-towels/tea-towels' },
-          { label: '8Pc Towel Bale Set', href: '/shop/throws-towels/8pc-towel-bale-set' },
-          { label: '10Pc Towel Bale Set', href: '/shop/throws-towels/10pc-towel-bale-set' },
-          { label: 'Weighted Blankets', href: '/shop/throws-towels/weighted-blankets' },
-          { label: 'Throws', href: '/shop/throws-towels/throws' },
+          { label: 'Tea Towels', href: '/shop/tea-towels' },
+          { label: '8Pc Towel Bale Set', href: '/shop/8pc-towel-bale-set' },
+          { label: '10Pc Towel Bale Set', href: '/shop/10pc-towel-bale-set' },
+          { label: 'Weighted Blankets', href: '/shop//weighted-blanketss' },
+          { label: 'Throws', href: '/shop/all-throws' },
         ],
       },
       {
