@@ -83,7 +83,28 @@ const throwsTowelsColors = [
 // Дополнительные опции для категории BEDDING
 const beddingSizes = ['Single', 'Double', 'King', 'Super King', 'Crib'];
 const beddingStyles = ['Printed', 'Plain', '3D', 'Teddy', 'Hotel Quality'];
-const beddingColors = ['White', 'Black', 'Grey', 'Blue', 'Pink', 'Green', 'Yellow', 'Red', 'Purple', 'Beige'];
+const beddingColors = [
+  'White',
+  'Black',
+  'Grey',
+  'Blue',
+  'Pink',
+  'Green',
+  'Yellow',
+  'Red',
+  'Purple',
+  'Beige',
+  'Teal',
+  'Emerald',
+  'Ochre',
+  'Gold',
+  'Champagne',
+  'Oyster',
+  'Orange',
+  'Other Colours',
+  'Multi Colours',
+  'Brown'
+];
 
 // Дополнительные опции для категории RUGS & MATS
 const rugsMatsSizes = ['Small', 'Medium', 'Large', 'Xlarge', 'Runner'];
@@ -294,7 +315,7 @@ export default function ProductsPage() {
         <h4 className="text-sm font-medium text-gray-700 mb-1">Available Sizes:</h4>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
           {sizes.map((size, index) => {
-            const discountedPrice = size.regularPrice * (1 - (size.clearanceDiscount || 0) / 100);
+            const discountedPrice = size.salePrice;
             return (
               <div key={index} className="bg-gray-50 p-2 rounded">
                 <div className="flex justify-between items-center">

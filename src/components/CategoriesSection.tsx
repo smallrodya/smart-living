@@ -143,17 +143,17 @@ const megaMenus: MegaMenu[] = [
           { label: 'Tea Towels', href: '/shop/tea-towels' },
           { label: '8Pc Towel Bale Set', href: '/shop/8pc-towel-bale-set' },
           { label: '10Pc Towel Bale Set', href: '/shop/10pc-towel-bale-set' },
-          { label: 'Weighted Blankets', href: '/shop//weighted-blanketss' },
+          { label: 'Weighted Blankets', href: '/shop/weighted-blankets-throws-towels' },
           { label: 'Throws', href: '/shop/all-throws' },
         ],
       },
       {
         title: 'STYLE',
         items: [
-          { label: 'Fleece', href: '/category/throws-towels/fleece' },
-          { label: 'Plain', href: '/shop/throws-towels/plain' },
-          { label: '3D', href: '/shop/throws-towels/3d' },
-          { label: 'Chunky Hand Knitted', href: '/shop/throws-towels/chunky-hand-knitted' },
+          { label: 'Fleece', href: '/shop/fleece-throws-towels' },
+          { label: 'Plain', href: '/shop/plain-throws-towels' },
+          { label: '3D', href: '/shop/3d-throws-towels' },
+          { label: 'Chunky Hand Knitted', href: '/shop/chunky-hand-knitted-throws-towels' },
         ],
       },
       {

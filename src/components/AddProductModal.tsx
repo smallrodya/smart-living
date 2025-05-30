@@ -122,7 +122,28 @@ const throwsTowelsColors = [
 
 const beddingSizes = ['Single', 'Double', 'King', 'Super King', 'Crib'];
 const beddingStyles = ['Printed', 'Plain', '3D', 'Teddy', 'Hotel Quality'];
-const beddingColors = ['White', 'Black', 'Grey', 'Blue', 'Pink', 'Green', 'Yellow', 'Red', 'Purple', 'Beige'];
+const beddingColors = [
+  'White',
+  'Black',
+  'Grey',
+  'Blue',
+  'Pink',
+  'Green',
+  'Yellow',
+  'Red',
+  'Purple',
+  'Beige',
+  'Teal',
+  'Emerald',
+  'Ochre',
+  'Gold',
+  'Champagne',
+  'Oyster',
+  'Orange',
+  'Other Colours',
+  'Multi Colours',
+  'Brown'
+];
 
 const rugsMatsSizes = ['Small', 'Medium', 'Large', 'Xlarge', 'Runner'];
 const rugsMatsColors = ['White', 'Black', 'Grey', 'Blue', 'Pink', 'Green', 'Yellow', 'Red', 'Purple', 'Beige', 'Brown', 'Multi'];
@@ -154,8 +175,16 @@ const curtainsColors = [
   'Red',
   'Purple',
   'Beige',
-  'Brown',
-  'Multi'
+  'Teal',
+  'Emerald',
+  'Ochre',
+  'Gold',
+  'Champagne',
+  'Oyster',
+  'Orange',
+  'Other Colours',
+  'Multi Colours',
+  'Brown'
 ];
 
 const clothingSubcategories = [
@@ -184,8 +213,16 @@ const clothingColors = [
   'Red',
   'Purple',
   'Beige',
-  'Brown',
-  'Multi'
+  'Teal',
+  'Emerald',
+  'Ochre',
+  'Gold',
+  'Champagne',
+  'Oyster',
+  'Orange',
+  'Other Colours',
+  'Multi Colours',
+  'Brown'
 ];
 
 const footwearSubcategories = [
@@ -216,8 +253,16 @@ const footwearColors = [
   'Red',
   'Purple',
   'Beige',
-  'Brown',
-  'Multi'
+  'Teal',
+  'Emerald',
+  'Ochre',
+  'Gold',
+  'Champagne',
+  'Oyster',
+  'Orange',
+  'Other Colours',
+  'Multi Colours',
+  'Brown'
 ];
 
 const throwsTowelsSizes = ['Small', 'Medium', 'Large', 'XLarge', 'Custom'];
@@ -333,6 +378,9 @@ export default function AddProductModal({ open, onClose, onProductAdded }: AddPr
       };
 
       console.log('Отправка данных для добавления:', formDataToSubmit);
+      console.log('Категория:', formDataToSubmit.category);
+      console.log('Подкатегория:', formDataToSubmit.subcategory);
+      console.log('Стили:', formDataToSubmit.throwsTowelsStyles);
       
       const response = await fetch('/api/products', {
         method: 'POST',

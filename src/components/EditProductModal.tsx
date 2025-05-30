@@ -81,16 +81,66 @@ const throwsTowelsColors = [
   'Red',
   'Purple',
   'Beige',
-  'Brown',
-  'Multi'
+  'Teal',
+  'Emerald',
+  'Ochre',
+  'Gold',
+  'Champagne',
+  'Oyster',
+  'Orange',
+  'Other Colours',
+  'Multi Colours',
+  'Brown'
 ];
 
 const beddingSizes = ['Single', 'Double', 'King', 'Super King', 'Crib'];
 const beddingStyles = ['Printed', 'Plain', '3D', 'Teddy', 'Hotel Quality'];
-const beddingColors = ['White', 'Black', 'Grey', 'Blue', 'Pink', 'Green', 'Yellow', 'Red', 'Purple', 'Beige'];
+const beddingColors = [
+  'White',
+  'Black',
+  'Grey',
+  'Blue',
+  'Pink',
+  'Green',
+  'Yellow',
+  'Red',
+  'Purple',
+  'Beige',
+  'Teal',
+  'Emerald',
+  'Ochre',
+  'Gold',
+  'Champagne',
+  'Oyster',
+  'Orange',
+  'Other Colours',
+  'Multi Colours',
+  'Brown'
+];
 
 const rugsMatsSizes = ['Small', 'Medium', 'Large', 'Xlarge', 'Runner'];
-const rugsMatsColors = ['White', 'Black', 'Grey', 'Blue', 'Pink', 'Green', 'Yellow', 'Red', 'Purple', 'Beige', 'Brown', 'Multi'];
+const rugsMatsColors = [
+  'White',
+  'Black',
+  'Grey',
+  'Blue',
+  'Pink',
+  'Green',
+  'Yellow',
+  'Red',
+  'Purple',
+  'Beige',
+  'Teal',
+  'Emerald',
+  'Ochre',
+  'Gold',
+  'Champagne',
+  'Oyster',
+  'Orange',
+  'Other Colours',
+  'Multi Colours',
+  'Brown'
+];
 
 const outdoorSubcategories = [
   'Shop all'
