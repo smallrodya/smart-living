@@ -3,11 +3,23 @@ import { v2 as cloudinary } from 'cloudinary';
 
 export const dynamic = 'force-dynamic';
 
+// Получаем значения переменных окружения
+const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
+const apiKey = process.env.CLOUDINARY_API_KEY;
+const apiSecret = process.env.CLOUDINARY_API_SECRET;
+
+// Логируем значения (без секретных данных)
+console.log('Cloudinary Config:', {
+  cloud_name: cloudName,
+  api_key: apiKey ? '***' : undefined,
+  api_secret: apiSecret ? '***' : undefined
+});
+
 // Конфигурируем Cloudinary
 cloudinary.config({
-  cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
+  cloud_name: cloudName,
+  api_key: apiKey,
+  api_secret: apiSecret,
 });
 
 export async function POST(request: Request) {
@@ -23,11 +35,12 @@ export async function POST(request: Request) {
     }
 
     // Проверяем конфигурацию Cloudinary
-    if (!process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || !process.env.CLOUDINARY_API_KEY || !process.env.CLOUDINARY_API_SECRET) {
+    if (!cloudName || !apiKey || !apiSecret) {
       console.error('Cloudinary configuration missing:', {
-        cloud_name: !!process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
-        api_key: !!process.env.CLOUDINARY_API_KEY,
-        api_secret: !!process.env.CLOUDINARY_API_SECRET
+        cloud_name: !!cloudName,
+        api_key: !!apiKey,
+        api_secret: !!apiSecret,
+        env_vars: Object.keys(process.env).filter(key => key.includes('CLOUDINARY'))
       });
       return NextResponse.json(
         { error: 'Cloudinary configuration is missing' },
