@@ -139,10 +139,6 @@ export default function CribPage() {
     });
   };
 
-  const handleQuickView = (product: Product) => {
-    setQuickViewProduct(product);
-  };
-
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -815,7 +811,7 @@ export default function CribPage() {
                       marginTop: '16px'
                     }}>
                       <button
-                        onClick={() => handleQuickView(product)}
+                        onClick={() => setQuickViewProduct(product)}
                         style={{
                           flex: 1,
                           padding: '12px 24px',
@@ -876,12 +872,10 @@ export default function CribPage() {
       </main>
       <Footer />
       <CookieBanner />
-      {quickViewProduct && (
-        <QuickViewModal
-          product={quickViewProduct}
-          onClose={() => setQuickViewProduct(null)}
-        />
-      )}
+      <QuickViewModal 
+        product={quickViewProduct} 
+        onClose={() => setQuickViewProduct(null)} 
+      />
       <style jsx global>{`
         @keyframes slideDown {
           from {

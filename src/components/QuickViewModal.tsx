@@ -45,7 +45,7 @@ interface Product {
     sku?: string;
     stock?: number;
   }[];
-  isClearance?: boolean;
+  rugsMatsColors?: string[];
   clearanceDiscount?: number;
 }
 
@@ -72,22 +72,22 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
     let sku = '';
     let stock = 0;
 
-    if (product.beddingSizes) {
+    if (product.category === 'RUGS & MATS') {
+      const size = product.rugsMatsSizes?.find(s => s.size === selectedSize);
+      if (size) {
+        price = size.salePrice;
+        sku = size.sku || `${product.sku}-${selectedSize}`;
+        stock = size.stock || 0;
+      }
+    } else if (product.category === 'THROWS & TOWELS') {
+      const size = product.throwsTowelsStylePrices?.find(s => s.size === selectedSize);
+      if (size) {
+        price = size.salePrice;
+        sku = size.sku;
+        stock = size.stock;
+      }
+    } else if (product.beddingSizes) {
       const size = product.beddingSizes.find(s => s.size === selectedSize);
-      if (size) {
-        price = size.salePrice;
-        sku = size.sku || `${product.sku}-${selectedSize}`;
-        stock = size.stock || 0;
-      }
-    } else if (product.throwsTowelsStylePrices) {
-      const size = product.throwsTowelsStylePrices.find(s => s.size === selectedSize);
-      if (size) {
-        price = size.salePrice;
-        sku = size.sku || `${product.sku}-${selectedSize}`;
-        stock = size.stock || 0;
-      }
-    } else if (product.rugsMatsSizes) {
-      const size = product.rugsMatsSizes.find(s => s.size === selectedSize);
       if (size) {
         price = size.salePrice;
         sku = size.sku || `${product.sku}-${selectedSize}`;
@@ -109,6 +109,8 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
       });
       toast.success('Product added to cart');
       onClose();
+    } else {
+      toast.error('Unable to add product to cart. Please try again.');
     }
   };
 
@@ -121,18 +123,47 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
   };
 
   const formatPriceRange = (product: Product) => {
-    if (product.beddingSizes && product.beddingSizes.length > 0) {
-      const prices = product.beddingSizes.map(size => size.salePrice);
+    if (product.category === 'THROWS & TOWELS') {
+      if (!product.throwsTowelsStylePrices || product.throwsTowelsStylePrices.length === 0) return '£0.00';
+      const prices = product.throwsTowelsStylePrices.map(style => {
+        if (product.clearanceDiscount) {
+          const discountedPrice = style.salePrice * (1 - product.clearanceDiscount / 100);
+          return discountedPrice;
+        }
+        return style.salePrice;
+      });
       const min = Math.min(...prices);
       const max = Math.max(...prices);
       return min === max ? formatPrice(min) : `${formatPrice(min)} - ${formatPrice(max)}`;
-    } else if (product.throwsTowelsStylePrices && product.throwsTowelsStylePrices.length > 0) {
+    }
+
+    if (!product.beddingSizes || product.beddingSizes.length === 0) return '£0.00';
+    const prices = product.beddingSizes.map(size => {
+      if (product.clearanceDiscount) {
+        const discountedPrice = size.salePrice * (1 - product.clearanceDiscount / 100);
+        return discountedPrice;
+      }
+      return size.salePrice;
+    });
+    const min = Math.min(...prices);
+    const max = Math.max(...prices);
+    return min === max ? formatPrice(min) : `${formatPrice(min)} - ${formatPrice(max)}`;
+  };
+
+  const getOriginalPriceRange = (product: Product) => {
+    if (product.category === 'THROWS & TOWELS') {
+      if (!product.throwsTowelsStylePrices || product.throwsTowelsStylePrices.length === 0) return '£0.00';
       const prices = product.throwsTowelsStylePrices.map(style => style.salePrice);
       const min = Math.min(...prices);
       const max = Math.max(...prices);
       return min === max ? formatPrice(min) : `${formatPrice(min)} - ${formatPrice(max)}`;
     }
-    return '£0.00';
+
+    if (!product.beddingSizes || product.beddingSizes.length === 0) return '£0.00';
+    const prices = product.beddingSizes.map(size => size.salePrice);
+    const min = Math.min(...prices);
+    const max = Math.max(...prices);
+    return min === max ? formatPrice(min) : `${formatPrice(min)} - ${formatPrice(max)}`;
   };
 
   const handleSizeSelect = (size: string) => {
@@ -428,6 +459,7 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
               {product.title}
             </h2>
 
+            {/* Price display */}
             <div style={{
               color: '#e53935',
               fontWeight: 700,
@@ -437,15 +469,20 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
               alignItems: 'center',
               gap: '12px'
             }}>
-              {product.discount || product.isClearance ? (
+              {product.clearanceDiscount ? (
                 <>
-                  {formatPriceRange(product)}
                   <span style={{
                     color: '#999',
                     textDecoration: 'line-through',
                     fontSize: '20px'
                   }}>
-                    {formatPriceRange({ ...product, discount: undefined, isClearance: false })}
+                    {getOriginalPriceRange(product)}
+                  </span>
+                  <span style={{
+                    color: '#e53935',
+                    fontSize: '28px'
+                  }}>
+                    {formatPriceRange(product)}
                   </span>
                   <span style={{
                     background: '#e53935',
@@ -455,7 +492,7 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
                     fontSize: '14px',
                     fontWeight: 600
                   }}>
-                    {product.discount ? `-${product.discount}%` : product.clearanceDiscount ? `-${product.clearanceDiscount}%` : ''} OFF
+                    {product.clearanceDiscount}% OFF
                   </span>
                 </>
               ) : (
@@ -881,7 +918,7 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
             )}
 
             {/* Colors */}
-            {(product.beddingColors || product.throwsTowelsColors) && (
+            {(product.beddingColors || product.throwsTowelsColors || product.rugsMatsColors) && (
               <div style={{ marginBottom: '24px' }}>
                 <h3 style={{
                   fontSize: '18px',
@@ -913,6 +950,22 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
                     </div>
                   ))}
                   {product.throwsTowelsColors?.map((color, index) => (
+                    <div
+                      key={index}
+                      style={{
+                        padding: '8px 16px',
+                        borderRadius: '6px',
+                        border: '1px solid #eee',
+                        background: '#f8f9fa',
+                        color: '#444',
+                        fontSize: '14px',
+                        fontWeight: 500
+                      }}
+                    >
+                      {color}
+                    </div>
+                  ))}
+                  {product.rugsMatsColors?.map((color, index) => (
                     <div
                       key={index}
                       style={{

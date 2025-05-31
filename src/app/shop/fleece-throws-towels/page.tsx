@@ -142,10 +142,6 @@ export default function FleeceThrowsTowelsPage() {
     });
   };
 
-  const handleQuickView = (product: Product) => {
-    setQuickViewProduct(product);
-  };
-
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -749,7 +745,7 @@ export default function FleeceThrowsTowelsPage() {
                       marginTop: '16px'
                     }}>
                       <button
-                        onClick={() => {/* Add to basket logic */}}
+                        onClick={() => setQuickViewProduct(product)}
                         style={{
                           flex: 1,
                           padding: '12px 24px',
@@ -785,16 +781,9 @@ export default function FleeceThrowsTowelsPage() {
                           strokeLinecap="round"
                           strokeLinejoin="round"
                         >
-                          <circle cx="9" cy="21" r="1"/>
-                          <circle cx="20" cy="21" r="1"/>
-                          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+                          <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                          <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
                         </svg>
-                        Add to Cart
-                      </button>
-                      <button
-                        onClick={() => handleQuickView(product)}
-                        className="w-full bg-black text-white py-3 px-4 rounded-md hover:bg-gray-800 transition-colors duration-300"
-                      >
                         View
                       </button>
                     </div>
@@ -817,12 +806,10 @@ export default function FleeceThrowsTowelsPage() {
       </main>
       <Footer />
       <CookieBanner />
-      {quickViewProduct && (
-        <QuickViewModal
-          product={quickViewProduct}
-          onClose={() => setQuickViewProduct(null)}
-        />
-      )}
+      <QuickViewModal 
+        product={quickViewProduct} 
+        onClose={() => setQuickViewProduct(null)} 
+      />
       <style jsx global>{`
         @keyframes slideDown {
           from {

@@ -144,10 +144,6 @@ export default function ReversibleRugsPage() {
     });
   };
 
-  const handleQuickView = (product: Product) => {
-    setQuickViewProduct(product);
-  };
-
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -752,7 +748,7 @@ export default function ReversibleRugsPage() {
                       marginTop: '16px'
                     }}>
                       <button
-                        onClick={() => handleQuickView(product)}
+                        onClick={() => setQuickViewProduct(product)}
                         style={{
                           flex: 1,
                           padding: '12px 24px',
