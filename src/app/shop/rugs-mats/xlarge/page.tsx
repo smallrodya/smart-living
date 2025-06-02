@@ -17,7 +17,13 @@ interface Product {
   category: string;
   subcategory: string;
   sku: string;
-  rugsMatsSizes: Array<{ size: string; regularPrice: number; salePrice: number; sku: string; stock: number }>;
+  rugsMatsSizes: Array<{ 
+    size: string; 
+    price: number; 
+    salePrice: number; 
+    sku?: string; 
+    stock?: number 
+  }>;
   rugsMatsColors: string[];
   rugsMatsType: 'RUGS' | 'MATS';
   images?: string[];
@@ -73,7 +79,7 @@ export default function XLargeRugsMatsPage() {
   const formatPriceRange = (product: Product) => {
     const xlargeSize = product.rugsMatsSizes?.find(s => s.size === 'Xlarge');
     if (!xlargeSize) return '£0.00';
-    return xlargeSize.salePrice ? formatPrice(xlargeSize.salePrice) : formatPrice(xlargeSize.regularPrice);
+    return xlargeSize.salePrice ? formatPrice(xlargeSize.salePrice) : formatPrice(xlargeSize.price);
   };
 
   const filteredProducts = products.filter(product => {
@@ -81,7 +87,7 @@ export default function XLargeRugsMatsPage() {
     const matchesColor = !selectedColor || product.rugsMatsColors?.includes(selectedColor);
     const xlargeSize = product.rugsMatsSizes?.find(s => s.size === 'Xlarge');
     const [minPrice, maxPrice] = priceRange;
-    const productPrice = xlargeSize?.salePrice || xlargeSize?.regularPrice || 0;
+    const productPrice = xlargeSize?.salePrice || xlargeSize?.price || 0;
     return matchesType && matchesColor && productPrice >= minPrice && productPrice <= maxPrice;
   });
 

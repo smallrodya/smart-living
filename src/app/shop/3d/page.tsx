@@ -160,7 +160,7 @@ export default function ThreeDPage() {
           marginBottom: '60px'
         }}>
           <Image
-            src="/3d-sweet-pug.jpg"
+            src="/3d-lion.jpg"
             alt="3D Bedding"
             fill
             style={{

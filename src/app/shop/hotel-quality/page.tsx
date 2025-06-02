@@ -160,7 +160,7 @@ export default function HotelQualityPage() {
           marginBottom: '60px'
         }}>
           <Image
-            src="/hotel-quality-duvet107.jpg"
+            src="/HotelQualityBedding.jpg"
             alt="Hotel Quality Bedding"
             fill
             style={{

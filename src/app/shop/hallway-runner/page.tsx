@@ -165,7 +165,7 @@ export default function HallwayRunnerPage() {
           marginBottom: '60px'
         }}>
           <Image
-            src="/hallway-runner.jpg"
+            src="/HallwayRunner.jpg"
             alt="Hallway Runner Category"
             fill
             style={{

@@ -170,7 +170,7 @@ export default function DuvetSetPage() {
           marginBottom: '60px'
         }}>
           <Image
-            src="/printed-duvet107.jpg"
+            src="/SHOPDUVET.jpg"
             alt="Duvet Cover Sets"
             fill
             style={{

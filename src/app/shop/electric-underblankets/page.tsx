@@ -160,7 +160,7 @@ export default function ElectricUnderblanketsPage() {
           marginBottom: '60px'
         }}>
           <Image
-            src="/electric-underblankets.jpg"
+            src="/ElectricUnderblankets.jpg"
             alt="Electric Underblankets"
             fill
             style={{

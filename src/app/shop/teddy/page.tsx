@@ -160,7 +160,7 @@ export default function TeddyPage() {
           marginBottom: '60px'
         }}>
           <Image
-            src="/teddy-duvet107.jpg"
+            src="/TeddyBedding.jpg"
             alt="Teddy Bedding"
             fill
             style={{

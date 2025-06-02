@@ -174,7 +174,7 @@ export default function PlainThrowsTowelsPage() {
           marginBottom: '60px'
         }}>
           <Image
-            src="/plain-throws-towels.jpg"
+            src="/plain-throws-towels1.jpg"
             alt="Plain Throws & Towels"
             fill
             style={{

@@ -160,7 +160,7 @@ export default function KidsBeddingPage() {
           marginBottom: '60px'
         }}>
           <Image
-            src="/kids-bedding.jpg"
+            src="/Out-Of-Space.jpg"
             alt="Kids Bedding"
             fill
             style={{

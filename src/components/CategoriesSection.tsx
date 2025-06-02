@@ -215,20 +215,20 @@ const megaMenus: MegaMenu[] = [
       {
         title: 'CATEGORY',
         items: [
-          { label: "Men's", href: '/shop/clothing/men' },
-          { label: "Women's", href: '/shop/clothing/women' },
-          { label: "Kid's", href: '/shop/clothing/kids' },
+          { label: "Men's", href: '/shop/clothing-men' },
+          { label: "Women's", href: '/shop/clothing-women' },
+          { label: "Kid's", href: '/shop/clothing-kids' },
         ],
       },
       {
         title: 'STYLE',
         items: [
-          { label: 'Jeans', href: '/shop/clothing/jeans' },
-          { label: 'Joggers', href: '/shop/clothing/joggers' },
-          { label: 'Hoodies', href: '/shop/clothing/hoodies' },
-          { label: 'Polo Shirts', href: '/shop/clothing/polo-shirts' },
-          { label: 'Loungewear', href: '/shop/clothing/loungewear' },
-          { label: 'Bathrobes', href: '/shop/clothing/bathrobes' },
+          { label: 'Jeans', href: '/shop/clothing-jeans' },
+          { label: 'Joggers', href: '/shop/clothing-joggers' },
+          { label: 'Hoodies', href: '/shop/clothing-hoodies' },
+          { label: 'Polo Shirts', href: '/shop/clothing-polo-shirts' },
+          { label: 'Loungewear', href: '/shop/clothing-loungewear' },
+          { label: 'Bathrobes', href: '/shop/clothing-bathrobes' },
         ],
       },
       {
@@ -258,22 +258,22 @@ const megaMenus: MegaMenu[] = [
       {
         title: 'CATEGORY',
         items: [
-          { label: 'Booties', href: '/shop/footwear/booties' },
-          { label: 'Slippers', href: '/shop/footwear/slippers' },
-          { label: 'Socks', href: '/shop/footwear/socks' },
+          { label: 'Booties', href: '/shop/footwear-booties' },
+          { label: 'Slippers', href: '/shop/footwear-slippers' },
+          { label: 'Socks', href: '/shop/footwear-socks' },
         ],
       },
       {
         title: 'SIZE',
         items: [
-          { label: 'UK 3-4', href: '/shop/footwear/uk-3-4' },
-          { label: 'UK 5-6', href: '/shop/footwear/uk-5-6' },
-          { label: 'UK 7-8', href: '/shop/footwear/uk-7-8' },
-          { label: 'UK 9-10', href: '/shop/footwear/uk-9-10' },
-          { label: 'UK 11-12', href: '/shop/footwear/uk-11-12' },
-          { label: 'Small', href: '/shop/footwear/small' },
-          { label: 'Medium', href: '/shop/footwear/medium' },
-          { label: 'Large', href: '/shop/footwear/large' },
+          { label: 'UK 3-4', href: '/shop/footwear-uk-3-4' },
+          { label: 'UK 5-6', href: '/shop/footwear-uk-5-6' },
+          { label: 'UK 7-8', href: '/shop/footwear-uk-7-8' },
+          { label: 'UK 9-10', href: '/shop/footwear-uk-9-10' },
+          { label: 'UK 11-12', href: '/shop/footwear-uk-11-12' },
+          { label: 'Small', href: '/shop/footwear-small' },
+          { label: 'Medium', href: '/shop/footwear-medium' },
+          { label: 'Large', href: '/shop/footwear-large' },
         ],
       },
       {

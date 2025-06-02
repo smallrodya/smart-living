@@ -160,7 +160,7 @@ export default function PlainPage() {
           marginBottom: '60px'
         }}>
           <Image
-            src="/plain-duvet107.jpg"
+            src="/PlainBedding.jpg"
             alt="Plain Bedding"
             fill
             style={{

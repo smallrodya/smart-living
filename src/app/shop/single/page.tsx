@@ -160,7 +160,7 @@ export default function SinglePage() {
           marginBottom: '60px'
         }}>
           <Image
-            src="/single-duvet107.jpg"
+            src="/SingleSizeBedding.jpg"
             alt="Single Size Bedding"
             fill
             style={{

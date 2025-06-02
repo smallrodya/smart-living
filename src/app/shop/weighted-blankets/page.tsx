@@ -169,7 +169,7 @@ export default function WeightedBlanketsPage() {
           marginBottom: '60px'
         }}>
           <Image
-            src="/images/weighted-blankets-banner.jpg"
+            src="/Weighted_Blankets.jpg"
             alt="Weighted Blankets"
             fill
             style={{

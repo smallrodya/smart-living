@@ -266,11 +266,7 @@ export default function ProductsPage() {
         if (!sizes) return;
         sizes.forEach((size: any) => {
           if (size.sku) {
-            if (allSkus.has(size.sku)) {
-              duplicateSkus.add(size.sku);
-            } else {
-              allSkus.add(size.sku);
-            }
+            allSkus.add(size.sku);
           }
         });
       };
@@ -280,9 +276,15 @@ export default function ProductsPage() {
       collectSkus(p.throwsTowelsStylePrices);
       collectSkus(p.curtainsSizes);
       collectSkus(p.footwearSizes);
+      collectSkus(p.clothingStylePrices);
+
+      // Добавляем проверку SKU для OUTDOOR
+      if (p.outdoorPrice && p.outdoorPrice.sku) {
+        allSkus.add(p.outdoorPrice.sku);
+      }
     });
 
-    // Проверяем SKU нового продукта
+    // Проверяем SKU редактируемого/нового продукта
     const checkProductSkus = (sizes: any[]) => {
       if (!sizes) return;
       sizes.forEach((size: any) => {
@@ -299,6 +301,17 @@ export default function ProductsPage() {
     checkProductSkus(product.throwsTowelsStylePrices);
     checkProductSkus(product.curtainsSizes);
     checkProductSkus(product.footwearSizes);
+    checkProductSkus(product.clothingStylePrices);
+
+    // Добавляем проверку SKU для OUTDOOR в редактируемом/новом продукте
+    if (product.outdoorPrice && product.outdoorPrice.sku) {
+      // При редактировании пропускаем проверку текущего SKU
+      if (!isEditing || product.outdoorPrice.sku !== products.find(p => p._id === currentProductId)?.outdoorPrice?.sku) {
+        if (allSkus.has(product.outdoorPrice.sku)) {
+          duplicateSkus.add(product.outdoorPrice.sku);
+        }
+      }
+    }
 
     if (duplicateSkus.size > 0) {
       return {
@@ -381,6 +394,7 @@ export default function ProductsPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
           {sizes.map((size, index) => {
             const discountedPrice = size.salePrice;
+            const regularPrice = size.regularPrice || size.price;
             return (
               <div key={index} className="bg-gray-50 p-2 rounded">
                 <div className="flex justify-between items-center">
@@ -390,7 +404,7 @@ export default function ProductsPage() {
                 <div className="flex justify-between items-center mt-1">
                   <span className="text-sm text-gray-600">Stock: {size.stock || 0}</span>
                   <div className="text-sm">
-                    <span className="text-gray-500 line-through mr-2">£{size.regularPrice}</span>
+                    <span className="text-gray-500 line-through mr-2">£{regularPrice}</span>
                     <span className="text-green-600 font-medium">£{discountedPrice.toFixed(2)}</span>
                   </div>
                 </div>
@@ -678,6 +692,8 @@ export default function ProductsPage() {
                                 {product.beddingSizes && renderProductSizes(product.beddingSizes)}
                                 {product.rugsMatsSizes && renderProductSizes(product.rugsMatsSizes)}
                                 {product.throwsTowelsStylePrices && renderProductSizes(product.throwsTowelsStylePrices)}
+                                {product.clothingStylePrices && renderProductSizes(product.clothingStylePrices)}
+                                {product.footwearSizes && renderProductSizes(product.footwearSizes)}
 
                                 {/* Styles */}
                                 {product.beddingStyles && product.beddingStyles.length > 0 && (
@@ -719,6 +735,40 @@ export default function ProductsPage() {
                                     <h4 className="text-sm font-medium text-gray-700 mb-1">Colors:</h4>
                                     <div className="flex flex-wrap gap-2">
                                       {product.beddingColors.map((color: string, index: number) => (
+                                        <span
+                                          key={index}
+                                          className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-sm"
+                                        >
+                                          {color}
+                                        </span>
+                                      ))}
+                                    </div>
+                                  </div>
+                                )}
+
+                                {/* Clothing Colors */}
+                                {product.category === 'CLOTHING' && product.clothingColors && product.clothingColors.length > 0 && (
+                                  <div>
+                                    <h4 className="text-sm font-medium text-gray-700 mb-1">Available Colors:</h4>
+                                    <div className="flex flex-wrap gap-2">
+                                      {product.clothingColors.map((color: string, index: number) => (
+                                        <span
+                                          key={index}
+                                          className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-sm"
+                                        >
+                                          {color}
+                                        </span>
+                                      ))}
+                                    </div>
+                                  </div>
+                                )}
+
+                                {/* Footwear Colors */}
+                                {product.category === 'FOOTWEAR' && product.footwearColors && product.footwearColors.length > 0 && (
+                                  <div>
+                                    <h4 className="text-sm font-medium text-gray-700 mb-1">Available Colors:</h4>
+                                    <div className="flex flex-wrap gap-2">
+                                      {product.footwearColors.map((color: string, index: number) => (
                                         <span
                                           key={index}
                                           className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-sm"

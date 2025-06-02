@@ -11,6 +11,14 @@ interface BeddingSize {
   stock?: number;
 }
 
+interface FootwearSize {
+  size: string;
+  regularPrice: number;
+  salePrice: number;
+  sku: string;
+  stock: number;
+}
+
 interface TowelSize {
   size: string;
   regularPrice: number;
@@ -54,6 +62,16 @@ interface Product {
     stock: number;
   };
   outdoorColors?: string[];
+  clothingStylePrices?: {
+    size: string;
+    regularPrice: number;
+    salePrice: number;
+    sku: string;
+    stock: number;
+  }[];
+  clothingStyles?: string[];
+  clothingColors?: string[];
+  footwearSizes?: FootwearSize[];
 }
 
 interface QuickViewModalProps {
@@ -90,6 +108,64 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
         quantity: 1,
         stock: product.outdoorPrice.stock,
         size: 'One Size'
+      });
+      toast.success('Product added to cart');
+      onClose();
+    } else if (product.category === 'FOOTWEAR') {
+      if (!selectedSize) {
+        toast.error('Please select a size');
+        return;
+      }
+
+      const size = product.footwearSizes?.find(s => s.size === selectedSize);
+      if (!size) {
+        toast.error('Selected size not found');
+        return;
+      }
+
+      const price = product.discount 
+        ? size.salePrice * (1 - product.discount / 100)
+        : size.salePrice;
+
+      addItem({
+        id: `${product._id}-${selectedSize}`,
+        title: product.title,
+        size: selectedSize,
+        price,
+        image: product.images?.[0] || '/placeholder.jpg',
+        category: product.category,
+        sku: size.sku,
+        quantity: 1,
+        stock: size.stock
+      });
+      toast.success('Product added to cart');
+      onClose();
+    } else if (product.category === 'CLOTHING') {
+      if (!selectedSize) {
+        toast.error('Please select a style');
+        return;
+      }
+
+      const style = product.clothingStylePrices?.find(s => s.size === selectedSize);
+      if (!style) {
+        toast.error('Selected style not found');
+        return;
+      }
+
+      const price = product.discount 
+        ? style.salePrice * (1 - product.discount / 100)
+        : style.salePrice;
+
+      addItem({
+        id: `${product._id}-${selectedSize}`,
+        title: product.title,
+        size: selectedSize,
+        price,
+        image: product.images?.[0] || '/placeholder.jpg',
+        category: product.category,
+        sku: style.sku,
+        quantity: 1,
+        stock: style.stock
       });
       toast.success('Product added to cart');
       onClose();
@@ -163,9 +239,36 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
   };
 
   const formatPriceRange = (product: Product) => {
+    if (product.category === 'FOOTWEAR') {
+      if (!product.footwearSizes || product.footwearSizes.length === 0) return '£0.00';
+      const prices = product.footwearSizes.map(size => {
+        if (product.discount) {
+          return size.salePrice * (1 - product.discount / 100);
+        }
+        return size.salePrice;
+      });
+      const min = Math.min(...prices);
+      const max = Math.max(...prices);
+      return min === max ? formatPrice(min) : `${formatPrice(min)} - ${formatPrice(max)}`;
+    }
+
     if (product.category === 'THROWS & TOWELS') {
       if (!product.throwsTowelsStylePrices || product.throwsTowelsStylePrices.length === 0) return '£0.00';
       const prices = product.throwsTowelsStylePrices.map(style => {
+        if (product.clearanceDiscount) {
+          const discountedPrice = style.salePrice * (1 - product.clearanceDiscount / 100);
+          return discountedPrice;
+        }
+        return style.salePrice;
+      });
+      const min = Math.min(...prices);
+      const max = Math.max(...prices);
+      return min === max ? formatPrice(min) : `${formatPrice(min)} - ${formatPrice(max)}`;
+    }
+
+    if (product.category === 'CLOTHING') {
+      if (!product.clothingStylePrices || product.clothingStylePrices.length === 0) return '£0.00';
+      const prices = product.clothingStylePrices.map(style => {
         if (product.clearanceDiscount) {
           const discountedPrice = style.salePrice * (1 - product.clearanceDiscount / 100);
           return discountedPrice;
@@ -191,6 +294,14 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
   };
 
   const getOriginalPriceRange = (product: Product) => {
+    if (product.category === 'FOOTWEAR') {
+      if (!product.footwearSizes || product.footwearSizes.length === 0) return '£0.00';
+      const prices = product.footwearSizes.map(size => size.salePrice);
+      const min = Math.min(...prices);
+      const max = Math.max(...prices);
+      return min === max ? formatPrice(min) : `${formatPrice(min)} - ${formatPrice(max)}`;
+    }
+
     if (product.category === 'THROWS & TOWELS') {
       if (!product.throwsTowelsStylePrices || product.throwsTowelsStylePrices.length === 0) return '£0.00';
       const prices = product.throwsTowelsStylePrices.map(style => style.salePrice);
@@ -788,7 +899,7 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
             </div>
 
             {/* Sizes */}
-            {(product.beddingSizes || product.throwsTowelsStylePrices || product.rugsMatsSizes) && (
+            {(product.beddingSizes || product.throwsTowelsStylePrices || product.rugsMatsSizes || product.clothingStylePrices || product.footwearSizes) && (
               <div style={{ marginBottom: '32px' }}>
                 <h3 style={{
                   fontSize: '20px',
@@ -802,14 +913,77 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
                   </svg>
-                  {product.category === 'THROWS & TOWELS' ? 'Available Styles' : 'Available Sizes'}
+                  {product.category === 'THROWS & TOWELS' || product.category === 'CLOTHING' ? 'Available Styles' : 'Available Sizes'}
                 </h3>
                 <div style={{
                   display: 'flex',
                   flexDirection: 'column',
                   gap: '12px'
                 }}>
-                  {product.throwsTowelsStylePrices?.map((style, index) => (
+                  {product.footwearSizes?.map((size, index) => (
+                    <button
+                      key={index}
+                      onClick={() => handleSizeSelect(size.size)}
+                      style={{
+                        padding: '16px 20px',
+                        borderRadius: '12px',
+                        border: '1px solid',
+                        borderColor: selectedSize === size.size ? '#222' : '#eee',
+                        background: selectedSize === size.size ? '#f8f9fa' : 'transparent',
+                        color: '#444',
+                        fontSize: '16px',
+                        fontWeight: 500,
+                        cursor: 'pointer',
+                        transition: 'all 0.2s ease',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        textAlign: 'left',
+                        width: '100%',
+                        boxShadow: selectedSize === size.size ? '0 4px 12px rgba(0,0,0,0.1)' : 'none'
+                      }}
+                      onMouseEnter={(e) => {
+                        if (selectedSize !== size.size) {
+                          e.currentTarget.style.borderColor = '#222';
+                          e.currentTarget.style.background = '#f8f9fa';
+                          e.currentTarget.style.transform = 'translateY(-2px)';
+                          e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.1)';
+                        }
+                      }}
+                      onMouseLeave={(e) => {
+                        if (selectedSize !== size.size) {
+                          e.currentTarget.style.borderColor = '#eee';
+                          e.currentTarget.style.background = 'transparent';
+                          e.currentTarget.style.transform = 'translateY(0)';
+                          e.currentTarget.style.boxShadow = 'none';
+                        }
+                      }}
+                    >
+                      <span>{size.size}</span>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                        <span style={{ color: '#e53935', fontWeight: 600 }}>
+                          {formatPrice(product.discount 
+                            ? size.salePrice * (1 - product.discount / 100)
+                            : size.salePrice)}
+                        </span>
+                        {selectedSize === size.size && (
+                          <svg
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="#222"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          >
+                            <path d="M20 6L9 17l-5-5"/>
+                          </svg>
+                        )}
+                      </div>
+                    </button>
+                  ))}
+                  {product.clothingStylePrices?.map((style, index) => (
                     <button
                       key={index}
                       onClick={() => handleSizeSelect(style.size)}

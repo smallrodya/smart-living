@@ -188,7 +188,7 @@ export default function OutdoorShopPage() {
           marginBottom: '60px'
         }}>
           <Image
-            src="/outdoor-banner.jpg"
+            src="/outdoor-banner1.jpg"
             alt="Outdoor Collection"
             fill
             style={{

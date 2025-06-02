@@ -44,6 +44,7 @@ interface FormData {
   curtainsSizes: SizePrice[];
   curtainsColors: string[];
   // Clothing specific
+  clothingStylePrices: SizePrice[];
   clothingStyles: string[];
   clothingColors: string[];
   // Footwear specific
@@ -343,6 +344,7 @@ export default function AddProductModal({ open, onClose, onProductAdded, validat
     curtainsSizes: [],
     curtainsColors: [],
     // Clothing specific
+    clothingStylePrices: [],
     clothingStyles: [],
     clothingColors: [],
     // Footwear specific
@@ -393,6 +395,22 @@ export default function AddProductModal({ open, onClose, onProductAdded, validat
           return { ...prev, throwsTowelsStylePrices: newSizes };
         }
         return { ...prev, throwsTowelsStylePrices: [...prev.throwsTowelsStylePrices, sizePrice] };
+      } else if (category === 'footwear') {
+        const existingSizeIndex = prev.footwearSizes.findIndex(s => s.size === size);
+        if (existingSizeIndex >= 0) {
+          const newSizes = [...prev.footwearSizes];
+          newSizes[existingSizeIndex] = sizePrice;
+          return { ...prev, footwearSizes: newSizes };
+        }
+        return { ...prev, footwearSizes: [...prev.footwearSizes, sizePrice] };
+      } else if (category === 'clothing') {
+        const existingSizeIndex = prev.clothingStylePrices.findIndex(s => s.size === size);
+        if (existingSizeIndex >= 0) {
+          const newSizes = [...prev.clothingStylePrices];
+          newSizes[existingSizeIndex] = sizePrice;
+          return { ...prev, clothingStylePrices: newSizes };
+        }
+        return { ...prev, clothingStylePrices: [...prev.clothingStylePrices, sizePrice] };
       }
       return prev;
     });
@@ -453,7 +471,8 @@ export default function AddProductModal({ open, onClose, onProductAdded, validat
         price: getPriceRange(formData.beddingSizes) || 
                getPriceRange(formData.rugsMatsSizes) || 
                getPriceRange(formData.curtainsSizes) || 
-               getPriceRange(formData.footwearSizes) || 
+               getPriceRange(formData.footwearSizes) ||
+               getPriceRange(formData.clothingStylePrices) ||
                formData.price
       };
 
@@ -537,6 +556,16 @@ export default function AddProductModal({ open, onClose, onProductAdded, validat
           ...prev,
           throwsTowelsStylePrices: prev.throwsTowelsStylePrices.filter(s => s.size !== size)
         };
+      } else if (category === 'footwear') {
+        return {
+          ...prev,
+          footwearSizes: prev.footwearSizes.filter(s => s.size !== size)
+        };
+      } else if (category === 'clothing') {
+        return {
+          ...prev,
+          clothingStylePrices: prev.clothingStylePrices.filter(s => s.size !== size)
+        };
       }
       return prev;
     });
@@ -556,6 +585,44 @@ export default function AddProductModal({ open, onClose, onProductAdded, validat
         };
       }
       return prev;
+    });
+  };
+
+  const handleClothingStylePriceChange = (style: string, regularPrice: number, salePrice: number, sku: string, stock: number) => {
+    const stylePrice: SizePrice = { size: style, regularPrice, salePrice, sku, stock };
+    
+    setFormData(prev => {
+      const existingStyleIndex = prev.clothingStylePrices.findIndex(s => s.size === style);
+      let newStyles = [...prev.clothingStylePrices];
+      
+      if (existingStyleIndex >= 0) {
+        newStyles[existingStyleIndex] = stylePrice;
+      } else {
+        newStyles = [...newStyles, stylePrice];
+      }
+      
+      // Обновляем массив clothingStyles на основе clothingStylePrices
+      const styles = newStyles.map(s => s.size);
+      
+      return { 
+        ...prev, 
+        clothingStylePrices: newStyles,
+        clothingStyles: styles
+      };
+    });
+  };
+
+  const removeClothingStyle = (style: string) => {
+    setFormData(prev => {
+      const newStylePrices = prev.clothingStylePrices.filter(s => s.size !== style);
+      // Обновляем массив clothingStyles на основе оставшихся clothingStylePrices
+      const styles = newStylePrices.map(s => s.size);
+      
+      return {
+        ...prev,
+        clothingStylePrices: newStylePrices,
+        clothingStyles: styles
+      };
     });
   };
 
@@ -1324,72 +1391,136 @@ export default function AddProductModal({ open, onClose, onProductAdded, validat
           )}
 
           {formData.category === 'CLOTHING' && (
-            <>
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Subcategory</label>
-                <select
-                  value={formData.subcategory}
-                  onChange={(e) => setFormData(prev => ({ ...prev, subcategory: e.target.value }))}
-                  className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
-                  required
-                >
-                  <option value="">Select a subcategory</option>
-                  {clothingSubcategories.map(subcategory => (
-                    <option key={subcategory} value={subcategory}>{subcategory}</option>
-                  ))}
-                </select>
-              </div>
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Styles</label>
-                <div className="flex flex-wrap gap-3">
-                  {clothingStyles.map(style => (
-                    <label key={style} className={`inline-flex items-center px-4 py-2 rounded-full bg-white border transition-all cursor-pointer ${
-                      formData.clothingStyles.includes(style) 
-                        ? 'border-red-500 text-red-500' 
-                        : 'border-gray-300 hover:border-gray-400 text-gray-700'
-                    }`}>
-                      <input
-                        type="checkbox"
-                        checked={formData.clothingStyles.includes(style)}
-                        onChange={(e) => {
-                          const newStyles = e.target.checked
-                            ? [...formData.clothingStyles, style]
-                            : formData.clothingStyles.filter(s => s !== style);
-                          setFormData(prev => ({ ...prev, clothingStyles: newStyles }));
-                        }}
-                        className="hidden"
-                      />
-                      <span className={`${formData.clothingStyles.includes(style) ? 'text-indigo-600' : 'text-gray-700'}`}>{style}</span>
-                    </label>
-                  ))}
+            <div className="bg-gray-50 p-6 rounded-xl space-y-6">
+              <h3 className="text-lg font-semibold text-gray-900">Clothing Details</h3>
+              <div className="grid grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Subcategory</label>
+                  <select
+                    value={formData.subcategory}
+                    onChange={(e) => setFormData(prev => ({ ...prev, subcategory: e.target.value }))}
+                    className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                    required
+                  >
+                    <option value="">Select a subcategory</option>
+                    {clothingSubcategories.map(subcategory => (
+                      <option key={subcategory} value={subcategory}>{subcategory}</option>
+                    ))}
+                  </select>
                 </div>
               </div>
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Colors</label>
-                <div className="flex flex-wrap gap-3">
-                  {clothingColors.map(color => (
-                    <label key={color} className={`inline-flex items-center px-4 py-2 rounded-full bg-white border transition-all cursor-pointer ${
-                      formData.clothingColors.includes(color) 
-                        ? 'border-red-500 text-red-500' 
-                        : 'border-gray-300 hover:border-gray-400 text-gray-700'
-                    }`}>
-                      <input
-                        type="checkbox"
-                        checked={formData.clothingColors.includes(color)}
-                        onChange={(e) => {
-                          const newColors = e.target.checked
-                            ? [...formData.clothingColors, color]
-                            : formData.clothingColors.filter(c => c !== color);
-                          setFormData(prev => ({ ...prev, clothingColors: newColors }));
-                        }}
-                        className="hidden"
-                      />
-                      <span className={`${formData.clothingColors.includes(color) ? 'text-indigo-600' : 'text-gray-700'}`}>{color}</span>
-                    </label>
-                  ))}
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Styles and Prices</label>
+                  <div className="space-y-3">
+                    {clothingStyles.map(style => {
+                      const stylePrice = formData.clothingStylePrices.find(s => s.size === style);
+                      return (
+                        <div key={style} className="flex items-center gap-3">
+                          <label className={`inline-flex items-center px-4 py-2 rounded-full bg-white border transition-all cursor-pointer ${
+                            stylePrice ? 'border-red-500 text-red-500' : 'border-gray-300 hover:border-gray-400 text-gray-700'
+                          }`}>
+                            <input
+                              type="checkbox"
+                              checked={!!stylePrice}
+                              onChange={(e) => {
+                                if (e.target.checked) {
+                                  handleClothingStylePriceChange(style, 0, 0, '', 0);
+                                } else {
+                                  removeClothingStyle(style);
+                                }
+                              }}
+                              className="hidden"
+                            />
+                            <span>{style}</span>
+                          </label>
+                          {stylePrice && (
+                            <div className="flex items-center gap-2">
+                              <div className="flex flex-col gap-1">
+                                <label className="text-xs text-gray-500">SKU</label>
+                                <input
+                                  type="text"
+                                  value={stylePrice.sku}
+                                  onChange={(e) => handleClothingStylePriceChange(style, stylePrice.regularPrice, stylePrice.salePrice, e.target.value, stylePrice.stock)}
+                                  className="w-32 px-3 py-1 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                                  placeholder="SKU"
+                                />
+                              </div>
+                              <div className="flex flex-col gap-1">
+                                <label className="text-xs text-gray-500">Regular Price</label>
+                                <div className="flex items-center gap-1">
+                                  <input
+                                    type="number"
+                                    value={stylePrice.regularPrice}
+                                    onChange={(e) => handleClothingStylePriceChange(style, parseFloat(e.target.value), stylePrice.salePrice, stylePrice.sku, stylePrice.stock)}
+                                    className="w-24 px-3 py-1 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                                    placeholder="Regular"
+                                    min="0"
+                                    step="0.01"
+                                  />
+                                  <span className="text-gray-500">£</span>
+                                </div>
+                              </div>
+                              <div className="flex flex-col gap-1">
+                                <label className="text-xs text-gray-500">Sale Price</label>
+                                <div className="flex items-center gap-1">
+                                  <input
+                                    type="number"
+                                    value={stylePrice.salePrice}
+                                    onChange={(e) => handleClothingStylePriceChange(style, stylePrice.regularPrice, parseFloat(e.target.value), stylePrice.sku, stylePrice.stock)}
+                                    className="w-24 px-3 py-1 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                                    placeholder="Sale"
+                                    min="0"
+                                    step="0.01"
+                                  />
+                                  <span className="text-gray-500">£</span>
+                                </div>
+                              </div>
+                              <div className="flex flex-col gap-1">
+                                <label className="text-xs text-gray-500">Stock</label>
+                                <input
+                                  type="number"
+                                  value={stylePrice.stock}
+                                  onChange={(e) => handleClothingStylePriceChange(style, stylePrice.regularPrice, stylePrice.salePrice, stylePrice.sku, parseInt(e.target.value) || 0)}
+                                  className="w-20 px-3 py-1 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                                  placeholder="Stock"
+                                  min="0"
+                                />
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Colors</label>
+                  <div className="flex flex-wrap gap-3">
+                    {clothingColors.map(color => (
+                      <label key={color} className={`inline-flex items-center px-4 py-2 rounded-full bg-white border transition-all cursor-pointer ${
+                        formData.clothingColors.includes(color) 
+                          ? 'border-red-500 text-red-500' 
+                          : 'border-gray-300 hover:border-gray-400 text-gray-700'
+                      }`}>
+                        <input
+                          type="checkbox"
+                          checked={formData.clothingColors.includes(color)}
+                          onChange={(e) => {
+                            const newColors = e.target.checked
+                              ? [...formData.clothingColors, color]
+                              : formData.clothingColors.filter(c => c !== color);
+                            setFormData(prev => ({ ...prev, clothingColors: newColors }));
+                          }}
+                          className="hidden"
+                        />
+                        <span>{color}</span>
+                      </label>
+                    ))}
+                  </div>
                 </div>
               </div>
-            </>
+            </div>
           )}
 
           {formData.category === 'FOOTWEAR' && (

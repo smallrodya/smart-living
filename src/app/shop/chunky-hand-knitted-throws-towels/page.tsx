@@ -174,7 +174,7 @@ export default function ChunkyHandKnittedThrowsTowelsPage() {
           marginBottom: '60px'
         }}>
           <Image
-            src="/chunky-hand-knitted-throws-towels.jpg"
+            src="/chunky-hand-knitted-throws-towels1.jpg"
             alt="Chunky Hand Knitted Throws & Towels"
             fill
             style={{
