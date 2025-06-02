@@ -71,3 +71,8 @@ section {
   background: #ccc;
   border-radius: 4px;
 }
+
+/* Отступ для контента под header */
+main {
+  padding-top: 30px;
+}
