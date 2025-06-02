@@ -274,43 +274,59 @@ interface FormData {
   // Clearance specific
   isClearance: boolean;
   clearanceDiscount: number;
+  // Outdoor specific
+  outdoorPrice: {
+    sku: string;
+    regularPrice: number;
+    salePrice: number;
+    stock: number;
+  };
+  outdoorColors: string[];
 }
 
 export default function EditProductModal({ open, onClose, product, onProductEdited, validateUniqueSku }: EditProductModalProps) {
   const [formData, setFormData] = useState<FormData>({
-    title: '',
-    description: '',
-    features: '',
-    price: '',
-    category: '',
-    subcategory: '',
-    images: [],
-    isSoldOut: false,
-    isHot: false,
+    title: product?.title || '',
+    description: product?.description || '',
+    features: product?.features || '',
+    price: product?.price || '',
+    category: product?.category || '',
+    subcategory: product?.subcategory || '',
+    images: product?.images || [],
+    isSoldOut: product?.isSoldOut || false,
+    isHot: product?.isHot || false,
     // Bedding specific
-    beddingSizes: [],
-    beddingStyles: [],
-    beddingColors: [],
+    beddingSizes: product?.beddingSizes || [],
+    beddingStyles: product?.beddingStyles || [],
+    beddingColors: product?.beddingColors || [],
     // Rugs & Mats specific
-    rugsMatsType: '',
-    rugsMatsSizes: [],
-    rugsMatsColors: [],
+    rugsMatsType: product?.rugsMatsType || '',
+    rugsMatsSizes: product?.rugsMatsSizes || [],
+    rugsMatsColors: product?.rugsMatsColors || [],
     // Throws & Towels specific
-    throwsTowelsStylePrices: [],
-    throwsTowelsStyles: [],
-    throwsTowelsColors: [],
+    throwsTowelsStylePrices: product?.throwsTowelsStylePrices || [],
+    throwsTowelsStyles: product?.throwsTowelsStyles || [],
+    throwsTowelsColors: product?.throwsTowelsColors || [],
     // Curtains specific
-    curtainsSizes: [],
-    curtainsColors: [],
+    curtainsSizes: product?.curtainsSizes || [],
+    curtainsColors: product?.curtainsColors || [],
     // Clothing specific
-    clothingStyles: [],
-    clothingColors: [],
+    clothingStyles: product?.clothingStyles || [],
+    clothingColors: product?.clothingColors || [],
     // Footwear specific
-    footwearSizes: [],
-    footwearColors: [],
+    footwearSizes: product?.footwearSizes || [],
+    footwearColors: product?.footwearColors || [],
     // Clearance specific
-    isClearance: false,
-    clearanceDiscount: 0
+    isClearance: product?.isClearance || false,
+    clearanceDiscount: product?.clearanceDiscount || 0,
+    // Outdoor specific
+    outdoorPrice: {
+      sku: product?.outdoorPrice?.sku || '',
+      regularPrice: product?.outdoorPrice?.regularPrice || 0,
+      salePrice: product?.outdoorPrice?.salePrice || 0,
+      stock: product?.outdoorPrice?.stock || 0
+    },
+    outdoorColors: product?.outdoorColors || [],
   });
   const [images, setImages] = useState<string[]>([]);
   const [uploading, setUploading] = useState(false);
@@ -369,7 +385,15 @@ export default function EditProductModal({ open, onClose, product, onProductEdit
         footwearColors: product.footwearColors || [],
         // Clearance specific
         isClearance: product.isClearance || false,
-        clearanceDiscount: product.clearanceDiscount || 0
+        clearanceDiscount: product.clearanceDiscount || 0,
+        // Outdoor specific
+        outdoorPrice: {
+          sku: product.outdoorPrice?.sku || '',
+          regularPrice: product.outdoorPrice?.regularPrice || 0,
+          salePrice: product.outdoorPrice?.salePrice || 0,
+          stock: product.outdoorPrice?.stock || 0
+        },
+        outdoorColors: product.outdoorColors || [],
       });
     }
   }, [product]);
@@ -1416,6 +1440,123 @@ export default function EditProductModal({ open, onClose, product, onProductEdit
                               ? [...formData.footwearColors, color]
                               : formData.footwearColors.filter(c => c !== color);
                             setFormData(prev => ({ ...prev, footwearColors: newColors }));
+                          }}
+                          className="hidden"
+                        />
+                        <span>{color}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {formData.category === 'OUTDOOR' && (
+            <div className="bg-gray-50 p-6 rounded-xl space-y-6">
+              <h3 className="text-lg font-semibold text-gray-900">Outdoor Details</h3>
+              <div className="grid grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Subcategory</label>
+                  <select
+                    value={formData.subcategory}
+                    onChange={(e) => setFormData(prev => ({ ...prev, subcategory: e.target.value }))}
+                    className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                    required
+                  >
+                    <option value="">Select a subcategory</option>
+                    {outdoorSubcategories.map(subcategory => (
+                      <option key={subcategory} value={subcategory}>{subcategory}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Product Details</label>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="flex flex-col gap-1">
+                      <label className="text-xs text-gray-500">SKU</label>
+                      <input
+                        type="text"
+                        value={formData.outdoorPrice.sku}
+                        onChange={(e) => setFormData(prev => ({
+                          ...prev,
+                          outdoorPrice: { ...prev.outdoorPrice, sku: e.target.value }
+                        }))}
+                        className="w-full px-3 py-1 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                        placeholder="SKU"
+                      />
+                    </div>
+                    <div className="flex flex-col gap-1">
+                      <label className="text-xs text-gray-500">Regular Price</label>
+                      <div className="flex items-center gap-1">
+                        <input
+                          type="number"
+                          value={formData.outdoorPrice.regularPrice}
+                          onChange={(e) => setFormData(prev => ({
+                            ...prev,
+                            outdoorPrice: { ...prev.outdoorPrice, regularPrice: parseFloat(e.target.value) || 0 }
+                          }))}
+                          className="w-full px-3 py-1 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                          placeholder="Regular"
+                          min="0"
+                          step="0.01"
+                        />
+                        <span className="text-gray-500">£</span>
+                      </div>
+                    </div>
+                    <div className="flex flex-col gap-1">
+                      <label className="text-xs text-gray-500">Sale Price</label>
+                      <div className="flex items-center gap-1">
+                        <input
+                          type="number"
+                          value={formData.outdoorPrice.salePrice}
+                          onChange={(e) => setFormData(prev => ({
+                            ...prev,
+                            outdoorPrice: { ...prev.outdoorPrice, salePrice: parseFloat(e.target.value) || 0 }
+                          }))}
+                          className="w-full px-3 py-1 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                          placeholder="Sale"
+                          min="0"
+                          step="0.01"
+                        />
+                        <span className="text-gray-500">£</span>
+                      </div>
+                    </div>
+                    <div className="flex flex-col gap-1">
+                      <label className="text-xs text-gray-500">Stock</label>
+                      <input
+                        type="number"
+                        value={formData.outdoorPrice.stock}
+                        onChange={(e) => setFormData(prev => ({
+                          ...prev,
+                          outdoorPrice: { ...prev.outdoorPrice, stock: parseInt(e.target.value) || 0 }
+                        }))}
+                        className="w-full px-3 py-1 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                        placeholder="Stock"
+                        min="0"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Colors</label>
+                  <div className="flex flex-wrap gap-3">
+                    {formData.outdoorColors.map(color => (
+                      <label key={color} className={`inline-flex items-center px-4 py-2 rounded-full bg-white border transition-all cursor-pointer ${
+                        formData.outdoorColors.includes(color) 
+                          ? 'border-red-500 text-red-500' 
+                          : 'border-gray-300 hover:border-gray-400 text-gray-700'
+                      }`}>
+                        <input
+                          type="checkbox"
+                          checked={formData.outdoorColors.includes(color)}
+                          onChange={(e) => {
+                            const newColors = e.target.checked
+                              ? [...formData.outdoorColors, color]
+                              : formData.outdoorColors.filter(c => c !== color);
+                            setFormData(prev => ({ ...prev, outdoorColors: newColors }));
                           }}
                           className="hidden"
                         />

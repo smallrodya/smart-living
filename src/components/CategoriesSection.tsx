@@ -6,7 +6,7 @@ import styles from './CategoriesSection.module.css';
 
 interface MenuColumn {
   title?: string;
-  items: Array<{ label: string; href?: string; color?: string; img?: string; description?: string; labelColor?: string }>;
+  items: Array<{ label: string; href?: string; color?: string; img?: string; description?: string; labelColor?: string; style?: React.CSSProperties }>;
 }
 
 interface MegaMenu {
@@ -187,7 +187,7 @@ const megaMenus: MegaMenu[] = [
       {
         title: 'CATEGORY',
         items: [
-          { label: 'Shop all', href: '/category/outdoor/shop-all' },
+          { label: 'Shop all', href: '/shop/outdoorshop-all' },
         ],
       },
       {
@@ -289,7 +289,17 @@ const megaMenus: MegaMenu[] = [
     columns: [
       {
         items: [
-          { label: 'Clearance', href: '/shop/clearance', labelColor: 'red' },
+          { 
+            label: 'Clearance', 
+            href: '/shop/clearance', 
+            labelColor: 'red',
+            style: {
+              textAlign: 'center',
+              fontSize: '14px',
+              fontWeight: 'bold',
+              color: 'red'
+            }
+          },
         ],
       },
     ],
@@ -363,7 +373,7 @@ const CategoriesSection = () => {
                           <ul className={styles.dropdownLinks}>
                             {col.items.map((item, itemIdx) => (
                               <li key={itemIdx} className={styles.dropdownLink}>
-                                <Link href={item.href || '#'} tabIndex={0}>{item.label}</Link>
+                                <Link href={item.href || '#'} tabIndex={0} style={item.style}>{item.label}</Link>
                               </li>
                             ))}
                           </ul>

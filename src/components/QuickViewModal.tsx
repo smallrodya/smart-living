@@ -47,6 +47,13 @@ interface Product {
   }[];
   rugsMatsColors?: string[];
   clearanceDiscount?: number;
+  outdoorPrice?: {
+    sku: string;
+    regularPrice: number;
+    salePrice: number;
+    stock: number;
+  };
+  outdoorColors?: string[];
 }
 
 interface QuickViewModalProps {
@@ -63,54 +70,87 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
   if (!product) return null;
 
   const handleAddToCart = () => {
-    if (!selectedSize) {
-      toast.error('Please select a size');
-      return;
-    }
-
-    let price = 0;
-    let sku = '';
-    let stock = 0;
-
-    if (product.category === 'RUGS & MATS') {
-      const size = product.rugsMatsSizes?.find(s => s.size === selectedSize);
-      if (size) {
-        price = size.salePrice;
-        sku = size.sku || `${product.sku}-${selectedSize}`;
-        stock = size.stock || 0;
+    if (product.category === 'OUTDOOR') {
+      if (!product.outdoorPrice) {
+        toast.error('Product data is incomplete');
+        return;
       }
-    } else if (product.category === 'THROWS & TOWELS') {
-      const size = product.throwsTowelsStylePrices?.find(s => s.size === selectedSize);
-      if (size) {
-        price = size.salePrice;
-        sku = size.sku;
-        stock = size.stock;
-      }
-    } else if (product.beddingSizes) {
-      const size = product.beddingSizes.find(s => s.size === selectedSize);
-      if (size) {
-        price = size.salePrice;
-        sku = size.sku || `${product.sku}-${selectedSize}`;
-        stock = size.stock || 0;
-      }
-    }
 
-    if (price > 0 && product.images && product.images.length > 0) {
+      const price = product.discount 
+        ? product.outdoorPrice.salePrice * (1 - product.discount / 100)
+        : product.outdoorPrice.salePrice;
+
       addItem({
-        id: `${product._id}-${selectedSize}`,
+        id: product._id,
         title: product.title,
-        size: selectedSize,
         price,
-        image: product.images[0],
+        image: product.images?.[0] || '/placeholder.jpg',
         category: product.category,
-        sku,
+        sku: product.outdoorPrice.sku,
         quantity: 1,
-        stock
+        stock: product.outdoorPrice.stock,
+        size: 'One Size'
       });
       toast.success('Product added to cart');
       onClose();
     } else {
-      toast.error('Unable to add product to cart. Please try again.');
+      if (!selectedSize) {
+        toast.error('Please select a style');
+        return;
+      }
+
+      let price = 0;
+      let sku = '';
+      let stock = 0;
+
+      if (product.category === 'RUGS & MATS') {
+        const size = product.rugsMatsSizes?.find(s => s.size === selectedSize);
+        if (size) {
+          price = size.salePrice;
+          sku = size.sku || `${product.sku}-${selectedSize}`;
+          stock = size.stock || 0;
+        }
+      } else if (product.category === 'THROWS & TOWELS') {
+        const style = product.throwsTowelsStylePrices?.find(s => s.size === selectedSize);
+        if (style) {
+          price = product.discount 
+            ? style.salePrice * (1 - product.discount / 100)
+            : style.salePrice;
+          sku = style.sku;
+          stock = style.stock;
+        }
+      } else if (product.beddingSizes) {
+        const size = product.beddingSizes.find(s => s.size === selectedSize);
+        if (size) {
+          price = size.salePrice;
+          sku = size.sku || `${product.sku}-${selectedSize}`;
+          stock = size.stock || 0;
+        }
+      }
+
+      if (price > 0) {
+        addItem({
+          id: `${product._id}-${selectedSize}`,
+          title: product.title,
+          size: selectedSize,
+          price,
+          image: product.images?.[0] || '/placeholder.jpg',
+          category: product.category,
+          sku,
+          quantity: 1,
+          stock
+        });
+        toast.success('Product added to cart');
+        onClose();
+      } else {
+        console.error('Error adding to cart:', {
+          price,
+          selectedSize,
+          product,
+          style: product.throwsTowelsStylePrices?.find(s => s.size === selectedSize)
+        });
+        toast.error('Unable to add product to cart. Please try again.');
+      }
     }
   };
 
@@ -469,34 +509,68 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
               alignItems: 'center',
               gap: '12px'
             }}>
-              {product.clearanceDiscount ? (
+              {product.category === 'OUTDOOR' && product.outdoorPrice ? (
                 <>
-                  <span style={{
-                    color: '#999',
-                    textDecoration: 'line-through',
-                    fontSize: '20px'
-                  }}>
-                    {getOriginalPriceRange(product)}
-                  </span>
-                  <span style={{
-                    color: '#e53935',
-                    fontSize: '28px'
-                  }}>
-                    {formatPriceRange(product)}
-                  </span>
-                  <span style={{
-                    background: '#e53935',
-                    color: '#fff',
-                    padding: '4px 8px',
-                    borderRadius: '4px',
-                    fontSize: '14px',
-                    fontWeight: 600
-                  }}>
-                    {product.clearanceDiscount}% OFF
-                  </span>
+                  {product.discount ? (
+                    <>
+                      <span style={{
+                        color: '#999',
+                        textDecoration: 'line-through',
+                        fontSize: '20px'
+                      }}>
+                        £{product.outdoorPrice.regularPrice.toFixed(2)}
+                      </span>
+                      <span style={{
+                        color: '#e53935',
+                        fontSize: '28px'
+                      }}>
+                        £{product.outdoorPrice.salePrice.toFixed(2)}
+                      </span>
+                      <span style={{
+                        background: '#e53935',
+                        color: '#fff',
+                        padding: '4px 8px',
+                        borderRadius: '4px',
+                        fontSize: '14px',
+                        fontWeight: 600
+                      }}>
+                        {product.discount}% OFF
+                      </span>
+                    </>
+                  ) : (
+                    <span>£{product.outdoorPrice.salePrice.toFixed(2)}</span>
+                  )}
                 </>
               ) : (
-                formatPriceRange(product)
+                product.clearanceDiscount ? (
+                  <>
+                    <span style={{
+                      color: '#999',
+                      textDecoration: 'line-through',
+                      fontSize: '20px'
+                    }}>
+                      {getOriginalPriceRange(product)}
+                    </span>
+                    <span style={{
+                      color: '#e53935',
+                      fontSize: '28px'
+                    }}>
+                      {formatPriceRange(product)}
+                    </span>
+                    <span style={{
+                      background: '#e53935',
+                      color: '#fff',
+                      padding: '4px 8px',
+                      borderRadius: '4px',
+                      fontSize: '14px',
+                      fontWeight: 600
+                    }}>
+                      {product.clearanceDiscount}% OFF
+                    </span>
+                  </>
+                ) : (
+                  formatPriceRange(product)
+                )
               )}
             </div>
 
@@ -728,23 +802,23 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
                   </svg>
-                  Available Sizes
+                  {product.category === 'THROWS & TOWELS' ? 'Available Styles' : 'Available Sizes'}
                 </h3>
                 <div style={{
                   display: 'flex',
                   flexDirection: 'column',
                   gap: '12px'
                 }}>
-                  {product.beddingSizes?.map((size, index) => (
+                  {product.throwsTowelsStylePrices?.map((style, index) => (
                     <button
                       key={index}
-                      onClick={() => handleSizeSelect(size.size)}
+                      onClick={() => handleSizeSelect(style.size)}
                       style={{
                         padding: '16px 20px',
                         borderRadius: '12px',
                         border: '1px solid',
-                        borderColor: selectedSize === size.size ? '#222' : '#eee',
-                        background: selectedSize === size.size ? '#f8f9fa' : 'transparent',
+                        borderColor: selectedSize === style.size ? '#222' : '#eee',
+                        background: selectedSize === style.size ? '#f8f9fa' : 'transparent',
                         color: '#444',
                         fontSize: '16px',
                         fontWeight: 500,
@@ -755,10 +829,10 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
                         justifyContent: 'space-between',
                         textAlign: 'left',
                         width: '100%',
-                        boxShadow: selectedSize === size.size ? '0 4px 12px rgba(0,0,0,0.1)' : 'none'
+                        boxShadow: selectedSize === style.size ? '0 4px 12px rgba(0,0,0,0.1)' : 'none'
                       }}
                       onMouseEnter={(e) => {
-                        if (selectedSize !== size.size) {
+                        if (selectedSize !== style.size) {
                           e.currentTarget.style.borderColor = '#222';
                           e.currentTarget.style.background = '#f8f9fa';
                           e.currentTarget.style.transform = 'translateY(-2px)';
@@ -766,7 +840,7 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
                         }
                       }}
                       onMouseLeave={(e) => {
-                        if (selectedSize !== size.size) {
+                        if (selectedSize !== style.size) {
                           e.currentTarget.style.borderColor = '#eee';
                           e.currentTarget.style.background = 'transparent';
                           e.currentTarget.style.transform = 'translateY(0)';
@@ -774,12 +848,14 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
                         }
                       }}
                     >
-                      <span>{size.size}</span>
+                      <span>{style.size}</span>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                         <span style={{ color: '#e53935', fontWeight: 600 }}>
-                          {formatPrice(size.salePrice)}
+                          {formatPrice(product.discount 
+                            ? style.salePrice * (1 - product.discount / 100)
+                            : style.salePrice)}
                         </span>
-                        {selectedSize === size.size && (
+                        {selectedSize === style.size && (
                           <svg
                             width="24"
                             height="24"
@@ -796,7 +872,7 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
                       </div>
                     </button>
                   ))}
-                  {product.throwsTowelsStylePrices?.map((size, index) => (
+                  {product.beddingSizes?.map((size, index) => (
                     <button
                       key={index}
                       onClick={() => handleSizeSelect(size.size)}
@@ -989,33 +1065,33 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
             {!product.isSoldOut && (
               <button
                 onClick={handleAddToCart}
-                disabled={!selectedSize}
+                disabled={product.category !== 'OUTDOOR' && !selectedSize}
                 style={{
                   width: '100%',
                   padding: '20px',
-                  background: selectedSize ? '#222' : '#ccc',
+                  background: (product.category === 'OUTDOOR' || selectedSize) ? '#222' : '#ccc',
                   color: '#fff',
                   border: 'none',
                   borderRadius: '12px',
                   fontSize: '18px',
                   fontWeight: 600,
-                  cursor: selectedSize ? 'pointer' : 'not-allowed',
+                  cursor: (product.category === 'OUTDOOR' || selectedSize) ? 'pointer' : 'not-allowed',
                   transition: 'all 0.2s ease',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   gap: '12px',
-                  boxShadow: selectedSize ? '0 4px 12px rgba(0,0,0,0.1)' : 'none'
+                  boxShadow: (product.category === 'OUTDOOR' || selectedSize) ? '0 4px 12px rgba(0,0,0,0.1)' : 'none'
                 }}
                 onMouseEnter={(e) => {
-                  if (selectedSize) {
+                  if (product.category === 'OUTDOOR' || selectedSize) {
                     e.currentTarget.style.background = '#333';
                     e.currentTarget.style.transform = 'translateY(-2px)';
                     e.currentTarget.style.boxShadow = '0 6px 16px rgba(0,0,0,0.2)';
                   }
                 }}
                 onMouseLeave={(e) => {
-                  if (selectedSize) {
+                  if (product.category === 'OUTDOOR' || selectedSize) {
                     e.currentTarget.style.background = '#222';
                     e.currentTarget.style.transform = 'translateY(0)';
                     e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.1)';
@@ -1036,7 +1112,7 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
                   <circle cx="20" cy="21" r="1"/>
                   <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
                 </svg>
-                {selectedSize ? 'Add to Cart' : 'Select Size'}
+                {product.category === 'OUTDOOR' ? 'Add to Cart' : (selectedSize ? 'Add to Cart' : 'Select Size')}
               </button>
             )}
           </div>

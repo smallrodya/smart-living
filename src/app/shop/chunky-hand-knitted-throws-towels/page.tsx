@@ -26,7 +26,7 @@ interface Product {
   isHot?: boolean;
 }
 
-export default function FleeceThrowsTowelsPage() {
+export default function ChunkyHandKnittedThrowsTowelsPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedStyle, setSelectedStyle] = useState<string>('');
@@ -62,8 +62,8 @@ export default function FleeceThrowsTowelsPage() {
         });
         
         return product.category === 'THROWS & TOWELS' && 
-               (product.throwsTowelsStyles?.includes('Fleece') || 
-                product.throwsTowelsStylePrices?.some(style => style.size === 'Fleece'));
+               (product.throwsTowelsStyles?.includes('Chunky Hand Knitted') || 
+                product.throwsTowelsStylePrices?.some(style => style.size === 'Chunky Hand Knitted'));
       });
       
       console.log('Отфильтрованные товары:', filteredProducts);
@@ -115,7 +115,7 @@ export default function FleeceThrowsTowelsPage() {
 
   const toggleWishlist = (id: string) => {
     setWishlist(prev => {
-      const prefixedId = `fleece_${id}`;
+      const prefixedId = `chunky_${id}`;
       const newWishlist = prev.includes(prefixedId) 
         ? prev.filter(i => i !== prefixedId)
         : [...prev, prefixedId];
@@ -128,14 +128,14 @@ export default function FleeceThrowsTowelsPage() {
               typeof item === 'object' && 
               'id' in item && 
               typeof item.id === 'string' && 
-              !item.id.startsWith('fleece_')
+              !item.id.startsWith('chunky_')
             )
           : [];
         
         const newItems = products
-          .filter((p) => newWishlist.includes(`fleece_${p._id}`))
+          .filter((p) => newWishlist.includes(`chunky_${p._id}`))
           .map((item) => ({
-            id: `fleece_${item._id}`,
+            id: `chunky_${item._id}`,
             src: item.images?.[0] || '',
             hoverSrc: item.images?.[1] || item.images?.[0] || '',
             title: item.title,
@@ -174,8 +174,8 @@ export default function FleeceThrowsTowelsPage() {
           marginBottom: '60px'
         }}>
           <Image
-            src="/fleece-throws-towels.jpg"
-            alt="Fleece Throws & Towels"
+            src="/chunky-hand-knitted-throws-towels.jpg"
+            alt="Chunky Hand Knitted Throws & Towels"
             fill
             style={{
               objectFit: 'cover',
@@ -250,7 +250,7 @@ export default function FleeceThrowsTowelsPage() {
                 textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
                 lineHeight: '1.2',
                 marginBottom: '20px'
-              }}>Fleece Throws & Towels</h1>
+              }}>Chunky Hand Knitted Throws & Towels</h1>
               <p style={{
                 color: '#fff',
                 fontSize: '24px',
@@ -260,7 +260,7 @@ export default function FleeceThrowsTowelsPage() {
                 margin: '0 auto',
                 lineHeight: '1.5'
               }}>
-                Discover our collection of cozy fleece throws and towels
+                Discover our collection of cozy hand-knitted throws and towels
               </p>
             </div>
           </div>
@@ -638,7 +638,7 @@ export default function FleeceThrowsTowelsPage() {
                       cursor: 'pointer',
                       boxShadow: '0 2px 12px rgba(0,0,0,0.15)',
                       transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                      transform: wishlist.includes(`fleece_${product._id}`) ? 'scale(1.1)' : 'scale(1)',
+                      transform: wishlist.includes(`chunky_${product._id}`) ? 'scale(1.1)' : 'scale(1)',
                       backdropFilter: 'blur(4px)'
                     }}
                   >
@@ -646,7 +646,7 @@ export default function FleeceThrowsTowelsPage() {
                       width="24"
                       height="24"
                       viewBox="0 0 24 24"
-                      fill={wishlist.includes(`fleece_${product._id}`) ? '#e53935' : 'none'}
+                      fill={wishlist.includes(`chunky_${product._id}`) ? '#e53935' : 'none'}
                       stroke="#e53935"
                       strokeWidth="2"
                       strokeLinecap="round"

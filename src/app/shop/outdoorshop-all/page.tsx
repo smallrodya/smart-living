@@ -17,20 +17,28 @@ interface Product {
   category: string;
   subcategory: string;
   sku: string;
-  throwsTowelsStylePrices: Array<{ size: string; regularPrice: number; salePrice: number; sku: string; stock: number }>;
-  throwsTowelsColors: string[];
-  throwsTowelsStyles: string[];
+  beddingSizes: Array<{ size: string; price: number; salePrice: number }>;
+  beddingColors: string[];
+  beddingStyles: string[];
+  outdoorPrice?: {
+    sku: string;
+    stock: number;
+    regularPrice: number;
+    salePrice: number;
+  };
+  outdoorColors?: string[];
   images?: string[];
   discount?: number;
   isSoldOut?: boolean;
   isHot?: boolean;
 }
 
-export default function FleeceThrowsTowelsPage() {
+export default function OutdoorShopPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedStyle, setSelectedStyle] = useState<string>('');
+  const [selectedSize, setSelectedSize] = useState<string>('');
   const [selectedColor, setSelectedColor] = useState<string>('');
+  const [selectedStyle, setSelectedStyle] = useState<string>('');
   const [showFilters, setShowFilters] = useState(false);
   const [hoveredProduct, setHoveredProduct] = useState<string | null>(null);
   const [wishlist, setWishlist] = useState<string[]>([]);
@@ -51,23 +59,10 @@ export default function FleeceThrowsTowelsPage() {
     try {
       const res = await fetch('/api/products');
       const data = await res.json();
-      console.log('Все товары:', data.products);
-      
-      const filteredProducts = data.products.filter((product: Product) => {
-        console.log('Проверяем товар:', {
-          category: product.category,
-          styles: product.throwsTowelsStyles,
-          stylePrices: product.throwsTowelsStylePrices,
-          subcategory: product.subcategory
-        });
-        
-        return product.category === 'THROWS & TOWELS' && 
-               (product.throwsTowelsStyles?.includes('Fleece') || 
-                product.throwsTowelsStylePrices?.some(style => style.size === 'Fleece'));
-      });
-      
-      console.log('Отфильтрованные товары:', filteredProducts);
-      setProducts(filteredProducts);
+      const outdoorProducts = data.products.filter(
+        (product: Product) => product.category === 'OUTDOOR'
+      );
+      setProducts(outdoorProducts);
     } catch (error) {
       console.error('Error fetching products:', error);
     } finally {
@@ -75,47 +70,66 @@ export default function FleeceThrowsTowelsPage() {
     }
   };
 
-  const allStyles = Array.from(new Set(products.flatMap(p => p.throwsTowelsStyles || [])));
-  const allColors = Array.from(new Set(products.flatMap(p => p.throwsTowelsColors || [])));
+  const allSizes = Array.from(new Set(products.flatMap(p => p.beddingSizes?.map(s => s.size) || [])));
+  const allColors = Array.from(new Set(products.flatMap(p => p.beddingColors || [])));
+  const allStyles = Array.from(new Set(products.flatMap(p => p.beddingStyles || [])));
+
+  const getProductPrice = (product: Product) => {
+    if (product.category === 'OUTDOOR' && product.outdoorPrice) {
+      return product.outdoorPrice.salePrice;
+    }
+    if (!product.beddingSizes || product.beddingSizes.length === 0) return 0;
+    return product.beddingSizes[0].salePrice;
+  };
 
   const formatPrice = (price: number) => {
     return `£${price.toFixed(2)}`;
   };
 
   const formatPriceRange = (product: Product) => {
-    if (!product.throwsTowelsStylePrices || product.throwsTowelsStylePrices.length === 0) return '£0.00';
-    
-    const prices = product.throwsTowelsStylePrices.map(style => {
-      if (product.discount) {
-        return style.salePrice * (1 - product.discount / 100);
-      }
-      return style.salePrice;
-    });
-    
+    if (product.category === 'OUTDOOR' && product.outdoorPrice) {
+      return formatPrice(product.outdoorPrice.salePrice);
+    }
+    if (!product.beddingSizes || product.beddingSizes.length === 0) return '£0.00';
+    const prices = product.beddingSizes.map(size => size.salePrice);
     const min = Math.min(...prices);
     const max = Math.max(...prices);
     return min === max ? formatPrice(min) : `${formatPrice(min)} - ${formatPrice(max)}`;
   };
 
   const filteredProducts = products.filter(product => {
-    const matchesStyle = !selectedStyle || product.throwsTowelsStyles?.includes(selectedStyle);
-    const matchesColor = !selectedColor || product.throwsTowelsColors?.includes(selectedColor);
+    const matchesSize = !selectedSize || product.beddingSizes?.some(s => s.size === selectedSize);
+    const matchesColor = !selectedColor || 
+      (product.category === 'OUTDOOR' ? 
+        product.outdoorColors?.includes(selectedColor) : 
+        product.beddingColors?.includes(selectedColor));
+    const matchesStyle = !selectedStyle || product.beddingStyles?.includes(selectedStyle);
     const [minPrice, maxPrice] = priceRange;
-    const productPrices = product.throwsTowelsStylePrices?.map(s => s.salePrice) || [];
+    
+    if (product.category === 'OUTDOOR' && product.outdoorPrice) {
+      return matchesColor && matchesStyle && 
+        product.outdoorPrice.salePrice >= minPrice && 
+        product.outdoorPrice.salePrice <= maxPrice;
+    }
+    
+    const productPrices = product.beddingSizes?.map(s => s.salePrice) || [];
     const productMinPrice = Math.min(...productPrices);
     const productMaxPrice = Math.max(...productPrices);
-    return matchesStyle && matchesColor && productMinPrice >= minPrice && productMaxPrice <= maxPrice;
+    return matchesSize && matchesColor && matchesStyle && 
+      productMinPrice >= minPrice && 
+      productMaxPrice <= maxPrice;
   });
 
   const clearFilters = () => {
-    setSelectedStyle('');
+    setSelectedSize('');
     setSelectedColor('');
+    setSelectedStyle('');
     setPriceRange([0, 1000]);
   };
 
   const toggleWishlist = (id: string) => {
     setWishlist(prev => {
-      const prefixedId = `fleece_${id}`;
+      const prefixedId = `outdoor_${id}`;
       const newWishlist = prev.includes(prefixedId) 
         ? prev.filter(i => i !== prefixedId)
         : [...prev, prefixedId];
@@ -128,18 +142,18 @@ export default function FleeceThrowsTowelsPage() {
               typeof item === 'object' && 
               'id' in item && 
               typeof item.id === 'string' && 
-              !item.id.startsWith('fleece_')
+              !item.id.startsWith('outdoor_')
             )
           : [];
         
         const newItems = products
-          .filter((p) => newWishlist.includes(`fleece_${p._id}`))
+          .filter((p) => newWishlist.includes(`outdoor_${p._id}`))
           .map((item) => ({
-            id: `fleece_${item._id}`,
+            id: `outdoor_${item._id}`,
             src: item.images?.[0] || '',
             hoverSrc: item.images?.[1] || item.images?.[0] || '',
             title: item.title,
-            price: formatPriceRange(item),
+            price: `£${item.price}`,
             discount: item.discount ? `-${item.discount}%` : ''
           }));
         
@@ -174,8 +188,8 @@ export default function FleeceThrowsTowelsPage() {
           marginBottom: '60px'
         }}>
           <Image
-            src="/fleece-throws-towels.jpg"
-            alt="Fleece Throws & Towels"
+            src="/outdoor-banner.jpg"
+            alt="Outdoor Collection"
             fill
             style={{
               objectFit: 'cover',
@@ -250,7 +264,7 @@ export default function FleeceThrowsTowelsPage() {
                 textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
                 lineHeight: '1.2',
                 marginBottom: '20px'
-              }}>Fleece Throws & Towels</h1>
+              }}>Outdoor Collection</h1>
               <p style={{
                 color: '#fff',
                 fontSize: '24px',
@@ -260,7 +274,7 @@ export default function FleeceThrowsTowelsPage() {
                 margin: '0 auto',
                 lineHeight: '1.5'
               }}>
-                Discover our collection of cozy fleece throws and towels
+                Discover our premium outdoor collection for your perfect outdoor living space
               </p>
             </div>
           </div>
@@ -542,6 +556,75 @@ export default function FleeceThrowsTowelsPage() {
                     ))}
                   </div>
                 </div>
+
+                {/* Size Filter */}
+                <div style={{
+                  flex: '1',
+                  minWidth: '300px'
+                }}>
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '12px',
+                    marginBottom: '20px'
+                  }}>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                    </svg>
+                    <span style={{
+                      fontSize: '16px',
+                      fontWeight: 500,
+                      color: '#444'
+                    }}>Sizes</span>
+                  </div>
+                  <div style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '8px'
+                  }}>
+                    {allSizes.map(size => (
+                      <button
+                        key={size}
+                        onClick={() => setSelectedSize(size === selectedSize ? '' : size)}
+                        style={{
+                          padding: '8px 16px',
+                          borderRadius: '6px',
+                          border: '1px solid',
+                          borderColor: selectedSize === size ? '#222' : '#eee',
+                          background: selectedSize === size ? '#222' : 'transparent',
+                          color: selectedSize === size ? '#fff' : '#444',
+                          cursor: 'pointer',
+                          transition: 'all 0.2s ease',
+                          fontSize: '14px',
+                          fontWeight: 500,
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '6px',
+                          textAlign: 'left'
+                        }}
+                        onMouseEnter={(e) => {
+                          if (selectedSize !== size) {
+                            e.currentTarget.style.borderColor = '#222';
+                            e.currentTarget.style.color = '#222';
+                          }
+                        }}
+                        onMouseLeave={(e) => {
+                          if (selectedSize !== size) {
+                            e.currentTarget.style.borderColor = '#eee';
+                            e.currentTarget.style.color = '#444';
+                          }
+                        }}
+                      >
+                        {selectedSize === size && (
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <path d="M20 6L9 17l-5-5"/>
+                          </svg>
+                        )}
+                        {size}
+                      </button>
+                    ))}
+                  </div>
+                </div>
               </div>
             )}
           </div>
@@ -638,7 +721,7 @@ export default function FleeceThrowsTowelsPage() {
                       cursor: 'pointer',
                       boxShadow: '0 2px 12px rgba(0,0,0,0.15)',
                       transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                      transform: wishlist.includes(`fleece_${product._id}`) ? 'scale(1.1)' : 'scale(1)',
+                      transform: wishlist.includes(`outdoor_${product._id}`) ? 'scale(1.1)' : 'scale(1)',
                       backdropFilter: 'blur(4px)'
                     }}
                   >
@@ -646,7 +729,7 @@ export default function FleeceThrowsTowelsPage() {
                       width="24"
                       height="24"
                       viewBox="0 0 24 24"
-                      fill={wishlist.includes(`fleece_${product._id}`) ? '#e53935' : 'none'}
+                      fill={wishlist.includes(`outdoor_${product._id}`) ? '#e53935' : 'none'}
                       stroke="#e53935"
                       strokeWidth="2"
                       strokeLinecap="round"
@@ -817,9 +900,9 @@ export default function FleeceThrowsTowelsPage() {
       </main>
       <Footer />
       <CookieBanner />
-      <QuickViewModal 
-        product={quickViewProduct} 
-        onClose={() => setQuickViewProduct(null)} 
+      <QuickViewModal
+        product={quickViewProduct}
+        onClose={() => setQuickViewProduct(null)}
       />
       <style jsx global>{`
         @keyframes slideDown {

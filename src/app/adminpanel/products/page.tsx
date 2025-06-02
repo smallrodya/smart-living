@@ -677,6 +677,7 @@ export default function ProductsPage() {
                                 {/* Sizes */}
                                 {product.beddingSizes && renderProductSizes(product.beddingSizes)}
                                 {product.rugsMatsSizes && renderProductSizes(product.rugsMatsSizes)}
+                                {product.throwsTowelsStylePrices && renderProductSizes(product.throwsTowelsStylePrices)}
 
                                 {/* Styles */}
                                 {product.beddingStyles && product.beddingStyles.length > 0 && (
@@ -684,6 +685,23 @@ export default function ProductsPage() {
                                     <h4 className="text-sm font-medium text-gray-700 mb-1">Styles:</h4>
                                     <div className="flex flex-wrap gap-2">
                                       {product.beddingStyles.map((style: string, index: number) => (
+                                        <span
+                                          key={index}
+                                          className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-sm"
+                                        >
+                                          {style}
+                                        </span>
+                                      ))}
+                                    </div>
+                                  </div>
+                                )}
+
+                                {/* Throws & Towels Styles */}
+                                {product.throwsTowelsStyles && product.throwsTowelsStyles.length > 0 && (
+                                  <div>
+                                    <h4 className="text-sm font-medium text-gray-700 mb-1">Throws & Towels Styles:</h4>
+                                    <div className="flex flex-wrap gap-2">
+                                      {product.throwsTowelsStyles.map((style: string, index: number) => (
                                         <span
                                           key={index}
                                           className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-sm"
@@ -712,12 +730,75 @@ export default function ProductsPage() {
                                   </div>
                                 )}
 
+                                {/* Throws & Towels Colors */}
+                                {product.throwsTowelsColors && product.throwsTowelsColors.length > 0 && (
+                                  <div>
+                                    <h4 className="text-sm font-medium text-gray-700 mb-1">Throws & Towels Colors:</h4>
+                                    <div className="flex flex-wrap gap-2">
+                                      {product.throwsTowelsColors.map((color: string, index: number) => (
+                                        <span
+                                          key={index}
+                                          className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-sm"
+                                        >
+                                          {color}
+                                        </span>
+                                      ))}
+                                    </div>
+                                  </div>
+                                )}
+
                                 {/* Rugs & Mats Colors */}
                                 {product.rugsMatsColors && product.rugsMatsColors.length > 0 && (
                                   <div>
                                     <h4 className="text-sm font-medium text-gray-700 mb-1">Colors:</h4>
                                     <div className="flex flex-wrap gap-2">
                                       {product.rugsMatsColors.map((color: string, index: number) => (
+                                        <span
+                                          key={index}
+                                          className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-sm"
+                                        >
+                                          {color}
+                                        </span>
+                                      ))}
+                                    </div>
+                                  </div>
+                                )}
+
+                                {/* Outdoor Product Information */}
+                                {product.category === 'OUTDOOR' && product.outdoorPrice && (
+                                  <div className="bg-gray-50 p-4 rounded-lg">
+                                    <h4 className="text-sm font-medium text-gray-700 mb-2">Outdoor Product Details</h4>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                      <div>
+                                        <div className="flex justify-between items-center mb-2">
+                                          <span className="text-sm text-gray-600">SKU:</span>
+                                          <span className="text-sm font-medium">{product.outdoorPrice.sku}</span>
+                                        </div>
+                                        <div className="flex justify-between items-center mb-2">
+                                          <span className="text-sm text-gray-600">Stock:</span>
+                                          <span className="text-sm font-medium">{product.outdoorPrice.stock}</span>
+                                        </div>
+                                      </div>
+                                      <div>
+                                        <div className="flex justify-between items-center mb-2">
+                                          <span className="text-sm text-gray-600">Regular Price:</span>
+                                          <span className="text-sm text-gray-500 line-through">£{product.outdoorPrice.regularPrice.toFixed(2)}</span>
+                                        </div>
+                                        <div className="flex justify-between items-center">
+                                          <span className="text-sm text-gray-600">Sale Price:</span>
+                                          <span className="text-sm text-green-600 font-medium">£{product.outdoorPrice.salePrice.toFixed(2)}</span>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                )}
+
+                                {/* Outdoor Colors */}
+                                {product.category === 'OUTDOOR' && product.outdoorColors && product.outdoorColors.length > 0 && (
+                                  <div>
+                                    <h4 className="text-sm font-medium text-gray-700 mb-1">Available Colors:</h4>
+                                    <div className="flex flex-wrap gap-2">
+                                      {product.outdoorColors.map((color: string, index: number) => (
                                         <span
                                           key={index}
                                           className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-sm"

@@ -52,6 +52,14 @@ interface FormData {
   // Clearance specific
   isClearance: boolean;
   clearanceDiscount: number;
+  // Outdoor specific
+  outdoorPrice: {
+    sku: string;
+    regularPrice: number;
+    salePrice: number;
+    stock: number;
+  };
+  outdoorColors: string[];
 }
 
 const categories = [
@@ -176,6 +184,21 @@ const rugsMatsColors = [
 
 const outdoorSubcategories = [
   'Shop all'
+];
+
+const outdoorColors = [
+  'White',
+  'Black',
+  'Grey',
+  'Blue',
+  'Pink',
+  'Green',
+  'Yellow',
+  'Red',
+  'Purple',
+  'Beige',
+  'Brown',
+  'Multi'
 ];
 
 const curtainsSubcategories = [
@@ -327,7 +350,15 @@ export default function AddProductModal({ open, onClose, onProductAdded, validat
     footwearColors: [],
     // Clearance specific
     isClearance: false,
-    clearanceDiscount: 0
+    clearanceDiscount: 0,
+    // Outdoor specific
+    outdoorPrice: {
+      sku: '',
+      regularPrice: 0,
+      salePrice: 0,
+      stock: 0
+    },
+    outdoorColors: [],
   });
 
   const [images, setImages] = useState<string[]>([]);
@@ -373,12 +404,22 @@ export default function AddProductModal({ open, onClose, onProductAdded, validat
     setFormData(prev => {
       if (category === 'throwsTowels') {
         const existingStyleIndex = prev.throwsTowelsStylePrices.findIndex(s => s.size === style);
+        let newStyles = [...prev.throwsTowelsStylePrices];
+        
         if (existingStyleIndex >= 0) {
-          const newStyles = [...prev.throwsTowelsStylePrices];
           newStyles[existingStyleIndex] = stylePrice;
-          return { ...prev, throwsTowelsStylePrices: newStyles };
+        } else {
+          newStyles = [...newStyles, stylePrice];
         }
-        return { ...prev, throwsTowelsStylePrices: [...prev.throwsTowelsStylePrices, stylePrice] };
+        
+        // Обновляем массив throwsTowelsStyles на основе throwsTowelsStylePrices
+        const styles = newStyles.map(s => s.size);
+        
+        return { 
+          ...prev, 
+          throwsTowelsStylePrices: newStyles,
+          throwsTowelsStyles: styles
+        };
       }
       return prev;
     });
@@ -504,9 +545,14 @@ export default function AddProductModal({ open, onClose, onProductAdded, validat
   const removeStyle = (category: string, style: string) => {
     setFormData(prev => {
       if (category === 'throwsTowels') {
+        const newStylePrices = prev.throwsTowelsStylePrices.filter(s => s.size !== style);
+        // Обновляем массив throwsTowelsStyles на основе оставшихся throwsTowelsStylePrices
+        const styles = newStylePrices.map(s => s.size);
+        
         return {
           ...prev,
-          throwsTowelsStylePrices: prev.throwsTowelsStylePrices.filter(s => s.size !== style)
+          throwsTowelsStylePrices: newStylePrices,
+          throwsTowelsStyles: styles
         };
       }
       return prev;
@@ -1033,19 +1079,119 @@ export default function AddProductModal({ open, onClose, onProductAdded, validat
           )}
 
           {formData.category === 'OUTDOOR' && (
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Subcategory</label>
-              <select
-                value={formData.subcategory}
-                onChange={(e) => setFormData(prev => ({ ...prev, subcategory: e.target.value }))}
-                className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
-                required
-              >
-                <option value="">Select a subcategory</option>
-                {outdoorSubcategories.map(subcategory => (
-                  <option key={subcategory} value={subcategory}>{subcategory}</option>
-                ))}
-              </select>
+            <div className="bg-gray-50 p-6 rounded-xl space-y-6">
+              <h3 className="text-lg font-semibold text-gray-900">Outdoor Details</h3>
+              <div className="grid grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Subcategory</label>
+                  <select
+                    value={formData.subcategory}
+                    onChange={(e) => setFormData(prev => ({ ...prev, subcategory: e.target.value }))}
+                    className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                    required
+                  >
+                    <option value="">Select a subcategory</option>
+                    {outdoorSubcategories.map(subcategory => (
+                      <option key={subcategory} value={subcategory}>{subcategory}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Product Details</label>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="flex flex-col gap-1">
+                      <label className="text-xs text-gray-500">SKU</label>
+                      <input
+                        type="text"
+                        value={formData.outdoorPrice.sku}
+                        onChange={(e) => setFormData(prev => ({
+                          ...prev,
+                          outdoorPrice: { ...prev.outdoorPrice, sku: e.target.value }
+                        }))}
+                        className="w-full px-3 py-1 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                        placeholder="SKU"
+                      />
+                    </div>
+                    <div className="flex flex-col gap-1">
+                      <label className="text-xs text-gray-500">Regular Price</label>
+                      <div className="flex items-center gap-1">
+                        <input
+                          type="number"
+                          value={formData.outdoorPrice.regularPrice}
+                          onChange={(e) => setFormData(prev => ({
+                            ...prev,
+                            outdoorPrice: { ...prev.outdoorPrice, regularPrice: parseFloat(e.target.value) || 0 }
+                          }))}
+                          className="w-full px-3 py-1 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                          placeholder="Regular"
+                          min="0"
+                          step="0.01"
+                        />
+                        <span className="text-gray-500">£</span>
+                      </div>
+                    </div>
+                    <div className="flex flex-col gap-1">
+                      <label className="text-xs text-gray-500">Sale Price</label>
+                      <div className="flex items-center gap-1">
+                        <input
+                          type="number"
+                          value={formData.outdoorPrice.salePrice}
+                          onChange={(e) => setFormData(prev => ({
+                            ...prev,
+                            outdoorPrice: { ...prev.outdoorPrice, salePrice: parseFloat(e.target.value) || 0 }
+                          }))}
+                          className="w-full px-3 py-1 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                          placeholder="Sale"
+                          min="0"
+                          step="0.01"
+                        />
+                        <span className="text-gray-500">£</span>
+                      </div>
+                    </div>
+                    <div className="flex flex-col gap-1">
+                      <label className="text-xs text-gray-500">Stock</label>
+                      <input
+                        type="number"
+                        value={formData.outdoorPrice.stock}
+                        onChange={(e) => setFormData(prev => ({
+                          ...prev,
+                          outdoorPrice: { ...prev.outdoorPrice, stock: parseInt(e.target.value) || 0 }
+                        }))}
+                        className="w-full px-3 py-1 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                        placeholder="Stock"
+                        min="0"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Colors</label>
+                  <div className="flex flex-wrap gap-3">
+                    {outdoorColors.map(color => (
+                      <label key={color} className={`inline-flex items-center px-4 py-2 rounded-full bg-white border transition-all cursor-pointer ${
+                        formData.outdoorColors.includes(color) 
+                          ? 'border-red-500 text-red-500' 
+                          : 'border-gray-300 hover:border-gray-400 text-gray-700'
+                      }`}>
+                        <input
+                          type="checkbox"
+                          checked={formData.outdoorColors.includes(color)}
+                          onChange={(e) => {
+                            const newColors = e.target.checked
+                              ? [...formData.outdoorColors, color]
+                              : formData.outdoorColors.filter(c => c !== color);
+                            setFormData(prev => ({ ...prev, outdoorColors: newColors }));
+                          }}
+                          className="hidden"
+                        />
+                        <span>{color}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+              </div>
             </div>
           )}
 
