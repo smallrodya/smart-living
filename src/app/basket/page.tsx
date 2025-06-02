@@ -74,7 +74,7 @@ export default function BasketPage() {
     <div className="min-h-screen flex flex-col">
       <Header />
       <main className="flex-grow container mx-auto px-4 py-8 max-w-7xl">
-        <h1 className="text-3xl font-bold mb-8">Shopping Basket</h1>
+        <h1 className="text-3xl font-bold mb-8 mt-10 text-center">Shopping Basket</h1>
         
         {items.length === 0 ? (
           <div className="text-center py-12">

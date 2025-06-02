@@ -1,8 +1,58 @@
 'use client';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 const MobileBottomMenu = () => {
+  const [isVisible, setIsVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
+  const pathname = usePathname();
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      
+      if (currentScrollY > lastScrollY) {
+        // Прокрутка вниз - скрываем меню
+        setIsVisible(false);
+      } else {
+        // Прокрутка вверх - показываем меню
+        setIsVisible(true);
+      }
+      
+      setLastScrollY(currentScrollY);
+    };
+
+    // Проверяем, открыто ли модальное окно
+    const isModalOpen = document.body.style.position === 'fixed';
+    if (isModalOpen) {
+      setIsVisible(false);
+    } else {
+      window.addEventListener('scroll', handleScroll, { passive: true });
+    }
+
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [lastScrollY]);
+
+  // Добавляем эффект для отслеживания изменений в body
+  useEffect(() => {
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.attributeName === 'style') {
+          const isModalOpen = document.body.style.position === 'fixed';
+          setIsVisible(!isModalOpen);
+        }
+      });
+    });
+
+    observer.observe(document.body, {
+      attributes: true,
+      attributeFilter: ['style']
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <div style={{
       position: 'fixed',
@@ -11,20 +61,26 @@ const MobileBottomMenu = () => {
       right: 0,
       backgroundColor: '#fff',
       borderTop: '1px solid #eee',
-      padding: '8px 0',
+      padding: '12px 0',
       display: 'flex',
       justifyContent: 'space-around',
       alignItems: 'center',
       zIndex: 1000,
+      transform: isVisible ? 'translateY(0)' : 'translateY(100%)',
+      transition: 'transform 0.3s ease-in-out',
+      boxShadow: '0 -2px 10px rgba(0, 0, 0, 0.05)',
     }}>
       <Link href="/track-order" style={{
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
         textDecoration: 'none',
-        color: '#222',
+        color: pathname === '/track-order' ? '#e53935' : '#222',
         fontSize: 10,
         gap: 4,
+        padding: '4px 8px',
+        borderRadius: '8px',
+        transition: 'all 0.2s ease',
       }}>
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
@@ -37,9 +93,12 @@ const MobileBottomMenu = () => {
         flexDirection: 'column',
         alignItems: 'center',
         textDecoration: 'none',
-        color: '#222',
+        color: pathname === '/wishlist' ? '#e53935' : '#222',
         fontSize: 10,
         gap: 4,
+        padding: '4px 8px',
+        borderRadius: '8px',
+        transition: 'all 0.2s ease',
       }}>
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
@@ -52,9 +111,12 @@ const MobileBottomMenu = () => {
         flexDirection: 'column',
         alignItems: 'center',
         textDecoration: 'none',
-        color: '#222',
+        color: pathname === '/basket' ? '#e53935' : '#222',
         fontSize: 10,
         gap: 4,
+        padding: '4px 8px',
+        borderRadius: '8px',
+        transition: 'all 0.2s ease',
       }}>
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <circle cx="9" cy="21" r="1"/>
@@ -69,9 +131,12 @@ const MobileBottomMenu = () => {
         flexDirection: 'column',
         alignItems: 'center',
         textDecoration: 'none',
-        color: '#222',
+        color: pathname === '/profile' ? '#e53935' : '#222',
         fontSize: 10,
         gap: 4,
+        padding: '4px 8px',
+        borderRadius: '8px',
+        transition: 'all 0.2s ease',
       }}>
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>

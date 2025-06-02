@@ -83,20 +83,20 @@ const categories: Category[] = [
       {
         title: 'RUG TYPES',
         items: [
-          { label: 'Shaggy Rugs', href: '/shop/rugs/shaggy-rugs' },
-          { label: 'Carved Rugs', href: '/shop/rugs/carved-rugs' },
-          { label: 'Reversible Rugs', href: '/shop/rugs/reversible-rugs' },
-          { label: 'Hallway Runner', href: '/shop/rugs/hallway-runner' },
-          { label: 'Table Runner', href: '/shop/rugs/table-runner' },
+          { label: 'Shaggy Rugs', href: '/shop/shaggy-rugs' },
+          { label: 'Carved Rugs', href: '/shop/carved-rugs' },
+          { label: 'Reversible Rugs', href: '/shop/reversible-rugs' },
+          { label: 'Hallway Runner', href: '/shop/hallway-runner' },
+          { label: 'Table Runner', href: '/shop/table-runner' },
         ],
       },
       {
         title: 'MAT TYPES',
         items: [
-          { label: 'Door Mat', href: '/shop/rugs-mats/mats/door-mat' },
-          { label: 'Kitchen Mat', href: '/shop/rugs-mats/mats/kitchen-mat' },
-          { label: 'Hallway Runner', href: '/shop/rugs-mats/mats/hallway-runner' },
-          { label: 'Table Placemat', href: '/shop/rugs-mats/mats/table-placemat' },
+          { label: 'Door Mat', href: '/shop/door-mat' },
+          { label: 'Kitchen Mat', href: '/shop/kitchen-mat' },
+          { label: 'Hallway Runner', href: '/shop/hallway-runner' },
+          { label: 'Table Placemat', href: '/shop/table-placemat' },
         ],
       },
       {
@@ -104,7 +104,7 @@ const categories: Category[] = [
         items: [
           { label: 'Small', href: '/shop/rugs-mats/small' },
           { label: 'Medium', href: '/shop/rugs-mats/medium' },
-          { label: 'Large', href: '/shop/rugs-mats/large' },
+          { label: 'Large', href: '/shop/rugs-mats/Large' },
           { label: 'Xlarge', href: '/shop/rugs-mats/xlarge' },
           { label: 'Runner', href: '/shop/rugs-mats/runner' },
         ],
@@ -136,20 +136,20 @@ const categories: Category[] = [
       {
         title: 'CATEGORY',
         items: [
-          { label: 'Tea Towels', href: '/shop/throws-towels/tea-towels' },
-          { label: '8Pc Towel Bale Set', href: '/shop/throws-towels/8pc-towel-bale-set' },
-          { label: '10Pc Towel Bale Set', href: '/shop/throws-towels/10pc-towel-bale-set' },
-          { label: 'Weighted Blankets', href: '/shop/throws-towels/weighted-blankets' },
-          { label: 'Throws', href: '/shop/throws-towels/throws' },
+          { label: 'Tea Towels', href: '/shop/tea-towels' },
+          { label: '8Pc Towel Bale Set', href: '/shop/8pc-towel-bale-set' },
+          { label: '10Pc Towel Bale Set', href: '/shop/10pc-towel-bale-set' },
+          { label: 'Weighted Blankets', href: '/shop/weighted-blankets-throws-towels' },
+          { label: 'Throws', href: '/shop/all-throws' },
         ],
       },
       {
         title: 'STYLE',
         items: [
-          { label: 'Fleece', href: '/shop/throws-towels/fleece' },
-          { label: 'Plain', href: '/shop/throws-towels/plain' },
-          { label: '3D', href: '/shop/throws-towels/3d' },
-          { label: 'Chunky Hand Knitted', href: '/shop/throws-towels/chunky-hand-knitted' },
+          { label: 'Fleece', href: '/shop/fleece-throws-towels' },
+          { label: 'Plain', href: '/shop/plain-throws-towels' },
+          { label: '3D', href: '/shop/3d-throws-towels' },
+          { label: 'Chunky Hand Knitted', href: '/shop/chunky-hand-knitted-throws-towels' },
         ],
       },
       {
@@ -179,7 +179,7 @@ const categories: Category[] = [
       {
         title: 'CATEGORY',
         items: [
-          { label: 'Shop all', href: '/shop/outdoor' },
+          { label: 'Shop all', href: '/shop/outdoorshop-all' },
         ],
       },
     ],
@@ -192,7 +192,7 @@ const categories: Category[] = [
       {
         title: 'CATEGORY',
         items: [
-          { label: 'In the near future.', href: '/shop/curtains/living-room' },
+          { label: 'In the near future.', href: '/category/curtains/living-room' },
         ],
       },
     ],
@@ -205,20 +205,20 @@ const categories: Category[] = [
       {
         title: 'CATEGORY',
         items: [
-          { label: "Men's", href: '/shop/clothing/men' },
-          { label: "Women's", href: '/shop/clothing/women' },
-          { label: "Kid's", href: '/shop/clothing/kids' },
+          { label: "Men's", href: '/shop/clothing-men' },
+          { label: "Women's", href: '/shop/clothing-women' },
+          { label: "Kid's", href: '/shop/clothing-kids' },
         ],
       },
       {
         title: 'STYLE',
         items: [
-          { label: 'Jeans', href: '/shop/clothing/jeans' },
-          { label: 'Joggers', href: '/shop/clothing/joggers' },
-          { label: 'Hoodies', href: '/shop/clothing/hoodies' },
-          { label: 'Polo Shirts', href: '/shop/clothing/polo-shirts' },
-          { label: 'Loungewear', href: '/shop/clothing/loungewear' },
-          { label: 'Bathrobes', href: '/shop/clothing/bathrobes' },
+          { label: 'Jeans', href: '/shop/clothing-jeans' },
+          { label: 'Joggers', href: '/shop/clothing-joggers' },
+          { label: 'Hoodies', href: '/shop/clothing-hoodies' },
+          { label: 'Polo Shirts', href: '/shop/clothing-polo-shirts' },
+          { label: 'Loungewear', href: '/shop/clothing-loungewear' },
+          { label: 'Bathrobes', href: '/shop/clothing-bathrobes' },
         ],
       },
       {
@@ -244,22 +244,35 @@ const categories: Category[] = [
       {
         title: 'CATEGORY',
         items: [
-          { label: 'Booties', href: '/shop/footwear/booties' },
-          { label: 'Slippers', href: '/shop/footwear/slippers' },
-          { label: 'Socks', href: '/shop/footwear/socks' },
+          { label: 'Booties', href: '/shop/footwear-booties' },
+          { label: 'Slippers', href: '/shop/footwear-slippers' },
+          { label: 'Socks', href: '/shop/footwear-socks' },
         ],
       },
       {
         title: 'SIZE',
         items: [
-          { label: 'UK 3-4', href: '/shop/footwear/uk-3-4' },
-          { label: 'UK 5-6', href: '/shop/footwear/uk-5-6' },
-          { label: 'UK 7-8', href: '/shop/footwear/uk-7-8' },
-          { label: 'UK 9-10', href: '/shop/footwear/uk-9-10' },
-          { label: 'UK 11-12', href: '/shop/footwear/uk-11-12' },
-          { label: 'Small', href: '/shop/footwear/small' },
-          { label: 'Medium', href: '/shop/footwear/medium' },
-          { label: 'Large', href: '/shop/footwear/large' },
+          { label: 'UK 3-4', href: '/shop/footwear-uk-3-4' },
+          { label: 'UK 5-6', href: '/shop/footwear-uk-5-6' },
+          { label: 'UK 7-8', href: '/shop/footwear-uk-7-8' },
+          { label: 'UK 9-10', href: '/shop/footwear-uk-9-10' },
+          { label: 'UK 11-12', href: '/shop/footwear-uk-11-12' },
+          { label: 'Small', href: '/shop/footwear-small' },
+          { label: 'Medium', href: '/shop/footwear-medium' },
+          { label: 'Large', href: '/shop/footwear-large' },
+        ],
+      },
+    ],
+  },
+  {
+    name: 'CLEARANCE',
+    img: '/CLEARANCESALE.JPG',
+    color: '#e53935',
+    columns: [
+      {
+        title: 'CATEGORY',
+        items: [
+          { label: 'Shop all', href: '/shop/clearance' },
         ],
       },
     ],
@@ -304,7 +317,12 @@ const MobileCategoriesMenu = () => {
                   className={styles.categoryImage}
                 />
               </div>
-              <span className={styles.categoryName}>{category.name}</span>
+              <span 
+                className={styles.categoryName}
+                style={category.name === 'CLEARANCE' ? { color: '#e53935' } : undefined}
+              >
+                {category.name}
+              </span>
               <span className={`${styles.arrow} ${expandedCategory === category.name ? styles.arrowUp : ''}`}>
                 ›
               </span>

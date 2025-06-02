@@ -100,7 +100,7 @@ const MobileHeader = () => {
           WebkitOverflowScrolling: 'touch',
           height: 'calc(100vh - 60px)',
           overscrollBehavior: 'contain',
-          paddingBottom: '130px'
+          paddingBottom: '80px'
         }}>
           <MobileCategoriesMenu />
         </div>
