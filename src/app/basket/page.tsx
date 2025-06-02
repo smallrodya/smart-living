@@ -88,7 +88,8 @@ export default function BasketPage() {
           </div>
         ) : (
           <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-            <div className="overflow-x-auto">
+            {/* Desktop View */}
+            <div className="hidden md:block overflow-x-auto">
               <table className="w-full">
                 <thead className="bg-gray-50">
                   <tr>
@@ -164,13 +165,82 @@ export default function BasketPage() {
                 </tbody>
               </table>
             </div>
+
+            {/* Mobile View */}
+            <div className="md:hidden">
+              {items.map((item) => (
+                <div key={item.id} className="p-4 border-b border-gray-200">
+                  <div className="flex items-start space-x-4">
+                    {item.image && (
+                      <div className="relative w-20 h-20 flex-shrink-0">
+                        <Image
+                          src={item.image}
+                          alt={item.title}
+                          fill
+                          className="object-cover rounded"
+                        />
+                      </div>
+                    )}
+                    <div className="flex-grow">
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <h3 className="font-medium text-gray-900">{item.title}</h3>
+                          <p className="text-sm text-gray-500">{item.category}</p>
+                          <p className="text-sm text-gray-500 mt-1">Size: {item.size}</p>
+                        </div>
+                        <button
+                          onClick={() => removeItem(item.id)}
+                          className="text-red-600 hover:text-red-900 transition-colors"
+                        >
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                          </svg>
+                        </button>
+                      </div>
+                      
+                      <div className="mt-2">
+                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                          item.stock && item.stock > 0 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                        }`}>
+                          {getStockInfo(item)}
+                        </span>
+                      </div>
+
+                      <div className="mt-3 flex items-center justify-between">
+                        <div className="flex items-center space-x-2">
+                          <button
+                            onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                            className="p-1 rounded hover:bg-gray-100 transition-colors"
+                            disabled={item.quantity <= 1}
+                          >
+                            -
+                          </button>
+                          <span className="w-8 text-center">{item.quantity}</span>
+                          <button
+                            onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                            className="p-1 rounded hover:bg-gray-100 transition-colors"
+                            disabled={item.stock !== undefined && item.quantity >= item.stock}
+                          >
+                            +
+                          </button>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-sm text-gray-500">Price: £{item.price.toFixed(2)}</p>
+                          <p className="font-medium text-gray-900">Total: £{(item.price * item.quantity).toFixed(2)}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
             
-            <div className="px-6 py-4 bg-gray-50 border-t">
-              <div className="flex justify-between items-center">
+            <div className="px-4 md:px-6 py-4 bg-gray-50 border-t">
+              <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
                 <div className="text-lg font-medium">Total: £{total.toFixed(2)}</div>
                 <button
                   onClick={() => router.push('/checkout')}
-                  className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+                  className="w-full md:w-auto bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors"
                 >
                   Proceed to Checkout
                 </button>
