@@ -28,10 +28,21 @@ export default function AdminDashboard() {
   const fetchStats = async () => {
     try {
       setIsLoading(true);
-      const res = await fetch('/api/stats');
+      const res = await fetch('/api/stats', {
+        method: 'GET',
+        headers: {
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          'Pragma': 'no-cache',
+          'Expires': '0',
+        },
+        next: { revalidate: 0 }
+      });
+      
       if (!res.ok) throw new Error('Failed to fetch stats');
       
       const data = await res.json();
+      console.log('Fetched stats:', data); // Добавляем для отладки
+      
       setStats({
         products: data.products || 0,
         orders: data.orders || 0,
@@ -46,11 +57,11 @@ export default function AdminDashboard() {
     }
   };
 
-  // Периодическое обновление каждые 30 секунд
+  // Увеличиваем частоту обновления до 10 секунд
   useEffect(() => {
     fetchStats(); // Первоначальная загрузка
 
-    const interval = setInterval(fetchStats, 30000); // Обновление каждые 30 секунд
+    const interval = setInterval(fetchStats, 10000); // Обновление каждые 10 секунд
 
     return () => clearInterval(interval);
   }, []);
