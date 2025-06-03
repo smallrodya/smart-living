@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import { MongoClient, ObjectId } from 'mongodb';
 import { cookies } from 'next/headers';
 
+export const dynamic = 'force-dynamic';
+
 const uri = process.env.MONGODB_URI as string;
 if (!uri) {
   throw new Error('Please define the MONGODB_URI environment variable inside .env.local');

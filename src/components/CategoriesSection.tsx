@@ -71,8 +71,8 @@ const megaMenus: MegaMenu[] = [
       },
       {
         items: [
-          { img: '/printed-duvet68.jpg', label: 'New in summer collection', labelColor: 'red', description: 'Shop Now', href: '/shop/printed-duvet-set' },
-          { img: '/premium-duvet139.jpg', label: 'Summer sale upto 70% off', labelColor: 'red', description: 'Shop Now', href: '/shop-duvet-set-by-type/premium-duvet-set' },
+          { img: '/Adrianna.jpg', label: 'New in summer collection', labelColor: 'red' },
+          { img: '/Bardsley_Check_Grey-scaled-2.jpg', label: 'Summer sale upto 70% off', labelColor: 'red' },
         ],
       },
     ],
@@ -128,8 +128,8 @@ const megaMenus: MegaMenu[] = [
       },
       {
         items: [
-          { img: '/soft-shaggy-rugs.jpg', label: 'Explore our range of stylish rugs for every room!', labelColor: 'red', description: 'Shop Now', href: '/category/rugs-mats/rugs' },
-          { img: '/xlarge-rugs-mats.jpg', label: 'Find the perfect mat for your hallway or bathroom.', labelColor: 'red', description: 'Shop Now', href: '/category/rugs-mats/mats' },
+          { img: '/soft-shaggy-rugs.jpg', label: 'Explore our range of stylish rugs for every room!', labelColor: 'red' },
+          { img: '/xlarge-rugs-mats.jpg', label: 'Find the perfect mat for your hallway or bathroom.', labelColor: 'red' },
         ],
       },
     ],
@@ -175,8 +175,8 @@ const megaMenus: MegaMenu[] = [
       },
       {
         items: [
-          { img: '/throws-main.jpg', label: 'New in summer collection', labelColor: 'red', description: 'Shop Now', href: '/shop/throws-collection' },
-          { img: '/towels-main.jpg', label: 'Summer sale upto 70% off', labelColor: 'red', description: 'Shop Now', href: '/shop-towels' },
+          { img: '/all-throws.jpg', label: 'Thows for every room', labelColor: 'red' },
+          { img: '/10pc-towel-bale-set.jpg', label: 'Great towels to keep you cosy', labelColor: 'red' },
         ],
       },
     ],
@@ -192,8 +192,7 @@ const megaMenus: MegaMenu[] = [
       },
       {
         items: [
-          { img: '/outdoor-main.jpg', label: 'New summer collection', labelColor: 'red', description: 'Shop Now', href: '/shop/outdoor-collection' },
-          { img: '/garden-main.jpg', label: 'Summer sale upto 70% off', labelColor: 'red', description: 'Shop Now', href: '/shop-garden' },
+          { img: '/outdoor-banner1.jpg', label: 'Perfect for your outdoor space', labelColor: 'red' },
         ],
       },
     ],
@@ -246,8 +245,8 @@ const megaMenus: MegaMenu[] = [
       },
       {
         items: [
-          { img: '/clothing-main.jpg', label: 'New season collection', labelColor: 'red', description: 'Shop Now', href: '/shop/clothing-collection' },
-          { img: '/clothing-sale.jpg', label: 'Sale upto 70% off', labelColor: 'red', description: 'Shop Now', href: '/shop-clothing' },
+          { img: '/mens-clothing.jpg', label: 'Explore our range of men\'s clothing', labelColor: 'red' },
+          { img: '/womens-clothing.jpg', label: 'Favourite clothing for women', labelColor: 'red' },
         ],
       },
     ],
@@ -278,8 +277,7 @@ const megaMenus: MegaMenu[] = [
       },
       {
         items: [
-          { img: '/footwear-main.jpg', label: 'New collection', labelColor: 'red', description: 'Shop Now', href: '/shop/footwear-collection' },
-          { img: '/footwear-sale.jpg', label: 'Sale upto 70% off', labelColor: 'red', description: 'Shop Now', href: '/shop-footwear' },
+          { img: '/slippers-footwear1.jpg', label: 'find your perfect footwear', labelColor: 'red' },
         ],
       },
     ],
