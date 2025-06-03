@@ -969,9 +969,12 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
                       <span>{size.size}</span>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                         <span style={{ color: '#e53935', fontWeight: 600 }}>
-                          {formatPrice(product.discount 
-                            ? size.salePrice * (1 - product.discount / 100)
-                            : size.salePrice)}
+                          {formatPrice(product.clearanceDiscount
+                            ? size.salePrice * (1 - product.clearanceDiscount / 100)
+                            : (product.discount
+                              ? size.salePrice * (1 - product.discount / 100)
+                              : size.salePrice)
+                          )}
                         </span>
                         {selectedSize === size.size && (
                           <svg
@@ -1032,9 +1035,12 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
                       <span>{style.size}</span>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                         <span style={{ color: '#e53935', fontWeight: 600 }}>
-                          {formatPrice(product.discount 
-                            ? style.salePrice * (1 - product.discount / 100)
-                            : style.salePrice)}
+                          {formatPrice(product.clearanceDiscount
+                            ? style.salePrice * (1 - product.clearanceDiscount / 100)
+                            : (product.discount
+                              ? style.salePrice * (1 - product.discount / 100)
+                              : style.salePrice)
+                          )}
                         </span>
                         {selectedSize === style.size && (
                           <svg
@@ -1095,7 +1101,10 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
                       <span>{size.size}</span>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                         <span style={{ color: '#e53935', fontWeight: 600 }}>
-                          {formatPrice(size.salePrice)}
+                          {formatPrice(product.clearanceDiscount
+                            ? size.salePrice * (1 - product.clearanceDiscount / 100)
+                            : size.salePrice
+                          )}
                         </span>
                         {selectedSize === size.size && (
                           <svg
@@ -1151,7 +1160,10 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
                       <span>{size.size}</span>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                         <span style={{ color: '#e53935', fontWeight: 600 }}>
-                          {formatPrice(size.salePrice)}
+                          {formatPrice(product.clearanceDiscount
+                            ? size.salePrice * (1 - product.clearanceDiscount / 100)
+                            : size.salePrice
+                          )}
                         </span>
                         {selectedSize === size.size && (
                           <svg
