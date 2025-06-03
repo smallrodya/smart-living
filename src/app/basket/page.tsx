@@ -135,7 +135,9 @@ export default function BasketPage() {
                           {getStockInfo(item)}
                         </span>
                       </td>
-                      <td className="px-6 py-4 text-sm text-gray-900">£{item.price.toFixed(2)}</td>
+                      <td className="px-6 py-4 text-sm text-gray-900">
+                        £{item.price ? item.price.toFixed(2) : '0.00'}
+                      </td>
                       <td className="px-6 py-4">
                         <div className="flex items-center space-x-2">
                           <button
@@ -232,7 +234,7 @@ export default function BasketPage() {
                           </button>
                         </div>
                         <div className="text-right">
-                          <p className="text-sm text-gray-500">Price: £{item.price.toFixed(2)}</p>
+                          <p className="text-sm text-gray-500">Price: £{item.price ? item.price.toFixed(2) : '0.00'}</p>
                           <p className="font-medium text-gray-900">Total: £{((item.clearanceDiscount ? item.price * (1 - item.clearanceDiscount / 100) : item.price) * item.quantity).toFixed(2)}</p>
                         </div>
                       </div>

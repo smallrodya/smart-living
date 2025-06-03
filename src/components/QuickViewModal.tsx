@@ -970,7 +970,16 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
                         }
                       }}
                     >
-                      <span>{size.size}</span>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                        <span>{size.size}</span>
+                        <span style={{ 
+                          fontSize: '12px', 
+                          color: size.stock > 0 ? '#4CAF50' : '#e53935',
+                          fontWeight: 500
+                        }}>
+                          {size.stock > 0 ? `${size.stock} in stock` : 'Out of stock'}
+                        </span>
+                      </div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                         <span style={{ color: '#e53935', fontWeight: 600 }}>
                           {formatPrice(product.clearanceDiscount
@@ -997,7 +1006,7 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
                       </div>
                     </button>
                   ))}
-                  {product.clothingStylePrices?.map((style, index) => (
+                  {product.throwsTowelsStylePrices?.map((style, index) => (
                     <button
                       key={index}
                       onClick={() => handleSizeSelect(style.size)}
@@ -1036,7 +1045,16 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
                         }
                       }}
                     >
-                      <span>{style.size}</span>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                        <span>{style.size}</span>
+                        <span style={{ 
+                          fontSize: '12px', 
+                          color: style.stock > 0 ? '#4CAF50' : '#e53935',
+                          fontWeight: 500
+                        }}>
+                          {style.stock > 0 ? `${style.stock} in stock` : 'Out of stock'}
+                        </span>
+                      </div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                         <span style={{ color: '#e53935', fontWeight: 600 }}>
                           {formatPrice(product.clearanceDiscount
@@ -1102,7 +1120,16 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
                         }
                       }}
                     >
-                      <span>{size.size}</span>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                        <span>{size.size}</span>
+                        <span style={{ 
+                          fontSize: '12px', 
+                          color: (size.stock || 0) > 0 ? '#4CAF50' : '#e53935',
+                          fontWeight: 500
+                        }}>
+                          {(size.stock || 0) > 0 ? `${size.stock} in stock` : 'Out of stock'}
+                        </span>
+                      </div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                         <span style={{ color: '#e53935', fontWeight: 600 }}>
                           {formatPrice(product.clearanceDiscount
@@ -1132,13 +1159,13 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
                       key={index}
                       onClick={() => handleSizeSelect(size.size)}
                       style={{
-                        padding: '12px 16px',
-                        borderRadius: '8px',
+                        padding: '16px 20px',
+                        borderRadius: '12px',
                         border: '1px solid',
                         borderColor: selectedSize === size.size ? '#222' : '#eee',
                         background: selectedSize === size.size ? '#f8f9fa' : 'transparent',
                         color: '#444',
-                        fontSize: '14px',
+                        fontSize: '16px',
                         fontWeight: 500,
                         cursor: 'pointer',
                         transition: 'all 0.2s ease',
@@ -1146,23 +1173,37 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
                         alignItems: 'center',
                         justifyContent: 'space-between',
                         textAlign: 'left',
-                        width: '100%'
+                        width: '100%',
+                        boxShadow: selectedSize === size.size ? '0 4px 12px rgba(0,0,0,0.1)' : 'none'
                       }}
                       onMouseEnter={(e) => {
                         if (selectedSize !== size.size) {
                           e.currentTarget.style.borderColor = '#222';
                           e.currentTarget.style.background = '#f8f9fa';
+                          e.currentTarget.style.transform = 'translateY(-2px)';
+                          e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.1)';
                         }
                       }}
                       onMouseLeave={(e) => {
                         if (selectedSize !== size.size) {
                           e.currentTarget.style.borderColor = '#eee';
                           e.currentTarget.style.background = 'transparent';
+                          e.currentTarget.style.transform = 'translateY(0)';
+                          e.currentTarget.style.boxShadow = 'none';
                         }
                       }}
                     >
-                      <span>{size.size}</span>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                        <span>{size.size}</span>
+                        <span style={{ 
+                          fontSize: '12px', 
+                          color: (size.stock || 0) > 0 ? '#4CAF50' : '#e53935',
+                          fontWeight: 500
+                        }}>
+                          {(size.stock || 0) > 0 ? `${size.stock} in stock` : 'Out of stock'}
+                        </span>
+                      </div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                         <span style={{ color: '#e53935', fontWeight: 600 }}>
                           {formatPrice(product.clearanceDiscount
                             ? size.salePrice * (1 - product.clearanceDiscount / 100)
@@ -1171,8 +1212,8 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
                         </span>
                         {selectedSize === size.size && (
                           <svg
-                            width="20"
-                            height="20"
+                            width="24"
+                            height="24"
                             viewBox="0 0 24 24"
                             fill="none"
                             stroke="#222"
@@ -1309,7 +1350,13 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
                   <circle cx="20" cy="21" r="1"/>
                   <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
                 </svg>
-                {product.category === 'OUTDOOR' ? 'Add to Cart' : (selectedSize ? 'Add to Cart' : 'Select Size')}
+                {product.category === 'OUTDOOR' ? 'Add to Cart' : (
+                  selectedSize ? 'Add to Cart' : (
+                    product.category === 'THROWS & TOWELS' || product.category === 'CLOTHING' 
+                      ? 'Select Style' 
+                      : 'Select Size'
+                  )
+                )}
               </button>
             )}
           </div>

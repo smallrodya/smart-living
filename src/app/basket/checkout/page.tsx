@@ -50,7 +50,7 @@ export default function CheckoutPage() {
   });
   const [errors, setErrors] = useState<any>({});
   const [submitting, setSubmitting] = useState(false);
-  const [shipping, setShipping] = useState("express");
+  const [shipping, setShipping] = useState("free");
   const [paymentMethod, setPaymentMethod] = useState("card");
   const [saveCard, setSaveCard] = useState(false);
 
@@ -87,6 +87,10 @@ export default function CheckoutPage() {
       return;
     }
 
+    // Получаем email из куки пользователя
+    const userData = JSON.parse(userCookie as string);
+    console.log('User data from cookie:', userData);
+
     setSubmitting(true);
     try {
       // Обновляем количество товара
@@ -120,7 +124,10 @@ export default function CheckoutPage() {
           total: totalWithShipping,
           shipping,
           paymentMethod,
-          customerDetails: form,
+          customerDetails: {
+            ...form,
+            email: userData.email // Используем email из куки пользователя
+          },
           status: 'DONE'
         }),
       });
@@ -130,10 +137,13 @@ export default function CheckoutPage() {
         throw new Error(errorData.error || 'Failed to create order');
       }
 
+      const orderData = await orderResponse.json();
+      console.log('Order response:', orderData);
+
       // Очищаем корзину
       clearBasket();
 
-      toast.success('Order placed successfully!');
+      toast.success(`Order placed successfully! You earned ${orderData.smartCoinEarned} Smart Coins!`);
       router.push("/basket");
     } catch (error) {
       console.error('Error placing order:', error);
@@ -382,6 +392,34 @@ export default function CheckoutPage() {
               <div className="grid grid-cols-2 font-bold text-lg py-3 border-b border-gray-200">
                 <span>Total</span>
                 <span className="text-right">£{totalWithShipping.toFixed(2)}</span>
+              </div>
+              
+              {/* Smart Coin Section */}
+              <div className="mt-6 p-4 rounded-xl bg-gradient-to-r from-purple-50 to-pink-50 border border-purple-100 shadow-sm">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="bg-gradient-to-br from-purple-500 to-pink-500 p-2 rounded-lg">
+                      <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-gray-900">Smart Coin Rewards</h4>
+                      <p className="text-sm text-gray-600">You'll earn 5% of your subtotal</p>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+                      +{(subtotal * 0.05).toFixed(2)}
+                    </div>
+                    <p className="text-xs text-gray-500">Smart Coins</p>
+                  </div>
+                </div>
+                <div className="mt-3 pt-3 border-t border-purple-100">
+                  <p className="text-sm text-gray-600">
+                    <span className="text-purple-600 font-medium">Smart Coins</span> can be used for future purchases and special offers
+                  </p>
+                </div>
               </div>
             </div>
 

@@ -16,23 +16,23 @@ const Banner = () => {
       title: 'Summer Collection',
       subtitle: 'Discover our new arrivals',
       cta: 'Shop Now',
-      link: '/summer-collection',
+      link: '/shop/summer-collection',
       color: '#FF6B6B'
     },
     {
-      image: '/banner2.jpg',
+      image: '/banner1.jpg',
       title: 'Home Essentials',
       subtitle: 'Transform your space',
       cta: 'Explore',
-      link: '/home-essentials',
+      link: '/shop/home-essentials',
       color: '#4ECDC4'
     },
     {
-      image: '/banner3.jpg',
+      image: '/banner2.jpg',
       title: 'Special Offers',
       subtitle: 'Up to 70% off',
       cta: 'View Deals',
-      link: '/special-offers',
+      link: '/shop/clearance',
       color: '#FFD93D'
     }
   ];

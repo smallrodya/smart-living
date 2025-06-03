@@ -2,23 +2,64 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import styles from './myaccount.module.css';
 import Header from '@/components/Header';
 import CategoriesSection from '@/components/CategoriesSection';
 import { getCookie } from 'cookies-next';
+import { FiUser, FiShoppingBag, FiMapPin, FiLogOut, FiEdit2, FiCalendar, FiMail, FiHeart, FiCreditCard, FiSettings, FiBell, FiGift } from 'react-icons/fi';
 
 interface UserData {
   firstName: string;
   lastName: string;
   email: string;
   createdAt: string;
+  smartCoin: number;
+}
+
+interface OrderItem {
+  id: string;
+  title: string;
+  size: string;
+  price: number;
+  quantity: number;
+  image?: string;
+  category?: string;
+  sku?: string;
+}
+
+interface Order {
+  _id: string;
+  items: OrderItem[];
+  total: number;
+  shipping: string;
+  paymentMethod: string;
+  customerDetails: {
+    email: string;
+    firstName: string;
+    lastName: string;
+    company?: string;
+    country: string;
+    address: string;
+    address2?: string;
+    city: string;
+    county?: string;
+    postcode: string;
+    phone: string;
+    orderNotes?: string;
+  };
+  status: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export default function MyAccountPage() {
   const router = useRouter();
   const [userData, setUserData] = useState<UserData | null>(null);
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [wishlistItems, setWishlistItems] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [activeTab, setActiveTab] = useState('overview');
+  const [expandedOrders, setExpandedOrders] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     const checkAuth = () => {
@@ -38,6 +79,20 @@ export default function MyAccountPage() {
         if (response.ok) {
           const data = await response.json();
           setUserData(data);
+
+          // Получаем заказы пользователя
+          const ordersResponse = await fetch('/api/orders');
+          if (ordersResponse.ok) {
+            const ordersData = await ordersResponse.json();
+            setOrders(ordersData.orders || []);
+          }
+
+          // Получаем избранные товары
+          const savedWishlist = localStorage.getItem('wishlist');
+          if (savedWishlist) {
+            const items = JSON.parse(savedWishlist);
+            setWishlistItems(items);
+          }
         } else {
           if (response.status === 401) {
             router.push('/user/login');
@@ -56,9 +111,30 @@ export default function MyAccountPage() {
   }, [router]);
 
   const handleLogout = () => {
-    // Удаляем куки
     document.cookie = 'user=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
     router.push('/user/login');
+  };
+
+  const toggleOrderExpand = (orderId: string) => {
+    setExpandedOrders(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(orderId)) {
+        newSet.delete(orderId);
+      } else {
+        newSet.add(orderId);
+      }
+      return newSet;
+    });
+  };
+
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleString('en-GB', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
   };
 
   if (loading) {
@@ -66,8 +142,12 @@ export default function MyAccountPage() {
       <>
         <Header />
         <CategoriesSection />
-        <div className={styles.container}>
-          <div className={styles.loading}>Loading...</div>
+        <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-12">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex justify-center items-center h-64">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+            </div>
+          </div>
         </div>
       </>
     );
@@ -78,8 +158,12 @@ export default function MyAccountPage() {
       <>
         <Header />
         <CategoriesSection />
-        <div className={styles.container}>
-          <div className={styles.error}>{error}</div>
+        <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-12">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg shadow-sm">
+              {error}
+            </div>
+          </div>
         </div>
       </>
     );
@@ -89,62 +173,417 @@ export default function MyAccountPage() {
     <>
       <Header />
       <CategoriesSection />
-      <div className={styles.container}>
-        <div className={styles.accountBox}>
-          <h1 className={styles.title}>My Account</h1>
-          
-          <div className={styles.sections}>
-            <section className={styles.section}>
-              <h2 className={styles.sectionTitle}>Personal Information</h2>
-              <div className={styles.infoGrid}>
-                <div className={styles.infoItem}>
-                  <label>First Name</label>
-                  <p>{userData?.firstName}</p>
-                </div>
-                <div className={styles.infoItem}>
-                  <label>Last Name</label>
-                  <p>{userData?.lastName}</p>
-                </div>
-                <div className={styles.infoItem}>
-                  <label>Email</label>
-                  <p>{userData?.email}</p>
-                </div>
-                <div className={styles.infoItem}>
-                  <label>Member Since</label>
-                  <p>{new Date(userData?.createdAt || '').toLocaleDateString()}</p>
-                </div>
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
+            {/* Header with gradient and pattern */}
+            <div className="relative bg-gradient-to-r from-black to-gray-900 px-8 py-12 text-white overflow-hidden">
+              <div className="absolute inset-0 bg-grid-white/[0.05] bg-[length:20px_20px]"></div>
+              <div className="relative">
+                <h1 className="text-4xl font-bold">My Account</h1>
+                <p className="mt-2 text-blue-100 text-lg">Welcome back, {userData?.firstName}!</p>
               </div>
-            </section>
+            </div>
 
-            <section className={styles.section}>
-              <h2 className={styles.sectionTitle}>Account Actions</h2>
-              <div className={styles.actions}>
+            {/* Navigation Tabs */}
+            <div className="border-b border-gray-200">
+              <nav className="flex space-x-8 px-8" aria-label="Tabs">
+                {['overview', 'orders', 'wishlist'].map((tab) => (
+                  <button
+                    key={tab}
+                    onClick={() => setActiveTab(tab)}
+                    className={`py-4 px-1 border-b-2 font-medium text-sm ${
+                      activeTab === tab
+                        ? 'border-blue-500 text-blue-600'
+                        : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                    }`}
+                  >
+                    {tab.charAt(0).toUpperCase() + tab.slice(1)}
+                  </button>
+                ))}
+              </nav>
+            </div>
+
+            <div className="p-8">
+              {activeTab === 'overview' && (
+                <>
+                  {/* Quick Stats */}
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+                    <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-6 border border-blue-100">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-sm font-medium text-blue-600">Total Orders</p>
+                          <p className="text-2xl font-bold text-blue-900 mt-1">{orders.length}</p>
+                        </div>
+                        <FiShoppingBag className="text-blue-500 text-2xl" />
+                      </div>
+                    </div>
+                    <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-6 border border-purple-100">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-sm font-medium text-purple-600">Wishlist Items</p>
+                          <p className="text-2xl font-bold text-purple-900 mt-1">{wishlistItems.length}</p>
+                        </div>
+                        <FiHeart className="text-purple-500 text-2xl" />
+                      </div>
+                    </div>
+                    <div className="bg-gradient-to-br from-purple-500/10 to-pink-500/10 p-6 rounded-xl">
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-center space-x-3">
+                          <div className="bg-purple-500/20 p-3 rounded-lg">
+                            <FiGift className="w-6 h-6 text-purple-500" />
+                          </div>
+                          <div>
+                            <h3 className="text-lg font-semibold text-gray-800">Smart Coin</h3>
+                            <p className="text-sm text-gray-600">Your rewards balance</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="text-2xl font-bold text-gray-900">
+                        {userData?.smartCoin?.toFixed(2) || '0.00'}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Personal Information */}
+                  <div className="mb-12">
+                    <h2 className="text-2xl font-semibold text-gray-900 mb-6 flex items-center">
+                      <FiUser className="mr-2" />
+                      Personal Information
+                    </h2>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl p-6 border border-gray-200 hover:border-blue-200 transition-all duration-200">
+                        <div className="flex items-center mb-4">
+                          <div className="bg-blue-100 p-2 rounded-lg">
+                            <FiUser className="text-blue-600 text-xl" />
+                          </div>
+                          <h3 className="text-lg font-medium text-gray-900 ml-3">Name</h3>
+                        </div>
+                        <p className="text-gray-600">{userData?.firstName} {userData?.lastName}</p>
+                      </div>
+                      <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl p-6 border border-gray-200 hover:border-blue-200 transition-all duration-200">
+                        <div className="flex items-center mb-4">
+                          <div className="bg-blue-100 p-2 rounded-lg">
+                            <FiMail className="text-blue-600 text-xl" />
+                          </div>
+                          <h3 className="text-lg font-medium text-gray-900 ml-3">Email</h3>
+                        </div>
+                        <p className="text-gray-600">{userData?.email}</p>
+                      </div>
+                      <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl p-6 border border-gray-200 hover:border-blue-200 transition-all duration-200">
+                        <div className="flex items-center mb-4">
+                          <div className="bg-blue-100 p-2 rounded-lg">
+                            <FiCalendar className="text-blue-600 text-xl" />
+                </div>
+                          <h3 className="text-lg font-medium text-gray-900 ml-3">Member Since</h3>
+                </div>
+                        <p className="text-gray-600">{new Date(userData?.createdAt || '').toLocaleDateString()}</p>
+                </div>
+                </div>
+              </div>
+
+                  {/* Account Actions */}
+                  <div>
+                    <h2 className="text-2xl font-semibold text-gray-900 mb-6">Account Actions</h2>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 <button 
-                  className={styles.actionButton}
                   onClick={() => router.push('/user/Myaccount/edit')}
+                        className="group flex items-center justify-center gap-3 bg-white border border-gray-200 rounded-xl p-6 hover:border-blue-500 hover:bg-blue-50 transition-all duration-200"
                 >
-                  Edit Profile
+                        <div className="bg-blue-100 p-2 rounded-lg group-hover:bg-blue-200 transition-colors">
+                          <FiEdit2 className="text-blue-600 text-xl" />
+                        </div>
+                        <span className="font-medium text-gray-900">Edit Profile</span>
                 </button>
                 <button 
-                  className={styles.actionButton}
                   onClick={() => router.push('/user/Myaccount/orders')}
+                        className="group flex items-center justify-center gap-3 bg-white border border-gray-200 rounded-xl p-6 hover:border-blue-500 hover:bg-blue-50 transition-all duration-200"
                 >
-                  View Orders
+                        <div className="bg-blue-100 p-2 rounded-lg group-hover:bg-blue-200 transition-colors">
+                          <FiShoppingBag className="text-blue-600 text-xl" />
+                        </div>
+                        <span className="font-medium text-gray-900">View Orders</span>
                 </button>
                 <button 
-                  className={styles.actionButton}
                   onClick={() => router.push('/user/Myaccount/addresses')}
+                        className="group flex items-center justify-center gap-3 bg-white border border-gray-200 rounded-xl p-6 hover:border-blue-500 hover:bg-blue-50 transition-all duration-200"
                 >
-                  Manage Addresses
+                        <div className="bg-blue-100 p-2 rounded-lg group-hover:bg-blue-200 transition-colors">
+                          <FiMapPin className="text-blue-600 text-xl" />
+                        </div>
+                        <span className="font-medium text-gray-900">Manage Addresses</span>
                 </button>
                 <button 
-                  className={`${styles.actionButton} ${styles.dangerButton}`}
                   onClick={handleLogout}
-                >
-                  Logout
+                        className="group flex items-center justify-center gap-3 bg-white border border-red-200 rounded-xl p-6 hover:border-red-500 hover:bg-red-50 transition-all duration-200"
+                      >
+                        <div className="bg-red-100 p-2 rounded-lg group-hover:bg-red-200 transition-colors">
+                          <FiLogOut className="text-red-600 text-xl" />
+                        </div>
+                        <span className="font-medium text-red-600">Logout</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Recent Activity */}
+                  <div className="mt-12">
+                    <h2 className="text-2xl font-semibold text-gray-900 mb-6 flex items-center">
+                      <FiBell className="mr-2" />
+                      Recent Activity
+                    </h2>
+                    <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
+                      <div className="divide-y divide-gray-200">
+                        {orders.length === 0 ? (
+                          <div className="p-4 text-center">
+                            <p className="text-gray-500">No recent activity</p>
+                          </div>
+                        ) : (
+                          orders.slice(0, 5).map((order) => (
+                            <div key={order._id} className="p-4 hover:bg-gray-50 transition-colors">
+                              <div className="flex items-center justify-between">
+                                <div>
+                                  <p className="font-medium text-gray-900">Order #{order._id.slice(-6)}</p>
+                                  <p className="text-sm text-gray-500">{new Date(order.createdAt).toLocaleDateString()}</p>
+                                </div>
+                                <div className="flex items-center gap-4">
+                                  <span className="text-lg font-semibold">£{order.total.toFixed(2)}</span>
+                                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                                    order.status === 'DONE' ? 'bg-green-100 text-green-800' :
+                                    order.status === 'PROCESSING' ? 'bg-blue-100 text-blue-800' :
+                                    order.status === 'SHIPPED' ? 'bg-purple-100 text-purple-800' :
+                                    order.status === 'DELIVERED' ? 'bg-gray-100 text-gray-800' :
+                                    'bg-red-100 text-red-800'
+                                  }`}>
+                                    {order.status}
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                          ))
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </>
+              )}
+
+              {activeTab === 'orders' && (
+                <div>
+                  <h2 className="text-2xl font-semibold text-gray-900 mb-6 flex items-center">
+                    <FiShoppingBag className="mr-2" />
+                    My Orders
+                  </h2>
+                  <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
+                    {orders.length === 0 ? (
+                      <div className="p-8 text-center">
+                        <div className="mb-4">
+                          <FiShoppingBag className="mx-auto h-12 w-12 text-gray-400" />
+                        </div>
+                        <h3 className="text-lg font-medium text-gray-900 mb-2">No orders yet</h3>
+                        <p className="text-gray-500 mb-6">Start shopping to see your orders here</p>
+                        <button
+                          onClick={() => router.push('/shop')}
+                          className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                        >
+                          Start Shopping
+                        </button>
+                      </div>
+                    ) : (
+                      <div className="divide-y divide-gray-200">
+                        {orders.map((order) => (
+                          <div key={order._id} className="p-6">
+                            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                              <div className="flex-1">
+                                <div className="flex items-center gap-4 mb-2">
+                                  <h3 className="text-lg font-medium text-gray-900">
+                                    Order #{order._id.slice(-6)}
+                                  </h3>
+                                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                                    order.status === 'DONE' ? 'bg-green-100 text-green-800' :
+                                    order.status === 'PROCESSING' ? 'bg-blue-100 text-blue-800' :
+                                    order.status === 'SHIPPED' ? 'bg-purple-100 text-purple-800' :
+                                    order.status === 'DELIVERED' ? 'bg-gray-100 text-gray-800' :
+                                    'bg-red-100 text-red-800'
+                                  }`}>
+                                    {order.status}
+                                  </span>
+                                </div>
+                                <p className="text-sm text-gray-500">
+                                  Placed on {formatDate(order.createdAt)}
+                                </p>
+                                <div className="mt-4">
+                                  <p className="text-sm text-gray-600">
+                                    {order.items.length} {order.items.length === 1 ? 'item' : 'items'}
+                                  </p>
+                                </div>
+                              </div>
+                              <div className="flex flex-col items-end gap-2">
+                                <p className="text-lg font-semibold text-gray-900">
+                                  £{order.total.toFixed(2)}
+                                </p>
+                                <button
+                                  onClick={() => toggleOrderExpand(order._id)}
+                                  className="text-sm text-blue-600 hover:text-blue-800 font-medium"
+                                >
+                                  {expandedOrders.has(order._id) ? 'Hide Details' : 'View Details'}
+                                </button>
+                              </div>
+                            </div>
+
+                            {/* Expandable Order Details */}
+                            <div 
+                              className={`space-y-4 overflow-hidden transition-all duration-300 ease-in-out ${
+                                expandedOrders.has(order._id) ? 'max-h-[1000px] opacity-100 mt-6' : 'max-h-0 opacity-0'
+                              }`}
+                            >
+                              {/* Customer Details */}
+                              <div className="bg-gray-50 p-4 rounded-lg">
+                                <h4 className="text-sm font-medium text-gray-900 mb-2">Customer Details</h4>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                  <div>
+                                    <p className="text-sm text-gray-600">Name: {order.customerDetails.firstName} {order.customerDetails.lastName}</p>
+                                    <p className="text-sm text-gray-600">Email: {order.customerDetails.email}</p>
+                                    <p className="text-sm text-gray-600">Phone: {order.customerDetails.phone}</p>
+                                    {order.customerDetails.company && (
+                                      <p className="text-sm text-gray-600">Company: {order.customerDetails.company}</p>
+                                    )}
+                                  </div>
+                                  <div>
+                                    <p className="text-sm text-gray-600">Address: {order.customerDetails.address}</p>
+                                    {order.customerDetails.address2 && (
+                                      <p className="text-sm text-gray-600">Address 2: {order.customerDetails.address2}</p>
+                                    )}
+                                    <p className="text-sm text-gray-600">City: {order.customerDetails.city}</p>
+                                    {order.customerDetails.county && (
+                                      <p className="text-sm text-gray-600">County: {order.customerDetails.county}</p>
+                                    )}
+                                    <p className="text-sm text-gray-600">Postcode: {order.customerDetails.postcode}</p>
+                                    <p className="text-sm text-gray-600">Country: {order.customerDetails.country}</p>
+                                  </div>
+                                </div>
+                              </div>
+
+                              {/* Order Items */}
+                              <div className="bg-white p-4 rounded-lg border">
+                                <h4 className="text-sm font-medium text-gray-900 mb-4">Order Items</h4>
+                                <div className="space-y-4">
+                                  {order.items.map((item, index) => (
+                                    <div key={index} className="flex items-center gap-4 p-2 bg-gray-50 rounded">
+                                      {item.image && (
+                                        <div className="w-16 h-16 relative rounded overflow-hidden">
+                                          <img
+                                            src={item.image}
+                                            alt={item.title}
+                                            className="w-full h-full object-cover"
+                                          />
+                                        </div>
+                                      )}
+                                      <div className="flex-1">
+                                        <p className="font-medium text-gray-900">{item.title}</p>
+                                        <p className="text-sm text-gray-500">Size: {item.size}</p>
+                                        <p className="text-sm text-gray-500">Quantity: {item.quantity}</p>
+                                        <p className="text-sm text-gray-500">Price: £{item.price.toFixed(2)}</p>
+                                      </div>
+                                      <div className="text-right">
+                                        <p className="font-medium text-gray-900">
+                                          £{(item.price * item.quantity).toFixed(2)}
+                                        </p>
+                                      </div>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+
+                              {/* Order Summary */}
+                              <div className="bg-gray-50 p-4 rounded-lg">
+                                <h4 className="text-sm font-medium text-gray-900 mb-4">Order Summary</h4>
+                                <div className="space-y-2">
+                                  <div className="flex justify-between">
+                                    <span className="text-sm text-gray-600">Subtotal:</span>
+                                    <span className="text-sm font-medium">£{order.total.toFixed(2)}</span>
+                                  </div>
+                                  <div className="flex justify-between">
+                                    <span className="text-sm text-gray-600">Shipping:</span>
+                                    <span className="text-sm font-medium">{order.shipping}</span>
+                                  </div>
+                                  <div className="flex justify-between border-t pt-2">
+                                    <span className="text-sm font-medium">Total:</span>
+                                    <span className="text-sm font-medium">£{order.total.toFixed(2)}</span>
+                                  </div>
+                                </div>
+                              </div>
+
+                              {/* Payment Information */}
+                              <div className="bg-white p-4 rounded-lg border">
+                                <h4 className="text-sm font-medium text-gray-900 mb-2">Payment Information</h4>
+                                <p className="text-sm text-gray-600">Payment Method: {order.paymentMethod}</p>
+                              </div>
+
+                              {/* Order Notes */}
+                              {order.customerDetails.orderNotes && (
+                                <div className="bg-gray-50 p-4 rounded-lg">
+                                  <h4 className="text-sm font-medium text-gray-900 mb-2">Order Notes</h4>
+                                  <p className="text-sm text-gray-600">{order.customerDetails.orderNotes}</p>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {activeTab === 'wishlist' && (
+                <div>
+                  <h2 className="text-2xl font-semibold text-gray-900 mb-6 flex items-center">
+                    <FiHeart className="mr-2" />
+                    My Wishlist
+                  </h2>
+                  <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
+                    {wishlistItems.length === 0 ? (
+                      <div className="p-8 text-center">
+                        <div className="mb-4">
+                          <FiHeart className="mx-auto h-12 w-12 text-gray-400" />
+                        </div>
+                        <h3 className="text-lg font-medium text-gray-900 mb-2">Your wishlist is empty</h3>
+                        <p className="text-gray-500 mb-6">Add items to your wishlist to save them for later</p>
+                        <button
+                          onClick={() => router.push('/shop')}
+                          className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                        >
+                          Start Shopping
                 </button>
               </div>
-            </section>
+                    ) : (
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
+                        {wishlistItems.map((item) => (
+                          <div key={item.id} className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow">
+                            <div className="relative aspect-square">
+                              <img
+                                src={item.src}
+                                alt={item.title}
+                                className="w-full h-full object-cover"
+                              />
+                            </div>
+                            <div className="p-4">
+                              <h3 className="text-lg font-medium text-gray-900 mb-2">{item.title}</h3>
+                              <div className="flex items-center justify-between">
+                                <p className="text-lg font-semibold text-gray-900">{item.price}</p>
+                                {item.discount && (
+                                  <span className="text-sm font-medium text-red-600">{item.discount}</span>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>

@@ -737,7 +737,13 @@ export default function MobileQuickViewModal({ product, onClose }: MobileQuickVi
                   <circle cx="20" cy="21" r="1"/>
                   <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
                 </svg>
-                {product.category === 'OUTDOOR' ? 'Add to Cart' : (selectedSize ? 'Add to Cart' : 'Select Size')}
+                {product.category === 'OUTDOOR' ? 'Add to Cart' : (
+                  selectedSize ? 'Add to Cart' : (
+                    product.category === 'THROWS & TOWELS' || product.category === 'CLOTHING' 
+                      ? 'Select Style' 
+                      : 'Select Size'
+                  )
+                )}
               </button>
             )}
           </div>
@@ -841,7 +847,16 @@ export default function MobileQuickViewModal({ product, onClose }: MobileQuickVi
                         WebkitTapHighlightColor: 'transparent'
                       }}
                     >
-                      <span>{size.size}</span>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                        <span>{size.size}</span>
+                        <span style={{ 
+                          fontSize: '12px', 
+                          color: size.stock > 0 ? '#4CAF50' : '#e53935',
+                          fontWeight: 500
+                        }}>
+                          {size.stock > 0 ? `${size.stock} in stock` : 'Out of stock'}
+                        </span>
+                      </div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                         <span style={{ color: '#e53935', fontWeight: 600 }}>
                           {formatPrice(product.clearanceDiscount
@@ -891,7 +906,16 @@ export default function MobileQuickViewModal({ product, onClose }: MobileQuickVi
                         WebkitTapHighlightColor: 'transparent'
                       }}
                     >
-                      <span>{style.size}</span>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                        <span>{style.size}</span>
+                        <span style={{ 
+                          fontSize: '12px', 
+                          color: style.stock > 0 ? '#4CAF50' : '#e53935',
+                          fontWeight: 500
+                        }}>
+                          {style.stock > 0 ? `${style.stock} in stock` : 'Out of stock'}
+                        </span>
+                      </div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                         <span style={{ color: '#e53935', fontWeight: 600 }}>
                           {formatPrice(product.clearanceDiscount
@@ -941,7 +965,16 @@ export default function MobileQuickViewModal({ product, onClose }: MobileQuickVi
                         WebkitTapHighlightColor: 'transparent'
                       }}
                     >
-                      <span>{size.size}</span>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                        <span>{size.size}</span>
+                        <span style={{ 
+                          fontSize: '12px', 
+                          color: (size.stock || 0) > 0 ? '#4CAF50' : '#e53935',
+                          fontWeight: 500
+                        }}>
+                          {(size.stock || 0) > 0 ? `${size.stock} in stock` : 'Out of stock'}
+                        </span>
+                      </div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                         <span style={{ color: '#e53935', fontWeight: 600 }}>
                           {formatPrice(product.clearanceDiscount
@@ -989,7 +1022,16 @@ export default function MobileQuickViewModal({ product, onClose }: MobileQuickVi
                         WebkitTapHighlightColor: 'transparent'
                       }}
                     >
-                      <span>{size.size}</span>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                        <span>{size.size}</span>
+                        <span style={{ 
+                          fontSize: '12px', 
+                          color: (size.stock || 0) > 0 ? '#4CAF50' : '#e53935',
+                          fontWeight: 500
+                        }}>
+                          {(size.stock || 0) > 0 ? `${size.stock} in stock` : 'Out of stock'}
+                        </span>
+                      </div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                         <span style={{ color: '#e53935', fontWeight: 600 }}>
                           {formatPrice(product.clearanceDiscount
@@ -998,6 +1040,65 @@ export default function MobileQuickViewModal({ product, onClose }: MobileQuickVi
                           )}
                         </span>
                         {selectedSize === size.size && (
+                          <svg
+                            width="20"
+                            height="20"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="#222"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          >
+                            <path d="M20 6L9 17l-5-5"/>
+                          </svg>
+                        )}
+                      </div>
+                    </button>
+                  ))}
+                  {product.throwsTowelsStylePrices?.map((style, index) => (
+                    <button
+                      key={index}
+                      onClick={() => handleSizeSelect(style.size)}
+                      style={{
+                        padding: '16px',
+                        borderRadius: '8px',
+                        border: '1px solid',
+                        borderColor: selectedSize === style.size ? '#222' : '#eee',
+                        background: selectedSize === style.size ? '#f8f9fa' : 'transparent',
+                        color: '#444',
+                        fontSize: '16px',
+                        fontWeight: 500,
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        textAlign: 'left',
+                        width: '100%',
+                        touchAction: 'manipulation',
+                        WebkitTapHighlightColor: 'transparent'
+                      }}
+                    >
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                        <span>{style.size}</span>
+                        <span style={{ 
+                          fontSize: '12px', 
+                          color: style.stock > 0 ? '#4CAF50' : '#e53935',
+                          fontWeight: 500
+                        }}>
+                          {style.stock > 0 ? `${style.stock} in stock` : 'Out of stock'}
+                        </span>
+                      </div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <span style={{ color: '#e53935', fontWeight: 600 }}>
+                          {formatPrice(product.clearanceDiscount
+                            ? style.salePrice * (1 - product.clearanceDiscount / 100)
+                            : (product.discount
+                              ? style.salePrice * (1 - product.discount / 100)
+                              : style.salePrice)
+                          )}
+                        </span>
+                        {selectedSize === style.size && (
                           <svg
                             width="20"
                             height="20"
