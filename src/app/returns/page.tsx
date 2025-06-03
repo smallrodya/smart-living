@@ -72,6 +72,17 @@ export default function ReturnsPage() {
                         <p className="text-gray-600 mt-1">30 days with no questions as to why you want to send it back. Please note that you will be responsible for the postal costs of returning the item.</p>
                       </div>
                     </li>
+                    <li className="flex items-start">
+                      <span className="text-green-600 mr-2">✓</span>
+                      <div>
+                        <span className="font-semibold text-gray-900">Return Conditions</span>
+                        <p className="text-gray-600 mt-1">The item must be returned in a sellable condition, which means:</p>
+                        <ul className="list-disc list-inside text-gray-600 mt-2 ml-4">
+                          <li>Unused, undamaged, and unworn</li>
+                          <li>In its original packaging, with all tags, labels, and any included accessories or documentation intact</li>
+                        </ul>
+                      </div>
+                    </li>
                   </ul>
                 </div>
               </div>
@@ -165,9 +176,31 @@ export default function ReturnsPage() {
               <section className="bg-pink-50 rounded-2xl p-6 md:p-8">
                 <h2 className="text-xl font-semibold text-gray-900 mb-4">Refunds</h2>
                 <div className="bg-white rounded-xl p-4 border border-pink-100">
-                  <p className="text-gray-600 leading-relaxed">
-                    All refunds will be processed within 14 days of cancellation of your order or receipt of your returned goods.
-                  </p>
+                  <div className="space-y-4">
+                    <p className="text-gray-600 leading-relaxed">
+                      All refunds will be processed within 14 days of cancellation of your order or receipt of your returned goods.
+                    </p>
+                    <div className="bg-pink-50 p-4 rounded-lg">
+                      <h3 className="font-semibold text-gray-900 mb-2">Please Note – Seller Rights:</h3>
+                      <p className="text-gray-600 text-sm">
+                        In accordance with UK consumer law, we reserve the right to inspect returned items before processing a refund. 
+                        If the item is not returned in a resaleable (sellable) condition, or if it has been used, damaged, or altered 
+                        in any way, we may reject the return or apply a partial refund. This is to ensure fairness and compliance with 
+                        legal standards.
+                      </p>
+                    </div>
+                    <div className="bg-pink-50 p-4 rounded-lg">
+                      <h3 className="font-semibold text-gray-900 mb-2">Refund Timeline:</h3>
+                      <p className="text-gray-600 text-sm">
+                        Returned parcels usually take 3–7 working days to reach us. They are first sent to a central depot, 
+                        then forwarded to our warehouse for inspection.
+                      </p>
+                      <p className="text-gray-600 text-sm mt-2">
+                        All refunds will be issued within 14 days of either the cancellation of your order or the receipt of 
+                        the returned goods—whichever is later.
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </section>
             </div>
