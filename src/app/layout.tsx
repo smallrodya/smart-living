@@ -15,7 +15,7 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: "Smart Living",
-  description: "Smart Living - The best place to buy homeware",
+  description: "Smart Living - Quality products at smart prices",
   icons: {
     icon: '/site-ico.ico',
     apple: '/site-ico.ico',

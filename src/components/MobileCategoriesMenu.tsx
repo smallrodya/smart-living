@@ -185,19 +185,6 @@ const categories: Category[] = [
     ],
   },
   {
-    name: 'CURTAINS',
-    img: '/cat-curtains-main.jpg',
-    color: '#FFB6C1',
-    columns: [
-      {
-        title: 'CATEGORY',
-        items: [
-          { label: 'In the near future.', href: '/category/curtains/living-room' },
-        ],
-      },
-    ],
-  },
-  {
     name: 'CLOTHING',
     img: '/cat-clothing-main.jpg',
     color: '#D8BFD8',
@@ -264,19 +251,6 @@ const categories: Category[] = [
       },
     ],
   },
-  {
-    name: 'CLEARANCE',
-    img: '/CLEARANCESALE.JPG',
-    color: '#e53935',
-    columns: [
-      {
-        title: 'CATEGORY',
-        items: [
-          { label: 'Shop all', href: '/shop/clearance' },
-        ],
-      },
-    ],
-  },
 ];
 
 const MobileCategoriesMenu = () => {
@@ -317,10 +291,7 @@ const MobileCategoriesMenu = () => {
                   className={styles.categoryImage}
                 />
               </div>
-              <span 
-                className={styles.categoryName}
-                style={category.name === 'CLEARANCE' ? { color: '#e53935' } : undefined}
-              >
+              <span className={styles.categoryName}>
                 {category.name}
               </span>
               <span className={`${styles.arrow} ${expandedCategory === category.name ? styles.arrowUp : ''}`}>
@@ -374,6 +345,25 @@ const MobileCategoriesMenu = () => {
             )}
           </div>
         ))}
+        <Link 
+          href="/shop/clearance" 
+          className={styles.categoryItem}
+        >
+          <div className={styles.categoryHeader}>
+            <div className={styles.categoryImageWrapper}>
+              <Image
+                src="/CLEARANCESALE.JPG"
+                alt="CLEARANCE"
+                width={60}
+                height={60}
+                className={styles.categoryImage}
+              />
+            </div>
+            <span className={styles.categoryName} style={{ color: '#e53935' }}>
+              CLEARANCE
+            </span>
+          </div>
+        </Link>
       </div>
     </div>
   );

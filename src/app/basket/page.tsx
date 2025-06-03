@@ -26,6 +26,7 @@ interface Product {
     stock: number;
   }>;
   clearanceDiscount?: number;
+  sku: string;
 }
 
 export default function BasketPage() {
@@ -96,6 +97,7 @@ export default function BasketPage() {
                   <tr>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Size</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">SKU</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Availability</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quantity</th>
@@ -125,8 +127,9 @@ export default function BasketPage() {
                         </div>
                       </td>
                       <td className="px-6 py-4 text-sm text-gray-500">{item.size}</td>
+                      <td className="px-6 py-4 text-sm text-gray-500">{item.sku}</td>
                       <td className="px-6 py-4 text-sm text-gray-500">
-                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium whitespace-nowrap ${
                           item.stock && item.stock > 0 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
                         }`}>
                           {getStockInfo(item)}
@@ -190,6 +193,7 @@ export default function BasketPage() {
                           <h3 className="font-medium text-gray-900">{item.title}</h3>
                           <p className="text-sm text-gray-500">{item.category}</p>
                           <p className="text-sm text-gray-500 mt-1">Size: {item.size}</p>
+                          <p className="text-sm text-gray-500">SKU: {item.sku}</p>
                         </div>
                         <button
                           onClick={() => removeItem(item.id)}
@@ -202,7 +206,7 @@ export default function BasketPage() {
                       </div>
                       
                       <div className="mt-2">
-                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium whitespace-nowrap ${
                           item.stock && item.stock > 0 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
                         }`}>
                           {getStockInfo(item)}

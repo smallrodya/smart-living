@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Image from "next/image";
+import { getCookie } from 'cookies-next';
 
 interface BasketItem {
   id: string;
@@ -25,8 +26,9 @@ const SHIPPING_OPTIONS = [
 ];
 
 export default function CheckoutPage() {
-  const { items, total } = useBasket();
+  const { items, total, clearBasket } = useBasket();
   const router = useRouter();
+  const [authError, setAuthError] = useState('');
 
   const [form, setForm] = useState({
     email: "",
@@ -76,12 +78,55 @@ export default function CheckoutPage() {
     const newErrors = validate();
     setErrors(newErrors);
     if (Object.keys(newErrors).length > 0) return;
+
+    // Проверка авторизации
+    const userCookie = getCookie('user');
+    if (!userCookie) {
+      setAuthError('Please login or register to complete your purchase. This will allow you to track your orders in your account.');
+      return;
+    }
+
     setSubmitting(true);
-    setTimeout(() => {
-      setSubmitting(false);
-      alert("Order placed! (Demo)");
+    try {
+      // Подготавливаем данные для обновления количества товара
+      const stockUpdateData = {
+        items: items.map(item => ({
+          sku: item.sku,
+          quantity: item.quantity
+        }))
+      };
+      
+      console.log('Sending stock update data:', stockUpdateData);
+
+      // Обновляем количество товара
+      const response = await fetch('/api/products/update-stock', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(stockUpdateData),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error('Stock update failed:', errorData);
+        throw new Error('Failed to update stock');
+      }
+
+      const result = await response.json();
+      console.log('Stock update result:', result);
+
+      // Очищаем корзину после успешного оформления заказа
+      clearBasket();
+
+      alert("Order placed successfully!");
       router.push("/basket");
-    }, 1000);
+    } catch (error) {
+      console.error('Error placing order:', error);
+      alert("Failed to place order. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const subtotal = items.reduce((sum, item) => sum + (item.clearanceDiscount ? item.price * (1 - item.clearanceDiscount / 100) : item.price) * item.quantity, 0);
@@ -292,6 +337,8 @@ export default function CheckoutPage() {
                   <div className="flex flex-col">
                     <span className="font-medium text-gray-900">{item.title} <span className="font-normal text-gray-500">× {item.quantity}</span></span>
                     {item.size && <span className="text-xs text-gray-400">Size: {item.size}</span>}
+                    {item.sku && <span className="text-xs text-gray-400">SKU: {item.sku}</span>}
+                    {item.stock !== undefined && <span className="text-xs text-gray-400">Stock: {item.stock}</span>}
                   </div>
                   <div className="text-right text-gray-900">£{((item.clearanceDiscount ? item.price * (1 - item.clearanceDiscount / 100) : item.price) * item.quantity).toFixed(2)}</div>
                 </div>
@@ -474,14 +521,36 @@ export default function CheckoutPage() {
             </div>
 
             {/* Place Order Button */}
-            <button
-              type="button"
-              onClick={handleSubmit}
-              disabled={submitting}
-              className="w-full mt-6 bg-blue-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors disabled:opacity-50 text-lg"
-            >
-              {submitting ? "Placing order..." : "Place Order"}
-            </button>
+            <div className="space-y-4">
+              {authError && (
+                <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+                  <p className="font-medium">Authentication Required</p>
+                  <p className="text-sm mt-1">{authError}</p>
+                  <div className="mt-3 flex gap-3">
+                    <button
+                      onClick={() => router.push('/user/login')}
+                      className="text-sm bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition-colors"
+                    >
+                      Login
+                    </button>
+                    <button
+                      onClick={() => router.push('/user/register')}
+                      className="text-sm bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700 transition-colors"
+                    >
+                      Register
+                    </button>
+                  </div>
+                </div>
+              )}
+              <button
+                type="button"
+                onClick={handleSubmit}
+                disabled={submitting}
+                className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors disabled:opacity-50 text-lg"
+              >
+                {submitting ? "Placing order..." : "Place Order"}
+              </button>
+            </div>
 
             {/* Info text */}
             <div className="text-xs text-gray-500 mt-6 border-t pt-4">
