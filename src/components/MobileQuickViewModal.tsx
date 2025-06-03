@@ -623,11 +623,14 @@ export default function MobileQuickViewModal({ product, onClose }: MobileQuickVi
             <div style={{
               color: '#e53935',
               fontWeight: 700,
-              fontSize: '24px',
+              fontSize: '20px',
               marginBottom: '16px',
               display: 'flex',
               alignItems: 'center',
-              gap: '8px'
+              gap: '4px',
+              flexWrap: 'nowrap',
+              minWidth: 0,
+              overflow: 'hidden',
             }}>
               {product.category === 'OUTDOOR' && product.outdoorPrice ? (
                 <>
