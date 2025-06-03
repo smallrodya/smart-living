@@ -1,28 +1,36 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 const MobileBottomMenu = () => {
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
+
+  useEffect(() => {
+    const checkAuth = () => {
+      const userCookie = document.cookie.split('; ').find(row => row.startsWith('user='));
+      setIsAuthenticated(!!userCookie);
+    };
+
+    checkAuth();
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
-      if (isModalOpen) return; // Не реагируем на скролл если открыто модальное окно
+      if (isModalOpen) return;
 
       const currentScrollY = window.scrollY;
       const scrollDifference = currentScrollY - lastScrollY;
       
-      // Определяем направление скролла с учетом порога
-      if (Math.abs(scrollDifference) > 5) { // Порог для предотвращения ложных срабатываний
+      if (Math.abs(scrollDifference) > 5) {
         if (scrollDifference > 0) {
-          // Скролл вниз
           setIsVisible(false);
         } else {
-          // Скролл вверх
           setIsVisible(true);
         }
       }
@@ -34,7 +42,6 @@ const MobileBottomMenu = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [lastScrollY, isModalOpen]);
 
-  // Отслеживаем состояние модального окна
   useEffect(() => {
     const observer = new MutationObserver((mutations) => {
       mutations.forEach((mutation) => {
@@ -42,9 +49,9 @@ const MobileBottomMenu = () => {
           const modalOpen = document.body.style.position === 'fixed';
           setIsModalOpen(modalOpen);
           if (modalOpen) {
-            setIsVisible(false); // Скрываем меню при открытии модального окна
+            setIsVisible(false);
           } else {
-            setIsVisible(true); // Показываем меню при закрытии модального окна
+            setIsVisible(true);
           }
         }
       });
@@ -57,6 +64,15 @@ const MobileBottomMenu = () => {
 
     return () => observer.disconnect();
   }, []);
+
+  const handleAccountClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (isAuthenticated) {
+      router.push('/user/Myaccount');
+    } else {
+      router.push('/user/login');
+    }
+  };
 
   return (
     <div style={{
@@ -131,18 +147,22 @@ const MobileBottomMenu = () => {
         <span>Basket</span>
       </Link>
 
-      <Link href="/user/login" style={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        textDecoration: 'none',
-        color: pathname === '/user/login' ? '#e53935' : '#222',
-        fontSize: 10,
-        gap: 4,
-        padding: '4px 8px',
-        borderRadius: '8px',
-        transition: 'all 0.2s ease',
-      }}>
+      <Link 
+        href={isAuthenticated ? "/user/Myaccount" : "/user/login"}
+        onClick={handleAccountClick}
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          textDecoration: 'none',
+          color: pathname === '/user/login' || pathname === '/user/Myaccount' ? '#e53935' : '#222',
+          fontSize: 10,
+          gap: 4,
+          padding: '4px 8px',
+          borderRadius: '8px',
+          transition: 'all 0.2s ease',
+        }}
+      >
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
           <circle cx="12" cy="7" r="4"/>

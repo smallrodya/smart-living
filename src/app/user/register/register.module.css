@@ -164,3 +164,9 @@
     padding: 1.5rem;
   }
 } 
+
+@media (max-width: 768px) {
+  .container {
+    padding-top: 60px;
+  }
+}

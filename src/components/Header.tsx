@@ -3,15 +3,18 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import MobileHeader from './MobileHeader';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 const Header = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [isMobile, setIsMobile] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     const checkMobile = () => {
       if (typeof window !== 'undefined') {
-      setIsMobile(window.innerWidth <= 768);
+        setIsMobile(window.innerWidth <= 768);
       }
     };
     
@@ -21,9 +24,27 @@ const Header = () => {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
+  useEffect(() => {
+    const checkAuth = () => {
+      const userCookie = document.cookie.split('; ').find(row => row.startsWith('user='));
+      setIsAuthenticated(!!userCookie);
+    };
+
+    checkAuth();
+  }, []);
+
   if (isMobile) {
     return <MobileHeader />;
   }
+
+  const handleProfileClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (isAuthenticated) {
+      router.push('/user/Myaccount');
+    } else {
+      router.push('/user/login');
+    }
+  };
 
   return (
     <header style={{ 
@@ -152,7 +173,8 @@ const Header = () => {
           alignItems: 'center'
         }}>
           <Link 
-            href="/user/login" 
+            href={isAuthenticated ? "/user/Myaccount" : "/user/login"}
+            onClick={handleProfileClick}
             style={{ 
               color: '#000',
               textDecoration: 'none',

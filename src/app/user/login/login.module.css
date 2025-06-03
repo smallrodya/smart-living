@@ -94,3 +94,9 @@
   color: #0051a2;
   text-decoration: underline;
 } 
+
+@media (max-width: 768px) {
+  .container {
+    padding-top: 60px;
+  }
+}
