@@ -235,7 +235,7 @@ export default function ClearancePage() {
           marginBottom: '60px'
         }}>
           <Image
-            src="/clearance-banner.jpg"
+            src="/banner.jpg"
             alt="Clearance Sale"
             fill
             style={{
