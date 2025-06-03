@@ -12,6 +12,7 @@ const nextConfig = {
         hostname: 'localhost',
       }
     ],
+    unoptimized: true,
   },
   async headers() {
     return [

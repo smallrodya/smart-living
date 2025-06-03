@@ -168,7 +168,7 @@ export default function CompleteBeddingSetPage() {
           marginBottom: '60px'
         }}>
           <Image
-            src="/Complete Bedding Sets.jpg"
+            src="/CompleteBeddingSets.jpg"
             alt="Complete Bedding Sets"
             fill
             style={{
