@@ -16,7 +16,23 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "Smart Living",
   description: "Smart Living - The best place to buy homeware",
-  icons: '/site-ico.ico',
+  icons: {
+    icon: [
+      { url: '/site-ico.ico', sizes: 'any' },
+      { url: '/site-ico.ico', type: 'image/png', sizes: '32x32' },
+      { url: '/site-ico.ico', type: 'image/png', sizes: '180x180' },
+    ],
+    apple: [
+      { url: '/site-ico.ico', sizes: '180x180' },
+    ],
+    shortcut: ['/site-ico.ico'],
+  },
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: 'Smart Living',
+  },
+  manifest: '/manifest.json',
 };
 
 export default function RootLayout({
