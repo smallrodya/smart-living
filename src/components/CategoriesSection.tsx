@@ -198,17 +198,6 @@ const megaMenus: MegaMenu[] = [
     ],
   },
   {
-    name: 'CURTAINS',
-    columns: [
-      {
-        title: 'CATEGORY',
-        items: [
-          { label: 'In the near future.', href: '/category/curtains/living-room' },
-        ],
-      },
-    ],
-  },
-  {
     name: 'CLOTHING',
     columns: [
       {
@@ -329,20 +318,23 @@ const CategoriesSection = () => {
           <li
             key={cat.name}
             className={styles.menuItem + (hoveredIdx === idx && dropdownOpen ? ' ' + styles.active : '')}
-            onMouseEnter={() => handleMouseEnter(idx)}
+            onMouseEnter={() => cat.name !== 'CLEARANCE' && handleMouseEnter(idx)}
             onMouseLeave={handleMouseLeave}
             tabIndex={0}
-            aria-haspopup="true"
+            aria-haspopup={cat.name !== 'CLEARANCE'}
             aria-expanded={hoveredIdx === idx && dropdownOpen}
             role="menuitem"
           >
-            <span
-              className={styles.menuTitle}
-              style={cat.name === 'CLEARANCE' ? { color: 'red' } : undefined}
-            >
-              {cat.name}
-            </span>
-            {hoveredIdx === idx && dropdownOpen && (
+            {cat.name === 'CLEARANCE' ? (
+              <Link href="/shop/clearance" className={styles.menuTitle} style={{ color: 'red' }}>
+                {cat.name}
+              </Link>
+            ) : (
+              <span className={styles.menuTitle}>
+                {cat.name}
+              </span>
+            )}
+            {hoveredIdx === idx && dropdownOpen && cat.name !== 'CLEARANCE' && (
               <div className={styles.dropdown} role="menu">
                 <div className={styles.dropdownContent}>
                   {cat.columns.map((col, colIdx) => (
