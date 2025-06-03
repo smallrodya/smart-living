@@ -133,7 +133,7 @@ const ThrowAndCurtainSection = () => {
             transform: hovered === 'rugs' ? 'scale(1.06)' : 'scale(1)',
           }}>
             <Image
-              src="/carved9.jpg"
+              src="/carved_banner.jpg"
               alt="Curtains"
               fill
               style={{ objectFit: 'cover', borderRadius: 12 }}
