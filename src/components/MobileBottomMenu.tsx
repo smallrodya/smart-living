@@ -6,41 +6,46 @@ import { usePathname } from 'next/navigation';
 const MobileBottomMenu = () => {
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const pathname = usePathname();
 
   useEffect(() => {
     const handleScroll = () => {
+      if (isModalOpen) return; // Не реагируем на скролл если открыто модальное окно
+
       const currentScrollY = window.scrollY;
+      const scrollDifference = currentScrollY - lastScrollY;
       
-      if (currentScrollY > lastScrollY) {
-        // Прокрутка вниз - скрываем меню
-        setIsVisible(false);
-      } else {
-        // Прокрутка вверх - показываем меню
-        setIsVisible(true);
+      // Определяем направление скролла с учетом порога
+      if (Math.abs(scrollDifference) > 5) { // Порог для предотвращения ложных срабатываний
+        if (scrollDifference > 0) {
+          // Скролл вниз
+          setIsVisible(false);
+        } else {
+          // Скролл вверх
+          setIsVisible(true);
+        }
       }
       
       setLastScrollY(currentScrollY);
     };
 
-    // Проверяем, открыто ли модальное окно
-    const isModalOpen = document.body.style.position === 'fixed';
-    if (isModalOpen) {
-      setIsVisible(false);
-    } else {
-      window.addEventListener('scroll', handleScroll, { passive: true });
-    }
-
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [lastScrollY]);
+  }, [lastScrollY, isModalOpen]);
 
-  // Добавляем эффект для отслеживания изменений в body
+  // Отслеживаем состояние модального окна
   useEffect(() => {
     const observer = new MutationObserver((mutations) => {
       mutations.forEach((mutation) => {
         if (mutation.attributeName === 'style') {
-          const isModalOpen = document.body.style.position === 'fixed';
-          setIsVisible(!isModalOpen);
+          const modalOpen = document.body.style.position === 'fixed';
+          setIsModalOpen(modalOpen);
+          if (modalOpen) {
+            setIsVisible(false); // Скрываем меню при открытии модального окна
+          } else {
+            setIsVisible(true); // Показываем меню при закрытии модального окна
+          }
         }
       });
     });

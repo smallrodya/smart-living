@@ -480,11 +480,37 @@ export default function MobileQuickViewModal({ product, onClose }: MobileQuickVi
                   priority
                   style={{ 
                     objectFit: 'contain',
-                    objectPosition: 'center',
-                    cursor: 'zoom-in'
+                    objectPosition: 'center'
                   }}
-                  onClick={handleImageClick}
                 />
+                <button
+                  onClick={handleImageClick}
+                  style={{
+                    position: 'absolute',
+                    bottom: '16px',
+                    right: '16px',
+                    background: 'rgba(0, 0, 0, 0.6)',
+                    border: 'none',
+                    borderRadius: '50%',
+                    width: '40px',
+                    height: '40px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    cursor: 'pointer',
+                    zIndex: 3,
+                    backdropFilter: 'blur(4px)',
+                    transition: 'background-color 0.2s ease'
+                  }}
+                  onTouchEnd={(e) => {
+                    e.stopPropagation(); // Предотвращаем срабатывание свайпа
+                    handleImageClick();
+                  }}
+                >
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2">
+                    <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+                  </svg>
+                </button>
                 {product.discount && (
                   <span style={{
                     position: 'absolute',
