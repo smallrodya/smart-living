@@ -1,54 +1,71 @@
 import { NextResponse } from 'next/server';
+import { connectToDatabase } from '@/lib/mongodb';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 30; // Устанавливаем максимальную длительность в 30 секунд
 
 export async function GET() {
   try {
-    const encoder = new TextEncoder();
-    const stream = new ReadableStream({
-      start(controller) {
-        let isControllerClosed = false;
+    const { db } = await connectToDatabase();
 
-        // Отправляем начальное сообщение
-        controller.enqueue(encoder.encode('data: {"type":"connected"}\n\n'));
-
-        // Устанавливаем интервал для отправки обновлений
-        const interval = setInterval(() => {
-          if (!isControllerClosed) {
-            try {
-              controller.enqueue(encoder.encode('data: {"type":"ping"}\n\n'));
-            } catch (error) {
-              isControllerClosed = true;
-              clearInterval(interval);
-            }
+    // Получаем только необходимые поля и ограничиваем количество записей
+    const recentOrders = await db.collection('orders')
+      .find({}, {
+        projection: {
+          _id: 1,
+          total: 1,
+          status: 1,
+          createdAt: 1,
+          customerDetails: {
+            firstName: 1,
+            lastName: 1
           }
-        }, 15000);
+        }
+      })
+      .sort({ createdAt: -1 })
+      .limit(10)
+      .toArray();
 
-        // Обработчик закрытия соединения
-        return () => {
-          isControllerClosed = true;
-          clearInterval(interval);
-          try {
-            controller.close();
-          } catch (error) {
-            console.error('Error closing controller:', error);
+    // Получаем только количество документов вместо полных данных
+    const [ordersCount, usersCount, productsCount] = await Promise.all([
+      db.collection('orders').countDocuments(),
+      db.collection('users').countDocuments(),
+      db.collection('products').countDocuments()
+    ]);
+
+    // Получаем общую сумму заказов за последние 30 дней
+    const thirtyDaysAgo = new Date();
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+    const recentOrdersTotal = await db.collection('orders')
+      .aggregate([
+        {
+          $match: {
+            createdAt: { $gte: thirtyDaysAgo.toISOString() }
           }
-        };
-      },
-    });
+        },
+        {
+          $group: {
+            _id: null,
+            total: { $sum: '$total' }
+          }
+        }
+      ])
+      .toArray();
 
-    return new NextResponse(stream, {
-      headers: {
-        'Content-Type': 'text/event-stream',
-        'Cache-Control': 'no-cache',
-        'Connection': 'keep-alive',
-      },
+    const totalRevenue = recentOrdersTotal[0]?.total || 0;
+
+    return NextResponse.json({
+      orders: ordersCount,
+      revenue: totalRevenue.toFixed(2),
+      users: usersCount,
+      products: productsCount,
+      recentOrders
     });
   } catch (error) {
-    console.error('Error in stats-updates:', error);
+    console.error('Error fetching stats:', error);
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: 'Failed to fetch stats' },
       { status: 500 }
     );
   }
