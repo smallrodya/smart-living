@@ -18,8 +18,8 @@ interface BasketItem {
 interface BasketContextType {
   items: BasketItem[];
   addItem: (item: BasketItem) => void;
-  removeItem: (id: string) => void;
-  updateQuantity: (id: string, quantity: number) => void;
+  removeItem: (id: string, size: string) => void;
+  updateQuantity: (id: string, size: string, quantity: number) => void;
   clearBasket: () => void;
   total: number;
 }
@@ -55,32 +55,30 @@ export function BasketProvider({ children }: { children: React.ReactNode }) {
     }
   }, [items, isInitialized]);
 
-  const addItem = (newItem: BasketItem) => {
-    setItems(prevItems => {
-      const existingItem = prevItems.find(item => item.id === newItem.id);
-      
+  const addItem = (item: BasketItem) => {
+    setItems(prev => {
+      const existingItem = prev.find(i => i.id === item.id && i.size === item.size);
       if (existingItem) {
-        return prevItems.map(item =>
-          item.id === newItem.id
-            ? { ...item, quantity: item.quantity + 1 }
-            : item
+        return prev.map(i => 
+          i.id === item.id && i.size === item.size 
+            ? { ...i, quantity: i.quantity + item.quantity }
+            : i
         );
       }
-      
-      return [...prevItems, { ...newItem, quantity: 1 }];
+      return [...prev, item];
     });
   };
 
-  const removeItem = (id: string) => {
-    setItems(prevItems => prevItems.filter(item => item.id !== id));
+  const removeItem = (id: string, size: string) => {
+    setItems(prev => prev.filter(item => !(item.id === id && item.size === size)));
   };
 
-  const updateQuantity = (id: string, quantity: number) => {
-    if (quantity < 1) return;
-    
-    setItems(prevItems =>
-      prevItems.map(item =>
-        item.id === id ? { ...item, quantity } : item
+  const updateQuantity = (id: string, size: string, quantity: number) => {
+    setItems(prev => 
+      prev.map(item => 
+        item.id === id && item.size === size 
+          ? { ...item, quantity }
+          : item
       )
     );
   };
@@ -90,21 +88,14 @@ export function BasketProvider({ children }: { children: React.ReactNode }) {
   };
 
   const total = items.reduce((sum, item) => {
-    const itemPrice = item.clearanceDiscount 
-      ? item.price * (1 - item.clearanceDiscount / 100)
+    const price = item.clearanceDiscount 
+      ? item.price * (1 - item.clearanceDiscount / 100) 
       : item.price;
-    return sum + itemPrice * item.quantity;
+    return sum + price * item.quantity;
   }, 0);
 
   return (
-    <BasketContext.Provider value={{
-      items,
-      addItem,
-      removeItem,
-      updateQuantity,
-      clearBasket,
-      total
-    }}>
+    <BasketContext.Provider value={{ items, addItem, removeItem, updateQuantity, clearBasket, total }}>
       {children}
     </BasketContext.Provider>
   );

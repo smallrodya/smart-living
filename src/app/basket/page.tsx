@@ -139,7 +139,7 @@ export default function BasketPage() {
                       <td className="px-6 py-4">
                         <div className="flex items-center space-x-2">
                           <button
-                            onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                            onClick={() => updateQuantity(item.id, item.size, item.quantity - 1)}
                             className="p-1 rounded hover:bg-gray-100 transition-colors"
                             disabled={item.quantity <= 1}
                           >
@@ -147,7 +147,7 @@ export default function BasketPage() {
                           </button>
                           <span className="w-8 text-center">{item.quantity}</span>
                           <button
-                            onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                            onClick={() => updateQuantity(item.id, item.size, item.quantity + 1)}
                             className="p-1 rounded hover:bg-gray-100 transition-colors"
                             disabled={item.stock !== undefined && item.quantity >= item.stock}
                           >
@@ -160,7 +160,7 @@ export default function BasketPage() {
                       </td>
                       <td className="px-6 py-4 text-right">
                         <button
-                          onClick={() => removeItem(item.id)}
+                          onClick={() => removeItem(item.id, item.size)}
                           className="text-red-600 hover:text-red-900 transition-colors"
                         >
                           Remove
@@ -196,7 +196,7 @@ export default function BasketPage() {
                           <p className="text-sm text-gray-500">SKU: {item.sku}</p>
                         </div>
                         <button
-                          onClick={() => removeItem(item.id)}
+                          onClick={() => removeItem(item.id, item.size)}
                           className="text-red-600 hover:text-red-900 transition-colors"
                         >
                           <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -216,7 +216,7 @@ export default function BasketPage() {
                       <div className="mt-3 flex items-center justify-between">
                         <div className="flex items-center space-x-2">
                           <button
-                            onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                            onClick={() => updateQuantity(item.id, item.size, item.quantity - 1)}
                             className="p-1 rounded hover:bg-gray-100 transition-colors"
                             disabled={item.quantity <= 1}
                           >
@@ -224,7 +224,7 @@ export default function BasketPage() {
                           </button>
                           <span className="w-8 text-center">{item.quantity}</span>
                           <button
-                            onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                            onClick={() => updateQuantity(item.id, item.size, item.quantity + 1)}
                             className="p-1 rounded hover:bg-gray-100 transition-colors"
                             disabled={item.stock !== undefined && item.quantity >= item.stock}
                           >

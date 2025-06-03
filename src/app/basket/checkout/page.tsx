@@ -6,6 +6,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Image from "next/image";
 import { getCookie } from 'cookies-next';
+import { toast } from 'react-hot-toast';
 
 interface BasketItem {
   id: string;
@@ -88,42 +89,55 @@ export default function CheckoutPage() {
 
     setSubmitting(true);
     try {
-      // Подготавливаем данные для обновления количества товара
-      const stockUpdateData = {
-        items: items.map(item => ({
-          sku: item.sku,
-          quantity: item.quantity
-        }))
-      };
-      
-      console.log('Sending stock update data:', stockUpdateData);
-
       // Обновляем количество товара
       const response = await fetch('/api/products/update-stock', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(stockUpdateData),
+        body: JSON.stringify({
+          items: items.map(item => ({
+            title: item.title,
+            size: item.size,
+            quantity: item.quantity
+          }))
+        }),
       });
 
       if (!response.ok) {
         const errorData = await response.json();
-        console.error('Stock update failed:', errorData);
-        throw new Error('Failed to update stock');
+        throw new Error(errorData.error || 'Failed to update stock');
       }
 
-      const result = await response.json();
-      console.log('Stock update result:', result);
+      // Создаем заказ в базе данных
+      const orderResponse = await fetch('/api/orders', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          items,
+          total: totalWithShipping,
+          shipping,
+          paymentMethod,
+          customerDetails: form,
+          status: 'DONE'
+        }),
+      });
 
-      // Очищаем корзину после успешного оформления заказа
+      if (!orderResponse.ok) {
+        const errorData = await orderResponse.json();
+        throw new Error(errorData.error || 'Failed to create order');
+      }
+
+      // Очищаем корзину
       clearBasket();
 
-      alert("Order placed successfully!");
+      toast.success('Order placed successfully!');
       router.push("/basket");
     } catch (error) {
       console.error('Error placing order:', error);
-      alert("Failed to place order. Please try again.");
+      toast.error(error instanceof Error ? error.message : "Failed to place order. Please try again.");
     } finally {
       setSubmitting(false);
     }

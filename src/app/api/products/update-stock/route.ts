@@ -1,107 +1,111 @@
 import { NextResponse } from 'next/server';
-import clientPromise from '@/lib/mongodb';
+import { connectToDatabase } from '@/lib/mongodb';
 
-export async function POST(request: Request) {
+export async function POST(req: Request) {
   try {
-    const { items } = await request.json();
-    console.log('Received items for stock update:', items);
-    
-    const client = await clientPromise;
-    const db = client.db();
+    const { items } = await req.json();
+    console.log('Connecting to database...');
+    const { db } = await connectToDatabase();
+    console.log('Connected to database successfully');
 
-    // Обновляем количество для каждого товара
+    // Для каждого товара в заказе
     for (const item of items) {
-      console.log('Processing item:', item);
+      console.log('Searching for product with title:', item.title);
       
-      // Ищем товар по SKU во всех возможных массивах
+      // Находим товар по названию
       const product = await db.collection('products').findOne({
-        $or: [
-          { 'beddingSizes': { $elemMatch: { sku: item.sku } } },
-          { 'rugsMatsSizes': { $elemMatch: { sku: item.sku } } },
-          { 'throwsTowelsStylePrices': { $elemMatch: { sku: item.sku } } },
-          { 'clothingStylePrices': { $elemMatch: { sku: item.sku } } },
-          { 'footwearSizes': { $elemMatch: { sku: item.sku } } },
-          { 'outdoorPrice.sku': item.sku }
-        ]
+        title: { $regex: new RegExp(item.title, 'i') }
       });
 
       if (!product) {
-        console.log('Product not found for SKU:', item.sku);
-        continue;
-      }
-
-      console.log('Found product:', product._id);
-
-      // Определяем, в каком массиве находится товар
-      let updatePath = '';
-      let arrayFilters = undefined;
-      let currentStock = 0;
-      let sizeArray = null;
-
-      if (product.beddingSizes?.some((size: any) => size.sku === item.sku)) {
-        updatePath = 'beddingSizes.$[elem].stock';
-        arrayFilters = [{ 'elem.sku': item.sku }];
-        sizeArray = product.beddingSizes;
-      } else if (product.rugsMatsSizes?.some((size: any) => size.sku === item.sku)) {
-        updatePath = 'rugsMatsSizes.$[elem].stock';
-        arrayFilters = [{ 'elem.sku': item.sku }];
-        sizeArray = product.rugsMatsSizes;
-      } else if (product.throwsTowelsStylePrices?.some((size: any) => size.sku === item.sku)) {
-        updatePath = 'throwsTowelsStylePrices.$[elem].stock';
-        arrayFilters = [{ 'elem.sku': item.sku }];
-        sizeArray = product.throwsTowelsStylePrices;
-      } else if (product.clothingStylePrices?.some((size: any) => size.sku === item.sku)) {
-        updatePath = 'clothingStylePrices.$[elem].stock';
-        arrayFilters = [{ 'elem.sku': item.sku }];
-        sizeArray = product.clothingStylePrices;
-      } else if (product.footwearSizes?.some((size: any) => size.sku === item.sku)) {
-        updatePath = 'footwearSizes.$[elem].stock';
-        arrayFilters = [{ 'elem.sku': item.sku }];
-        sizeArray = product.footwearSizes;
-      } else if (product.outdoorPrice?.sku === item.sku) {
-        updatePath = 'outdoorPrice.stock';
-        currentStock = product.outdoorPrice.stock || 0;
-      }
-
-      if (sizeArray) {
-        const sizeItem = sizeArray.find((size: any) => size.sku === item.sku);
-        if (sizeItem) {
-          currentStock = sizeItem.stock || 0;
-        }
-      }
-
-      console.log('Current stock:', currentStock);
-      console.log('Update path:', updatePath);
-      console.log('Array filters:', arrayFilters);
-
-      if (updatePath) {
-        const newStock = currentStock - item.quantity;
-        console.log('New stock will be:', newStock);
+        // Проверим все товары в базе для отладки
+        const allProducts = await db.collection('products').find({}).toArray();
+        console.log('Available products:', allProducts.map(p => p.title));
         
-        // Обновляем количество товара и устанавливаем флаг isSoldOut
-        const updateResult = await db.collection('products').updateOne(
-          { _id: product._id },
-          {
-            $inc: { [updatePath]: -item.quantity },
-            $set: {
-              isSoldOut: newStock <= 0
-            }
-          },
-          {
-            arrayFilters: arrayFilters
-          }
+        console.error(`Product not found: ${item.title}`);
+        return NextResponse.json(
+          { error: `Product not found: ${item.title}` },
+          { status: 404 }
         );
+      }
 
-        console.log('Update result:', updateResult);
+      // Обновляем количество в зависимости от категории товара
+      let updateQuery: any = {};
+
+      switch (product.category) {
+        case 'BEDDING':
+          updateQuery = {
+            $inc: {
+              'beddingSizes.$[elem].stock': -item.quantity
+            }
+          };
+          break;
+        case 'RUGS & MATS':
+          updateQuery = {
+            $inc: {
+              'rugsMatsSizes.$[elem].stock': -item.quantity
+            }
+          };
+          break;
+        case 'THROWS & TOWELS':
+          updateQuery = {
+            $inc: {
+              'throwsTowelsStylePrices.$[elem].stock': -item.quantity
+            }
+          };
+          break;
+        case 'OUTDOOR':
+          updateQuery = {
+            $inc: {
+              'outdoorPrice.stock': -item.quantity
+            }
+          };
+          break;
+        case 'CURTAINS':
+          updateQuery = {
+            $inc: {
+              'curtainsSizes.$[elem].stock': -item.quantity
+            }
+          };
+          break;
+        case 'CLOTHING':
+          updateQuery = {
+            $inc: {
+              'clothingStylePrices.$[elem].stock': -item.quantity
+            }
+          };
+          break;
+        case 'FOOTWEAR':
+          updateQuery = {
+            $inc: {
+              'footwearSizes.$[elem].stock': -item.quantity
+            }
+          };
+          break;
+      }
+
+      // Если это не OUTDOOR категория, добавляем условие для обновления конкретного размера/стиля
+      if (product.category !== 'OUTDOOR') {
+        const arrayFilters = [{
+          'elem.size': item.size
+        }];
+        
+        await db.collection('products').updateOne(
+          { title: item.title },
+          updateQuery,
+          { arrayFilters }
+        );
+      } else {
+        await db.collection('products').updateOne(
+          { title: item.title },
+          updateQuery
+        );
       }
     }
 
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error('Error updating stock:', error);
-    return NextResponse.json(
-      { error: 'Failed to update stock' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed to update stock' }, { status: 500 });
   }
 } 
