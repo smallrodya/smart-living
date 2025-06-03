@@ -41,7 +41,7 @@ export default function AdminDashboard() {
       if (!res.ok) throw new Error('Failed to fetch stats');
       
       const data = await res.json();
-      console.log('Fetched stats:', data); // Добавляем для отладки
+      console.log('Fetched stats:', data);
       
       setStats({
         products: data.products || 0,
@@ -57,13 +57,9 @@ export default function AdminDashboard() {
     }
   };
 
-  // Увеличиваем частоту обновления до 10 секунд
+  // Загружаем данные только при монтировании компонента
   useEffect(() => {
-    fetchStats(); // Первоначальная загрузка
-
-    const interval = setInterval(fetchStats, 10000); // Обновление каждые 10 секунд
-
-    return () => clearInterval(interval);
+    fetchStats();
   }, []);
 
   const formatDate = (dateString: string) => {
