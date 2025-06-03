@@ -160,7 +160,7 @@ export default function BedspreadsPage() {
           marginBottom: '60px'
         }}>
           <Image
-            src="/bedspreads.jpg"
+            src="/best6-hover.jpg"
             alt="Bedspreads"
             fill
             style={{

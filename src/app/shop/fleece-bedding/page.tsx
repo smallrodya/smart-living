@@ -167,7 +167,7 @@ export default function FleeceBeddingPage() {
           marginBottom: '60px'
         }}>
           <Image
-            src="/printed-duvet46.jpg"
+            src="/fleece-throws-towels.jpg"
             alt="Fleece Bedding"
             fill
             style={{

@@ -165,7 +165,7 @@ export default function ReversibleRugsPage() {
           marginBottom: '60px'
         }}>
           <Image
-            src="/reversible-mustard2.jpg"
+            src="/reversible-mustard5.jpg"
             alt="Reversible Rugs Category"
             fill
             style={{

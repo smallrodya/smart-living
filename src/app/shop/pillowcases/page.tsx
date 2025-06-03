@@ -168,7 +168,7 @@ export default function PillowcasesPage() {
           marginBottom: '60px'
         }}>
           <Image
-            src="/printed-duvet67.jpg"
+            src="/pillowcase_banner.jpg"
             alt="Pillowcases"
             fill
             style={{
