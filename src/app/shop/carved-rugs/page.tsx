@@ -165,7 +165,7 @@ export default function CarvedRugsPage() {
           marginBottom: '60px'
         }}>
           <Image
-            src="/carved22.jpg"
+            src="/carved_banner.jpg"
             alt="Carved Rugs Category"
             fill
             style={{

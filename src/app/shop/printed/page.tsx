@@ -160,7 +160,7 @@ export default function PrintedPage() {
           marginBottom: '60px'
         }}>
           <Image
-            src="/printed-duvet107.jpg"
+            src="/Bardsley_Check_Grey-scaled-2.jpg"
             alt="Printed Bedding"
             fill
             style={{

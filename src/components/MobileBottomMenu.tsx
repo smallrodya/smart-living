@@ -131,12 +131,12 @@ const MobileBottomMenu = () => {
         <span>Basket</span>
       </Link>
 
-      <Link href="/profile" style={{
+      <Link href="/user/login" style={{
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
         textDecoration: 'none',
-        color: pathname === '/profile' ? '#e53935' : '#222',
+        color: pathname === '/user/login' ? '#e53935' : '#222',
         fontSize: 10,
         gap: 4,
         padding: '4px 8px',
@@ -147,7 +147,7 @@ const MobileBottomMenu = () => {
           <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
           <circle cx="12" cy="7" r="4"/>
         </svg>
-        <span>Profile</span>
+        <span>My Account</span>
       </Link>
     </div>
   );
