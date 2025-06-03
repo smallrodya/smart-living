@@ -23,10 +23,14 @@ export default function AdminDashboard() {
     revenue: 0,
   });
   const [recentOrders, setRecentOrders] = useState<RecentOrder[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const fetchStats = async () => {
     try {
+      setIsLoading(true);
       const res = await fetch('/api/stats');
+      if (!res.ok) throw new Error('Failed to fetch stats');
+      
       const data = await res.json();
       setStats({
         products: data.products || 0,
@@ -37,27 +41,18 @@ export default function AdminDashboard() {
       setRecentOrders(data.recentOrders || []);
     } catch (error) {
       console.error('Failed to fetch stats:', error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
+  // Периодическое обновление каждые 30 секунд
   useEffect(() => {
-    fetchStats();
-  }, []);
+    fetchStats(); // Первоначальная загрузка
 
-  // Подписываемся на обновления через EventSource
-  useEffect(() => {
-    const eventSource = new EventSource('/api/stats-updates');
-    
-    eventSource.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      if (data.type === 'stats-updated') {
-        fetchStats();
-      }
-    };
+    const interval = setInterval(fetchStats, 30000); // Обновление каждые 30 секунд
 
-    return () => {
-      eventSource.close();
-    };
+    return () => clearInterval(interval);
   }, []);
 
   const formatDate = (dateString: string) => {
@@ -76,29 +71,31 @@ export default function AdminDashboard() {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
         <div className="bg-white rounded-lg shadow p-6 flex flex-col items-center">
           <span className="text-2xl font-semibold mb-2">Total Products</span>
-          <span className="text-4xl font-bold mb-2">{stats.products}</span>
+          <span className="text-4xl font-bold mb-2">{isLoading ? '...' : stats.products}</span>
           <span className="text-3xl">📦</span>
         </div>
         <div className="bg-white rounded-lg shadow p-6 flex flex-col items-center">
           <span className="text-2xl font-semibold mb-2">Orders</span>
-          <span className="text-4xl font-bold mb-2">{stats.orders}</span>
+          <span className="text-4xl font-bold mb-2">{isLoading ? '...' : stats.orders}</span>
           <span className="text-3xl">🛒</span>
         </div>
         <div className="bg-white rounded-lg shadow p-6 flex flex-col items-center">
           <span className="text-2xl font-semibold mb-2">Users</span>
-          <span className="text-4xl font-bold mb-2">{stats.users}</span>
+          <span className="text-4xl font-bold mb-2">{isLoading ? '...' : stats.users}</span>
           <span className="text-3xl">👥</span>
         </div>
         <div className="bg-white rounded-lg shadow p-6 flex flex-col items-center">
           <span className="text-2xl font-semibold mb-2">Revenue</span>
-          <span className="text-4xl font-bold mb-2">£{stats.revenue}</span>
+          <span className="text-4xl font-bold mb-2">£{isLoading ? '...' : stats.revenue}</span>
           <span className="text-3xl">💸</span>
         </div>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="bg-white rounded-lg shadow p-6">
           <h2 className="text-xl font-bold mb-4">Recent Orders</h2>
-          {recentOrders.length === 0 ? (
+          {isLoading ? (
+            <div className="text-gray-500">Loading...</div>
+          ) : recentOrders.length === 0 ? (
             <div className="text-gray-500">No orders yet.</div>
           ) : (
             <div className="space-y-4">
