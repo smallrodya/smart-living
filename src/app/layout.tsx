@@ -6,7 +6,12 @@ import MobileLayout from '@/components/MobileLayout';
 import { Toaster } from 'react-hot-toast';
 import { BasketProvider } from '@/context/BasketContext';
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({
+  subsets: ["latin"],
+  display: 'swap',
+  preload: true,
+  fallback: ['system-ui', 'arial'],
+});
 
 export const metadata: Metadata = {
   title: "Smart Living",
