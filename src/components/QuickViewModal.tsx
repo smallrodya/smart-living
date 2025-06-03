@@ -114,7 +114,8 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
         sku: product.outdoorPrice.sku,
         quantity: 1,
         stock: product.outdoorPrice.stock,
-        size: 'One Size'
+        size: 'One Size',
+        clearanceDiscount: product.clearanceDiscount
       });
       toast.success('Product added to cart');
       onClose();
@@ -143,7 +144,8 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
         category: product.category,
         sku: size.sku,
         quantity: 1,
-        stock: size.stock
+        stock: size.stock,
+        clearanceDiscount: product.clearanceDiscount
       });
       toast.success('Product added to cart');
       onClose();
@@ -172,7 +174,8 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
         category: product.category,
         sku: style.sku,
         quantity: 1,
-        stock: style.stock
+        stock: style.stock,
+        clearanceDiscount: product.clearanceDiscount
       });
       toast.success('Product added to cart');
       onClose();
@@ -221,7 +224,8 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
           category: product.category,
           sku,
           quantity: 1,
-          stock
+          stock,
+          clearanceDiscount: product.clearanceDiscount
         });
         toast.success('Product added to cart');
         onClose();

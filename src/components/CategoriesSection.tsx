@@ -128,8 +128,8 @@ const megaMenus: MegaMenu[] = [
       },
       {
         items: [
-          { img: '/carved15.jpg', label: 'Explore our range of stylish rugs for every room!', labelColor: 'red', description: 'Shop Now', href: '/category/rugs-mats/rugs' },
-          { img: '/carved16.jpg', label: 'Find the perfect mat for your hallway or bathroom.', labelColor: 'red', description: 'Shop Now', href: '/category/rugs-mats/mats' },
+          { img: '/soft-shaggy-rugs.jpg', label: 'Explore our range of stylish rugs for every room!', labelColor: 'red', description: 'Shop Now', href: '/category/rugs-mats/rugs' },
+          { img: '/xlarge-rugs-mats.jpg', label: 'Find the perfect mat for your hallway or bathroom.', labelColor: 'red', description: 'Shop Now', href: '/category/rugs-mats/mats' },
         ],
       },
     ],

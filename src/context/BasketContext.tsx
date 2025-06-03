@@ -12,6 +12,7 @@ interface BasketItem {
   category?: string;
   sku?: string;
   stock?: number;
+  clearanceDiscount?: number;
 }
 
 interface BasketContextType {
@@ -88,7 +89,12 @@ export function BasketProvider({ children }: { children: React.ReactNode }) {
     setItems([]);
   };
 
-  const total = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const total = items.reduce((sum, item) => {
+    const itemPrice = item.clearanceDiscount 
+      ? item.price * (1 - item.clearanceDiscount / 100)
+      : item.price;
+    return sum + itemPrice * item.quantity;
+  }, 0);
 
   return (
     <BasketContext.Provider value={{
