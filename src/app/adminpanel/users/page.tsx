@@ -57,9 +57,9 @@ export default function UsersPage() {
   const filteredUsers = users.filter(user => {
     const searchLower = searchQuery.toLowerCase();
     return (
-      user.firstName.toLowerCase().includes(searchLower) ||
-      user.lastName.toLowerCase().includes(searchLower) ||
-      user.email.toLowerCase().includes(searchLower)
+      (user.firstName?.toLowerCase() || '').includes(searchLower) ||
+      (user.lastName?.toLowerCase() || '').includes(searchLower) ||
+      (user.email?.toLowerCase() || '').includes(searchLower)
     );
   });
 
