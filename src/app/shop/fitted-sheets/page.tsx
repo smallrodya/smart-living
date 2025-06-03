@@ -168,7 +168,7 @@ export default function FittedSheetsPage() {
           marginBottom: '60px'
         }}>
           <Image
-            src="/printed-duvet109.jpg"
+            src="/generated_image_large1.jpg"
             alt="Fitted Sheets"
             fill
             style={{
