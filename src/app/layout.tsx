@@ -17,9 +17,9 @@ export const metadata: Metadata = {
   title: "Smart Living",
   description: "Smart Living - The best place to buy homeware",
   icons: {
-    icon: '/site-ico.ico',
-    apple: '/site-ico.ico',
-    shortcut: '/site-ico.ico',
+    icon: '/favicon.ico',
+    apple: '/favicon.ico',
+    shortcut: '/favicon.ico',
   },
   appleWebApp: {
     capable: true,
@@ -37,9 +37,9 @@ export default function RootLayout({
   return (
     <html lang="ru">
       <head>
-        <link rel="icon" href="/site-ico.ico" />
-        <link rel="apple-touch-icon" href="/site-ico.ico" />
-        <link rel="shortcut icon" href="/site-ico.ico" />
+        <link rel="icon" href="/favicon.ico" />
+        <link rel="apple-touch-icon" href="/favicon.ico" />
+        <link rel="shortcut icon" href="/favicon.ico" />
       </head>
       <body className={inter.className}>
         <BasketProvider>
