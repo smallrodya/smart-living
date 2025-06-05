@@ -28,13 +28,13 @@ export async function POST(req: Request) {
       case 'payment_intent.succeeded':
         const paymentIntent = event.data.object as Stripe.PaymentIntent;
         console.log('Payment succeeded:', paymentIntent.id);
-        // Здесь можно добавить логику обновления статуса заказа
+        // Add order status update logic here
         break;
 
       case 'payment_intent.payment_failed':
         const failedPayment = event.data.object as Stripe.PaymentIntent;
         console.log('Payment failed:', failedPayment.id);
-        // Здесь можно добавить логику обработки неудачного платежа
+        // Add failed payment handling logic here
         break;
 
       default:

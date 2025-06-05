@@ -47,6 +47,7 @@ export async function POST(request: Request) {
       email: user.email,
       firstName: user.firstName,
       lastName: user.lastName,
+      smartCoins: user.smartCoins || 0,
       createdAt: user.createdAt
     };
 

@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Image from "next/image";
-import { getCookie } from 'cookies-next';
+import { getCookie, setCookie } from 'cookies-next';
 import { toast } from 'react-hot-toast';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements, useStripe, useElements, CardElement } from '@stripe/react-stripe-js';
@@ -48,6 +48,7 @@ function CheckoutPage() {
   const router = useRouter();
   const [authError, setAuthError] = useState('');
   const [cardElement, setCardElement] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   const [form, setForm] = useState({
     email: "",
@@ -74,6 +75,73 @@ function CheckoutPage() {
   const [cardComplete, setCardComplete] = useState(false);
   const [paymentProcessing, setPaymentProcessing] = useState(false);
   const [paymentError, setPaymentError] = useState<string | null>(null);
+  const [smartCoinBalance, setSmartCoinBalance] = useState<number>(0);
+  const [useSmartCoins, setUseSmartCoins] = useState(false);
+
+  useEffect(() => {
+    const checkAuthAndBalance = async () => {
+      try {
+        console.log('Starting auth check...');
+        const userCookie = getCookie('user');
+        console.log('User cookie:', userCookie);
+
+        if (!userCookie) {
+          console.log('No user cookie found, redirecting to login...');
+          router.push('/user/login');
+          return;
+        }
+
+        let userData;
+        try {
+          userData = JSON.parse(userCookie as string);
+          console.log('Parsed user data:', userData);
+        } catch (parseError) {
+          console.error('Error parsing user cookie:', parseError);
+          router.push('/user/login');
+          return;
+        }
+
+        if (!userData || !userData.userId) {
+          console.log('Invalid user data structure:', userData);
+          router.push('/user/login');
+          return;
+        }
+
+        // Set user email from cookie
+        console.log('Setting user email:', userData.email);
+        setForm(prev => ({
+          ...prev,
+          email: userData.email || ''
+        }));
+
+        // Set Smart Coin balance
+        console.log('Setting Smart Coin balance:', userData.smartCoins);
+        if (typeof userData.smartCoins === 'number') {
+          setSmartCoinBalance(userData.smartCoins);
+        } else {
+          console.log('Smart Coins not found in user data, setting default value to 0');
+          setSmartCoinBalance(0);
+          // Обновляем данные пользователя в куки
+          const updatedUserData = {
+            ...userData,
+            smartCoins: 0
+          };
+          setCookie('user', JSON.stringify(updatedUserData), {
+            maxAge: 30 * 24 * 60 * 60, // 30 дней
+            path: '/'
+          });
+        }
+
+        setIsLoading(false);
+        console.log('Auth check completed successfully');
+      } catch (error) {
+        console.error('Error in checkAuthAndBalance:', error);
+        router.push('/user/login');
+      }
+    };
+
+    checkAuthAndBalance();
+  }, [router]);
 
   const validate = () => {
     const newErrors: any = {};
@@ -105,23 +173,134 @@ function CheckoutPage() {
     setErrors(newErrors);
     if (Object.keys(newErrors).length > 0) return;
 
-    // Проверка авторизации
+    // Authentication check
+    console.log('Starting order submission...');
     const userCookie = getCookie('user');
+    console.log('User cookie in handleSubmit:', userCookie);
+
     if (!userCookie) {
+      console.log('No user cookie found in handleSubmit');
       setAuthError('Please login or register to complete your purchase. This will allow you to track your orders in your account.');
       return;
     }
 
-    // Получаем email из куки пользователя
-    const userData = JSON.parse(userCookie as string);
-    console.log('User data from cookie:', userData);
+    // Get user email from cookie
+    let userData;
+    try {
+      userData = JSON.parse(userCookie as string);
+      console.log('Parsed user data in handleSubmit:', userData);
+    } catch (parseError) {
+      console.error('Error parsing user cookie in handleSubmit:', parseError);
+      setAuthError('Session error. Please login again.');
+      return;
+    }
+
+    if (!userData || !userData.userId) {
+      console.log('Invalid user data in handleSubmit:', userData);
+      setAuthError('Session error. Please login again.');
+      return;
+    }
+
+    // Check if user has enough Smart Coins
+    if (useSmartCoins && smartCoinBalance < totalWithShipping) {
+      console.log('Not enough Smart Coins:', { balance: smartCoinBalance, required: totalWithShipping });
+      setPaymentError(`Not enough Smart Coins. Your balance: ${smartCoinBalance}, Required: ${totalWithShipping}`);
+      return;
+    }
 
     setSubmitting(true);
     setPaymentProcessing(true);
     setPaymentError(null);
 
     try {
-      // Создаем Payment Intent
+      if (useSmartCoins) {
+        // Process Smart Coin payment
+        console.log('Processing Smart Coin payment...', {
+          amount: totalWithShipping,
+          userId: userData.userId
+        });
+        const smartCoinResponse = await fetch('/api/payments/smart-coins', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            amount: totalWithShipping,
+            userId: userData.userId
+          }),
+        });
+
+        if (!smartCoinResponse.ok) {
+          throw new Error('Failed to process Smart Coin payment');
+        }
+
+        // Update product stock
+        console.log('Updating stock...');
+        const response = await fetch('/api/products/update-stock', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            items: items.map(item => ({
+              title: item.title,
+              size: item.size,
+              quantity: item.quantity
+            }))
+          }),
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || 'Failed to update stock');
+        }
+
+        // Create order in database
+        console.log('Creating order...');
+        const orderResponse = await fetch('/api/orders', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            items,
+            total: totalWithShipping,
+            shipping,
+            paymentMethod: 'smart_coins',
+            customerDetails: {
+              ...form,
+              email: userData.email
+            },
+            status: 'DONE'
+          }),
+        });
+
+        if (!orderResponse.ok) {
+          const errorData = await orderResponse.json();
+          throw new Error(errorData.error || 'Failed to create order');
+        }
+
+        const orderData = await orderResponse.json();
+        console.log('Order created:', orderData);
+
+        // Обновляем куки с новым балансом
+        if (orderData.userData) {
+          setCookie('user', JSON.stringify(orderData.userData), {
+            maxAge: 30 * 24 * 60 * 60, // 30 дней
+            path: '/'
+          });
+        }
+
+        // Clear basket
+        clearBasket();
+
+        toast.success(`Order placed successfully using Smart Coins!`);
+        router.push("/basket");
+        return;
+      }
+
+      // Regular payment flow continues here...
+      // Create Payment Intent
       console.log('Creating payment intent...');
       const paymentResponse = await fetch('/api/create-payment-intent', {
         method: 'POST',
@@ -141,9 +320,9 @@ function CheckoutPage() {
       const { clientSecret } = await paymentResponse.json();
       console.log('Payment intent created:', clientSecret);
 
-      // Подтверждаем платеж
+      // Confirm payment
       if (!stripe || !cardElement) {
-        throw new Error('Stripe не инициализирован');
+        throw new Error('Stripe is not initialized');
       }
 
       const { error: paymentError, paymentIntent } = await stripe.confirmCardPayment(
@@ -174,7 +353,7 @@ function CheckoutPage() {
 
       console.log('Payment successful:', paymentIntent);
 
-      // Обновляем количество товара
+      // Update product stock
       console.log('Updating stock...');
       const response = await fetch('/api/products/update-stock', {
         method: 'POST',
@@ -195,7 +374,7 @@ function CheckoutPage() {
         throw new Error(errorData.error || 'Failed to update stock');
       }
 
-      // Создаем заказ в базе данных
+      // Create order in database
       console.log('Creating order...');
       const orderResponse = await fetch('/api/orders', {
         method: 'POST',
@@ -224,7 +403,15 @@ function CheckoutPage() {
       const orderData = await orderResponse.json();
       console.log('Order created:', orderData);
 
-      // Очищаем корзину
+      // Обновляем куки с новым балансом
+      if (orderData.userData) {
+        setCookie('user', JSON.stringify(orderData.userData), {
+          maxAge: 30 * 24 * 60 * 60, // 30 дней
+          path: '/'
+        });
+      }
+
+      // Clear basket
       clearBasket();
 
       toast.success(`Order placed successfully! You earned ${orderData.smartCoinEarned} Smart Coins!`);
@@ -242,6 +429,17 @@ function CheckoutPage() {
   const subtotal = items.reduce((sum, item) => sum + (item.clearanceDiscount ? item.price * (1 - item.clearanceDiscount / 100) : item.price) * item.quantity, 0);
   const shippingPrice = SHIPPING_OPTIONS.find(opt => opt.value === shipping)?.price || 0;
   const totalWithShipping = subtotal + shippingPrice;
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -516,6 +714,34 @@ function CheckoutPage() {
               {/* Payment method selection */}
               <div className="space-y-3 mb-6">
                 <label className={`flex items-center p-4 border rounded-lg cursor-pointer transition-all ${
+                  paymentMethod === "smart_coins" ? "border-purple-500 bg-purple-50" : "border-gray-200 hover:border-gray-300"
+                }`}>
+                  <input
+                    type="radio"
+                    name="paymentMethod"
+                    value="smart_coins"
+                    checked={paymentMethod === "smart_coins"}
+                    onChange={() => setPaymentMethod("smart_coins")}
+                    className="accent-purple-600 mr-3"
+                  />
+                  <div className="flex-1">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <span className="font-medium">Smart Coins</span>
+                        <div className="bg-gradient-to-br from-purple-500 to-pink-500 p-1.5 rounded-lg">
+                          <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm text-gray-600">Balance: {smartCoinBalance}</span>
+                      </div>
+                    </div>
+                  </div>
+                </label>
+
+                <label className={`flex items-center p-4 border rounded-lg cursor-pointer transition-all ${
                   paymentMethod === "card" ? "border-blue-500 bg-blue-50" : "border-gray-200 hover:border-gray-300"
                 }`}>
                   <input
@@ -592,6 +818,45 @@ function CheckoutPage() {
               </div>
 
               {/* Payment method forms */}
+              {paymentMethod === "smart_coins" && (
+                <div className="space-y-4 bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg p-6 border border-purple-100 mb-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h4 className="font-medium text-gray-900">Smart Coin Balance</h4>
+                      <p className="text-sm text-gray-600">Available: {smartCoinBalance} Smart Coins</p>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-lg font-bold text-gray-900">£{totalWithShipping.toFixed(2)}</div>
+                      <p className="text-sm text-gray-600">Required</p>
+                    </div>
+                  </div>
+                  {smartCoinBalance < totalWithShipping ? (
+                    <div className="bg-yellow-50 border border-yellow-200 text-yellow-700 px-4 py-3 rounded-lg">
+                      <p className="font-medium">Not enough Smart Coins</p>
+                      <p className="text-sm mt-1">You need {totalWithShipping - smartCoinBalance} more Smart Coins to complete this purchase.</p>
+                    </div>
+                  ) : (
+                    <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg">
+                      <p className="font-medium">Sufficient Balance</p>
+                      <p className="text-sm mt-1">You have enough Smart Coins to complete this purchase.</p>
+                    </div>
+                  )}
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      checked={useSmartCoins}
+                      onChange={() => setUseSmartCoins(!useSmartCoins)}
+                      className="accent-purple-600"
+                      id="useSmartCoins"
+                      disabled={smartCoinBalance < totalWithShipping}
+                    />
+                    <label htmlFor="useSmartCoins" className="text-sm text-gray-600">
+                      Use Smart Coins for this purchase
+                    </label>
+                  </div>
+                </div>
+              )}
+
               {paymentMethod === "card" && (
                 <div className="space-y-4 bg-gray-50 rounded-lg p-6 border mb-4">
                   <StripeCardForm 

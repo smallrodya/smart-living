@@ -34,6 +34,7 @@ export async function POST(request: Request) {
       lastName,
       email,
       password: hashedPassword,
+      smartCoins: 0,
       createdAt: new Date(),
       updatedAt: new Date(),
     };
@@ -43,8 +44,18 @@ export async function POST(request: Request) {
 
     await client.close();
 
+    // Возвращаем данные пользователя без пароля
+    const userResponse = {
+      id: result.insertedId.toString(),
+      email: newUser.email,
+      firstName: newUser.firstName,
+      lastName: newUser.lastName,
+      smartCoins: newUser.smartCoins,
+      createdAt: newUser.createdAt
+    };
+
     return NextResponse.json(
-      { message: 'User registered successfully', userId: result.insertedId },
+      { message: 'User registered successfully', user: userResponse },
       { status: 201 }
     );
   } catch (error) {

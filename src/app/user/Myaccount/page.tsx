@@ -12,7 +12,7 @@ interface UserData {
   lastName: string;
   email: string;
   createdAt: string;
-  smartCoin: number;
+  smartCoins: number;
 }
 
 interface OrderItem {
@@ -234,13 +234,13 @@ export default function MyAccountPage() {
                             <FiGift className="w-6 h-6 text-purple-500" />
                           </div>
                           <div>
-                            <h3 className="text-lg font-semibold text-gray-800">Smart Coin</h3>
+                            <h3 className="text-lg font-semibold text-gray-800">Smart Coins</h3>
                             <p className="text-sm text-gray-600">Your rewards balance</p>
                           </div>
                         </div>
                       </div>
                       <div className="text-2xl font-bold text-gray-900">
-                        {userData?.smartCoin?.toFixed(2) || '0.00'}
+                        {userData?.smartCoins?.toFixed(2) || '0.00'}
                       </div>
                     </div>
                   </div>

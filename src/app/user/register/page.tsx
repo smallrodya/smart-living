@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import styles from './register.module.css';
 import Header from '@/components/Header';
 import CategoriesSection from '@/components/CategoriesSection';
+import { setCookie } from 'cookies-next';
 
 interface PasswordStrength {
   score: number;
@@ -89,10 +90,24 @@ export default function RegisterPage() {
         }),
       });
 
+      const data = await response.json();
+
       if (response.ok) {
-        router.push('/user/login');
+        // Сохраняем данные пользователя в куки
+        const userData = {
+          userId: data.user.id,
+          email: data.user.email,
+          firstName: data.user.firstName,
+          lastName: data.user.lastName,
+          smartCoins: data.user.smartCoins || 0,
+          createdAt: data.user.createdAt
+        };
+        setCookie('user', JSON.stringify(userData), {
+          maxAge: 30 * 24 * 60 * 60, // 30 дней
+          path: '/'
+        });
+        router.push('/user/Myaccount');
       } else {
-        const data = await response.json();
         setError(data.message || 'An error occurred during registration');
       }
     } catch (err) {

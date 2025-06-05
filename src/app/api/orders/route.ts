@@ -53,18 +53,32 @@ export async function POST(request: Request) {
     if (user) {
       const updateResult = await db.collection('users').updateOne(
         { _id: user._id },
-        { $inc: { smartCoin: smartCoinAmount } }
+        { $inc: { smartCoins: smartCoinAmount } }
       );
       console.log('Update result:', updateResult);
+      
+      // Получаем обновленные данные пользователя
+      const updatedUser = await db.collection('users').findOne({ _id: user._id });
+      if (updatedUser) {
+        // Обновляем куки с новым балансом
+        const userData = {
+          userId: updatedUser._id.toString(),
+          email: updatedUser.email,
+          firstName: updatedUser.firstName,
+          lastName: updatedUser.lastName,
+          smartCoins: updatedUser.smartCoins,
+          createdAt: updatedUser.createdAt
+        };
+        return NextResponse.json({ 
+          success: true, 
+          orderId: result.insertedId,
+          smartCoinEarned: smartCoinAmount,
+          userData
+        });
+      }
     } else {
       console.log('User not found for email:', orderData.customerDetails.email);
     }
-
-    return NextResponse.json({ 
-      success: true, 
-      orderId: result.insertedId,
-      smartCoinEarned: smartCoinAmount 
-    });
   } catch (error) {
     console.error('Error creating order:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });

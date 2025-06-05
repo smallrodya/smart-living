@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Search, Loader2 } from 'lucide-react';
 import { toast } from 'react-hot-toast';
+import { getCookie, setCookie } from 'cookies-next';
 
 interface User {
   _id: string;
@@ -10,6 +11,7 @@ interface User {
   lastName: string;
   email: string;
   createdAt: string;
+  smartCoins: number;
 }
 
 export default function UsersPage() {
@@ -17,6 +19,8 @@ export default function UsersPage() {
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [expandedUsers, setExpandedUsers] = useState<Set<string>>(new Set());
+  const [editingSmartCoins, setEditingSmartCoins] = useState<string | null>(null);
+  const [newSmartCoinsValue, setNewSmartCoinsValue] = useState<number>(0);
 
   const fetchUsers = async () => {
     setLoading(true);
@@ -52,6 +56,48 @@ export default function UsersPage() {
     } catch (error) {
       toast.error('Error deleting user');
     }
+  };
+
+  const handleUpdateSmartCoins = async (userId: string) => {
+    try {
+      const response = await fetch(`/api/admin/users?id=${userId}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ smartCoins: newSmartCoinsValue }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        toast.success('Smart Coins updated successfully');
+        setEditingSmartCoins(null);
+        
+        // Обновляем куки, если это текущий пользователь
+        const userCookie = getCookie('user');
+        if (userCookie) {
+          const userData = JSON.parse(userCookie as string);
+          if (userData.userId === userId) {
+            setCookie('user', JSON.stringify(data.userData), {
+              maxAge: 30 * 24 * 60 * 60, // 30 дней
+              path: '/'
+            });
+          }
+        }
+        
+        fetchUsers(); // Обновляем список пользователей
+      } else {
+        const data = await response.json();
+        toast.error(data.error || 'Failed to update Smart Coins');
+      }
+    } catch (error) {
+      toast.error('Error updating Smart Coins');
+    }
+  };
+
+  const startEditingSmartCoins = (user: User) => {
+    setEditingSmartCoins(user._id);
+    setNewSmartCoinsValue(user.smartCoins || 0);
   };
 
   const filteredUsers = users.filter(user => {
@@ -157,11 +203,61 @@ export default function UsersPage() {
                               <span className="text-sm text-gray-600">Email:</span>
                               <span className="text-sm font-medium">{user.email}</span>
                             </div>
-                            <div className="flex justify-between items-center">
+                            <div className="flex justify-between items-center mb-2">
                               <span className="text-sm text-gray-600">Member Since:</span>
                               <span className="text-sm font-medium">
                                 {new Date(user.createdAt).toLocaleDateString()}
                               </span>
+                            </div>
+                            <div className="flex justify-between items-center">
+                              <span className="text-sm text-gray-600">Smart Coins:</span>
+                              {editingSmartCoins === user._id ? (
+                                <div className="flex items-center gap-2">
+                                  <input
+                                    type="number"
+                                    min="0"
+                                    step="0.01"
+                                    value={isNaN(newSmartCoinsValue) ? '' : newSmartCoinsValue}
+                                    onChange={(e) => {
+                                      const value = e.target.value === '' ? 0 : parseFloat(e.target.value);
+                                      setNewSmartCoinsValue(isNaN(value) ? 0 : value);
+                                    }}
+                                    className="w-24 px-2 py-1 text-sm border rounded"
+                                    onClick={(e) => e.stopPropagation()}
+                                  />
+                                  <button
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      handleUpdateSmartCoins(user._id);
+                                    }}
+                                    className="text-xs text-green-600 hover:text-green-700"
+                                  >
+                                    Save
+                                  </button>
+                                  <button
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      setEditingSmartCoins(null);
+                                    }}
+                                    className="text-xs text-gray-600 hover:text-gray-700"
+                                  >
+                                    Cancel
+                                  </button>
+                                </div>
+                              ) : (
+                                <div className="flex items-center gap-2">
+                                  <span className="text-sm font-medium">{user.smartCoins}</span>
+                                  <button
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      startEditingSmartCoins(user);
+                                    }}
+                                    className="text-xs text-indigo-600 hover:text-indigo-700"
+                                  >
+                                    Edit
+                                  </button>
+                                </div>
+                              )}
                             </div>
                           </div>
                         </div>

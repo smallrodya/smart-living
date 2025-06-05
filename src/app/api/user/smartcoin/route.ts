@@ -18,9 +18,9 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
-    return NextResponse.json({ smartCoin: user.smartCoin || 0 });
+    return NextResponse.json({ smartCoins: user.smartCoins || 0 });
   } catch (error) {
-    console.error('Error fetching smart coin:', error);
+    console.error('Error fetching smart coins:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
@@ -37,7 +37,7 @@ export async function POST(request: Request) {
     
     const result = await db.collection('users').updateOne(
       { _id: new ObjectId(userId) },
-      { $inc: { smartCoin: amount } }
+      { $inc: { smartCoins: amount } }
     );
 
     if (result.matchedCount === 0) {
@@ -45,9 +45,12 @@ export async function POST(request: Request) {
     }
 
     const updatedUser = await db.collection('users').findOne({ _id: new ObjectId(userId) });
-    return NextResponse.json({ smartCoin: updatedUser.smartCoin });
+    if (!updatedUser) {
+      return NextResponse.json({ error: 'User not found after update' }, { status: 404 });
+    }
+    return NextResponse.json({ smartCoins: updatedUser.smartCoins });
   } catch (error) {
-    console.error('Error updating smart coin:', error);
+    console.error('Error updating smart coins:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 } 
