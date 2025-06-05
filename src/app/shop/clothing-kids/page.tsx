@@ -24,6 +24,7 @@ interface Product {
   discount?: number;
   isSoldOut?: boolean;
   isHot?: boolean;
+  additionalCategories?: Array<{ category: string; subcategory: string }>;
 }
 
 export default function ClothingKidsPage() {
@@ -53,17 +54,16 @@ export default function ClothingKidsPage() {
       const data = await res.json();
       console.log('Все товары:', data.products);
       
-      const filteredProducts = data.products.filter((product: Product) => {
-        console.log('Проверяем товар:', {
-          category: product.category,
-          styles: product.clothingStyles,
-          stylePrices: product.clothingStylePrices,
-          subcategory: product.subcategory
-        });
-        
-        return product.category === 'CLOTHING' && 
-               product.subcategory === "Kid's";
-      });
+      const filteredProducts = data.products.filter((product: Product) => 
+        (product.category === 'CLOTHING' && 
+        product.subcategory === "Kid's") ||
+        (product.additionalCategories && 
+         product.additionalCategories.some(
+           (ac: { category: string; subcategory: string }) => 
+             ac.category === 'CLOTHING' && 
+             ac.subcategory === "Kid's"
+         ))
+    );
       
       console.log('Отфильтрованные товары:', filteredProducts);
       setProducts(filteredProducts);

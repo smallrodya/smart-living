@@ -24,6 +24,7 @@ interface Product {
   discount?: number;
   isSoldOut?: boolean;
   isHot?: boolean;
+  additionalCategories?: Array<{ category: string; subcategory: string }>;
 }
 
 export default function ThreeDPage() {
@@ -54,8 +55,14 @@ export default function ThreeDPage() {
       const data = await res.json();
       const threeDProducts = data.products.filter(
         (product: Product) => 
-          product.category === 'BEDDING' && 
-          product.beddingStyles?.includes('3D')
+          (product.category === 'BEDDING' && 
+          product.beddingStyles?.includes('3D')) ||
+          (product.additionalCategories && 
+           product.additionalCategories.some(
+             (ac: { category: string; subcategory: string }) => 
+               ac.category === 'BEDDING' && 
+               ac.subcategory === '3D'
+           ))
       );
       setProducts(threeDProducts);
     } catch (error) {

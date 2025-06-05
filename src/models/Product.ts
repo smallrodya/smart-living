@@ -32,6 +32,11 @@ export interface Product {
   description: ProductDescription;
   additional: ProductAdditional;
   category: string;
+  subcategory: string;
+  additionalCategories?: Array<{
+    category: string;
+    subcategory: string;
+  }>;
   isBestSeller: boolean;
   isSoldOut: boolean;
   isHot: boolean;

@@ -45,6 +45,7 @@ export async function POST(request: Request) {
       isSoldOut: body.isSoldOut || false,
       isHot: body.isHot || false,
       discount: body.discount || null,
+      additionalCategories: body.additionalCategories || [],
       createdAt: new Date(),
       updatedAt: new Date()
     };
@@ -69,25 +70,24 @@ export async function PUT(request: Request) {
     if (!id) {
       return NextResponse.json({ error: 'Product ID is required' }, { status: 400 });
     }
-
+    
     const body = await request.json();
-    console.log('Получены данные для обновления:', body);
-    
-    // Удаляем _id из данных обновления
-    const { _id, ...updateData } = body;
-    
     await client.connect();
     const database = client.db('smartliving');
     const products = database.collection('products');
     
+    // Удаляем _id из данных обновления
+    const { _id, ...updateData } = body;
+    
+    const finalUpdateData = {
+      ...updateData,
+      additionalCategories: updateData.additionalCategories || [],
+      updatedAt: new Date()
+    };
+    
     const updateResult = await products.updateOne(
       { _id: new ObjectId(id) },
-      { 
-        $set: {
-          ...updateData,
-          updatedAt: new Date()
-        }
-      }
+      { $set: finalUpdateData }
     );
 
     if (updateResult.matchedCount === 0) {

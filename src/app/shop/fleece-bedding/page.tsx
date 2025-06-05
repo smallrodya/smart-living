@@ -25,6 +25,7 @@ interface Product {
   discount?: number;
   isSoldOut?: boolean;
   isHot?: boolean;
+  additionalCategories?: Array<{ category: string; subcategory: string }>;
 }
 
 export default function FleeceBeddingPage() {
@@ -54,12 +55,15 @@ export default function FleeceBeddingPage() {
       const data = await res.json();
       console.log('All products:', data.products); // Для отладки
       const fleeceBedding = data.products.filter(
-        (product: Product) => {
-          console.log('Product category:', product.category); // Для отладки
-          console.log('Product subcategory:', product.subcategory); // Для отладки
-          return product.category === 'BEDDING' && 
-                 product.subcategory === 'Fleece Bedding';
-        }
+        (product: Product) => 
+          (product.category === 'FLEECE BEDDING' && 
+          product.subcategory === 'Fleece Bedding') ||
+          (product.additionalCategories && 
+           product.additionalCategories.some(
+             (ac: { category: string; subcategory: string }) => 
+               ac.category === 'FLEECE BEDDING' && 
+               ac.subcategory === 'Fleece Bedding'
+           ))
       );
       console.log('Filtered fleece bedding:', fleeceBedding); // Для отладки
       setProducts(fleeceBedding);

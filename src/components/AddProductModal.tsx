@@ -61,6 +61,11 @@ interface FormData {
     stock: number;
   };
   outdoorColors: string[];
+  // Additional categories
+  additionalCategories: {
+    category: string;
+    subcategory: string;
+  }[];
 }
 
 const categories = [
@@ -84,6 +89,7 @@ const beddingSubcategories = [
   'Kids Beding',
   'Bedspreads',
   'Electric Underblankets',
+  'Cushions'
 ];
 
 const rugsMatsSubcategories = {
@@ -114,7 +120,9 @@ const throwsTowelsStyles = [
   'Fleece',
   'Plain',
   '3D',
-  'Chunky Hand Knitted'
+  'Chunky Hand Knitted',
+  'Large',
+  'XLarge'
 ];
 
 const throwsTowelsColors = [
@@ -133,7 +141,7 @@ const throwsTowelsColors = [
 ];
 
 const beddingSizes = ['Single', 'Double', 'King', 'Super King', 'Crib'];
-const beddingStyles = ['Printed', 'Plain', '3D', 'Teddy', 'Hotel Quality'];
+const beddingStyles = ['Printed', 'Plain', '3D', 'Teddy', 'Hotel Quality', 'Housewife Pillowcase', 'Oxford Pillowcase'];
 const beddingColors = [
   'White',
   'Black',
@@ -361,6 +369,8 @@ export default function AddProductModal({ open, onClose, onProductAdded, validat
       stock: 0
     },
     outdoorColors: [],
+    // Additional categories
+    additionalCategories: []
   });
 
   const [images, setImages] = useState<string[]>([]);
@@ -1740,6 +1750,79 @@ export default function AddProductModal({ open, onClose, onProductAdded, validat
               </div>
             </div>
           )}
+
+          {/* Additional Categories Section */}
+          <div className="bg-gray-50 p-6 rounded-xl">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">Additional Categories</h3>
+            <div className="space-y-4">
+              {categories.map(category => (
+                <div key={category} className="space-y-2">
+                  <label className="flex items-center space-x-2">
+                    <input
+                      type="checkbox"
+                      checked={formData.additionalCategories.some(ac => ac.category === category)}
+                      onChange={(e) => {
+                        if (e.target.checked) {
+                          setFormData(prev => ({
+                            ...prev,
+                            additionalCategories: [...prev.additionalCategories, { category, subcategory: '' }]
+                          }));
+                        } else {
+                          setFormData(prev => ({
+                            ...prev,
+                            additionalCategories: prev.additionalCategories.filter(ac => ac.category !== category)
+                          }));
+                        }
+                      }}
+                      className="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
+                    />
+                    <span className="text-sm font-medium text-gray-700">{category}</span>
+                  </label>
+                  {formData.additionalCategories.some(ac => ac.category === category) && (
+                    <div className="ml-6">
+                      <select
+                        value={formData.additionalCategories.find(ac => ac.category === category)?.subcategory || ''}
+                        onChange={(e) => {
+                          setFormData(prev => ({
+                            ...prev,
+                            additionalCategories: prev.additionalCategories.map(ac =>
+                              ac.category === category
+                                ? { ...ac, subcategory: e.target.value }
+                                : ac
+                            )
+                          }));
+                        }}
+                        className="w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                      >
+                        <option value="">Select a subcategory</option>
+                        {category === 'BEDDING' && beddingSubcategories.map(sub => (
+                          <option key={sub} value={sub}>{sub}</option>
+                        ))}
+                        {category === 'RUGS & MATS' && Object.values(rugsMatsSubcategories).flat().map(sub => (
+                          <option key={sub} value={sub}>{sub}</option>
+                        ))}
+                        {category === 'THROWS & TOWELS' && throwsTowelsSubcategories.map(sub => (
+                          <option key={sub} value={sub}>{sub}</option>
+                        ))}
+                        {category === 'OUTDOOR' && outdoorSubcategories.map(sub => (
+                          <option key={sub} value={sub}>{sub}</option>
+                        ))}
+                        {category === 'CURTAINS' && curtainsSubcategories.map(sub => (
+                          <option key={sub} value={sub}>{sub}</option>
+                        ))}
+                        {category === 'CLOTHING' && clothingSubcategories.map(sub => (
+                          <option key={sub} value={sub}>{sub}</option>
+                        ))}
+                        {category === 'FOOTWEAR' && footwearSubcategories.map(sub => (
+                          <option key={sub} value={sub}>{sub}</option>
+                        ))}
+                      </select>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
 
           <div className="flex justify-end space-x-4 pt-6 border-t">
             <button

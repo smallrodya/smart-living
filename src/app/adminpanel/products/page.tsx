@@ -1,8 +1,9 @@
 "use client";
 import { useState, useEffect } from "react";
-import { Plus, Search, Loader2 } from 'lucide-react';
+import { Plus, Search, Loader2, Upload } from 'lucide-react';
 import AddProductModal from '../../../components/AddProductModal';
 import EditProductModal from '../../../components/EditProductModal';
+import UploadCSVModal from '../../../components/UploadCSVModal';
 import ReactConfetti from 'react-confetti';
 import { toast } from 'react-hot-toast';
 
@@ -31,6 +32,7 @@ const beddingSubcategories = [
   'Kids Beding',
   'Bedspreads',
   'Electric Underblankets',
+  'Cushions'
 ];
 
 // Подкатегории для RUGS & MATS
@@ -220,6 +222,7 @@ export default function ProductsPage() {
   const [products, setProducts] = useState<any[]>([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
+  const [uploadModalOpen, setUploadModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -351,11 +354,29 @@ export default function ProductsPage() {
 
   const filteredProducts = products.filter(product => {
     const searchLower = searchQuery.toLowerCase();
+    
+    // Проверяем все возможные SKU в товаре
+    const hasMatchingSku = 
+      // Проверяем SKU в размерах постельного белья
+      (product.beddingSizes?.some((size: any) => size.sku?.toLowerCase().includes(searchLower))) ||
+      // Проверяем SKU в размерах ковров и ковриков
+      (product.rugsMatsSizes?.some((size: any) => size.sku?.toLowerCase().includes(searchLower))) ||
+      // Проверяем SKU в ценах стилей для пледов и полотенец
+      (product.throwsTowelsStylePrices?.some((style: any) => style.sku?.toLowerCase().includes(searchLower))) ||
+      // Проверяем SKU в размерах штор
+      (product.curtainsSizes?.some((size: any) => size.sku?.toLowerCase().includes(searchLower))) ||
+      // Проверяем SKU в размерах обуви
+      (product.footwearSizes?.some((size: any) => size.sku?.toLowerCase().includes(searchLower))) ||
+      // Проверяем SKU в ценах стилей одежды
+      (product.clothingStylePrices?.some((style: any) => style.sku?.toLowerCase().includes(searchLower))) ||
+      // Проверяем SKU для товаров категории OUTDOOR
+      (product.outdoorPrice?.sku?.toLowerCase().includes(searchLower));
+
     const matchesSearch = 
       product.title.toLowerCase().includes(searchLower) ||
       product.category.toLowerCase().includes(searchLower) ||
       product.subcategory?.toLowerCase().includes(searchLower) ||
-      product.sku?.toLowerCase().includes(searchLower);
+      hasMatchingSku;
     
     // Если выбрана категория Clearance, показываем все товары с isClearance: true
     if (selectedCategory === 'CLEARANCE') {
@@ -483,6 +504,11 @@ export default function ProductsPage() {
         onProductEdited={fetchProducts}
         validateUniqueSku={validateUniqueSku}
       />
+      <UploadCSVModal
+        open={uploadModalOpen}
+        onClose={() => setUploadModalOpen(false)}
+        onUploadSuccess={fetchProducts}
+      />
       
       <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8 gap-4">
         <h1 className="text-2xl font-bold text-gray-900">Products Management</h1>
@@ -509,6 +535,13 @@ export default function ProductsPage() {
               />
             </svg>
           </div>
+          <button
+            className="flex items-center gap-2 px-4 py-2 text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg transition-colors"
+            onClick={() => setUploadModalOpen(true)}
+          >
+            <Upload className="h-5 w-5" />
+            Import CSV
+          </button>
           <button
             className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors"
             onClick={() => setModalOpen(true)}
@@ -868,6 +901,29 @@ export default function ProductsPage() {
                                       <span className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-sm">
                                         {product.rugsMatsType}
                                       </span>
+                                    </div>
+                                  </div>
+                                )}
+
+                                {/* Additional Categories */}
+                                {product.additionalCategories && product.additionalCategories.length > 0 && (
+                                  <div>
+                                    <h4 className="text-sm font-medium text-gray-700 mb-1">Additional Categories:</h4>
+                                    <div className="space-y-2">
+                                      {product.additionalCategories.map((category: any, index: number) => (
+                                        <div key={index} className="bg-gray-50 p-3 rounded-lg">
+                                          <div className="flex flex-col gap-1">
+                                            <span className="text-sm font-medium text-gray-900">
+                                              Category: {category.category}
+                                            </span>
+                                            {category.subcategory && (
+                                              <span className="text-sm text-gray-600">
+                                                Subcategory: {category.subcategory}
+                                              </span>
+                                            )}
+                                          </div>
+                                        </div>
+                                      ))}
                                     </div>
                                   </div>
                                 )}

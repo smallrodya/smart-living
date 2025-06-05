@@ -25,6 +25,7 @@ interface Product {
   discount?: number;
   isSoldOut?: boolean;
   isHot?: boolean;
+  additionalCategories?: Array<{ category: string; subcategory: string }>;
 }
 
 export default function ShaggyRugsPage() {
@@ -54,12 +55,15 @@ export default function ShaggyRugsPage() {
       const data = await res.json();
       console.log('All products:', data.products); // Для отладки
       const shaggyRugs = data.products.filter(
-        (product: Product) => {
-          console.log('Product category:', product.category); // Для отладки
-          console.log('Product subcategory:', product.subcategory); // Для отладки
-          return product.category === 'RUGS & MATS' && 
-                 product.subcategory === 'Shaggy Rugs';
-        }
+        (product: Product) => 
+          (product.category === 'RUGS & MATS' && 
+          product.subcategory === 'Shaggy Rugs') ||
+          (product.additionalCategories && 
+           product.additionalCategories.some(
+             (ac: { category: string; subcategory: string }) => 
+               ac.category === 'RUGS & MATS' && 
+               ac.subcategory === 'Shaggy Rugs'
+           ))
       );
       console.log('Filtered shaggy rugs:', shaggyRugs); // Для отладки
       setProducts(shaggyRugs);

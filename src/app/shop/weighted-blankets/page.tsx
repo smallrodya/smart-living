@@ -25,6 +25,7 @@ interface Product {
   isSoldOut: boolean;
   isHot: boolean;
   discount?: number;
+  additionalCategories?: Array<{ category: string; subcategory: string }>;
 }
 
 export default function WeightedBlanketsPage() {
@@ -55,12 +56,15 @@ export default function WeightedBlanketsPage() {
       const data = await res.json();
       console.log('All products:', data.products); // Для отладки
       const weightedBlankets = data.products.filter(
-        (product: Product) => {
-          console.log('Product category:', product.category); // Для отладки
-          console.log('Product subcategory:', product.subcategory); // Для отладки
-          return product.category === 'BEDDING' && 
-                 product.subcategory === 'Weighted Blankets';
-        }
+        (product: Product) => 
+          (product.category === 'BEDDING' && 
+           product.subcategory === 'Weighted Blankets') ||
+          (product.additionalCategories && 
+           product.additionalCategories.some(
+             (ac: { category: string; subcategory: string }) => 
+               ac.category === 'BEDDING' && 
+               ac.subcategory === 'Weighted Blankets'
+           ))
       );
       console.log('Filtered weighted blankets:', weightedBlankets); // Для отладки
       setProducts(weightedBlankets);

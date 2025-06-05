@@ -24,6 +24,7 @@ interface Product {
   discount?: number;
   isSoldOut?: boolean;
   isHot?: boolean;
+  additionalCategories?: Array<{ category: string; subcategory: string }>;
 }
 
 export default function ElectricUnderblanketsPage() {
@@ -54,8 +55,14 @@ export default function ElectricUnderblanketsPage() {
       const data = await res.json();
       const electricUnderblankets = data.products.filter(
         (product: Product) => 
-          product.category === 'BEDDING' && 
-          product.subcategory === 'Electric Underblankets'
+          (product.category === 'BEDDING' && 
+          product.subcategory === 'Electric Underblankets') ||
+          (product.additionalCategories && 
+           product.additionalCategories.some(
+             (ac: { category: string; subcategory: string }) => 
+               ac.category === 'BEDDING' && 
+               ac.subcategory === 'Electric Underblankets'
+           ))
       );
       setProducts(electricUnderblankets);
     } catch (error) {

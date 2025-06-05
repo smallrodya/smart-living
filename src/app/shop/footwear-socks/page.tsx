@@ -23,6 +23,7 @@ interface Product {
   discount?: number;
   isSoldOut?: boolean;
   isHot?: boolean;
+  additionalCategories?: Array<{ category: string; subcategory: string }>;
 }
 
 export default function FootwearSocksPage() {
@@ -52,15 +53,16 @@ export default function FootwearSocksPage() {
       const data = await res.json();
       console.log('Все товары:', data.products);
       
-      const filteredProducts = data.products.filter((product: Product) => {
-        console.log('Проверяем товар:', {
-          category: product.category,
-          subcategory: product.subcategory
-        });
-        
-        return product.category === 'FOOTWEAR' && 
-               product.subcategory === 'Socks';
-      });
+      const filteredProducts = data.products.filter((product: Product) => 
+        (product.category === 'FOOTWEAR' && 
+        product.subcategory === 'Socks') ||
+        (product.additionalCategories && 
+         product.additionalCategories.some(
+           (ac: { category: string; subcategory: string }) => 
+             ac.category === 'FOOTWEAR' && 
+             ac.subcategory === 'Socks'
+         ))
+    );  
       
       console.log('Отфильтрованные товары:', filteredProducts);
       setProducts(filteredProducts);

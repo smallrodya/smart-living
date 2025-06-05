@@ -24,6 +24,7 @@ interface Product {
   discount?: number;
   isSoldOut?: boolean;
   isHot?: boolean;
+  additionalCategories?: Array<{ category: string; subcategory: string }>;
 }
 
 export default function WeightedBlanketsPage() {
@@ -53,8 +54,14 @@ export default function WeightedBlanketsPage() {
       const data = await res.json();
       const weightedBlankets = data.products.filter(
         (product: Product) => 
-          product.category === 'THROWS & TOWELS' && 
-          product.subcategory === 'Weighted Blankets'
+          (product.category === 'THROWS & TOWELS' && 
+          product.subcategory === 'Weighted Blankets') ||
+          (product.additionalCategories && 
+           product.additionalCategories.some(
+             (ac: { category: string; subcategory: string }) => 
+               ac.category === 'THROWS & TOWELS' && 
+               ac.subcategory === 'Weighted Blankets'
+           ))
       );
       setProducts(weightedBlankets);
     } catch (error) {

@@ -40,6 +40,7 @@ const beddingSubcategories = [
   'Kids Beding',
   'Bedspreads',
   'Electric Underblankets',
+  'Cushions'
 ];
 
 const rugsMatsSubcategories = {
@@ -70,7 +71,9 @@ const throwsTowelsStyles = [
   'Fleece',
   'Plain',
   '3D',
-  'Chunky Hand Knitted'
+  'Chunky Hand Knitted',
+  'Large',
+  'XLarge'
 ];
 
 const throwsTowelsColors = [
@@ -97,7 +100,7 @@ const throwsTowelsColors = [
 ];
 
 const beddingSizes = ['Single', 'Double', 'King', 'Super King', 'Crib'];
-const beddingStyles = ['Printed', 'Plain', '3D', 'Teddy', 'Hotel Quality'];
+const beddingStyles = ['Printed', 'Plain', '3D', 'Teddy', 'Hotel Quality', 'Housewife Pillowcase', 'Oxford Pillowcase'];
 const beddingColors = [
   'White',
   'Black',
@@ -291,52 +294,50 @@ interface FormData {
     stock: number;
   };
   outdoorColors: string[];
+  // Additional categories
+  additionalCategories: {
+    category: string;
+    subcategory: string;
+  }[];
 }
 
 export default function EditProductModal({ open, onClose, product, onProductEdited, validateUniqueSku }: EditProductModalProps) {
   const [formData, setFormData] = useState<FormData>({
-    title: product?.title || '',
-    description: product?.description || '',
-    features: product?.features || '',
-    price: product?.price || '',
-    category: product?.category || '',
-    subcategory: product?.subcategory || '',
-    images: product?.images || [],
-    isSoldOut: product?.isSoldOut || false,
-    isHot: product?.isHot || false,
-    // Bedding specific
-    beddingSizes: product?.beddingSizes || [],
-    beddingStyles: product?.beddingStyles || [],
-    beddingColors: product?.beddingColors || [],
-    // Rugs & Mats specific
-    rugsMatsType: product?.rugsMatsType || '',
-    rugsMatsSizes: product?.rugsMatsSizes || [],
-    rugsMatsColors: product?.rugsMatsColors || [],
-    // Throws & Towels specific
-    throwsTowelsStylePrices: product?.throwsTowelsStylePrices || [],
-    throwsTowelsStyles: product?.throwsTowelsStyles || [],
-    throwsTowelsColors: product?.throwsTowelsColors || [],
-    // Curtains specific
-    curtainsSizes: product?.curtainsSizes || [],
-    curtainsColors: product?.curtainsColors || [],
-    // Clothing specific
-    clothingStylePrices: product?.clothingStylePrices || [],
-    clothingStyles: product?.clothingStyles || [],
-    clothingColors: product?.clothingColors || [],
-    // Footwear specific
-    footwearSizes: product?.footwearSizes || [],
-    footwearColors: product?.footwearColors || [],
-    // Clearance specific
-    isClearance: product?.isClearance || false,
-    clearanceDiscount: product?.clearanceDiscount || 0,
-    // Outdoor specific
+    title: '',
+    description: '',
+    features: '',
+    price: '',
+    category: '',
+    subcategory: '',
+    images: [],
+    isSoldOut: false,
+    isHot: false,
+    beddingSizes: [],
+    beddingStyles: [],
+    beddingColors: [],
+    rugsMatsType: '',
+    rugsMatsSizes: [],
+    rugsMatsColors: [],
+    throwsTowelsStylePrices: [],
+    throwsTowelsStyles: [],
+    throwsTowelsColors: [],
+    curtainsSizes: [],
+    curtainsColors: [],
+    clothingStylePrices: [],
+    clothingStyles: [],
+    clothingColors: [],
+    footwearSizes: [],
+    footwearColors: [],
+    isClearance: false,
+    clearanceDiscount: 0,
     outdoorPrice: {
-      sku: product?.outdoorPrice?.sku || '',
-      regularPrice: product?.outdoorPrice?.regularPrice || 0,
-      salePrice: product?.outdoorPrice?.salePrice || 0,
-      stock: product?.outdoorPrice?.stock || 0
+      sku: '',
+      regularPrice: 0,
+      salePrice: 0,
+      stock: 0
     },
-    outdoorColors: product?.outdoorColors || [],
+    outdoorColors: [],
+    additionalCategories: []
   });
   const [images, setImages] = useState<string[]>([]);
   const [uploading, setUploading] = useState(false);
@@ -394,10 +395,8 @@ export default function EditProductModal({ open, onClose, product, onProductEdit
           stock: typeof size === 'string' ? 0 : size.stock || 0
         })) || [],
         footwearColors: product.footwearColors || [],
-        // Clearance specific
         isClearance: product.isClearance || false,
         clearanceDiscount: product.clearanceDiscount || 0,
-        // Outdoor specific
         outdoorPrice: {
           sku: product.outdoorPrice?.sku || '',
           regularPrice: product.outdoorPrice?.regularPrice || 0,
@@ -405,6 +404,7 @@ export default function EditProductModal({ open, onClose, product, onProductEdit
           stock: product.outdoorPrice?.stock || 0
         },
         outdoorColors: product.outdoorColors || [],
+        additionalCategories: product.additionalCategories || []
       });
     }
   }, [product]);
@@ -1776,6 +1776,79 @@ export default function EditProductModal({ open, onClose, product, onProductEdit
               </div>
             </div>
           )}
+
+          {/* Additional Categories Section */}
+          <div className="bg-gray-50 p-6 rounded-xl">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">Additional Categories</h3>
+            <div className="space-y-4">
+              {categories.map(category => (
+                <div key={category} className="space-y-2">
+                  <label className="flex items-center space-x-2">
+                    <input
+                      type="checkbox"
+                      checked={formData.additionalCategories.some(ac => ac.category === category)}
+                      onChange={(e) => {
+                        if (e.target.checked) {
+                          setFormData(prev => ({
+                            ...prev,
+                            additionalCategories: [...prev.additionalCategories, { category, subcategory: '' }]
+                          }));
+                        } else {
+                          setFormData(prev => ({
+                            ...prev,
+                            additionalCategories: prev.additionalCategories.filter(ac => ac.category !== category)
+                          }));
+                        }
+                      }}
+                      className="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
+                    />
+                    <span className="text-sm font-medium text-gray-700">{category}</span>
+                  </label>
+                  {formData.additionalCategories.some(ac => ac.category === category) && (
+                    <div className="ml-6">
+                      <select
+                        value={formData.additionalCategories.find(ac => ac.category === category)?.subcategory || ''}
+                        onChange={(e) => {
+                          setFormData(prev => ({
+                            ...prev,
+                            additionalCategories: prev.additionalCategories.map(ac =>
+                              ac.category === category
+                                ? { ...ac, subcategory: e.target.value }
+                                : ac
+                            )
+                          }));
+                        }}
+                        className="w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                      >
+                        <option value="">Select a subcategory</option>
+                        {category === 'BEDDING' && beddingSubcategories.map(sub => (
+                          <option key={sub} value={sub}>{sub}</option>
+                        ))}
+                        {category === 'RUGS & MATS' && Object.values(rugsMatsSubcategories).flat().map(sub => (
+                          <option key={sub} value={sub}>{sub}</option>
+                        ))}
+                        {category === 'THROWS & TOWELS' && throwsTowelsSubcategories.map(sub => (
+                          <option key={sub} value={sub}>{sub}</option>
+                        ))}
+                        {category === 'OUTDOOR' && outdoorSubcategories.map(sub => (
+                          <option key={sub} value={sub}>{sub}</option>
+                        ))}
+                        {category === 'CURTAINS' && curtainsSubcategories.map(sub => (
+                          <option key={sub} value={sub}>{sub}</option>
+                        ))}
+                        {category === 'CLOTHING' && clothingSubcategories.map(sub => (
+                          <option key={sub} value={sub}>{sub}</option>
+                        ))}
+                        {category === 'FOOTWEAR' && footwearSubcategories.map(sub => (
+                          <option key={sub} value={sub}>{sub}</option>
+                        ))}
+                      </select>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
 
           <div className="flex justify-end space-x-4 pt-6 border-t">
             <button

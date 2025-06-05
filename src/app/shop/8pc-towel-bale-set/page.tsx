@@ -24,6 +24,7 @@ interface Product {
   discount?: number;
   isSoldOut?: boolean;
   isHot?: boolean;
+  additionalCategories?: Array<{ category: string; subcategory: string }>;
 }
 
 export default function TowelBaleSetPage() {
@@ -53,8 +54,14 @@ export default function TowelBaleSetPage() {
       const data = await res.json();
       const towelBaleSets = data.products.filter(
         (product: Product) => 
-          product.category === 'THROWS & TOWELS' && 
-          product.subcategory === '8Pc Towel Bale Set'
+          (product.category === 'THROWS & TOWELS' && 
+          product.subcategory === '8Pc Towel Bale Set') ||
+          (product.additionalCategories && 
+           product.additionalCategories.some(
+             (ac: { category: string; subcategory: string }) => 
+               ac.category === 'THROWS & TOWELS' && 
+               ac.subcategory === '8Pc Towel Bale Set'
+           ))
       );
       setProducts(towelBaleSets);
     } catch (error) {

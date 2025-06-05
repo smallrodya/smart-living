@@ -27,7 +27,7 @@ interface Product {
   additionalCategories?: Array<{ category: string; subcategory: string }>;
 }
 
-export default function KidsBeddingPage() {
+export default function OxfordPillowcasePage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedSize, setSelectedSize] = useState<string>('');
@@ -53,18 +53,18 @@ export default function KidsBeddingPage() {
     try {
       const res = await fetch('/api/products');
       const data = await res.json();
-      const kidsBedding = data.products.filter(
+      const pillowcases = data.products.filter(
         (product: Product) => 
           (product.category === 'BEDDING' && 
-          product.subcategory === 'Kids Bedding') ||
+          product.subcategory === 'Oxford Pillowcases') ||
           (product.additionalCategories && 
            product.additionalCategories.some(
              (ac: { category: string; subcategory: string }) => 
                ac.category === 'BEDDING' && 
-               ac.subcategory === 'Kids Bedding'
+               ac.subcategory === 'Oxford Pillowcases'
            ))
       );
-      setProducts(kidsBedding);
+      setProducts(pillowcases);
     } catch (error) {
       console.error('Error fetching products:', error);
     } finally {
@@ -75,6 +75,11 @@ export default function KidsBeddingPage() {
   const allSizes = Array.from(new Set(products.flatMap(p => p.beddingSizes?.map(s => s.size) || [])));
   const allColors = Array.from(new Set(products.flatMap(p => p.beddingColors || [])));
   const allStyles = Array.from(new Set(products.flatMap(p => p.beddingStyles || [])));
+
+  const getProductPrice = (product: Product) => {
+    if (!product.beddingSizes || product.beddingSizes.length === 0) return 0;
+    return product.beddingSizes[0].salePrice;
+  };
 
   const formatPrice = (price: number) => {
     return `£${price.toFixed(2)}`;
@@ -108,7 +113,7 @@ export default function KidsBeddingPage() {
 
   const toggleWishlist = (id: string) => {
     setWishlist(prev => {
-      const prefixedId = `kids_${id}`;
+      const prefixedId = `pillowcase_${id}`;
       const newWishlist = prev.includes(prefixedId) 
         ? prev.filter(i => i !== prefixedId)
         : [...prev, prefixedId];
@@ -121,18 +126,18 @@ export default function KidsBeddingPage() {
               typeof item === 'object' && 
               'id' in item && 
               typeof item.id === 'string' && 
-              !item.id.startsWith('kids_')
+              !item.id.startsWith('pillowcase_')
             )
           : [];
         
         const newItems = products
-          .filter((p) => newWishlist.includes(`kids_${p._id}`))
+          .filter((p) => newWishlist.includes(`pillowcase_${p._id}`))
           .map((item) => ({
-            id: `kids_${item._id}`,
+            id: `pillowcase_${item._id}`,
             src: item.images?.[0] || '',
             hoverSrc: item.images?.[1] || item.images?.[0] || '',
             title: item.title,
-            price: formatPriceRange(item),
+            price: `£${item.price}`,
             discount: item.discount ? `-${item.discount}%` : ''
           }));
         
@@ -167,8 +172,8 @@ export default function KidsBeddingPage() {
           marginBottom: '60px'
         }}>
           <Image
-            src="/Out-Of-Space.jpg"
-            alt="Kids Bedding"
+            src="/SHOPPILLOWCASE.jpg"
+            alt="Oxford Pillowcases"
             fill
             style={{
               objectFit: 'cover',
@@ -243,7 +248,7 @@ export default function KidsBeddingPage() {
                 textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
                 lineHeight: '1.2',
                 marginBottom: '20px'
-              }}>Kids Bedding</h1>
+              }}>Oxford Pillowcases</h1>
               <p style={{
                 color: '#fff',
                 fontSize: '24px',
@@ -253,7 +258,7 @@ export default function KidsBeddingPage() {
                 margin: '0 auto',
                 lineHeight: '1.5'
               }}>
-                Discover our colorful and fun collection of kids bedding, perfect for creating a magical bedroom for your little ones
+                Discover our collection of premium Oxford pillowcases, featuring elegant borders and luxurious comfort
               </p>
             </div>
           </div>
@@ -700,7 +705,7 @@ export default function KidsBeddingPage() {
                       cursor: 'pointer',
                       boxShadow: '0 2px 12px rgba(0,0,0,0.15)',
                       transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                      transform: wishlist.includes(`kids_${product._id}`) ? 'scale(1.1)' : 'scale(1)',
+                      transform: wishlist.includes(`pillowcase_${product._id}`) ? 'scale(1.1)' : 'scale(1)',
                       backdropFilter: 'blur(4px)'
                     }}
                   >
@@ -708,7 +713,7 @@ export default function KidsBeddingPage() {
                       width="24"
                       height="24"
                       viewBox="0 0 24 24"
-                      fill={wishlist.includes(`kids_${product._id}`) ? '#e53935' : 'none'}
+                      fill={wishlist.includes(`pillowcase_${product._id}`) ? '#e53935' : 'none'}
                       stroke="#e53935"
                       strokeWidth="2"
                       strokeLinecap="round"
@@ -879,9 +884,9 @@ export default function KidsBeddingPage() {
       </main>
       <Footer />
       <CookieBanner />
-      <QuickViewModal 
-        product={quickViewProduct} 
-        onClose={() => setQuickViewProduct(null)} 
+      <QuickViewModal
+        product={quickViewProduct}
+        onClose={() => setQuickViewProduct(null)}
       />
       <style jsx global>{`
         @keyframes slideDown {

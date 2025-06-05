@@ -26,6 +26,7 @@ interface Product {
   discount?: number;
   isSoldOut?: boolean;
   isHot?: boolean;
+  additionalCategories?: Array<{ category: string; subcategory: string }>;
 }
 
 export default function PillowcasesPage() {
@@ -55,12 +56,15 @@ export default function PillowcasesPage() {
       const data = await res.json();
       console.log('All products:', data.products); // Для отладки
       const pillowcases = data.products.filter(
-        (product: Product) => {
-          console.log('Product category:', product.category); // Для отладки
-          console.log('Product subcategory:', product.subcategory); // Для отладки
-          return product.category === 'BEDDING' && 
-                 product.subcategory === 'Pillowcases';
-        }
+        (product: Product) => 
+          (product.category === 'BEDDING' && 
+          product.subcategory === 'Pillowcases') ||
+          (product.additionalCategories && 
+           product.additionalCategories.some(
+             (ac: { category: string; subcategory: string }) => 
+               ac.category === 'BEDDING' && 
+               ac.subcategory === 'Pillowcases'
+           ))
       );
       console.log('Filtered pillowcases:', pillowcases); // Для отладки
       setProducts(pillowcases);

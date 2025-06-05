@@ -23,6 +23,7 @@ interface Product {
   discount?: number;
   isSoldOut?: boolean;
   isHot?: boolean;
+  additionalCategories?: Array<{ category: string; subcategory: string }>;
 }
 
 export default function HallwayRunnerPage() {
@@ -52,12 +53,15 @@ export default function HallwayRunnerPage() {
       const data = await res.json();
       console.log('All products:', data.products); // Для отладки
       const hallwayRunners = data.products.filter(
-        (product: Product) => {
-          console.log('Product category:', product.category); // Для отладки
-          console.log('Product subcategory:', product.subcategory); // Для отладки
-          return product.category === 'RUGS & MATS' && 
-                 product.subcategory === 'Hallway Runner';
-        }
+        (product: Product) => 
+          (product.category === 'RUGS & MATS' && 
+          product.subcategory === 'Hallway Runner') ||
+          (product.additionalCategories && 
+           product.additionalCategories.some(
+             (ac: { category: string; subcategory: string }) => 
+               ac.category === 'RUGS & MATS' && 
+               ac.subcategory === 'Hallway Runner'
+           ))
       );
       console.log('Filtered hallway runners:', hallwayRunners); // Для отладки
       setProducts(hallwayRunners);

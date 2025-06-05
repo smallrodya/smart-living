@@ -23,6 +23,7 @@ interface Product {
   discount?: number;
   isSoldOut?: boolean;
   isHot?: boolean;
+  additionalCategories?: Array<{ category: string; subcategory: string }>;
 }
 
 export default function FootwearBootiesPage() {
@@ -52,15 +53,16 @@ export default function FootwearBootiesPage() {
       const data = await res.json();
       console.log('Все товары:', data.products);
       
-      const filteredProducts = data.products.filter((product: Product) => {
-        console.log('Проверяем товар:', {
-          category: product.category,
-          subcategory: product.subcategory
-        });
-        
-        return product.category === 'FOOTWEAR' && 
-               product.subcategory === 'Booties';
-      });
+      const filteredProducts = data.products.filter((product: Product) => 
+        (product.category === 'FOOTWEAR' && 
+        product.subcategory === 'Booties') ||
+        (product.additionalCategories && 
+         product.additionalCategories.some(
+           (ac: { category: string; subcategory: string }) => 
+             ac.category === 'FOOTWEAR' && 
+             ac.subcategory === 'Booties'
+         ))
+    );
       
       console.log('Отфильтрованные товары:', filteredProducts);
       setProducts(filteredProducts);

@@ -24,6 +24,7 @@ interface Product {
   discount?: number;
   isSoldOut?: boolean;
   isHot?: boolean;
+  additionalCategories?: Array<{ category: string; subcategory: string }>;
 }
 
 export default function ClothingMenPage() {
@@ -53,17 +54,16 @@ export default function ClothingMenPage() {
       const data = await res.json();
       console.log('Все товары:', data.products);
       
-      const filteredProducts = data.products.filter((product: Product) => {
-        console.log('Проверяем товар:', {
-          category: product.category,
-          styles: product.clothingStyles,
-          stylePrices: product.clothingStylePrices,
-          subcategory: product.subcategory
-        });
-        
-        return product.category === 'CLOTHING' && 
-               product.subcategory === "Men's";
-      });
+      const filteredProducts = data.products.filter((product: Product) => 
+        (product.category === 'CLOTHING' && 
+        product.subcategory === "Men's") ||
+        (product.additionalCategories && 
+         product.additionalCategories.some(
+           (ac: { category: string; subcategory: string }) => 
+             ac.category === 'CLOTHING' && 
+             ac.subcategory === "Men's"
+         ))
+    );
       
       console.log('Отфильтрованные товары:', filteredProducts);
       setProducts(filteredProducts);

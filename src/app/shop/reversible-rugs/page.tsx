@@ -23,6 +23,7 @@ interface Product {
   discount?: number;
   isSoldOut?: boolean;
   isHot?: boolean;
+  additionalCategories?: Array<{ category: string; subcategory: string }>;
 }
 
 export default function ReversibleRugsPage() {
@@ -52,12 +53,15 @@ export default function ReversibleRugsPage() {
       const data = await res.json();
       console.log('All products:', data.products); // Для отладки
       const reversibleRugs = data.products.filter(
-        (product: Product) => {
-          console.log('Product category:', product.category); // Для отладки
-          console.log('Product subcategory:', product.subcategory); // Для отладки
-          return product.category === 'RUGS & MATS' && 
-                 product.subcategory === 'Reversible Rugs';
-        }
+        (product: Product) => 
+          (product.category === 'RUGS & MATS' && 
+          product.subcategory === 'Reversible Rugs') ||
+          (product.additionalCategories && 
+           product.additionalCategories.some(
+             (ac: { category: string; subcategory: string }) => 
+               ac.category === 'RUGS & MATS' && 
+               ac.subcategory === 'Reversible Rugs'
+           ))
       );
       console.log('Filtered reversible rugs:', reversibleRugs); // Для отладки
       setProducts(reversibleRugs);

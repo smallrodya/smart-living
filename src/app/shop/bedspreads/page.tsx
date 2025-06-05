@@ -24,6 +24,7 @@ interface Product {
   discount?: number;
   isSoldOut?: boolean;
   isHot?: boolean;
+  additionalCategories?: Array<{ category: string; subcategory: string }>;
 }
 
 export default function BedspreadsPage() {
@@ -54,8 +55,14 @@ export default function BedspreadsPage() {
       const data = await res.json();
       const bedspreads = data.products.filter(
         (product: Product) => 
-          product.category === 'BEDDING' && 
-          product.subcategory === 'Bedspreads'
+          (product.category === 'BEDDING' && 
+          product.subcategory === 'Bedspreads') ||
+          (product.additionalCategories && 
+           product.additionalCategories.some(
+             (ac: { category: string; subcategory: string }) => 
+               ac.category === 'BEDDING' && 
+               ac.subcategory === 'Bedspreads'
+           ))
       );
       setProducts(bedspreads);
     } catch (error) {

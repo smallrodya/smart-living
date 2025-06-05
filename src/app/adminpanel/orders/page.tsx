@@ -1,7 +1,8 @@
 "use client";
 import { useState, useEffect } from "react";
-import { Search, Loader2 } from 'lucide-react';
+import { Search, Loader2, Download } from 'lucide-react';
 import { toast } from 'react-hot-toast';
+import * as XLSX from 'xlsx';
 
 export const dynamic = 'force-dynamic';
 
@@ -119,6 +120,78 @@ export default function OrdersPage() {
     }
   };
 
+  const handleDownloadOrder = (order: Order) => {
+    // Создаем данные для Excel
+    const orderData = order.items.map(item => ({
+      'Order Number': order._id.slice(-6),
+      'Order Date': formatDate(order.createdAt),
+      'Customer Name': `${order.customerDetails.firstName} ${order.customerDetails.lastName}`,
+      'Address Line 1': order.customerDetails.address,
+      'Address Line 2': order.customerDetails.address2 || '',
+      'Address Line 3 (City)': order.customerDetails.city,
+      'Address Line 4': order.customerDetails.county || '',
+      'Postcode': order.customerDetails.postcode,
+      'Phone Number': order.customerDetails.phone,
+      'Email Address': order.customerDetails.email,
+      'Item SKU': item.sku || 'N/A',
+      'Item Cost': `£${item.price.toFixed(2)}`,
+      'Internal Name': item.title,
+      'Quantity': item.quantity,
+      'Customer Note': order.customerDetails.orderNotes || '',
+      'Tracking': order.status,
+      'Total': `£${(item.price * item.quantity).toFixed(2)}`,
+      'Shipping Method': order.shipping,
+      'Payment Method': order.paymentMethod
+    }));
+
+    // Создаем рабочую книгу Excel
+    const ws = XLSX.utils.json_to_sheet(orderData);
+    
+    // Настраиваем ширину колонок
+    const colWidths = [
+      { wch: 15 },  // Order Number
+      { wch: 20 },  // Order Date
+      { wch: 25 },  // Customer Name
+      { wch: 30 },  // Address Line 1
+      { wch: 30 },  // Address Line 2
+      { wch: 20 },  // Address Line 3 (City)
+      { wch: 20 },  // Address Line 4
+      { wch: 15 },  // Postcode
+      { wch: 20 },  // Phone Number
+      { wch: 30 },  // Email Address
+      { wch: 15 },  // Item SKU
+      { wch: 15 },  // Item Cost
+      { wch: 40 },  // Internal Name
+      { wch: 10 },  // Quantity
+      { wch: 50 },  // Customer Note
+      { wch: 15 },  // Tracking
+      { wch: 15 },  // Total
+      { wch: 20 },  // Shipping Method
+      { wch: 20 },  // Payment Method
+    ];
+    
+    ws['!cols'] = colWidths;
+
+    // Добавляем стили для заголовков
+    const range = XLSX.utils.decode_range(ws['!ref'] || 'A1');
+    for (let C = range.s.c; C <= range.e.c; ++C) {
+      const cell = XLSX.utils.encode_cell({ r: 0, c: C });
+      if (!ws[cell]) continue;
+      
+      // Устанавливаем стиль для заголовков
+      ws[cell].s = {
+        font: { bold: true },
+        alignment: { wrapText: true, vertical: 'center' }
+      };
+    }
+
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Order Details");
+
+    // Генерируем файл и скачиваем его
+    XLSX.writeFile(wb, `order_${order._id.slice(-6)}.xlsx`);
+  };
+
   const filteredOrders = orders.filter(order => {
     const searchLower = searchQuery.toLowerCase();
     const matchesSearch = 
@@ -234,6 +307,16 @@ export default function OrdersPage() {
                             <option key={status} value={status}>{status}</option>
                           ))}
                         </select>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleDownloadOrder(order);
+                          }}
+                          className="px-3 py-1 text-indigo-600 hover:text-indigo-800 hover:bg-indigo-50 rounded-lg transition-colors flex items-center gap-1"
+                        >
+                          <Download className="h-4 w-4" />
+                          Download
+                        </button>
                         <button
                           onClick={(e) => {
                             e.stopPropagation();

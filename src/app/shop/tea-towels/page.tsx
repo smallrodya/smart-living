@@ -24,6 +24,7 @@ interface Product {
   discount?: number;
   isSoldOut?: boolean;
   isHot?: boolean;
+  additionalCategories?: Array<{ category: string; subcategory: string }>;
 }
 
 export default function TeaTowelsPage() {
@@ -53,8 +54,14 @@ export default function TeaTowelsPage() {
       const data = await res.json();
       const teaTowels = data.products.filter(
         (product: Product) => 
-          product.category === 'THROWS & TOWELS' && 
-          product.subcategory === 'Tea Towels'
+          (product.category === 'THROWS & TOWELS' && 
+          product.subcategory === 'Tea Towels') ||
+          (product.additionalCategories && 
+           product.additionalCategories.some(
+             (ac: { category: string; subcategory: string }) => 
+               ac.category === 'THROWS & TOWELS' && 
+               ac.subcategory === 'Tea Towels'
+           ))
       );
       setProducts(teaTowels);
     } catch (error) {
