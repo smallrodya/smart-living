@@ -4,6 +4,21 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import CategoriesSection from "@/components/CategoriesSection";
 
+declare global {
+  namespace JSX {
+    interface IntrinsicElements {
+      'at-last': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
+        merchant?: string;
+        icon?: string;
+        color?: string;
+        shape?: string;
+        width?: string | number;
+        height?: string | number;
+      };
+    }
+  }
+}
+
 export default function ReturnsPage() {
   const formatDate = (date: Date) => {
     return date.toLocaleDateString('en-GB', {
@@ -160,7 +175,7 @@ export default function ReturnsPage() {
                     Whether you return the goods yourself or use our collection service, please affix a label, showing the return address below, 
                     together with your invoice number.
                   </p>
-                  <div className="bg-gray-50 p-4 rounded-lg">
+                  <div className="bg-gray-50 p-4 rounded-lg mb-4">
                     <p className="text-gray-600">
                       Smart Living Wholesale Ltd<br />
                       Unit-2, Block-5<br />
@@ -169,6 +184,22 @@ export default function ReturnsPage() {
                       Dudley<br />
                       DY2 0XW
                     </p>
+                  </div>
+                  <div className="text-center space-y-4">
+                    <p className="text-gray-600 font-medium">
+                      In order to start the Automatic Returns, Please click the button below
+                    </p>
+                    <div className="flex justify-center">
+                      <script type="module" src="https://button.atlast.co/at-last.js"></script>
+                      <at-last 
+                        merchant="smart-living" 
+                        icon="https://cdn.atlast.co/merchants/164c2a50-77e9-47f6-b2dd-12c277ed43ff/square-1711553919907.jpg" 
+                        color="#4F46E5" 
+                        shape="pill" 
+                        width="200" 
+                        height="50"
+                      ></at-last>
+                    </div>
                   </div>
                 </div>
               </section>
