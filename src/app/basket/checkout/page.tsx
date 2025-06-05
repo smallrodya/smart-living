@@ -230,8 +230,10 @@ function CheckoutPage() {
           }),
         });
 
+        const smartCoinData = await smartCoinResponse.json();
+
         if (!smartCoinResponse.ok) {
-          throw new Error('Failed to process Smart Coin payment');
+          throw new Error(smartCoinData.error || 'Failed to process Smart Coin payment');
         }
 
         // Update product stock
@@ -284,8 +286,8 @@ function CheckoutPage() {
         console.log('Order created:', orderData);
 
         // Обновляем куки с новым балансом
-        if (orderData.userData) {
-          setCookie('user', JSON.stringify(orderData.userData), {
+        if (smartCoinData.userData) {
+          setCookie('user', JSON.stringify(smartCoinData.userData), {
             maxAge: 30 * 24 * 60 * 60, // 30 дней
             path: '/'
           });
@@ -682,10 +684,10 @@ function CheckoutPage() {
               <div className="mt-6 p-4 rounded-xl bg-gradient-to-r from-purple-50 to-pink-50 border border-purple-100 shadow-sm">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div className="bg-gradient-to-br from-purple-500 to-pink-500 p-2 rounded-lg">
-                      <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
+                    <div className="bg-gradient-to-br from-purple-500 to-pink-500 p-2 rounded-full shadow-lg transform hover:scale-105 transition-transform duration-200 border-2 border-black">
+                      <div className="flex items-center justify-center w-8 h-8">
+                        <span className="text-white font-bold text-lg tracking-wider">SC</span>
+                      </div>
                     </div>
                     <div>
                       <h4 className="font-semibold text-gray-900">Smart Coin Rewards</h4>
@@ -728,10 +730,10 @@ function CheckoutPage() {
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <span className="font-medium">Smart Coins</span>
-                        <div className="bg-gradient-to-br from-purple-500 to-pink-500 p-1.5 rounded-lg">
-                          <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                          </svg>
+                        <div className="bg-gradient-to-br from-purple-500 to-pink-500 p-1.5 rounded-full shadow-md transform hover:scale-105 transition-transform duration-200 border-2 border-black">
+                          <div className="flex items-center justify-center w-6 h-6">
+                            <span className="text-white font-bold text-sm tracking-wider">SC</span>
+                          </div>
                         </div>
                       </div>
                       <div className="flex items-center gap-2">
@@ -928,7 +930,7 @@ function CheckoutPage() {
                 type="button"
                 onClick={handleSubmit}
                 disabled={submitting || paymentProcessing || (paymentMethod === "card" && !cardComplete)}
-                className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors disabled:opacity-50 text-lg"
+                className="w-full bg-black text-white py-3 px-6 rounded-lg font-medium hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors disabled:opacity-50 text-lg"
               >
                 {submitting || paymentProcessing ? "Processing payment..." : "Place Order"}
               </button>

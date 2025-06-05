@@ -7,7 +7,6 @@ import AdminAuthGuard from '@/components/AdminAuthGuard';
 const menuItems = [
   { name: 'Statistics', path: '/adminpanel', icon: '📊' },
   { name: 'Products', path: '/adminpanel/products', icon: '📦' },
-  { name: 'Categories', path: '/adminpanel/categories', icon: '📑' },
   { name: 'Orders', path: '/adminpanel/orders', icon: '🛒' },
   { name: 'Users', path: '/adminpanel/users', icon: '👥' },
 ];

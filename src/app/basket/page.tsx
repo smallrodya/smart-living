@@ -82,8 +82,8 @@ export default function BasketPage() {
           <div className="text-center py-12">
             <p className="text-gray-600 mb-4">Your basket is empty</p>
             <button
-              onClick={() => router.push('/shop')}
-              className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+              onClick={() => router.push('/')}
+              className="bg-black text-white px-6 py-2 rounded-lg hover:bg-gray-800 transition-colors"
             >
               Continue Shopping
             </button>
@@ -249,7 +249,7 @@ export default function BasketPage() {
                 <div className="text-lg font-medium">Total: £{total.toFixed(2)}</div>
                 <button
                   onClick={() => router.push('/basket/checkout')}
-                  className="w-full md:w-auto bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+                  className="w-full md:w-auto bg-black text-white px-6 py-2 rounded-lg hover:bg-gray-800 transition-colors"
                 >
                   Proceed to Checkout
                 </button>
