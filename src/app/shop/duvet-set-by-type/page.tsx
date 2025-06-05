@@ -54,18 +54,16 @@ export default function DuvetSetPage() {
       const res = await fetch('/api/products');
       const data = await res.json();
       console.log('All products:', data.products); // Для отладки
-      const duvetSets = data.products.filter(
-        (product: Product) => {
-          (product.category === 'BEDDING' && 
-            product.subcategory === 'Duvet Cover Sets') ||
-            (product.additionalCategories && 
-             product.additionalCategories.some(
-               (ac: { category: string; subcategory: string }) => 
-                 ac.category === 'BEDDING' && 
-                 ac.subcategory === 'Duvet Cover Sets'
-             ))
-        }
-      );
+      const duvetSets = data.products.filter((product: Product) => {
+        return (product.category === 'BEDDING' && 
+          product.subcategory === 'Duvet Cover Sets') ||
+          (product.additionalCategories && 
+           product.additionalCategories.some(
+             (ac: { category: string; subcategory: string }) => 
+               ac.category === 'BEDDING' && 
+               ac.subcategory === 'Duvet Cover Sets'
+           ));
+      });
       console.log('Filtered duvet sets:', duvetSets); // Для отладки
       setProducts(duvetSets);
     } catch (error) {

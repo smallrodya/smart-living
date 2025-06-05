@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useBasket } from "@/context/BasketContext";
 import { useRouter } from "next/navigation";
 import Header from "@/components/Header";
@@ -7,6 +7,12 @@ import Footer from "@/components/Footer";
 import Image from "next/image";
 import { getCookie } from 'cookies-next';
 import { toast } from 'react-hot-toast';
+import { loadStripe } from '@stripe/stripe-js';
+import { Elements, useStripe, useElements, CardElement } from '@stripe/react-stripe-js';
+import StripeCardForm from '@/components/StripeCardForm';
+
+// Инициализация Stripe
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
 interface BasketItem {
   id: string;
@@ -26,10 +32,22 @@ const SHIPPING_OPTIONS = [
   { label: "Express Delivery:", value: "express", price: 5.99 },
 ];
 
-export default function CheckoutPage() {
+// Wrap the main component with Stripe Elements
+export default function CheckoutPageWrapper() {
+  return (
+    <Elements stripe={stripePromise}>
+      <CheckoutPage />
+    </Elements>
+  );
+}
+
+function CheckoutPage() {
+  const stripe = useStripe();
+  const elements = useElements();
   const { items, total, clearBasket } = useBasket();
   const router = useRouter();
   const [authError, setAuthError] = useState('');
+  const [cardElement, setCardElement] = useState<any>(null);
 
   const [form, setForm] = useState({
     email: "",
@@ -53,6 +71,9 @@ export default function CheckoutPage() {
   const [shipping, setShipping] = useState("free");
   const [paymentMethod, setPaymentMethod] = useState("card");
   const [saveCard, setSaveCard] = useState(false);
+  const [cardComplete, setCardComplete] = useState(false);
+  const [paymentProcessing, setPaymentProcessing] = useState(false);
+  const [paymentError, setPaymentError] = useState<string | null>(null);
 
   const validate = () => {
     const newErrors: any = {};
@@ -74,6 +95,10 @@ export default function CheckoutPage() {
     }));
   };
 
+  const handleCardElementReady = (element: any) => {
+    setCardElement(element);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const newErrors = validate();
@@ -92,8 +117,65 @@ export default function CheckoutPage() {
     console.log('User data from cookie:', userData);
 
     setSubmitting(true);
+    setPaymentProcessing(true);
+    setPaymentError(null);
+
     try {
+      // Создаем Payment Intent
+      console.log('Creating payment intent...');
+      const paymentResponse = await fetch('/api/create-payment-intent', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          amount: totalWithShipping,
+          currency: 'gbp',
+        }),
+      });
+
+      if (!paymentResponse.ok) {
+        throw new Error('Failed to create payment intent');
+      }
+
+      const { clientSecret } = await paymentResponse.json();
+      console.log('Payment intent created:', clientSecret);
+
+      // Подтверждаем платеж
+      if (!stripe || !cardElement) {
+        throw new Error('Stripe не инициализирован');
+      }
+
+      const { error: paymentError, paymentIntent } = await stripe.confirmCardPayment(
+        clientSecret,
+        {
+          payment_method: {
+            card: cardElement,
+            billing_details: {
+              name: form.firstName + ' ' + form.lastName,
+              email: form.email,
+              phone: form.phone,
+              address: {
+                line1: form.address,
+                city: form.city,
+                state: form.county,
+                postal_code: form.postcode,
+                country: 'GB'
+              }
+            }
+          }
+        }
+      );
+
+      if (paymentError) {
+        console.error('Stripe payment error:', paymentError);
+        throw new Error(paymentError.message);
+      }
+
+      console.log('Payment successful:', paymentIntent);
+
       // Обновляем количество товара
+      console.log('Updating stock...');
       const response = await fetch('/api/products/update-stock', {
         method: 'POST',
         headers: {
@@ -114,6 +196,7 @@ export default function CheckoutPage() {
       }
 
       // Создаем заказ в базе данных
+      console.log('Creating order...');
       const orderResponse = await fetch('/api/orders', {
         method: 'POST',
         headers: {
@@ -124,9 +207,10 @@ export default function CheckoutPage() {
           total: totalWithShipping,
           shipping,
           paymentMethod,
+          paymentIntentId: paymentIntent.id,
           customerDetails: {
             ...form,
-            email: userData.email // Используем email из куки пользователя
+            email: userData.email
           },
           status: 'DONE'
         }),
@@ -138,7 +222,7 @@ export default function CheckoutPage() {
       }
 
       const orderData = await orderResponse.json();
-      console.log('Order response:', orderData);
+      console.log('Order created:', orderData);
 
       // Очищаем корзину
       clearBasket();
@@ -147,9 +231,11 @@ export default function CheckoutPage() {
       router.push("/basket");
     } catch (error) {
       console.error('Error placing order:', error);
+      setPaymentError(error instanceof Error ? error.message : "Failed to place order. Please try again.");
       toast.error(error instanceof Error ? error.message : "Failed to place order. Please try again.");
     } finally {
       setSubmitting(false);
+      setPaymentProcessing(false);
     }
   };
 
@@ -508,38 +594,15 @@ export default function CheckoutPage() {
               {/* Payment method forms */}
               {paymentMethod === "card" && (
                 <div className="space-y-4 bg-gray-50 rounded-lg p-6 border mb-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Card number</label>
-                    <input
-                      type="text"
-                      name="cardNumber"
-                      placeholder="1234 1234 1234 1234"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                      autoComplete="cc-number"
-                    />
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Expiry date</label>
-                      <input
-                        type="text"
-                        name="expiry"
-                        placeholder="MM / YY"
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                        autoComplete="cc-exp"
-                      />
+                  <StripeCardForm 
+                    onCardChange={setCardComplete} 
+                    onCardElementReady={handleCardElementReady}
+                  />
+                  {paymentError && (
+                    <div className="text-red-600 text-sm mt-2">
+                      {paymentError}
                     </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Security code</label>
-                      <input
-                        type="text"
-                        name="cvc"
-                        placeholder="CVC"
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                        autoComplete="cc-csc"
-                      />
-                    </div>
-                  </div>
+                  )}
                   <div className="flex items-center gap-2">
                     <input
                       type="checkbox"
@@ -548,7 +611,9 @@ export default function CheckoutPage() {
                       className="accent-blue-600"
                       id="saveCard"
                     />
-                    <label htmlFor="saveCard" className="text-sm text-gray-600">Save card for future purchases</label>
+                    <label htmlFor="saveCard" className="text-sm text-gray-600">
+                      Save card for future purchases
+                    </label>
                   </div>
                 </div>
               )}
@@ -597,10 +662,10 @@ export default function CheckoutPage() {
               <button
                 type="button"
                 onClick={handleSubmit}
-                disabled={submitting}
+                disabled={submitting || paymentProcessing || (paymentMethod === "card" && !cardComplete)}
                 className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors disabled:opacity-50 text-lg"
               >
-                {submitting ? "Placing order..." : "Place Order"}
+                {submitting || paymentProcessing ? "Processing payment..." : "Place Order"}
               </button>
             </div>
 
