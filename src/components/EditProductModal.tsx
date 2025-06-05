@@ -99,7 +99,7 @@ const throwsTowelsColors = [
   'Brown'
 ];
 
-const beddingSizes = ['Single', 'Double', 'King', 'Super King', 'Crib'];
+const beddingSizes = ['Single', 'Double', 'King', 'Super King', 'Crib', 'Pillowcase'];
 const beddingStyles = ['Printed', 'Plain', '3D', 'Teddy', 'Hotel Quality', 'Housewife Pillowcase', 'Oxford Pillowcase'];
 const beddingColors = [
   'White',
