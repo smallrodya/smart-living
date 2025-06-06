@@ -124,7 +124,29 @@ const beddingColors = [
   'Brown'
 ];
 
-const rugsMatsSizes = ['Small', 'Medium', 'Large', 'Xlarge', 'Runner'];
+const rugsMatsSizes = [
+  '40 x 60 cm',
+  '50 x 80 cm',
+  '57 x 90 cm',
+  '60 x 110 cm',
+  '67 x 120 cm',
+  '60 x 220 cm',
+  '67 x 220 cm',
+  '80 x 150 cm',
+  '80 x 300 cm',
+  '120 x 170 cm',
+  '160 x 230 cm',
+  '200 x 290 cm'
+];
+
+const rugsMatsStyles = [
+  'Small',
+  'Medium',
+  'Large',
+  'Xlarge',
+  'Runner'
+];
+
 const rugsMatsColors = [
   'Aubergine',
   'Black',
@@ -269,6 +291,7 @@ interface FormData {
   rugsMatsType: 'RUGS' | 'MATS' | '';
   rugsMatsSizes: SizePrice[];
   rugsMatsColors: string[];
+  rugsMatsStyles: string[];
   // Throws & Towels specific
   throwsTowelsStylePrices: SizePrice[];
   throwsTowelsStyles: string[];
@@ -318,6 +341,7 @@ export default function EditProductModal({ open, onClose, product, onProductEdit
     rugsMatsType: '',
     rugsMatsSizes: [],
     rugsMatsColors: [],
+    rugsMatsStyles: [],
     throwsTowelsStylePrices: [],
     throwsTowelsStyles: [],
     throwsTowelsColors: [],
@@ -373,6 +397,7 @@ export default function EditProductModal({ open, onClose, product, onProductEdit
           stock: typeof size === 'string' ? 0 : size.stock || 0
         })) || [],
         rugsMatsColors: product.rugsMatsColors || [],
+        rugsMatsStyles: product.rugsMatsStyles || [],
         throwsTowelsStylePrices: product.throwsTowelsStylePrices || [],
         throwsTowelsStyles: product.throwsTowelsStyles || [],
         throwsTowelsColors: product.throwsTowelsColors || [],
@@ -1032,6 +1057,31 @@ export default function EditProductModal({ open, onClose, product, onProductEdit
                           className="hidden"
                         />
                         <span>{color}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Styles</label>
+                  <div className="flex flex-wrap gap-3">
+                    {rugsMatsStyles.map(style => (
+                      <label key={style} className={`inline-flex items-center px-4 py-2 rounded-full bg-white border transition-all cursor-pointer ${
+                        formData.rugsMatsStyles.includes(style) 
+                          ? 'border-red-500 text-red-500' 
+                          : 'border-gray-300 hover:border-gray-400 text-gray-700'
+                      }`}>
+                        <input
+                          type="checkbox"
+                          checked={formData.rugsMatsStyles.includes(style)}
+                          onChange={(e) => {
+                            const newStyles = e.target.checked
+                              ? [...formData.rugsMatsStyles, style]
+                              : formData.rugsMatsStyles.filter(s => s !== style);
+                            setFormData(prev => ({ ...prev, rugsMatsStyles: newStyles }));
+                          }}
+                          className="hidden"
+                        />
+                        <span>{style}</span>
                       </label>
                     ))}
                   </div>

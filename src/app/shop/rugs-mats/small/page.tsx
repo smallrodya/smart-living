@@ -23,6 +23,7 @@ interface Product {
   discount?: number;
   isSoldOut?: boolean;
   isHot?: boolean;
+  rugsMatsStyles?: string[];
 }
 
 export default function SmallSizePage() {
@@ -49,17 +50,12 @@ export default function SmallSizePage() {
     try {
       const res = await fetch('/api/products');
       const data = await res.json();
-      console.log('All products:', data.products); // Для отладки
-      const smallProducts = data.products.filter(
-        (product: Product) => {
-          console.log('Product category:', product.category); // Для отладки
-          console.log('Product sizes:', product.rugsMatsSizes); // Для отладки
-          return product.category === 'RUGS & MATS' && 
-                 product.rugsMatsSizes?.some(size => size.size === 'Small');
-        }
+      const smallRugsMats = data.products.filter(
+        (product: Product) => 
+          product.category === 'RUGS & MATS' && 
+          product.rugsMatsStyles?.includes('Small')
       );
-      console.log('Filtered small products:', smallProducts); // Для отладки
-      setProducts(smallProducts);
+      setProducts(smallRugsMats);
     } catch (error) {
       console.error('Error fetching products:', error);
     } finally {

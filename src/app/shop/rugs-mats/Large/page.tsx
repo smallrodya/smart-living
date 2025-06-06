@@ -24,6 +24,7 @@ interface Product {
   discount?: number;
   isSoldOut?: boolean;
   isHot?: boolean;
+  rugsMatsStyles?: string[];
 }
 
 export default function LargeRugsMatsPage() {
@@ -54,7 +55,7 @@ export default function LargeRugsMatsPage() {
       const largeRugsMats = data.products.filter(
         (product: Product) => 
           product.category === 'RUGS & MATS' && 
-          product.rugsMatsSizes?.some(size => size.size === 'Large')
+          product.rugsMatsStyles?.includes('Large')
       );
       setProducts(largeRugsMats);
     } catch (error) {

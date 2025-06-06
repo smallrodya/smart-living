@@ -23,6 +23,7 @@ interface Product {
   discount?: number;
   isSoldOut?: boolean;
   isHot?: boolean;
+  rugsMatsStyles?: string[];
 }
 
 export default function MediumSizePage() {
@@ -49,17 +50,12 @@ export default function MediumSizePage() {
     try {
       const res = await fetch('/api/products');
       const data = await res.json();
-      console.log('All products:', data.products); // Для отладки
-      const mediumProducts = data.products.filter(
-        (product: Product) => {
-          console.log('Product category:', product.category); // Для отладки
-          console.log('Product sizes:', product.rugsMatsSizes); // Для отладки
-          return product.category === 'RUGS & MATS' && 
-                 product.rugsMatsSizes?.some(size => size.size === 'Medium');
-        }
+      const mediumRugsMats = data.products.filter(
+        (product: Product) => 
+          product.category === 'RUGS & MATS' && 
+          product.rugsMatsStyles?.includes('Medium')
       );
-      console.log('Filtered medium products:', mediumProducts); // Для отладки
-      setProducts(mediumProducts);
+      setProducts(mediumRugsMats);
     } catch (error) {
       console.error('Error fetching products:', error);
     } finally {

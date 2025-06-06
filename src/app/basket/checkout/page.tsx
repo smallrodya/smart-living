@@ -835,7 +835,7 @@ function CheckoutPage() {
                   {smartCoinBalance < totalWithShipping ? (
                     <div className="bg-yellow-50 border border-yellow-200 text-yellow-700 px-4 py-3 rounded-lg">
                       <p className="font-medium">Not enough Smart Coins</p>
-                      <p className="text-sm mt-1">You need {totalWithShipping - smartCoinBalance} more Smart Coins to complete this purchase.</p>
+                      <p className="text-sm mt-1">You need {(totalWithShipping - smartCoinBalance).toFixed(2)} more Smart Coins to complete this purchase.</p>
                     </div>
                   ) : (
                     <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg">

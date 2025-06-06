@@ -26,6 +26,7 @@ interface Product {
   }>;
   rugsMatsColors: string[];
   rugsMatsType: 'RUGS' | 'MATS';
+  rugsMatsStyles: string[];
   images?: string[];
   discount?: number;
   isSoldOut?: boolean;
@@ -60,7 +61,7 @@ export default function XLargeRugsMatsPage() {
       const xlargeRugsMats = data.products.filter(
         (product: Product) => 
           product.category === 'RUGS & MATS' && 
-          product.rugsMatsSizes?.some(size => size.size === 'Xlarge')
+          product.rugsMatsStyles?.includes('Xlarge')
       );
       setProducts(xlargeRugsMats);
     } catch (error) {
