@@ -59,4 +59,87 @@ export async function GET(request: Request) {
       { status: 500 }
     );
   }
+}
+
+export async function POST(request: Request) {
+  let client;
+  try {
+    // Проверяем наличие данных пользователя в куках
+    const cookieStore = cookies();
+    const userCookie = cookieStore.get('user');
+
+    if (!userCookie) {
+      return NextResponse.json(
+        { message: 'Unauthorized' },
+        { status: 401 }
+      );
+    }
+
+    const userData = JSON.parse(userCookie.value);
+    client = await MongoClient.connect(uri);
+    const db = client.db('smartliving');
+
+    // Получаем данные из тела запроса
+    const updateData = await request.json();
+    console.log('Update data:', updateData);
+
+    // Проверяем, что у нас есть userId
+    if (!userData.userId) {
+      console.error('No userId in userData:', userData);
+      return NextResponse.json(
+        { message: 'Invalid user data' },
+        { status: 400 }
+      );
+    }
+
+    // Обновляем данные пользователя
+    const result = await db.collection('users').updateOne(
+      { _id: new ObjectId(userData.userId) },
+      { $set: updateData }
+    );
+
+    if (result.matchedCount === 0) {
+      console.error('User not found for update:', userData.userId);
+      return NextResponse.json(
+        { message: 'User not found' },
+        { status: 404 }
+      );
+    }
+
+    // Получаем обновленные данные пользователя
+    const updatedUser = await db.collection('users').findOne(
+      { _id: new ObjectId(userData.userId) },
+      {
+        projection: {
+          password: 0, // Исключаем пароль из результата
+        }
+      }
+    );
+
+    if (!updatedUser) {
+      console.error('User not found after update:', userData.userId);
+      return NextResponse.json(
+        { message: 'User not found after update' },
+        { status: 404 }
+      );
+    }
+
+    // Преобразуем ObjectId в строку для JSON
+    const userResponse = {
+      ...updatedUser,
+      _id: updatedUser._id.toString()
+    };
+
+    return NextResponse.json(userResponse);
+  } catch (error) {
+    console.error('Profile update error:', error);
+    return NextResponse.json(
+      { message: 'Error updating user profile', error: error instanceof Error ? error.message : 'Unknown error' },
+      { status: 500 }
+    );
+  } finally {
+    if (client) {
+      await client.close();
+    }
+  }
 } 

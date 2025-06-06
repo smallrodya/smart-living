@@ -737,7 +737,7 @@ function CheckoutPage() {
                         </div>
                       </div>
                       <div className="flex items-center gap-2">
-                        <span className="text-sm text-gray-600">Balance: {smartCoinBalance}</span>
+                        <span className="text-sm text-gray-600">Balance: {smartCoinBalance.toFixed(2)}</span>
                       </div>
                     </div>
                   </div>
@@ -825,7 +825,7 @@ function CheckoutPage() {
                   <div className="flex items-center justify-between">
                     <div>
                       <h4 className="font-medium text-gray-900">Smart Coin Balance</h4>
-                      <p className="text-sm text-gray-600">Available: {smartCoinBalance} Smart Coins</p>
+                      <p className="text-sm text-gray-600">Available: {smartCoinBalance.toFixed(2)} Smart Coins</p>
                     </div>
                     <div className="text-right">
                       <div className="text-lg font-bold text-gray-900">£{totalWithShipping.toFixed(2)}</div>

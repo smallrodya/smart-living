@@ -6,6 +6,7 @@ import Header from '@/components/Header';
 import CategoriesSection from '@/components/CategoriesSection';
 import { getCookie } from 'cookies-next';
 import { FiUser, FiShoppingBag, FiMapPin, FiLogOut, FiEdit2, FiCalendar, FiMail, FiHeart, FiCreditCard, FiSettings, FiBell, FiGift } from 'react-icons/fi';
+import { toast } from 'react-hot-toast';
 
 interface UserData {
   firstName: string;
@@ -13,6 +14,14 @@ interface UserData {
   email: string;
   createdAt: string;
   smartCoins: number;
+  company?: string;
+  country?: string;
+  address?: string;
+  address2?: string;
+  city?: string;
+  county?: string;
+  postcode?: string;
+  phone?: string;
 }
 
 interface OrderItem {
@@ -60,6 +69,19 @@ export default function MyAccountPage() {
   const [error, setError] = useState('');
   const [activeTab, setActiveTab] = useState('overview');
   const [expandedOrders, setExpandedOrders] = useState<Set<string>>(new Set());
+  const [isEditing, setIsEditing] = useState(false);
+  const [editForm, setEditForm] = useState({
+    firstName: '',
+    lastName: '',
+    company: '',
+    country: 'United Kingdom (UK)',
+    address: '',
+    address2: '',
+    city: '',
+    county: '',
+    postcode: '',
+    phone: '',
+  });
 
   useEffect(() => {
     const checkAuth = () => {
@@ -109,6 +131,59 @@ export default function MyAccountPage() {
 
     fetchUserData();
   }, [router]);
+
+  useEffect(() => {
+    if (userData) {
+      setEditForm({
+        firstName: userData.firstName || '',
+        lastName: userData.lastName || '',
+        company: userData.company || '',
+        country: userData.country || 'United Kingdom (UK)',
+        address: userData.address || '',
+        address2: userData.address2 || '',
+        city: userData.city || '',
+        county: userData.county || '',
+        postcode: userData.postcode || '',
+        phone: userData.phone || '',
+      });
+    }
+  }, [userData]);
+
+  const handleEditChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setEditForm(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleEditSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      console.log('Sending update data:', editForm);
+      const response = await fetch('/api/user/profile', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(editForm),
+      });
+
+      const data = await response.json();
+      
+      if (!response.ok) {
+        console.error('Update failed:', data);
+        throw new Error(data.message || 'Failed to update profile');
+      }
+
+      setUserData(prev => prev ? { ...prev, ...data } : null);
+      setIsEditing(false);
+      toast.success('Profile updated successfully');
+    } catch (error) {
+      console.error('Update error:', error);
+      toast.error(error instanceof Error ? error.message : 'Failed to update profile');
+    }
+  };
 
   const handleLogout = () => {
     document.cookie = 'user=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
@@ -237,82 +312,227 @@ export default function MyAccountPage() {
                             <h3 className="text-lg font-semibold text-gray-800">Smart Coins</h3>
                             <p className="text-sm text-gray-600">Your rewards balance</p>
                           </div>
-                        </div>
-                      </div>
+                </div>
+                </div>
                       <div className="text-2xl font-bold text-gray-900">
                         {userData?.smartCoins?.toFixed(2) || '0.00'}
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Personal Information */}
-                  <div className="mb-12">
-                    <h2 className="text-2xl font-semibold text-gray-900 mb-6 flex items-center">
-                      <FiUser className="mr-2" />
-                      Personal Information
-                    </h2>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl p-6 border border-gray-200 hover:border-blue-200 transition-all duration-200">
-                        <div className="flex items-center mb-4">
-                          <div className="bg-blue-100 p-2 rounded-lg">
-                            <FiUser className="text-blue-600 text-xl" />
-                          </div>
-                          <h3 className="text-lg font-medium text-gray-900 ml-3">Name</h3>
-                        </div>
-                        <p className="text-gray-600">{userData?.firstName} {userData?.lastName}</p>
-                      </div>
-                      <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl p-6 border border-gray-200 hover:border-blue-200 transition-all duration-200">
-                        <div className="flex items-center mb-4">
-                          <div className="bg-blue-100 p-2 rounded-lg">
-                            <FiMail className="text-blue-600 text-xl" />
-                          </div>
-                          <h3 className="text-lg font-medium text-gray-900 ml-3">Email</h3>
-                        </div>
-                        <p className="text-gray-600">{userData?.email}</p>
-                      </div>
-                      <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl p-6 border border-gray-200 hover:border-blue-200 transition-all duration-200">
-                        <div className="flex items-center mb-4">
-                          <div className="bg-blue-100 p-2 rounded-lg">
-                            <FiCalendar className="text-blue-600 text-xl" />
-                </div>
-                          <h3 className="text-lg font-medium text-gray-900 ml-3">Member Since</h3>
-                </div>
-                        <p className="text-gray-600">{new Date(userData?.createdAt || '').toLocaleDateString()}</p>
                 </div>
                 </div>
               </div>
 
+                  {/* Personal Information */}
+                  <div className="mb-12">
+                    <h2 className="text-2xl font-semibold text-gray-900 mb-6 flex items-center justify-between">
+                      <div className="flex items-center">
+                        <FiUser className="mr-2" />
+                        Personal Information
+                      </div>
+                <button 
+                        onClick={() => setIsEditing(!isEditing)}
+                        className="text-sm text-blue-600 hover:text-blue-800 font-medium flex items-center gap-2"
+                >
+                        <FiEdit2 className="w-4 h-4" />
+                        {isEditing ? 'Cancel Editing' : 'Edit Profile'}
+                </button>
+                    </h2>
+
+                    {isEditing ? (
+                      <form onSubmit={handleEditSubmit} className="space-y-6 bg-white p-6 rounded-xl border border-gray-200">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                              First name *
+                            </label>
+                            <input
+                              type="text"
+                              name="firstName"
+                              value={editForm.firstName}
+                              onChange={handleEditChange}
+                              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                              required
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                              Last name *
+                            </label>
+                            <input
+                              type="text"
+                              name="lastName"
+                              value={editForm.lastName}
+                              onChange={handleEditChange}
+                              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                              required
+                            />
+                          </div>
+                        </div>
+
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">
+                            Company name (optional)
+                          </label>
+                          <input
+                            type="text"
+                            name="company"
+                            value={editForm.company}
+                            onChange={handleEditChange}
+                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">
+                            Country/Region *
+                          </label>
+                          <input
+                            type="text"
+                            name="country"
+                            value={editForm.country}
+                            onChange={handleEditChange}
+                            className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50"
+                            required
+                            disabled
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">
+                            Street address *
+                          </label>
+                          <input
+                            type="text"
+                            name="address"
+                            value={editForm.address}
+                            onChange={handleEditChange}
+                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            required
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">
+                            Flat, suite, unit, etc. (optional)
+                          </label>
+                          <input
+                            type="text"
+                            name="address2"
+                            value={editForm.address2}
+                            onChange={handleEditChange}
+                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                          />
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                              Town / City *
+                            </label>
+                            <input
+                              type="text"
+                              name="city"
+                              value={editForm.city}
+                              onChange={handleEditChange}
+                              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                              required
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                              Postcode *
+                            </label>
+                            <input
+                              type="text"
+                              name="postcode"
+                              value={editForm.postcode}
+                              onChange={handleEditChange}
+                              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                              required
+                            />
+                          </div>
+                        </div>
+
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">
+                            Phone *
+                          </label>
+                          <input
+                            type="tel"
+                            name="phone"
+                            value={editForm.phone}
+                            onChange={handleEditChange}
+                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            required
+                          />
+                        </div>
+
+                        <div className="flex justify-end gap-4">
+                <button 
+                            type="button"
+                            onClick={() => setIsEditing(false)}
+                            className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                >
+                            Cancel
+                </button>
+                <button 
+                            type="submit"
+                            className="px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                >
+                            Save Changes
+                </button>
+                        </div>
+                      </form>
+                    ) : (
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl p-6 border border-gray-200 hover:border-blue-200 transition-all duration-200">
+                          <div className="flex items-center mb-4">
+                            <div className="bg-blue-100 p-2 rounded-lg">
+                              <FiUser className="text-blue-600 text-xl" />
+                            </div>
+                            <h3 className="text-lg font-medium text-gray-900 ml-3">Name</h3>
+                          </div>
+                          <p className="text-gray-600">{userData?.firstName} {userData?.lastName}</p>
+                        </div>
+                        <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl p-6 border border-gray-200 hover:border-blue-200 transition-all duration-200">
+                          <div className="flex items-center mb-4">
+                            <div className="bg-blue-100 p-2 rounded-lg">
+                              <FiMail className="text-blue-600 text-xl" />
+                            </div>
+                            <h3 className="text-lg font-medium text-gray-900 ml-3">Email</h3>
+                          </div>
+                          <p className="text-gray-600">{userData?.email}</p>
+                        </div>
+                        <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl p-6 border border-gray-200 hover:border-blue-200 transition-all duration-200">
+                          <div className="flex items-center mb-4">
+                            <div className="bg-blue-100 p-2 rounded-lg">
+                              <FiMapPin className="text-blue-600 text-xl" />
+                            </div>
+                            <h3 className="text-lg font-medium text-gray-900 ml-3">Address</h3>
+                          </div>
+                          <p className="text-gray-600">
+                            {userData?.address}
+                            {userData?.address2 && <>, {userData.address2}</>}
+                            {userData?.city && <>, {userData.city}</>}
+                            {userData?.postcode && <>, {userData.postcode}</>}
+                            {userData?.country && <>, {userData.country}</>}
+                          </p>
+                        </div>
+                        <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl p-6 border border-gray-200 hover:border-blue-200 transition-all duration-200">
+                          <div className="flex items-center mb-4">
+                            <div className="bg-blue-100 p-2 rounded-lg">
+                              <FiCalendar className="text-blue-600 text-xl" />
+                            </div>
+                            <h3 className="text-lg font-medium text-gray-900 ml-3">Member Since</h3>
+                          </div>
+                          <p className="text-gray-600">{new Date(userData?.createdAt || '').toLocaleDateString()}</p>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
                   {/* Account Actions */}
                   <div>
                     <h2 className="text-2xl font-semibold text-gray-900 mb-6">Account Actions</h2>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <button 
-                  onClick={() => router.push('/user/Myaccount/edit')}
-                        className="group flex items-center justify-center gap-3 bg-white border border-gray-200 rounded-xl p-6 hover:border-blue-500 hover:bg-blue-50 transition-all duration-200"
-                >
-                        <div className="bg-blue-100 p-2 rounded-lg group-hover:bg-blue-200 transition-colors">
-                          <FiEdit2 className="text-blue-600 text-xl" />
-                        </div>
-                        <span className="font-medium text-gray-900">Edit Profile</span>
-                </button>
-                <button 
-                  onClick={() => router.push('/user/Myaccount/orders')}
-                        className="group flex items-center justify-center gap-3 bg-white border border-gray-200 rounded-xl p-6 hover:border-blue-500 hover:bg-blue-50 transition-all duration-200"
-                >
-                        <div className="bg-blue-100 p-2 rounded-lg group-hover:bg-blue-200 transition-colors">
-                          <FiShoppingBag className="text-blue-600 text-xl" />
-                        </div>
-                        <span className="font-medium text-gray-900">View Orders</span>
-                </button>
-                <button 
-                  onClick={() => router.push('/user/Myaccount/addresses')}
-                        className="group flex items-center justify-center gap-3 bg-white border border-gray-200 rounded-xl p-6 hover:border-blue-500 hover:bg-blue-50 transition-all duration-200"
-                >
-                        <div className="bg-blue-100 p-2 rounded-lg group-hover:bg-blue-200 transition-colors">
-                          <FiMapPin className="text-blue-600 text-xl" />
-                        </div>
-                        <span className="font-medium text-gray-900">Manage Addresses</span>
-                </button>
+                    <div className="grid grid-cols-1 gap-4">
                 <button 
                   onClick={handleLogout}
                         className="group flex items-center justify-center gap-3 bg-white border border-red-200 rounded-xl p-6 hover:border-red-500 hover:bg-red-50 transition-all duration-200"

@@ -53,17 +53,24 @@ export default function KidsBeddingPage() {
     try {
       const res = await fetch('/api/products');
       const data = await res.json();
-      const kidsBedding = data.products.filter(
-        (product: Product) => 
-          (product.category === 'BEDDING' && 
-          product.subcategory === 'Kids Bedding') ||
+      console.log('All products:', data.products); // Для отладки
+      const kidsBedding = data.products.filter((product: Product) => {
+        console.log('Checking product:', {
+          id: product._id,
+          category: product.category,
+          subcategory: product.subcategory,
+          additionalCategories: product.additionalCategories
+        });
+        return (product.category === 'BEDDING' && 
+          (product.subcategory === 'Kids Bedding' || product.subcategory === 'Kids Beding')) ||
           (product.additionalCategories && 
            product.additionalCategories.some(
              (ac: { category: string; subcategory: string }) => 
                ac.category === 'BEDDING' && 
-               ac.subcategory === 'Kids Bedding'
-           ))
-      );
+               (ac.subcategory === 'Kids Bedding' || ac.subcategory === 'Kids Beding')
+           ));
+      });
+      console.log('Filtered kids bedding:', kidsBedding); // Для отладки
       setProducts(kidsBedding);
     } catch (error) {
       console.error('Error fetching products:', error);
