@@ -1,6 +1,5 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { Analytics } from "@vercel/analytics/next";
 
 export const dynamic = 'force-dynamic';
 
@@ -16,23 +15,12 @@ interface RecentOrder {
   createdAt: string;
 }
 
-interface AnalyticsData {
-  visitors: number;
-  pageViews: number;
-  bounceRate: number;
-}
-
 export default function AdminDashboard() {
   const [stats, setStats] = useState({
     products: 0,
     orders: 0,
     users: 0,
     revenue: 0,
-  });
-  const [analytics, setAnalytics] = useState<AnalyticsData>({
-    visitors: 0,
-    pageViews: 0,
-    bounceRate: 0,
   });
   const [recentOrders, setRecentOrders] = useState<RecentOrder[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -62,13 +50,6 @@ export default function AdminDashboard() {
         revenue: data.revenue || 0
       });
       setRecentOrders(data.recentOrders || []);
-
-      // Fetch analytics data
-      const analyticsRes = await fetch('/api/analytics');
-      if (analyticsRes.ok) {
-        const analyticsData = await analyticsRes.json();
-        setAnalytics(analyticsData);
-      }
     } catch (error) {
       console.error('Failed to fetch stats:', error);
     } finally {
@@ -90,13 +71,8 @@ export default function AdminDashboard() {
     });
   };
 
-  const formatPercentage = (value: number) => {
-    return `${value.toFixed(1)}%`;
-  };
-
   return (
     <div className="min-h-screen bg-gray-50">
-      <Analytics />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
@@ -146,36 +122,6 @@ export default function AdminDashboard() {
             </div>
             <p className="text-3xl font-bold text-gray-900">£{isLoading ? '...' : stats.revenue.toLocaleString()}</p>
             <p className="text-sm text-gray-500 mt-2">Total sales amount</p>
-          </div>
-        </div>
-
-        {/* Analytics Section */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100 hover:shadow-md transition-shadow duration-200">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-medium text-gray-600">Visitors</h3>
-              <span className="text-3xl">👁️</span>
-            </div>
-            <p className="text-3xl font-bold text-gray-900">{isLoading ? '...' : analytics.visitors.toLocaleString()}</p>
-            <p className="text-sm text-gray-500 mt-2">Unique visitors today</p>
-          </div>
-
-          <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100 hover:shadow-md transition-shadow duration-200">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-medium text-gray-600">Page Views</h3>
-              <span className="text-3xl">📊</span>
-            </div>
-            <p className="text-3xl font-bold text-gray-900">{isLoading ? '...' : analytics.pageViews.toLocaleString()}</p>
-            <p className="text-sm text-gray-500 mt-2">Total page views today</p>
-          </div>
-
-          <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100 hover:shadow-md transition-shadow duration-200">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-medium text-gray-600">Bounce Rate</h3>
-              <span className="text-3xl">↩️</span>
-            </div>
-            <p className="text-3xl font-bold text-gray-900">{isLoading ? '...' : formatPercentage(analytics.bounceRate)}</p>
-            <p className="text-sm text-gray-500 mt-2">Visitors who left immediately</p>
           </div>
         </div>
 
