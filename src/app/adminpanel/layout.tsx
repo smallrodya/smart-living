@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation';
 import AdminAuthGuard from '@/components/AdminAuthGuard';
 
 const menuItems = [
-  { name: 'Statistics', path: '/adminpanel', icon: '📊' },
+  { name: 'Dashboard', path: '/adminpanel', icon: '📊' },
   { name: 'Products', path: '/adminpanel/products', icon: '📦' },
   { name: 'Orders', path: '/adminpanel/orders', icon: '🛒' },
   { name: 'Users', path: '/adminpanel/users', icon: '👥' },
