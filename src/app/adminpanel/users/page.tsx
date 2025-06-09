@@ -1,9 +1,10 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Search, Loader2 } from 'lucide-react';
+import { Search, Loader2, Download } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import { getCookie, setCookie } from 'cookies-next';
+import * as XLSX from 'xlsx';
 
 interface User {
   _id: string;
@@ -12,6 +13,14 @@ interface User {
   email: string;
   createdAt: string;
   smartCoins: number;
+  company?: string;
+  country?: string;
+  address?: string;
+  address2?: string;
+  city?: string;
+  county?: string;
+  postcode?: string;
+  phone?: string;
 }
 
 export default function UsersPage() {
@@ -121,6 +130,61 @@ export default function UsersPage() {
     });
   };
 
+  const exportToExcel = () => {
+    try {
+      // Подготавливаем данные для экспорта
+      const exportData = users.map(user => ({
+        'First Name': user.firstName,
+        'Last Name': user.lastName,
+        'Email': user.email,
+        'Phone': user.phone || 'Not provided',
+        'Company': user.company || 'Not provided',
+        'Country': user.country || 'Not provided',
+        'Address': user.address || 'Not provided',
+        'Address 2': user.address2 || 'Not provided',
+        'City': user.city || 'Not provided',
+        'County': user.county || 'Not provided',
+        'Postcode': user.postcode || 'Not provided',
+        'Smart Coins': user.smartCoins.toFixed(2),
+        'Member Since': new Date(user.createdAt).toLocaleDateString()
+      }));
+
+      // Создаем рабочую книгу
+      const wb = XLSX.utils.book_new();
+      const ws = XLSX.utils.json_to_sheet(exportData);
+
+      // Устанавливаем ширину столбцов
+      const colWidths = [
+        { wch: 15 }, // First Name
+        { wch: 15 }, // Last Name
+        { wch: 25 }, // Email
+        { wch: 15 }, // Phone
+        { wch: 20 }, // Company
+        { wch: 20 }, // Country
+        { wch: 30 }, // Address
+        { wch: 20 }, // Address 2
+        { wch: 15 }, // City
+        { wch: 15 }, // County
+        { wch: 10 }, // Postcode
+        { wch: 12 }, // Smart Coins
+        { wch: 15 }  // Member Since
+      ];
+      ws['!cols'] = colWidths;
+
+      // Добавляем лист в книгу
+      XLSX.utils.book_append_sheet(wb, ws, 'Users');
+
+      // Генерируем файл и скачиваем его
+      const fileName = `users_export_${new Date().toISOString().split('T')[0]}.xlsx`;
+      XLSX.writeFile(wb, fileName);
+
+      toast.success('Users exported successfully');
+    } catch (error) {
+      console.error('Export error:', error);
+      toast.error('Failed to export users');
+    }
+  };
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8 gap-4">
@@ -136,6 +200,13 @@ export default function UsersPage() {
             />
             <Search className="absolute right-3 top-2.5 h-5 w-5 text-gray-400" />
           </div>
+          <button
+            onClick={exportToExcel}
+            className="flex items-center gap-2 px-4 py-2 text-white bg-green-600 hover:bg-green-700 rounded-lg transition-colors"
+          >
+            <Download className="h-5 w-5" />
+            Export to Excel
+          </button>
         </div>
       </div>
 
@@ -197,68 +268,102 @@ export default function UsersPage() {
                               <span className="text-sm text-gray-600">Last Name:</span>
                               <span className="text-sm font-medium">{user.lastName}</span>
                             </div>
-                          </div>
-                          <div>
                             <div className="flex justify-between items-center mb-2">
                               <span className="text-sm text-gray-600">Email:</span>
                               <span className="text-sm font-medium">{user.email}</span>
                             </div>
                             <div className="flex justify-between items-center mb-2">
-                              <span className="text-sm text-gray-600">Member Since:</span>
-                              <span className="text-sm font-medium">
-                                {new Date(user.createdAt).toLocaleDateString()}
-                              </span>
+                              <span className="text-sm text-gray-600">Phone:</span>
+                              <span className="text-sm font-medium">{user.phone || 'Not provided'}</span>
                             </div>
-                            <div className="flex justify-between items-center">
-                              <span className="text-sm text-gray-600">Smart Coins:</span>
-                              {editingSmartCoins === user._id ? (
-                                <div className="flex items-center gap-2">
-                                  <input
-                                    type="number"
-                                    min="0"
-                                    step="0.01"
-                                    value={isNaN(newSmartCoinsValue) ? '' : newSmartCoinsValue}
-                                    onChange={(e) => {
-                                      const value = e.target.value === '' ? 0 : parseFloat(e.target.value);
-                                      setNewSmartCoinsValue(isNaN(value) ? 0 : value);
-                                    }}
-                                    className="w-24 px-2 py-1 text-sm border rounded"
-                                    onClick={(e) => e.stopPropagation()}
-                                  />
-                                  <button
-                                    onClick={(e) => {
-                                      e.stopPropagation();
-                                      handleUpdateSmartCoins(user._id);
-                                    }}
-                                    className="text-xs text-green-600 hover:text-green-700"
-                                  >
-                                    Save
-                                  </button>
-                                  <button
-                                    onClick={(e) => {
-                                      e.stopPropagation();
-                                      setEditingSmartCoins(null);
-                                    }}
-                                    className="text-xs text-gray-600 hover:text-gray-700"
-                                  >
-                                    Cancel
-                                  </button>
-                                </div>
-                              ) : (
-                                <div className="flex items-center gap-2">
-                                  <span className="text-sm font-medium">{user.smartCoins}</span>
-                                  <button
-                                    onClick={(e) => {
-                                      e.stopPropagation();
-                                      startEditingSmartCoins(user);
-                                    }}
-                                    className="text-xs text-indigo-600 hover:text-indigo-700"
-                                  >
-                                    Edit
-                                  </button>
-                                </div>
-                              )}
+                            <div className="flex justify-between items-center mb-2">
+                              <span className="text-sm text-gray-600">Company:</span>
+                              <span className="text-sm font-medium">{user.company || 'Not provided'}</span>
                             </div>
+                          </div>
+                          <div>
+                            <div className="flex justify-between items-center mb-2">
+                              <span className="text-sm text-gray-600">Country:</span>
+                              <span className="text-sm font-medium">{user.country || 'Not provided'}</span>
+                            </div>
+                            <div className="flex justify-between items-center mb-2">
+                              <span className="text-sm text-gray-600">Address:</span>
+                              <span className="text-sm font-medium">{user.address || 'Not provided'}</span>
+                            </div>
+                            <div className="flex justify-between items-center mb-2">
+                              <span className="text-sm text-gray-600">Address 2:</span>
+                              <span className="text-sm font-medium">{user.address2 || 'Not provided'}</span>
+                            </div>
+                            <div className="flex justify-between items-center mb-2">
+                              <span className="text-sm text-gray-600">City:</span>
+                              <span className="text-sm font-medium">{user.city || 'Not provided'}</span>
+                            </div>
+                            <div className="flex justify-between items-center mb-2">
+                              <span className="text-sm text-gray-600">County:</span>
+                              <span className="text-sm font-medium">{user.county || 'Not provided'}</span>
+                            </div>
+                            <div className="flex justify-between items-center mb-2">
+                              <span className="text-sm text-gray-600">Postcode:</span>
+                              <span className="text-sm font-medium">{user.postcode || 'Not provided'}</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="mt-4 pt-4 border-t border-gray-200">
+                          <div className="flex justify-between items-center mb-2">
+                            <span className="text-sm text-gray-600">Member Since:</span>
+                            <span className="text-sm font-medium">
+                              {new Date(user.createdAt).toLocaleDateString()}
+                            </span>
+                          </div>
+                          <div className="flex justify-between items-center">
+                            <span className="text-sm text-gray-600">Smart Coins:</span>
+                            {editingSmartCoins === user._id ? (
+                              <div className="flex items-center gap-2">
+                                <input
+                                  type="number"
+                                  min="0"
+                                  step="0.01"
+                                  value={isNaN(newSmartCoinsValue) ? '' : newSmartCoinsValue}
+                                  onChange={(e) => {
+                                    const value = e.target.value === '' ? 0 : parseFloat(e.target.value);
+                                    setNewSmartCoinsValue(isNaN(value) ? 0 : value);
+                                  }}
+                                  className="w-24 px-2 py-1 text-sm border rounded"
+                                  onClick={(e) => e.stopPropagation()}
+                                />
+                                <button
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleUpdateSmartCoins(user._id);
+                                  }}
+                                  className="text-xs text-green-600 hover:text-green-700"
+                                >
+                                  Save
+                                </button>
+                                <button
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setEditingSmartCoins(null);
+                                  }}
+                                  className="text-xs text-gray-600 hover:text-gray-700"
+                                >
+                                  Cancel
+                                </button>
+                              </div>
+                            ) : (
+                              <div className="flex items-center gap-2">
+                                <span className="text-sm font-medium">{user.smartCoins.toFixed(2)}</span>
+                                <button
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    startEditingSmartCoins(user);
+                                  }}
+                                  className="text-xs text-indigo-600 hover:text-indigo-700"
+                                >
+                                  Edit
+                                </button>
+                              </div>
+                            )}
                           </div>
                         </div>
                       </div>

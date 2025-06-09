@@ -666,367 +666,687 @@ export default function ProductsPage() {
           </div>
         ) : (
           <div className="divide-y divide-gray-200">
-            {Object.entries(groupedProducts).map(([category, subcategories]) => (
-              <div key={category} className="p-6">
-                <div 
-                  className="flex items-center justify-between cursor-pointer"
-                  onClick={() => toggleCategoryExpand(category)}
-                >
-                  <h2 className="text-xl font-bold text-gray-900">{category}</h2>
-                  <button className="text-gray-500 hover:text-gray-700">
-                    {expandedCategories.has(category) ? (
-                      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                      </svg>
-                    ) : (
-                      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                      </svg>
-                    )}
-                  </button>
-                </div>
-                
-                {expandedCategories.has(category) && (
-                  <div className="mt-4">
-                    {Object.entries(subcategories).map(([subcategory, products]) => (
-                      <div key={subcategory} className="mb-6">
-                        <div 
-                          className="flex items-center justify-between cursor-pointer mb-3"
-                          onClick={() => toggleSubcategoryExpand(category, subcategory)}
-                        >
-                          <h3 className="text-lg font-semibold text-gray-800">{subcategory}</h3>
-                          <button className="text-gray-500 hover:text-gray-700">
-                            {expandedSubcategories.has(`${category}-${subcategory}`) ? (
-                              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                              </svg>
-                            ) : (
-                              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                              </svg>
+            {/* Если есть активные фильтры (поиск, Clearance или Hot), показываем товары напрямую */}
+            {(searchQuery || selectedCategory === 'CLEARANCE' || selectedCategory === 'HOT') ? (
+              <div className="p-6">
+                <div className="space-y-4">
+                  {filteredProducts.map((product) => (
+                    <div key={product._id} className="p-4 bg-gray-50 rounded-lg">
+                      <div 
+                        className="flex flex-col md:flex-row gap-6 cursor-pointer"
+                        onClick={() => toggleProductExpand(product._id)}
+                      >
+                        {/* Product Image */}
+                        {product.images && product.images.length > 0 && (
+                          <div className="w-full md:w-48 h-48 relative rounded-lg overflow-hidden">
+                            <img
+                              src={product.images[0]}
+                              alt={product.title}
+                              className="w-full h-full object-cover"
+                            />
+                          </div>
+                        )}
+
+                        {/* Product Header */}
+                        <div className="flex-1">
+                          <div className="flex justify-between items-start mb-4">
+                            <div>
+                              <h3 className="text-lg font-semibold text-gray-900">{product.title}</h3>
+                              <p className="text-sm text-gray-500 mt-1">{product.category} - {product.subcategory}</p>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <button
+                                className="px-2 py-1 text-xs border border-indigo-600 text-indigo-600 hover:bg-indigo-50 rounded transition-colors"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleEdit(product);
+                                }}
+                              >
+                                Edit
+                              </button>
+                              <button
+                                className="px-2 py-1 text-xs border border-red-600 text-red-600 hover:bg-red-50 rounded transition-colors"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleDelete(product._id);
+                                }}
+                              >
+                                Delete
+                              </button>
+                            </div>
+                          </div>
+
+                          {/* Product Status */}
+                          <div className="flex items-center gap-4 mb-4">
+                            <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                              product.isSoldOut ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'
+                            }`}>
+                              {product.isSoldOut ? 'Sold Out' : 'In Stock'}
+                            </span>
+                            {product.isHot && (
+                              <span className="px-2 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
+                                Hot
+                              </span>
                             )}
-                          </button>
-                        </div>
-                        {expandedSubcategories.has(`${category}-${subcategory}`) && (
-                          <div className="space-y-4">
-                            {products.map((product) => (
-                              <div key={product._id} className="p-4 bg-gray-50 rounded-lg">
-                                <div 
-                                  className="flex flex-col md:flex-row gap-6 cursor-pointer"
-                                  onClick={() => toggleProductExpand(product._id)}
-                                >
-                                  {/* Product Image */}
-                                  {product.images && product.images.length > 0 && (
-                                    <div className="w-full md:w-48 h-48 relative rounded-lg overflow-hidden">
-                                      <img
-                                        src={product.images[0]}
-                                        alt={product.title}
-                                        className="w-full h-full object-cover"
-                                      />
+                            {product.isClearance && (
+                              <span className="px-2 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+                                Clearance {product.clearanceDiscount}% OFF
+                              </span>
+                            )}
+                          </div>
+
+                          {/* Expandable Content */}
+                          <div 
+                            className={`space-y-4 overflow-hidden transition-all duration-300 ease-in-out ${
+                              expandedProducts.has(product._id) ? 'max-h-[1000px] opacity-100' : 'max-h-0 opacity-0'
+                            }`}
+                          >
+                            {/* Clearance Information */}
+                            {product.isClearance && (
+                              <div className="bg-purple-50 p-4 rounded-lg">
+                                <h4 className="text-sm font-medium text-purple-900 mb-2">Clearance Details</h4>
+                                <div className="flex items-center gap-2">
+                                  <span className="text-sm text-purple-700">Discount: {product.clearanceDiscount}%</span>
+                                  {product.beddingSizes && product.beddingSizes.length > 0 && (
+                                    <div className="ml-4">
+                                      <span className="text-sm text-purple-700">Original Price: £{product.beddingSizes[0].regularPrice}</span>
+                                      <span className="text-sm text-purple-700 ml-2">Sale Price: £{product.beddingSizes[0].salePrice}</span>
                                     </div>
                                   )}
+                                </div>
+                              </div>
+                            )}
+                            
+                            {/* Sizes */}
+                            {product.beddingSizes && renderProductSizes(product.beddingSizes)}
+                            {product.rugsMatsSizes && renderProductSizes(product.rugsMatsSizes)}
+                            {product.throwsTowelsStylePrices && renderProductSizes(product.throwsTowelsStylePrices)}
+                            {product.clothingStylePrices && renderProductSizes(product.clothingStylePrices)}
+                            {product.footwearSizes && renderProductSizes(product.footwearSizes)}
 
-                                  {/* Product Header */}
-                                  <div className="flex-1">
-                                    <div className="flex justify-between items-start mb-4">
-                                      <div>
-                                        <h3 className="text-lg font-semibold text-gray-900">{product.title}</h3>
-                                      </div>
-                                      <div className="flex items-center gap-2">
-                                        <button
-                                          className="px-2 py-1 text-xs border border-indigo-600 text-indigo-600 hover:bg-indigo-50 rounded transition-colors"
-                                          onClick={(e) => {
-                                            e.stopPropagation();
-                                            handleEdit(product);
-                                          }}
-                                        >
-                                          Edit
-                                        </button>
-                                        <button
-                                          className="px-2 py-1 text-xs border border-red-600 text-red-600 hover:bg-red-50 rounded transition-colors"
-                                          onClick={(e) => {
-                                            e.stopPropagation();
-                                            handleDelete(product._id);
-                                          }}
-                                        >
-                                          Delete
-                                        </button>
-                                      </div>
-                                    </div>
-
-                                    {/* Product Status */}
-                                    <div className="flex items-center gap-4 mb-4">
-                                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                                        product.isSoldOut ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'
-                                      }`}>
-                                        {product.isSoldOut ? 'Sold Out' : 'In Stock'}
-                                      </span>
-                                      {product.isHot && (
-                                        <span className="px-2 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
-                                          Hot
-                                        </span>
-                                      )}
-                                      {product.isClearance && (
-                                        <span className="px-2 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
-                                          Clearance {product.clearanceDiscount}% OFF
-                                        </span>
-                                      )}
-                                    </div>
-
-                                    {/* Expandable Content */}
-                                    <div 
-                                      className={`space-y-4 overflow-hidden transition-all duration-300 ease-in-out ${
-                                        expandedProducts.has(product._id) ? 'max-h-[1000px] opacity-100' : 'max-h-0 opacity-0'
-                                      }`}
+                            {/* Styles */}
+                            {product.beddingStyles && product.beddingStyles.length > 0 && (
+                              <div>
+                                <h4 className="text-sm font-medium text-gray-700 mb-1">Styles:</h4>
+                                <div className="flex flex-wrap gap-2">
+                                  {product.beddingStyles.map((style: string, index: number) => (
+                                    <span
+                                      key={index}
+                                      className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-sm"
                                     >
-                                      {/* Clearance Information */}
-                                      {product.isClearance && (
-                                        <div className="bg-purple-50 p-4 rounded-lg">
-                                          <h4 className="text-sm font-medium text-purple-900 mb-2">Clearance Details</h4>
-                                          <div className="flex items-center gap-2">
-                                            <span className="text-sm text-purple-700">Discount: {product.clearanceDiscount}%</span>
-                                            {product.beddingSizes && product.beddingSizes.length > 0 && (
-                                              <div className="ml-4">
-                                                <span className="text-sm text-purple-700">Original Price: £{product.beddingSizes[0].regularPrice}</span>
-                                                <span className="text-sm text-purple-700 ml-2">Sale Price: £{product.beddingSizes[0].salePrice}</span>
-                                              </div>
-                                            )}
-                                          </div>
-                                        </div>
-                                      )}
-                                      
-                                      {/* Sizes */}
-                                      {product.beddingSizes && renderProductSizes(product.beddingSizes)}
-                                      {product.rugsMatsSizes && renderProductSizes(product.rugsMatsSizes)}
-                                      {product.throwsTowelsStylePrices && renderProductSizes(product.throwsTowelsStylePrices)}
-                                      {product.clothingStylePrices && renderProductSizes(product.clothingStylePrices)}
-                                      {product.footwearSizes && renderProductSizes(product.footwearSizes)}
+                                      {style}
+                                    </span>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
 
-                                      {/* Styles */}
-                                      {product.beddingStyles && product.beddingStyles.length > 0 && (
-                                        <div>
-                                          <h4 className="text-sm font-medium text-gray-700 mb-1">Styles:</h4>
-                                          <div className="flex flex-wrap gap-2">
-                                            {product.beddingStyles.map((style: string, index: number) => (
-                                              <span
-                                                key={index}
-                                                className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-sm"
-                                              >
-                                                {style}
-                                              </span>
-                                            ))}
-                                          </div>
-                                        </div>
-                                      )}
+                            {/* Throws & Towels Styles */}
+                            {product.throwsTowelsStyles && product.throwsTowelsStyles.length > 0 && (
+                              <div>
+                                <h4 className="text-sm font-medium text-gray-700 mb-1">Throws & Towels Styles:</h4>
+                                <div className="flex flex-wrap gap-2">
+                                  {product.throwsTowelsStyles.map((style: string, index: number) => (
+                                    <span
+                                      key={index}
+                                      className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-sm"
+                                    >
+                                      {style}
+                                    </span>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
 
-                                      {/* Throws & Towels Styles */}
-                                      {product.throwsTowelsStyles && product.throwsTowelsStyles.length > 0 && (
-                                        <div>
-                                          <h4 className="text-sm font-medium text-gray-700 mb-1">Throws & Towels Styles:</h4>
-                                          <div className="flex flex-wrap gap-2">
-                                            {product.throwsTowelsStyles.map((style: string, index: number) => (
-                                              <span
-                                                key={index}
-                                                className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-sm"
-                                              >
-                                                {style}
-                                              </span>
-                                            ))}
-                                          </div>
-                                        </div>
-                                      )}
+                            {/* Colors */}
+                            {product.beddingColors && product.beddingColors.length > 0 && (
+                              <div>
+                                <h4 className="text-sm font-medium text-gray-700 mb-1">Colors:</h4>
+                                <div className="flex flex-wrap gap-2">
+                                  {product.beddingColors.map((color: string, index: number) => (
+                                    <span
+                                      key={index}
+                                      className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-sm"
+                                    >
+                                      {color}
+                                    </span>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
 
-                                      {/* Colors */}
-                                      {product.beddingColors && product.beddingColors.length > 0 && (
-                                        <div>
-                                          <h4 className="text-sm font-medium text-gray-700 mb-1">Colors:</h4>
-                                          <div className="flex flex-wrap gap-2">
-                                            {product.beddingColors.map((color: string, index: number) => (
-                                              <span
-                                                key={index}
-                                                className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-sm"
-                                              >
-                                                {color}
-                                              </span>
-                                            ))}
-                                          </div>
-                                        </div>
-                                      )}
+                            {/* Clothing Colors */}
+                            {product.category === 'CLOTHING' && product.clothingColors && product.clothingColors.length > 0 && (
+                              <div>
+                                <h4 className="text-sm font-medium text-gray-700 mb-1">Available Colors:</h4>
+                                <div className="flex flex-wrap gap-2">
+                                  {product.clothingColors.map((color: string, index: number) => (
+                                    <span
+                                      key={index}
+                                      className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-sm"
+                                    >
+                                      {color}
+                                    </span>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
 
-                                      {/* Clothing Colors */}
-                                      {product.category === 'CLOTHING' && product.clothingColors && product.clothingColors.length > 0 && (
-                                        <div>
-                                          <h4 className="text-sm font-medium text-gray-700 mb-1">Available Colors:</h4>
-                                          <div className="flex flex-wrap gap-2">
-                                            {product.clothingColors.map((color: string, index: number) => (
-                                              <span
-                                                key={index}
-                                                className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-sm"
-                                              >
-                                                {color}
-                                              </span>
-                                            ))}
-                                          </div>
-                                        </div>
-                                      )}
+                            {/* Footwear Colors */}
+                            {product.category === 'FOOTWEAR' && product.footwearColors && product.footwearColors.length > 0 && (
+                              <div>
+                                <h4 className="text-sm font-medium text-gray-700 mb-1">Available Colors:</h4>
+                                <div className="flex flex-wrap gap-2">
+                                  {product.footwearColors.map((color: string, index: number) => (
+                                    <span
+                                      key={index}
+                                      className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-sm"
+                                    >
+                                      {color}
+                                    </span>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
 
-                                      {/* Footwear Colors */}
-                                      {product.category === 'FOOTWEAR' && product.footwearColors && product.footwearColors.length > 0 && (
-                                        <div>
-                                          <h4 className="text-sm font-medium text-gray-700 mb-1">Available Colors:</h4>
-                                          <div className="flex flex-wrap gap-2">
-                                            {product.footwearColors.map((color: string, index: number) => (
-                                              <span
-                                                key={index}
-                                                className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-sm"
-                                              >
-                                                {color}
-                                              </span>
-                                            ))}
-                                          </div>
-                                        </div>
-                                      )}
+                            {/* Throws & Towels Colors */}
+                            {product.throwsTowelsColors && product.throwsTowelsColors.length > 0 && (
+                              <div>
+                                <h4 className="text-sm font-medium text-gray-700 mb-1">Throws & Towels Colors:</h4>
+                                <div className="flex flex-wrap gap-2">
+                                  {product.throwsTowelsColors.map((color: string, index: number) => (
+                                    <span
+                                      key={index}
+                                      className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-sm"
+                                    >
+                                      {color}
+                                    </span>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
 
-                                      {/* Throws & Towels Colors */}
-                                      {product.throwsTowelsColors && product.throwsTowelsColors.length > 0 && (
-                                        <div>
-                                          <h4 className="text-sm font-medium text-gray-700 mb-1">Throws & Towels Colors:</h4>
-                                          <div className="flex flex-wrap gap-2">
-                                            {product.throwsTowelsColors.map((color: string, index: number) => (
-                                              <span
-                                                key={index}
-                                                className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-sm"
-                                              >
-                                                {color}
-                                              </span>
-                                            ))}
-                                          </div>
-                                        </div>
-                                      )}
+                            {/* Rugs & Mats Colors */}
+                            {product.rugsMatsColors && product.rugsMatsColors.length > 0 && (
+                              <div>
+                                <h4 className="text-sm font-medium text-gray-700 mb-1">Colors:</h4>
+                                <div className="flex flex-wrap gap-2">
+                                  {product.rugsMatsColors.map((color: string, index: number) => (
+                                    <span
+                                      key={index}
+                                      className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-sm"
+                                    >
+                                      {color}
+                                    </span>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
 
-                                      {/* Rugs & Mats Colors */}
-                                      {product.rugsMatsColors && product.rugsMatsColors.length > 0 && (
-                                        <div>
-                                          <h4 className="text-sm font-medium text-gray-700 mb-1">Colors:</h4>
-                                          <div className="flex flex-wrap gap-2">
-                                            {product.rugsMatsColors.map((color: string, index: number) => (
-                                              <span
-                                                key={index}
-                                                className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-sm"
-                                              >
-                                                {color}
-                                              </span>
-                                            ))}
-                                          </div>
-                                        </div>
-                                      )}
-
-                                      {/* Outdoor Product Information */}
-                                      {product.category === 'OUTDOOR' && product.outdoorPrice && (
-                                        <div className="bg-gray-50 p-4 rounded-lg">
-                                          <h4 className="text-sm font-medium text-gray-700 mb-2">Outdoor Product Details</h4>
-                                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                            <div>
-                                              <div className="flex justify-between items-center mb-2">
-                                                <span className="text-sm text-gray-600">SKU:</span>
-                                                <span className="text-sm font-medium">{product.outdoorPrice.sku}</span>
-                                              </div>
-                                              <div className="flex justify-between items-center mb-2">
-                                                <span className="text-sm text-gray-600">Stock:</span>
-                                                <span className="text-sm font-medium">{product.outdoorPrice.stock}</span>
-                                              </div>
-                                            </div>
-                                            <div>
-                                              <div className="flex justify-between items-center mb-2">
-                                                <span className="text-sm text-gray-600">Regular Price:</span>
-                                                <span className="text-sm text-gray-500 line-through">£{product.outdoorPrice.regularPrice.toFixed(2)}</span>
-                                              </div>
-                                              <div className="flex justify-between items-center">
-                                                <span className="text-sm text-gray-600">Sale Price:</span>
-                                                <span className="text-sm text-green-600 font-medium">£{product.outdoorPrice.salePrice.toFixed(2)}</span>
-                                              </div>
-                                            </div>
-                                          </div>
-                                        </div>
-                                      )}
-
-                                      {/* Outdoor Colors */}
-                                      {product.category === 'OUTDOOR' && product.outdoorColors && product.outdoorColors.length > 0 && (
-                                        <div>
-                                          <h4 className="text-sm font-medium text-gray-700 mb-1">Available Colors:</h4>
-                                          <div className="flex flex-wrap gap-2">
-                                            {product.outdoorColors.map((color: string, index: number) => (
-                                              <span
-                                                key={index}
-                                                className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-sm"
-                                              >
-                                                {color}
-                                              </span>
-                                            ))}
-                                          </div>
-                                        </div>
-                                      )}
-
-                                      {/* Type for Rugs & Mats */}
-                                      {product.rugsMatsType && (
-                                        <div>
-                                          <h4 className="text-sm font-medium text-gray-700 mb-1">Type:</h4>
-                                          <div className="flex flex-wrap gap-2">
-                                            <span className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-sm">
-                                              {product.rugsMatsType}
-                                            </span>
-                                          </div>
-                                        </div>
-                                      )}
-
-                                      {/* Additional Categories */}
-                                      {product.additionalCategories && product.additionalCategories.length > 0 && (
-                                        <div>
-                                          <h4 className="text-sm font-medium text-gray-700 mb-1">Additional Categories:</h4>
-                                          <div className="space-y-2">
-                                            {product.additionalCategories.map((category: any, index: number) => (
-                                              <div key={index} className="bg-gray-50 p-3 rounded-lg">
-                                                <div className="flex flex-col gap-1">
-                                                  <span className="text-sm font-medium text-gray-900">
-                                                    Category: {category.category}
-                                                  </span>
-                                                  {category.subcategory && (
-                                                    <span className="text-sm text-gray-600">
-                                                      Subcategory: {category.subcategory}
-                                                    </span>
-                                                  )}
-                                                </div>
-                                              </div>
-                                            ))}
-                                          </div>
-                                        </div>
-                                      )}
+                            {/* Outdoor Product Information */}
+                            {product.category === 'OUTDOOR' && product.outdoorPrice && (
+                              <div className="bg-gray-50 p-4 rounded-lg">
+                                <h4 className="text-sm font-medium text-gray-700 mb-2">Outdoor Product Details</h4>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                  <div>
+                                    <div className="flex justify-between items-center mb-2">
+                                      <span className="text-sm text-gray-600">SKU:</span>
+                                      <span className="text-sm font-medium">{product.outdoorPrice.sku}</span>
                                     </div>
-
-                                    {/* Open Product Button */}
-                                    <div className="mt-4 flex justify-center">
-                                      <button
-                                        className="text-sm text-gray-900 hover:text-gray-700 transition-colors border border-gray-900 px-3 py-1 rounded"
-                                        onClick={(e) => {
-                                          e.stopPropagation();
-                                          toggleProductExpand(product._id);
-                                        }}
-                                      >
-                                        {expandedProducts.has(product._id) ? 'Close Product' : 'Open Product'}
-                                      </button>
+                                    <div className="flex justify-between items-center mb-2">
+                                      <span className="text-sm text-gray-600">Stock:</span>
+                                      <span className="text-sm font-medium">{product.outdoorPrice.stock}</span>
+                                    </div>
+                                  </div>
+                                  <div>
+                                    <div className="flex justify-between items-center mb-2">
+                                      <span className="text-sm text-gray-600">Regular Price:</span>
+                                      <span className="text-sm text-gray-500 line-through">£{product.outdoorPrice.regularPrice.toFixed(2)}</span>
+                                    </div>
+                                    <div className="flex justify-between items-center">
+                                      <span className="text-sm text-gray-600">Sale Price:</span>
+                                      <span className="text-sm text-green-600 font-medium">£{product.outdoorPrice.salePrice.toFixed(2)}</span>
                                     </div>
                                   </div>
                                 </div>
                               </div>
-                            ))}
+                            )}
+
+                            {/* Outdoor Colors */}
+                            {product.category === 'OUTDOOR' && product.outdoorColors && product.outdoorColors.length > 0 && (
+                              <div>
+                                <h4 className="text-sm font-medium text-gray-700 mb-1">Available Colors:</h4>
+                                <div className="flex flex-wrap gap-2">
+                                  {product.outdoorColors.map((color: string, index: number) => (
+                                    <span
+                                      key={index}
+                                      className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-sm"
+                                    >
+                                      {color}
+                                    </span>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+
+                            {/* Type for Rugs & Mats */}
+                            {product.rugsMatsType && (
+                              <div>
+                                <h4 className="text-sm font-medium text-gray-700 mb-1">Type:</h4>
+                                <div className="flex flex-wrap gap-2">
+                                  <span className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-sm">
+                                    {product.rugsMatsType}
+                                  </span>
+                                </div>
+                              </div>
+                            )}
+
+                            {/* Additional Categories */}
+                            {product.additionalCategories && product.additionalCategories.length > 0 && (
+                              <div>
+                                <h4 className="text-sm font-medium text-gray-700 mb-1">Additional Categories:</h4>
+                                <div className="space-y-2">
+                                  {product.additionalCategories.map((category: any, index: number) => (
+                                    <div key={index} className="bg-gray-50 p-3 rounded-lg">
+                                      <div className="flex flex-col gap-1">
+                                        <span className="text-sm font-medium text-gray-900">
+                                          Category: {category.category}
+                                        </span>
+                                        {category.subcategory && (
+                                          <span className="text-sm text-gray-600">
+                                            Subcategory: {category.subcategory}
+                                          </span>
+                                        )}
+                                      </div>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
                           </div>
-                        )}
+
+                          {/* Open Product Button */}
+                          <div className="mt-4 flex justify-center">
+                            <button
+                              className="text-sm text-gray-900 hover:text-gray-700 transition-colors border border-gray-900 px-3 py-1 rounded"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                toggleProductExpand(product._id);
+                              }}
+                            >
+                              {expandedProducts.has(product._id) ? 'Close Product' : 'Open Product'}
+                            </button>
+                          </div>
+                        </div>
                       </div>
-                    ))}
-                  </div>
-                )}
+                    </div>
+                  ))}
+                </div>
               </div>
-            ))}
+            ) : (
+              // Если нет активных фильтров, показываем группировку по категориям
+              Object.entries(groupedProducts).map(([category, subcategories]) => (
+                <div key={category} className="p-6">
+                  <div 
+                    className="flex items-center justify-between cursor-pointer"
+                    onClick={() => toggleCategoryExpand(category)}
+                  >
+                    <h2 className="text-xl font-bold text-gray-900">{category}</h2>
+                    <button className="text-gray-500 hover:text-gray-700">
+                      {expandedCategories.has(category) ? (
+                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                        </svg>
+                      ) : (
+                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        </svg>
+                      )}
+                    </button>
+                  </div>
+                  
+                  {expandedCategories.has(category) && (
+                    <div className="mt-4">
+                      {Object.entries(subcategories).map(([subcategory, products]) => (
+                        <div key={subcategory} className="mb-6">
+                          <div 
+                            className="flex items-center justify-between cursor-pointer mb-3"
+                            onClick={() => toggleSubcategoryExpand(category, subcategory)}
+                          >
+                            <h3 className="text-lg font-semibold text-gray-800">{subcategory}</h3>
+                            <button className="text-gray-500 hover:text-gray-700">
+                              {expandedSubcategories.has(`${category}-${subcategory}`) ? (
+                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                </svg>
+                              ) : (
+                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                </svg>
+                              )}
+                            </button>
+                          </div>
+                          {expandedSubcategories.has(`${category}-${subcategory}`) && (
+                            <div className="space-y-4">
+                              {products.map((product) => (
+                                <div key={product._id} className="p-4 bg-gray-50 rounded-lg">
+                                  <div 
+                                    className="flex flex-col md:flex-row gap-6 cursor-pointer"
+                                    onClick={() => toggleProductExpand(product._id)}
+                                  >
+                                    {/* Product Image */}
+                                    {product.images && product.images.length > 0 && (
+                                      <div className="w-full md:w-48 h-48 relative rounded-lg overflow-hidden">
+                                        <img
+                                          src={product.images[0]}
+                                          alt={product.title}
+                                          className="w-full h-full object-cover"
+                                        />
+                                      </div>
+                                    )}
+
+                                    {/* Product Header */}
+                                    <div className="flex-1">
+                                      <div className="flex justify-between items-start mb-4">
+                                        <div>
+                                          <h3 className="text-lg font-semibold text-gray-900">{product.title}</h3>
+                                        </div>
+                                        <div className="flex items-center gap-2">
+                                          <button
+                                            className="px-2 py-1 text-xs border border-indigo-600 text-indigo-600 hover:bg-indigo-50 rounded transition-colors"
+                                            onClick={(e) => {
+                                              e.stopPropagation();
+                                              handleEdit(product);
+                                            }}
+                                          >
+                                            Edit
+                                          </button>
+                                          <button
+                                            className="px-2 py-1 text-xs border border-red-600 text-red-600 hover:bg-red-50 rounded transition-colors"
+                                            onClick={(e) => {
+                                              e.stopPropagation();
+                                              handleDelete(product._id);
+                                            }}
+                                          >
+                                            Delete
+                                          </button>
+                                        </div>
+                                      </div>
+
+                                      {/* Product Status */}
+                                      <div className="flex items-center gap-4 mb-4">
+                                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                                          product.isSoldOut ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'
+                                        }`}>
+                                          {product.isSoldOut ? 'Sold Out' : 'In Stock'}
+                                        </span>
+                                        {product.isHot && (
+                                          <span className="px-2 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
+                                            Hot
+                                          </span>
+                                        )}
+                                        {product.isClearance && (
+                                          <span className="px-2 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+                                            Clearance {product.clearanceDiscount}% OFF
+                                          </span>
+                                        )}
+                                      </div>
+
+                                      {/* Expandable Content */}
+                                      <div 
+                                        className={`space-y-4 overflow-hidden transition-all duration-300 ease-in-out ${
+                                          expandedProducts.has(product._id) ? 'max-h-[1000px] opacity-100' : 'max-h-0 opacity-0'
+                                        }`}
+                                      >
+                                        {/* Clearance Information */}
+                                        {product.isClearance && (
+                                          <div className="bg-purple-50 p-4 rounded-lg">
+                                            <h4 className="text-sm font-medium text-purple-900 mb-2">Clearance Details</h4>
+                                            <div className="flex items-center gap-2">
+                                              <span className="text-sm text-purple-700">Discount: {product.clearanceDiscount}%</span>
+                                              {product.beddingSizes && product.beddingSizes.length > 0 && (
+                                                <div className="ml-4">
+                                                  <span className="text-sm text-purple-700">Original Price: £{product.beddingSizes[0].regularPrice}</span>
+                                                  <span className="text-sm text-purple-700 ml-2">Sale Price: £{product.beddingSizes[0].salePrice}</span>
+                                                </div>
+                                              )}
+                                            </div>
+                                          </div>
+                                        )}
+                                        
+                                        {/* Sizes */}
+                                        {product.beddingSizes && renderProductSizes(product.beddingSizes)}
+                                        {product.rugsMatsSizes && renderProductSizes(product.rugsMatsSizes)}
+                                        {product.throwsTowelsStylePrices && renderProductSizes(product.throwsTowelsStylePrices)}
+                                        {product.clothingStylePrices && renderProductSizes(product.clothingStylePrices)}
+                                        {product.footwearSizes && renderProductSizes(product.footwearSizes)}
+
+                                        {/* Styles */}
+                                        {product.beddingStyles && product.beddingStyles.length > 0 && (
+                                          <div>
+                                            <h4 className="text-sm font-medium text-gray-700 mb-1">Styles:</h4>
+                                            <div className="flex flex-wrap gap-2">
+                                              {product.beddingStyles.map((style: string, index: number) => (
+                                                <span
+                                                  key={index}
+                                                  className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-sm"
+                                                >
+                                                  {style}
+                                                </span>
+                                              ))}
+                                            </div>
+                                          </div>
+                                        )}
+
+                                        {/* Throws & Towels Styles */}
+                                        {product.throwsTowelsStyles && product.throwsTowelsStyles.length > 0 && (
+                                          <div>
+                                            <h4 className="text-sm font-medium text-gray-700 mb-1">Throws & Towels Styles:</h4>
+                                            <div className="flex flex-wrap gap-2">
+                                              {product.throwsTowelsStyles.map((style: string, index: number) => (
+                                                <span
+                                                  key={index}
+                                                  className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-sm"
+                                                >
+                                                  {style}
+                                                </span>
+                                              ))}
+                                            </div>
+                                          </div>
+                                        )}
+
+                                        {/* Colors */}
+                                        {product.beddingColors && product.beddingColors.length > 0 && (
+                                          <div>
+                                            <h4 className="text-sm font-medium text-gray-700 mb-1">Colors:</h4>
+                                            <div className="flex flex-wrap gap-2">
+                                              {product.beddingColors.map((color: string, index: number) => (
+                                                <span
+                                                  key={index}
+                                                  className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-sm"
+                                                >
+                                                  {color}
+                                                </span>
+                                              ))}
+                                            </div>
+                                          </div>
+                                        )}
+
+                                        {/* Clothing Colors */}
+                                        {product.category === 'CLOTHING' && product.clothingColors && product.clothingColors.length > 0 && (
+                                          <div>
+                                            <h4 className="text-sm font-medium text-gray-700 mb-1">Available Colors:</h4>
+                                            <div className="flex flex-wrap gap-2">
+                                              {product.clothingColors.map((color: string, index: number) => (
+                                                <span
+                                                  key={index}
+                                                  className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-sm"
+                                                >
+                                                  {color}
+                                                </span>
+                                              ))}
+                                            </div>
+                                          </div>
+                                        )}
+
+                                        {/* Footwear Colors */}
+                                        {product.category === 'FOOTWEAR' && product.footwearColors && product.footwearColors.length > 0 && (
+                                          <div>
+                                            <h4 className="text-sm font-medium text-gray-700 mb-1">Available Colors:</h4>
+                                            <div className="flex flex-wrap gap-2">
+                                              {product.footwearColors.map((color: string, index: number) => (
+                                                <span
+                                                  key={index}
+                                                  className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-sm"
+                                                >
+                                                  {color}
+                                                </span>
+                                              ))}
+                                            </div>
+                                          </div>
+                                        )}
+
+                                        {/* Throws & Towels Colors */}
+                                        {product.throwsTowelsColors && product.throwsTowelsColors.length > 0 && (
+                                          <div>
+                                            <h4 className="text-sm font-medium text-gray-700 mb-1">Throws & Towels Colors:</h4>
+                                            <div className="flex flex-wrap gap-2">
+                                              {product.throwsTowelsColors.map((color: string, index: number) => (
+                                                <span
+                                                  key={index}
+                                                  className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-sm"
+                                                >
+                                                  {color}
+                                                </span>
+                                              ))}
+                                            </div>
+                                          </div>
+                                        )}
+
+                                        {/* Rugs & Mats Colors */}
+                                        {product.rugsMatsColors && product.rugsMatsColors.length > 0 && (
+                                          <div>
+                                            <h4 className="text-sm font-medium text-gray-700 mb-1">Colors:</h4>
+                                            <div className="flex flex-wrap gap-2">
+                                              {product.rugsMatsColors.map((color: string, index: number) => (
+                                                <span
+                                                  key={index}
+                                                  className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-sm"
+                                                >
+                                                  {color}
+                                                </span>
+                                              ))}
+                                            </div>
+                                          </div>
+                                        )}
+
+                                        {/* Outdoor Product Information */}
+                                        {product.category === 'OUTDOOR' && product.outdoorPrice && (
+                                          <div className="bg-gray-50 p-4 rounded-lg">
+                                            <h4 className="text-sm font-medium text-gray-700 mb-2">Outdoor Product Details</h4>
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                              <div>
+                                                <div className="flex justify-between items-center mb-2">
+                                                  <span className="text-sm text-gray-600">SKU:</span>
+                                                  <span className="text-sm font-medium">{product.outdoorPrice.sku}</span>
+                                                </div>
+                                                <div className="flex justify-between items-center mb-2">
+                                                  <span className="text-sm text-gray-600">Stock:</span>
+                                                  <span className="text-sm font-medium">{product.outdoorPrice.stock}</span>
+                                                </div>
+                                              </div>
+                                              <div>
+                                                <div className="flex justify-between items-center mb-2">
+                                                  <span className="text-sm text-gray-600">Regular Price:</span>
+                                                  <span className="text-sm text-gray-500 line-through">£{product.outdoorPrice.regularPrice.toFixed(2)}</span>
+                                                </div>
+                                                <div className="flex justify-between items-center">
+                                                  <span className="text-sm text-gray-600">Sale Price:</span>
+                                                  <span className="text-sm text-green-600 font-medium">£{product.outdoorPrice.salePrice.toFixed(2)}</span>
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        )}
+
+                                        {/* Outdoor Colors */}
+                                        {product.category === 'OUTDOOR' && product.outdoorColors && product.outdoorColors.length > 0 && (
+                                          <div>
+                                            <h4 className="text-sm font-medium text-gray-700 mb-1">Available Colors:</h4>
+                                            <div className="flex flex-wrap gap-2">
+                                              {product.outdoorColors.map((color: string, index: number) => (
+                                                <span
+                                                  key={index}
+                                                  className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-sm"
+                                                >
+                                                  {color}
+                                                </span>
+                                              ))}
+                                            </div>
+                                          </div>
+                                        )}
+
+                                        {/* Type for Rugs & Mats */}
+                                        {product.rugsMatsType && (
+                                          <div>
+                                            <h4 className="text-sm font-medium text-gray-700 mb-1">Type:</h4>
+                                            <div className="flex flex-wrap gap-2">
+                                              <span className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-sm">
+                                                {product.rugsMatsType}
+                                              </span>
+                                            </div>
+                                          </div>
+                                        )}
+
+                                        {/* Additional Categories */}
+                                        {product.additionalCategories && product.additionalCategories.length > 0 && (
+                                          <div>
+                                            <h4 className="text-sm font-medium text-gray-700 mb-1">Additional Categories:</h4>
+                                            <div className="space-y-2">
+                                              {product.additionalCategories.map((category: any, index: number) => (
+                                                <div key={index} className="bg-gray-50 p-3 rounded-lg">
+                                                  <div className="flex flex-col gap-1">
+                                                    <span className="text-sm font-medium text-gray-900">
+                                                      Category: {category.category}
+                                                    </span>
+                                                    {category.subcategory && (
+                                                      <span className="text-sm text-gray-600">
+                                                        Subcategory: {category.subcategory}
+                                                      </span>
+                                                    )}
+                                                  </div>
+                                                </div>
+                                              ))}
+                                            </div>
+                                          </div>
+                                        )}
+                                      </div>
+
+                                      {/* Open Product Button */}
+                                      <div className="mt-4 flex justify-center">
+                                        <button
+                                          className="text-sm text-gray-900 hover:text-gray-700 transition-colors border border-gray-900 px-3 py-1 rounded"
+                                          onClick={(e) => {
+                                            e.stopPropagation();
+                                            toggleProductExpand(product._id);
+                                          }}
+                                        >
+                                          {expandedProducts.has(product._id) ? 'Close Product' : 'Open Product'}
+                                        </button>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ))
+            )}
           </div>
         )}
       </div>

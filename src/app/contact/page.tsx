@@ -54,7 +54,7 @@ export default function ContactPage() {
                 <div>
                   <h3 className="text-lg font-medium text-gray-900">Phone</h3>
                   <p className="mt-1 text-gray-600">+44 1384 521170</p>
-                  <p className="text-sm text-gray-500">Monday - Friday, 10am - 6pm</p>
+                  <p className="text-sm text-gray-500">Monday - Friday, 10:30am - 6:00pm</p>
                 </div>
               </div>
 
@@ -97,7 +97,7 @@ export default function ContactPage() {
               <div className="space-y-2">
                 <div className="flex justify-between">
                   <span className="text-gray-600">Monday - Friday</span>
-                  <span className="text-gray-900">10:00 AM - 6:00 PM</span>
+                  <span className="text-gray-900">10:30 AM - 6:00 PM</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Saturday</span>
