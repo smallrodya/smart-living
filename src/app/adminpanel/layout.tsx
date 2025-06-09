@@ -5,14 +5,10 @@ import { usePathname } from 'next/navigation';
 import AdminAuthGuard from '@/components/AdminAuthGuard';
 
 const menuItems = [
-  { name: 'Edit BackEnd', path: '', icon: '', isTitle: true },
   { name: 'Dashboard', path: '/adminpanel', icon: '📊' },
   { name: 'Products', path: '/adminpanel/products', icon: '📦' },
   { name: 'Orders', path: '/adminpanel/orders', icon: '🛒' },
   { name: 'Users', path: '/adminpanel/users', icon: '👥' },
-  { name: 'Edit main page', path: '', icon: '', isTitle: true },
-  { name: 'Reduce Space Section', path: '/adminpanel/reduce-space', icon: '🔧' },
-  { name: 'Best Sellers Section (Dont use it now)', path: '/adminpanel/best-sellers', icon: '🔧' },
 ];
 
 export default function AdminLayout({
@@ -57,26 +53,20 @@ export default function AdminLayout({
 
             <nav className="space-y-2">
               {menuItems.map((item) => (
-                item.isTitle ? (
-                  <div key={item.name} className="px-3 py-2 text-sm font-semibold text-red-600 uppercase tracking-wider">
-                    {item.name}
-                  </div>
-                ) : (
-                  <Link
-                    key={item.path}
-                    href={item.path}
-                    className={`flex items-center p-3 rounded-lg transition-colors ${
-                      pathname === item.path
-                        ? 'bg-indigo-50 text-indigo-600'
-                        : 'hover:bg-gray-100'
-                    }`}
-                  >
-                    <span className="text-xl">{item.icon}</span>
-                    {isSidebarOpen && (
-                      <span className="ml-3">{item.name}</span>
-                    )}
-                  </Link>
-                )
+                <Link
+                  key={item.path}
+                  href={item.path}
+                  className={`flex items-center p-3 rounded-lg transition-colors ${
+                    pathname === item.path
+                      ? 'bg-indigo-50 text-indigo-600'
+                      : 'hover:bg-gray-100'
+                  }`}
+                >
+                  <span className="text-xl">{item.icon}</span>
+                  {isSidebarOpen && (
+                    <span className="ml-3">{item.name}</span>
+                  )}
+                </Link>
               ))}
             </nav>
 

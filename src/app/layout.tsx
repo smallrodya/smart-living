@@ -5,8 +5,6 @@ import PopupBanner from '@/components/PopupBanner';
 import MobileLayout from '@/components/MobileLayout';
 import { Toaster } from 'react-hot-toast';
 import { BasketProvider } from '@/context/BasketContext';
-import { ReduceSpaceProvider } from '@/context/ReduceSpaceContext';
-import { BestSellersProvider } from '@/context/BestSellersContext';
 
 const inter = Inter({
   subsets: ["latin"],
@@ -45,14 +43,10 @@ export default function RootLayout({
       </head>
       <body className={inter.className}>
         <BasketProvider>
-          <ReduceSpaceProvider>
-            <BestSellersProvider>
-              <MobileLayout>
-                {children}
-                <PopupBanner />
-              </MobileLayout>
-            </BestSellersProvider>
-          </ReduceSpaceProvider>
+          <MobileLayout>
+            {children}
+            <PopupBanner />
+          </MobileLayout>
         </BasketProvider>
         <Toaster position="top-right" />
       </body>
