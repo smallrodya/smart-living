@@ -1,8 +1,10 @@
 'use client';
-import React from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import { X } from 'lucide-react';
 import { Product } from '@/context/ReduceSpaceContext';
+import { useBasket } from '@/context/BasketContext';
+import toast from 'react-hot-toast';
 
 interface OpenModalProps {
   product: Product;
@@ -11,7 +13,36 @@ interface OpenModalProps {
 }
 
 const OpenModal: React.FC<OpenModalProps> = ({ product, isOpen, onClose }) => {
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [openSection, setOpenSection] = useState<string | null>(null);
+  const { addItem } = useBasket();
+
   if (!isOpen) return null;
+
+  const handleAddToCart = () => {
+    if (product.isSoldOut) {
+      toast.error('Product is out of stock');
+      return;
+    }
+
+    addItem({
+      id: product.id,
+      title: product.title,
+      price: parseFloat(product.price.replace('£', '')),
+      image: product.src,
+      category: 'OUTDOOR',
+      sku: product.id,
+      quantity: 1,
+      stock: product.stock || 0,
+      size: 'One Size'
+    });
+    toast.success('Product added to cart');
+    onClose();
+  };
+
+  const toggleSection = (section: string) => {
+    setOpenSection(openSection === section ? null : section);
+  };
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
@@ -40,6 +71,16 @@ const OpenModal: React.FC<OpenModalProps> = ({ product, isOpen, onClose }) => {
                   className="object-cover"
                   sizes="(max-width: 768px) 100vw, 50vw"
                 />
+                {product.isHot && (
+                  <span className="absolute top-4 left-4 bg-black text-white text-sm px-4 py-2 rounded-full font-medium shadow-md">
+                    Hot
+                  </span>
+                )}
+                {product.isSoldOut && (
+                  <span className="absolute top-4 left-4 bg-gray-500 text-white text-sm px-4 py-2 rounded-full font-medium shadow-md">
+                    Sold Out
+                  </span>
+                )}
               </div>
               <div className="relative aspect-square rounded-xl overflow-hidden">
                 <Image
@@ -54,25 +95,6 @@ const OpenModal: React.FC<OpenModalProps> = ({ product, isOpen, onClose }) => {
 
             {/* Информация о товаре */}
             <div className="space-y-6">
-              {/* Статусы */}
-              <div className="flex gap-2">
-                {product.isHot && (
-                  <span className="bg-red-500 text-white text-sm px-4 py-2 rounded-full font-medium shadow-md">
-                    Hot
-                  </span>
-                )}
-                {product.isSoldOut && (
-                  <span className="bg-gray-500 text-white text-sm px-4 py-2 rounded-full font-medium shadow-md">
-                    Sold Out
-                  </span>
-                )}
-                {product.stock && product.stock <= 5 && !product.isSoldOut && (
-                  <span className="bg-yellow-500 text-white text-sm px-4 py-2 rounded-full font-medium shadow-md">
-                    Low Stock
-                  </span>
-                )}
-              </div>
-
               {/* Название и цены */}
               <div>
                 <h3 className="text-2xl font-bold text-gray-800 mb-4">{product.title}</h3>
@@ -100,22 +122,114 @@ const OpenModal: React.FC<OpenModalProps> = ({ product, isOpen, onClose }) => {
 
               {/* Описание */}
               <div>
-                <h4 className="font-semibold text-gray-800 mb-2">Description</h4>
-                <p className="text-gray-600">
-                  Transform your outdoor space with this premium furniture piece. Perfect for creating a comfortable and stylish retreat in your garden or patio.
-                </p>
+                <button
+                  onClick={() => toggleSection('description')}
+                  className="w-full flex items-center justify-between p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors"
+                >
+                  <h4 className="font-semibold text-gray-800">Description</h4>
+                  <svg
+                    className={`w-6 h-6 transform transition-transform ${openSection === 'description' ? 'rotate-180' : ''}`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                {openSection === 'description' && (
+                  <div className="mt-4 p-4 bg-gray-50 rounded-xl">
+                    <p className="text-gray-600">
+                      {product.description || 'No description available'}
+                    </p>
+                  </div>
+                )}
               </div>
 
               {/* Характеристики */}
               <div>
-                <h4 className="font-semibold text-gray-800 mb-2">Features</h4>
-                <ul className="list-disc list-inside text-gray-600 space-y-2">
-                  <li>Premium quality materials</li>
-                  <li>Weather-resistant construction</li>
-                  <li>Easy to assemble</li>
-                  <li>Comfortable design</li>
-                  <li>Stylish appearance</li>
-                </ul>
+                <button
+                  onClick={() => toggleSection('features')}
+                  className="w-full flex items-center justify-between p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors"
+                >
+                  <h4 className="font-semibold text-gray-800">Features</h4>
+                  <svg
+                    className={`w-6 h-6 transform transition-transform ${openSection === 'features' ? 'rotate-180' : ''}`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                {openSection === 'features' && (
+                  <div className="mt-4 p-4 bg-gray-50 rounded-xl">
+                    <ul className="list-disc list-inside text-gray-600 space-y-2">
+                      {product.features && product.features.length > 0 ? (
+                        product.features.map((feature, index) => (
+                          <li key={index}>{feature}</li>
+                        ))
+                      ) : (
+                        <li>No features available</li>
+                      )}
+                    </ul>
+                  </div>
+                )}
+              </div>
+
+              {/* Доставка */}
+              <div>
+                <button
+                  onClick={() => toggleSection('shipping')}
+                  className="w-full flex items-center justify-between p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors"
+                >
+                  <h4 className="font-semibold text-gray-800">Shipping</h4>
+                  <svg
+                    className={`w-6 h-6 transform transition-transform ${openSection === 'shipping' ? 'rotate-180' : ''}`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                {openSection === 'shipping' && (
+                  <div className="mt-4 p-4 bg-gray-50 rounded-xl space-y-4">
+                    <div>
+                      <h5 className="font-semibold text-gray-800 mb-2">Free Mainland UK Delivery</h5>
+                      <p className="text-gray-600">We offer complimentary delivery on all orders within mainland UK — no minimum spend required.</p>
+                    </div>
+
+                    <div>
+                      <h5 className="font-semibold text-gray-800 mb-2">Same-Day Dispatch</h5>
+                      <p className="text-gray-600">Orders placed by 8:00 AM (Monday to Friday) are dispatched the same day. Orders placed after this time, or during weekends and bank holidays, will be dispatched on the next working day.</p>
+                    </div>
+
+                    <div>
+                      <h5 className="font-semibold text-gray-800 mb-2">Delivery Timeframes</h5>
+                      <p className="text-gray-600">Standard Delivery (Free): Estimated delivery within 2 to 5 working days.<br />
+                      Express Delivery (Paid): Delivered on the next working day.</p>
+                    </div>
+
+                    <div>
+                      <h5 className="font-semibold text-gray-800 mb-2">Packaging Information</h5>
+                      <p className="text-gray-600">Please note: Due to courier requirements, larger rugs may be shipped folded rather than rolled. This does not impact the quality or performance of the product.</p>
+                    </div>
+
+                    <div>
+                      <h5 className="font-semibold text-gray-800 mb-2">Order Tracking</h5>
+                      <p className="text-gray-600">A tracking link will be emailed to you once your order has been dispatched, so you can monitor your delivery status in real time.</p>
+                    </div>
+
+                    <div>
+                      <h5 className="font-semibold text-gray-800 mb-2">Need Help?</h5>
+                      <p className="text-gray-600">If you experience any issues with your delivery, our customer service team is happy to assist.</p>
+                      <div className="mt-2 space-y-1">
+                        <p className="text-gray-600">📧 Email: support@smart-living.co.uk</p>
+                        <p className="text-gray-600">📞 Phone: 01384 521170</p>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -131,8 +245,9 @@ const OpenModal: React.FC<OpenModalProps> = ({ product, isOpen, onClose }) => {
               Close
             </button>
             <button
-              className="px-6 py-3 text-white bg-blue-600 rounded-xl hover:bg-blue-700 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+              onClick={handleAddToCart}
               disabled={product.isSoldOut}
+              className="px-6 py-3 text-white bg-black rounded-xl hover:bg-gray-800 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Add to Cart
             </button>

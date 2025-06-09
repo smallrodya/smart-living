@@ -12,6 +12,8 @@ export interface Product {
   isHot?: boolean;
   isSoldOut?: boolean;
   stock?: number;
+  description: string;
+  features: string[];
 }
 
 interface ReduceSpaceContextType {
@@ -22,6 +24,7 @@ interface ReduceSpaceContextType {
   updateSectionDescription: (description: string) => Promise<void>;
   updateProduct: (product: Product) => Promise<void>;
   deleteProduct: (productId: string) => Promise<void>;
+  addProduct: (product: Product) => Promise<void>;
 }
 
 const defaultProducts: Product[] = [
@@ -34,7 +37,9 @@ const defaultProducts: Product[] = [
     oldPrice: '£299.99',
     discount: '-33%',
     isHot: true,
-    stock: 10
+    stock: 10,
+    description: '',
+    features: []
   },
   {
     id: '2',
@@ -44,7 +49,9 @@ const defaultProducts: Product[] = [
     price: '£199.99',
     oldPrice: '£299.99',
     discount: '-33%',
-    stock: 5
+    stock: 5,
+    description: '',
+    features: []
   },
   {
     id: '3',
@@ -55,7 +62,9 @@ const defaultProducts: Product[] = [
     oldPrice: '£249.99',
     discount: '-40%',
     isHot: true,
-    stock: 15
+    stock: 15,
+    description: '',
+    features: []
   },
   {
     id: '4',
@@ -65,7 +74,9 @@ const defaultProducts: Product[] = [
     price: '£149.99',
     oldPrice: '£249.99',
     discount: '-40%',
-    stock: 8
+    stock: 8,
+    description: '',
+    features: []
   }
 ];
 
@@ -117,6 +128,14 @@ export function ReduceSpaceProvider({ children }: { children: React.ReactNode })
     });
   };
 
+  const addProduct = async (product: Product) => {
+    setProducts(prevProducts => {
+      const newProducts = [...prevProducts, product];
+      localStorage.setItem('reduceSpaceProducts', JSON.stringify(newProducts));
+      return newProducts;
+    });
+  };
+
   return (
     <ReduceSpaceContext.Provider value={{
       sectionTitle,
@@ -125,7 +144,8 @@ export function ReduceSpaceProvider({ children }: { children: React.ReactNode })
       updateSectionTitle,
       updateSectionDescription,
       updateProduct,
-      deleteProduct
+      deleteProduct,
+      addProduct
     }}>
       {children}
     </ReduceSpaceContext.Provider>

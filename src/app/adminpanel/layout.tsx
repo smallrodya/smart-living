@@ -12,7 +12,7 @@ const menuItems = [
   { name: 'Users', path: '/adminpanel/users', icon: '👥' },
   { name: 'Edit main page', path: '', icon: '', isTitle: true },
   { name: 'Reduce Space Section', path: '/adminpanel/reduce-space', icon: '🔧' },
-  { name: 'Best Sellers Section', path: '/adminpanel/best-sellers', icon: '🔧' },
+  { name: 'Best Sellers Section (Dont use it now)', path: '/adminpanel/best-sellers', icon: '🔧' },
 ];
 
 export default function AdminLayout({
