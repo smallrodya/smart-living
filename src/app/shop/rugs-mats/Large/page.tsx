@@ -72,9 +72,11 @@ export default function LargeRugsMatsPage() {
   };
 
   const formatPriceRange = (product: Product) => {
-    const largeSize = product.rugsMatsSizes?.find(s => s.size === 'Large');
-    if (!largeSize) return '£0.00';
-    return largeSize.salePrice ? formatPrice(largeSize.salePrice) : formatPrice(largeSize.price);
+    if (!product.rugsMatsSizes || product.rugsMatsSizes.length === 0) return '£0.00';
+    const prices = product.rugsMatsSizes.map(size => size.salePrice);
+    const min = Math.min(...prices);
+    const max = Math.max(...prices);
+    return min === max ? formatPrice(min) : `${formatPrice(min)} - ${formatPrice(max)}`;
   };
 
   const filteredProducts = products.filter(product => {

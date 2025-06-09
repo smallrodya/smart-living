@@ -924,7 +924,7 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
                   </svg>
-                  {product.category === 'THROWS & TOWELS' || product.category === 'CLOTHING' ? 'Available Styles' : 'Available Sizes'}
+                  {product.category === 'THROWS & TOWELS' ? 'Available Styles' : 'Available Sizes'}
                 </h3>
                 <div style={{
                   display: 'flex',
@@ -1227,12 +1227,87 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
                       </div>
                     </button>
                   ))}
+                  {product.clothingStylePrices?.map((size, index) => (
+                    <button
+                      key={index}
+                      onClick={() => handleSizeSelect(size.size)}
+                      style={{
+                        padding: '16px 20px',
+                        borderRadius: '12px',
+                        border: '1px solid',
+                        borderColor: selectedSize === size.size ? '#222' : '#eee',
+                        background: selectedSize === size.size ? '#f8f9fa' : 'transparent',
+                        color: '#444',
+                        fontSize: '16px',
+                        fontWeight: 500,
+                        cursor: 'pointer',
+                        transition: 'all 0.2s ease',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        textAlign: 'left',
+                        width: '100%',
+                        boxShadow: selectedSize === size.size ? '0 4px 12px rgba(0,0,0,0.1)' : 'none'
+                      }}
+                      onMouseEnter={(e) => {
+                        if (selectedSize !== size.size) {
+                          e.currentTarget.style.borderColor = '#222';
+                          e.currentTarget.style.background = '#f8f9fa';
+                          e.currentTarget.style.transform = 'translateY(-2px)';
+                          e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.1)';
+                        }
+                      }}
+                      onMouseLeave={(e) => {
+                        if (selectedSize !== size.size) {
+                          e.currentTarget.style.borderColor = '#eee';
+                          e.currentTarget.style.background = 'transparent';
+                          e.currentTarget.style.transform = 'translateY(0)';
+                          e.currentTarget.style.boxShadow = 'none';
+                        }
+                      }}
+                    >
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                        <span>{size.size}</span>
+                        <span style={{ 
+                          fontSize: '12px', 
+                          color: size.stock > 0 ? '#4CAF50' : '#e53935',
+                          fontWeight: 500
+                        }}>
+                          {size.stock > 0 ? `${size.stock} in stock` : 'Out of stock'}
+                        </span>
+                      </div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                        <span style={{ color: '#e53935', fontWeight: 600 }}>
+                          {formatPrice(product.clearanceDiscount
+                            ? size.salePrice * (1 - product.clearanceDiscount / 100)
+                            : (product.discount
+                              ? size.salePrice * (1 - product.discount / 100)
+                              : size.salePrice)
+                          )}
+                        </span>
+                        {selectedSize === size.size && (
+                          <svg
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="#222"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          >
+                            <path d="M20 6L9 17l-5-5"/>
+                          </svg>
+                        )}
+                      </div>
+                    </button>
+                  ))}
                 </div>
               </div>
             )}
 
             {/* Colors */}
-            {(product.beddingColors || product.throwsTowelsColors || product.rugsMatsColors) && (
+            {(product.beddingColors || product.throwsTowelsColors || product.rugsMatsColors || product.clothingColors) && (
               <div style={{ marginBottom: '24px' }}>
                 <h3 style={{
                   fontSize: '18px',
@@ -1280,6 +1355,22 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
                     </div>
                   ))}
                   {product.rugsMatsColors?.map((color, index) => (
+                    <div
+                      key={index}
+                      style={{
+                        padding: '8px 16px',
+                        borderRadius: '6px',
+                        border: '1px solid #eee',
+                        background: '#f8f9fa',
+                        color: '#444',
+                        fontSize: '14px',
+                        fontWeight: 500
+                      }}
+                    >
+                      {color}
+                    </div>
+                  ))}
+                  {product.clothingColors?.map((color, index) => (
                     <div
                       key={index}
                       style={{
@@ -1352,7 +1443,7 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
                 </svg>
                 {product.category === 'OUTDOOR' ? 'Add to Cart' : (
                   selectedSize ? 'Add to Cart' : (
-                    product.category === 'THROWS & TOWELS' || product.category === 'CLOTHING' 
+                    product.category === 'THROWS & TOWELS' 
                       ? 'Select Style' 
                       : 'Select Size'
                   )

@@ -71,9 +71,10 @@ export default function MediumSizePage() {
 
   const formatPriceRange = (product: Product) => {
     if (!product.rugsMatsSizes || product.rugsMatsSizes.length === 0) return '£0.00';
-    const mediumSize = product.rugsMatsSizes.find(size => size.size === 'Medium');
-    if (!mediumSize) return '£0.00';
-    return formatPrice(mediumSize.salePrice);
+    const prices = product.rugsMatsSizes.map(size => size.salePrice);
+    const min = Math.min(...prices);
+    const max = Math.max(...prices);
+    return min === max ? formatPrice(min) : `${formatPrice(min)} - ${formatPrice(max)}`;
   };
 
   const filteredProducts = products.filter(product => {

@@ -141,7 +141,13 @@ const throwsTowelsColors = [
   'Multi'
 ];
 
-const beddingSizes = ['Single', 'Double', 'King', 'Super King', 'Crib', 'Pillowcase'];
+const beddingSizes = [
+  'Single',
+  'Double',
+  'King',
+  'Super King',
+  'One Size'
+];
 const beddingStyles = ['Printed', 'Plain', '3D', 'Teddy', 'Hotel Quality', 'Housewife Pillowcase', 'Oxford Pillowcase'];
 const beddingColors = [
   'White',
@@ -274,13 +280,15 @@ const clothingSubcategories = [
   "Kid's"
 ];
 
+const clothingSizes = [
+  // Jeans & Joggers sizes
+  '6', '7', '8', '9', '10', '11', '12', '14', '16', '18', '20', '22', '24', '26', '27', '28', '29', '30', '32', '33', '34', '36', '38', '40', '42', '44', '46', '48', '50', '52', '54', '56',
+  // Other clothing sizes
+  'XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL', '2XL', '3XL', 'S/M', 'M/L', 'L/XL', 'One Size'
+];
+
 const clothingStyles = [
-  'Jeans',
-  'Joggers',
-  'Hoodies',
-  'Polo Shirts',
-  'Loungewear',
-  'Bathrobes'
+  'Jeans', 'Joggers', 'Hoodies', 'Polo Shirts', 'Loungewear', 'Bathrobes'
 ];
 
 const clothingColors = [
@@ -303,7 +311,18 @@ const clothingColors = [
   'Orange',
   'Other Colours',
   'Multi Colours',
-  'Brown'
+  'Brown',
+  'TOFFEE',
+  'Stone',
+  'Acid Blue',
+  'Acid Black',
+  'Bromo Blue',
+  'Indigo',
+  'Berry',
+  'Mid Wash',
+  'Dark Wash',
+  'Vintage',
+  'Chocolate'
 ];
 
 const footwearSubcategories = [
@@ -402,9 +421,30 @@ export default function AddProductModal({ open, onClose, onProductAdded, validat
   const [skuError, setSkuError] = useState<string | null>(null);
 
   const handleSizePriceChange = (category: string, size: string, regularPrice: number, salePrice: number, sku: string, stock: number) => {
-    const sizePrice: SizePrice = { size, regularPrice, salePrice, sku, stock };
-    
     setFormData(prev => {
+      if (category === 'clothing') {
+        const existingSizes = prev.clothingStylePrices || [];
+        const sizeIndex = existingSizes.findIndex(s => s.size === size);
+        
+        if (sizeIndex >= 0) {
+          const updatedSizes = [...existingSizes];
+          updatedSizes[sizeIndex] = {
+            size,
+            regularPrice,
+            salePrice,
+            sku,
+            stock
+          };
+          return { ...prev, clothingStylePrices: updatedSizes };
+        } else {
+          return {
+            ...prev,
+            clothingStylePrices: [...existingSizes, { size, regularPrice, salePrice, sku, stock }]
+          };
+        }
+      }
+      const sizePrice: SizePrice = { size, regularPrice, salePrice, sku, stock };
+      
       if (category === 'bedding') {
         const existingSizeIndex = prev.beddingSizes.findIndex(s => s.size === size);
         if (existingSizeIndex >= 0) {
@@ -575,6 +615,12 @@ export default function AddProductModal({ open, onClose, onProductAdded, validat
 
   const removeSize = (category: string, size: string) => {
     setFormData(prev => {
+      if (category === 'clothing') {
+        return {
+          ...prev,
+          clothingStylePrices: prev.clothingStylePrices.filter(s => s.size !== size)
+        };
+      }
       if (category === 'bedding') {
         return {
           ...prev,
@@ -594,11 +640,6 @@ export default function AddProductModal({ open, onClose, onProductAdded, validat
         return {
           ...prev,
           footwearSizes: prev.footwearSizes.filter(s => s.size !== size)
-        };
-      } else if (category === 'clothing') {
-        return {
-          ...prev,
-          clothingStylePrices: prev.clothingStylePrices.filter(s => s.size !== size)
         };
       }
       return prev;
@@ -722,22 +763,51 @@ export default function AddProductModal({ open, onClose, onProductAdded, validat
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-6">
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Category</label>
+          <div style={{ marginBottom: '24px' }}>
+            <label style={{ display: 'block', marginBottom: '8px', fontWeight: 500 }}>Category</label>
+            <select
+              value={formData.category}
+              onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+              style={{
+                width: '100%',
+                padding: '12px',
+                borderRadius: '8px',
+                border: '1px solid #ddd',
+                fontSize: '16px'
+              }}
+            >
+              <option value="">Select Category</option>
+              <option value="BEDDING">BEDDING</option>
+              <option value="THROWS & TOWELS">THROWS & TOWELS</option>
+              <option value="RUGS & MATS">RUGS & MATS</option>
+              <option value="CURTAINS">CURTAINS</option>
+              <option value="CLOTHING">CLOTHING</option>
+              <option value="FOOTWEAR">FOOTWEAR</option>
+              <option value="OUTDOOR">OUTDOOR</option>
+            </select>
+          </div>
+
+          {formData.category === 'CLOTHING' && (
+            <div style={{ marginBottom: '24px' }}>
+              <label style={{ display: 'block', marginBottom: '8px', fontWeight: 500 }}>Subcategory</label>
               <select
-                value={formData.category}
-                onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value }))}
-                className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
-                required
+                value={formData.subcategory}
+                onChange={(e) => setFormData({ ...formData, subcategory: e.target.value })}
+                style={{
+                  width: '100%',
+                  padding: '12px',
+                  borderRadius: '8px',
+                  border: '1px solid #ddd',
+                  fontSize: '16px'
+                }}
               >
-                <option value="">Select a category</option>
-                {categories.map(category => (
-                  <option key={category} value={category}>{category}</option>
-                ))}
+                <option value="">Select Subcategory</option>
+                <option value="Men's">Men's</option>
+                <option value="Women's">Women's</option>
+                <option value="Kid's">Kid's</option>
               </select>
             </div>
-          </div>
+          )}
 
           {/* Category-specific fields */}
           {formData.category === 'BEDDING' && (
@@ -871,26 +941,39 @@ export default function AddProductModal({ open, onClose, onProductAdded, validat
                 </div>
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">Colors</label>
-                  <div className="flex flex-wrap gap-3">
-                    {beddingColors.map(color => (
-                      <label key={color} className={`inline-flex items-center px-4 py-2 rounded-full bg-white border transition-all cursor-pointer ${
-                        formData.beddingColors.includes(color) 
-                          ? 'border-red-500 text-red-500' 
-                          : 'border-gray-300 hover:border-gray-400 text-gray-700'
-                      }`}>
-                        <input
-                          type="checkbox"
-                          checked={formData.beddingColors.includes(color)}
-                          onChange={(e) => {
-                            const newColors = e.target.checked
-                              ? [...formData.beddingColors, color]
-                              : formData.beddingColors.filter(c => c !== color);
-                            setFormData(prev => ({ ...prev, beddingColors: newColors }));
-                          }}
-                          className="hidden"
-                        />
-                        <span>{color}</span>
-                      </label>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                    {beddingColors.map((color) => (
+                      <button
+                        key={color}
+                        type="button"
+                        onClick={() => {
+                          if (formData.beddingColors.includes(color)) {
+                            setFormData({
+                              ...formData,
+                              beddingColors: formData.beddingColors.filter((c) => c !== color),
+                            });
+                          } else {
+                            setFormData({
+                              ...formData,
+                              beddingColors: [...formData.beddingColors, color],
+                            });
+                          }
+                        }}
+                        style={{
+                          padding: '8px 16px',
+                          borderRadius: '6px',
+                          border: '1px solid',
+                          borderColor: formData.beddingColors.includes(color) ? '#222' : '#eee',
+                          background: formData.beddingColors.includes(color) ? '#f8f9fa' : 'transparent',
+                          color: '#444',
+                          fontSize: '14px',
+                          fontWeight: 500,
+                          cursor: 'pointer',
+                          transition: 'all 0.2s ease'
+                        }}
+                      >
+                        {color}
+                      </button>
                     ))}
                   </div>
                 </div>
@@ -1450,136 +1533,203 @@ export default function AddProductModal({ open, onClose, onProductAdded, validat
           )}
 
           {formData.category === 'CLOTHING' && (
-            <div className="bg-gray-50 p-6 rounded-xl space-y-6">
-              <h3 className="text-lg font-semibold text-gray-900">Clothing Details</h3>
-              <div className="grid grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Subcategory</label>
-                  <select
-                    value={formData.subcategory}
-                    onChange={(e) => setFormData(prev => ({ ...prev, subcategory: e.target.value }))}
-                    className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
-                    required
-                  >
-                    <option value="">Select a subcategory</option>
-                    {clothingSubcategories.map(subcategory => (
-                      <option key={subcategory} value={subcategory}>{subcategory}</option>
-                    ))}
-                  </select>
+            <>
+              <div style={{ marginBottom: '20px' }}>
+                <label style={{ display: 'block', marginBottom: '8px', fontWeight: 500 }}>Styles</label>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                  {clothingStyles.map(style => (
+                    <button
+                      key={style}
+                      type="button"
+                      onClick={() => {
+                        setFormData(prev => ({
+                          ...prev,
+                          clothingStyles: prev.clothingStyles.includes(style)
+                            ? prev.clothingStyles.filter(s => s !== style)
+                            : [...prev.clothingStyles, style]
+                        }));
+                      }}
+                      style={{
+                        padding: '8px 16px',
+                        borderRadius: '6px',
+                        border: '1px solid',
+                        borderColor: formData.clothingStyles.includes(style) ? '#222' : '#eee',
+                        background: formData.clothingStyles.includes(style) ? '#222' : 'transparent',
+                        color: formData.clothingStyles.includes(style) ? '#fff' : '#444',
+                        cursor: 'pointer',
+                        transition: 'all 0.2s ease',
+                        fontSize: '14px',
+                        fontWeight: 500
+                      }}
+                    >
+                      {style}
+                    </button>
+                  ))}
                 </div>
               </div>
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Styles and Prices</label>
-                  <div className="space-y-3">
-                    {clothingStyles.map(style => {
-                      const stylePrice = formData.clothingStylePrices.find(s => s.size === style);
-                      return (
-                        <div key={style} className="flex items-center gap-3">
-                          <label className={`inline-flex items-center px-4 py-2 rounded-full bg-white border transition-all cursor-pointer ${
-                            stylePrice ? 'border-red-500 text-red-500' : 'border-gray-300 hover:border-gray-400 text-gray-700'
-                          }`}>
-                            <input
-                              type="checkbox"
-                              checked={!!stylePrice}
-                              onChange={(e) => {
-                                if (e.target.checked) {
-                                  handleClothingStylePriceChange(style, 0, 0, '', 0);
-                                } else {
-                                  removeClothingStyle(style);
-                                }
-                              }}
-                              className="hidden"
-                            />
-                            <span>{style}</span>
-                          </label>
-                          {stylePrice && (
-                            <div className="flex items-center gap-2">
-                              <div className="flex flex-col gap-1">
-                                <label className="text-xs text-gray-500">SKU</label>
-                                <input
-                                  type="text"
-                                  value={stylePrice.sku}
-                                  onChange={(e) => handleClothingStylePriceChange(style, stylePrice.regularPrice, stylePrice.salePrice, e.target.value, stylePrice.stock)}
-                                  className="w-32 px-3 py-1 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
-                                  placeholder="SKU"
-                                />
-                              </div>
-                              <div className="flex flex-col gap-1">
-                                <label className="text-xs text-gray-500">Regular Price</label>
-                                <div className="flex items-center gap-1">
-                                  <input
-                                    type="number"
-                                    value={stylePrice.regularPrice}
-                                    onChange={(e) => handleClothingStylePriceChange(style, parseFloat(e.target.value), stylePrice.salePrice, stylePrice.sku, stylePrice.stock)}
-                                    className="w-24 px-3 py-1 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
-                                    placeholder="Regular"
-                                    min="0"
-                                    step="0.01"
-                                  />
-                                  <span className="text-gray-500">£</span>
-                                </div>
-                              </div>
-                              <div className="flex flex-col gap-1">
-                                <label className="text-xs text-gray-500">Sale Price</label>
-                                <div className="flex items-center gap-1">
-                                  <input
-                                    type="number"
-                                    value={stylePrice.salePrice}
-                                    onChange={(e) => handleClothingStylePriceChange(style, stylePrice.regularPrice, parseFloat(e.target.value), stylePrice.sku, stylePrice.stock)}
-                                    className="w-24 px-3 py-1 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
-                                    placeholder="Sale"
-                                    min="0"
-                                    step="0.01"
-                                  />
-                                  <span className="text-gray-500">£</span>
-                                </div>
-                              </div>
-                              <div className="flex flex-col gap-1">
-                                <label className="text-xs text-gray-500">Stock</label>
-                                <input
-                                  type="number"
-                                  value={stylePrice.stock}
-                                  onChange={(e) => handleClothingStylePriceChange(style, stylePrice.regularPrice, stylePrice.salePrice, stylePrice.sku, parseInt(e.target.value) || 0)}
-                                  className="w-20 px-3 py-1 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
-                                  placeholder="Stock"
-                                  min="0"
-                                />
-                              </div>
-                            </div>
-                          )}
+
+              <div style={{ marginBottom: '20px' }}>
+                <label style={{ display: 'block', marginBottom: '8px', fontWeight: 500 }}>Sizes and Prices</label>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '16px' }}>
+                  {clothingSizes.map(size => (
+                    <button
+                      key={size}
+                      type="button"
+                      onClick={() => {
+                        const existingSize = formData.clothingStylePrices.find(s => s.size === size);
+                        if (existingSize) {
+                          removeSize('clothing', size);
+                        } else {
+                          handleSizePriceChange('clothing', size, 0, 0, '', 0);
+                        }
+                      }}
+                      style={{
+                        padding: '8px 16px',
+                        borderRadius: '6px',
+                        border: '1px solid',
+                        borderColor: formData.clothingStylePrices.some(s => s.size === size) ? '#222' : '#eee',
+                        background: formData.clothingStylePrices.some(s => s.size === size) ? '#222' : 'transparent',
+                        color: formData.clothingStylePrices.some(s => s.size === size) ? '#fff' : '#444',
+                        cursor: 'pointer',
+                        transition: 'all 0.2s ease',
+                        fontSize: '14px',
+                        fontWeight: 500
+                      }}
+                    >
+                      {size}
+                    </button>
+                  ))}
+                </div>
+
+                {formData.clothingStylePrices.length > 0 && (
+                  <div style={{ marginTop: '20px' }}>
+                    <h4 style={{ marginBottom: '12px', fontSize: '16px', fontWeight: 500 }}>Size Details</h4>
+                    {formData.clothingStylePrices.map((sizePrice, index) => (
+                      <div key={index} style={{ marginBottom: '16px', padding: '16px', border: '1px solid #eee', borderRadius: '8px' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+                          <h5 style={{ fontSize: '16px', fontWeight: 600 }}>Size {sizePrice.size}</h5>
+                          <button
+                            type="button"
+                            onClick={() => removeSize('clothing', sizePrice.size)}
+                            style={{
+                              padding: '6px 12px',
+                              background: '#f5f5f5',
+                              border: 'none',
+                              borderRadius: '4px',
+                              cursor: 'pointer',
+                              fontSize: '14px',
+                              color: '#666'
+                            }}
+                          >
+                            Remove
+                          </button>
                         </div>
-                      );
-                    })}
-                  </div>
-                </div>
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Colors</label>
-                  <div className="flex flex-wrap gap-3">
-                    {clothingColors.map(color => (
-                      <label key={color} className={`inline-flex items-center px-4 py-2 rounded-full bg-white border transition-all cursor-pointer ${
-                        formData.clothingColors.includes(color) 
-                          ? 'border-red-500 text-red-500' 
-                          : 'border-gray-300 hover:border-gray-400 text-gray-700'
-                      }`}>
-                        <input
-                          type="checkbox"
-                          checked={formData.clothingColors.includes(color)}
-                          onChange={(e) => {
-                            const newColors = e.target.checked
-                              ? [...formData.clothingColors, color]
-                              : formData.clothingColors.filter(c => c !== color);
-                            setFormData(prev => ({ ...prev, clothingColors: newColors }));
-                          }}
-                          className="hidden"
-                        />
-                        <span>{color}</span>
-                      </label>
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px' }}>
+                          <div>
+                            <label style={{ display: 'block', marginBottom: '4px', fontSize: '14px' }}>SKU</label>
+                            <input
+                              type="text"
+                              value={sizePrice.sku}
+                              onChange={(e) => handleSizePriceChange('clothing', sizePrice.size, sizePrice.regularPrice, sizePrice.salePrice, e.target.value, sizePrice.stock)}
+                              style={{
+                                width: '100%',
+                                padding: '8px 12px',
+                                border: '1px solid #ddd',
+                                borderRadius: '4px',
+                                fontSize: '14px'
+                              }}
+                            />
+                          </div>
+                          <div>
+                            <label style={{ display: 'block', marginBottom: '4px', fontSize: '14px' }}>Regular Price</label>
+                            <input
+                              type="number"
+                              value={sizePrice.regularPrice}
+                              onChange={(e) => handleSizePriceChange('clothing', sizePrice.size, Number(e.target.value), sizePrice.salePrice, sizePrice.sku, sizePrice.stock)}
+                              style={{
+                                width: '100%',
+                                padding: '8px 12px',
+                                border: '1px solid #ddd',
+                                borderRadius: '4px',
+                                fontSize: '14px'
+                              }}
+                            />
+                          </div>
+                          <div>
+                            <label style={{ display: 'block', marginBottom: '4px', fontSize: '14px' }}>Sale Price</label>
+                            <input
+                              type="number"
+                              value={sizePrice.salePrice}
+                              onChange={(e) => handleSizePriceChange('clothing', sizePrice.size, sizePrice.regularPrice, Number(e.target.value), sizePrice.sku, sizePrice.stock)}
+                              style={{
+                                width: '100%',
+                                padding: '8px 12px',
+                                border: '1px solid #ddd',
+                                borderRadius: '4px',
+                                fontSize: '14px'
+                              }}
+                            />
+                          </div>
+                          <div>
+                            <label style={{ display: 'block', marginBottom: '4px', fontSize: '14px' }}>Stock</label>
+                            <input
+                              type="number"
+                              value={sizePrice.stock}
+                              onChange={(e) => handleSizePriceChange('clothing', sizePrice.size, sizePrice.regularPrice, sizePrice.salePrice, sizePrice.sku, Number(e.target.value))}
+                              style={{
+                                width: '100%',
+                                padding: '8px 12px',
+                                border: '1px solid #ddd',
+                                borderRadius: '4px',
+                                fontSize: '14px'
+                              }}
+                            />
+                          </div>
+                        </div>
+                      </div>
                     ))}
                   </div>
+                )}
+              </div>
+              <div style={{ marginBottom: '24px' }}>
+                <label style={{ display: 'block', marginBottom: '8px', fontWeight: 500 }}>Colors</label>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                  {clothingColors.map((color) => (
+                    <button
+                      key={color}
+                      type="button"
+                      onClick={() => {
+                        if (formData.clothingColors.includes(color)) {
+                          setFormData({
+                            ...formData,
+                            clothingColors: formData.clothingColors.filter((c) => c !== color),
+                          });
+                        } else {
+                          setFormData({
+                            ...formData,
+                            clothingColors: [...formData.clothingColors, color],
+                          });
+                        }
+                      }}
+                      style={{
+                        padding: '8px 16px',
+                        borderRadius: '6px',
+                        border: '1px solid',
+                        borderColor: formData.clothingColors.includes(color) ? '#222' : '#eee',
+                        background: formData.clothingColors.includes(color) ? '#f8f9fa' : 'transparent',
+                        color: '#444',
+                        fontSize: '14px',
+                        fontWeight: 500,
+                        cursor: 'pointer',
+                        transition: 'all 0.2s ease'
+                      }}
+                    >
+                      {color}
+                    </button>
+                  ))}
                 </div>
               </div>
-            </div>
+            </>
           )}
 
           {formData.category === 'FOOTWEAR' && (

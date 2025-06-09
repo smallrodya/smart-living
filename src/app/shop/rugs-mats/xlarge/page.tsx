@@ -78,9 +78,11 @@ export default function XLargeRugsMatsPage() {
   };
 
   const formatPriceRange = (product: Product) => {
-    const xlargeSize = product.rugsMatsSizes?.find(s => s.size === 'Xlarge');
-    if (!xlargeSize) return '£0.00';
-    return xlargeSize.salePrice ? formatPrice(xlargeSize.salePrice) : formatPrice(xlargeSize.price);
+    if (!product.rugsMatsSizes || product.rugsMatsSizes.length === 0) return '£0.00';
+    const prices = product.rugsMatsSizes.map(size => size.salePrice);
+    const min = Math.min(...prices);
+    const max = Math.max(...prices);
+    return min === max ? formatPrice(min) : `${formatPrice(min)} - ${formatPrice(max)}`;
   };
 
   const filteredProducts = products.filter(product => {
@@ -741,7 +743,7 @@ export default function XLargeRugsMatsPage() {
                       marginTop: '16px'
                     }}>
                       <button
-                        onClick={() => {/* Add to basket logic */}}
+                        onClick={() => setQuickViewProduct(product)}
                         style={{
                           flex: 1,
                           padding: '12px 24px',
@@ -777,43 +779,10 @@ export default function XLargeRugsMatsPage() {
                           strokeLinecap="round"
                           strokeLinejoin="round"
                         >
-                          <circle cx="9" cy="21" r="1"/>
-                          <circle cx="20" cy="21" r="1"/>
-                          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
-                        </svg>
-                        Add to Cart
-                      </button>
-                      <button
-                        onClick={() => setQuickViewProduct(product)}
-                        style={{
-                          padding: '12px',
-                          background: '#f5f5f5',
-                          color: '#222',
-                          border: 'none',
-                          borderRadius: '8px',
-                          cursor: 'pointer',
-                          transition: 'all 0.2s ease'
-                        }}
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.background = '#eee';
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.background = '#f5f5f5';
-                        }}
-                      >
-                        <svg
-                          width="20"
-                          height="20"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        >
                           <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
                           <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
                         </svg>
+                        View
                       </button>
                     </div>
                   )}

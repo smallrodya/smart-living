@@ -180,7 +180,18 @@ const clothingColors = [
   'Purple',
   'Beige',
   'Brown',
-  'Multi'
+  'Multi',
+  'TOFFEE',
+  'Stone',
+  'Acid Blue',
+  'Acid Black',
+  'Bromo Blue',
+  'Indigo',
+  'Berry',
+  'Mid Wash',
+  'Dark Wash',
+  'Vintage',
+  'Chocolate'
 ];
 
 // Подкатегории для FOOTWEAR

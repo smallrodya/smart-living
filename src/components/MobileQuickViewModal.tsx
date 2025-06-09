@@ -739,7 +739,7 @@ export default function MobileQuickViewModal({ product, onClose }: MobileQuickVi
                 </svg>
                 {product.category === 'OUTDOOR' ? 'Add to Cart' : (
                   selectedSize ? 'Add to Cart' : (
-                    product.category === 'THROWS & TOWELS' || product.category === 'CLOTHING' 
+                    product.category === 'THROWS & TOWELS' 
                       ? 'Select Style' 
                       : 'Select Size'
                   )
@@ -812,12 +812,18 @@ export default function MobileQuickViewModal({ product, onClose }: MobileQuickVi
             {(product.beddingSizes || product.throwsTowelsStylePrices || product.rugsMatsSizes || product.clothingStylePrices || product.footwearSizes) && (
               <div style={{ marginBottom: '16px' }}>
                 <h3 style={{
-                  fontSize: '16px',
+                  fontSize: '20px',
                   fontWeight: 600,
-                  marginBottom: '12px',
-                  color: '#222'
+                  marginBottom: '16px',
+                  color: '#222',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px'
                 }}>
-                  {product.category === 'THROWS & TOWELS' || product.category === 'CLOTHING' ? 'Available Styles' : 'Available Sizes'}
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                  </svg>
+                  {product.category === 'THROWS & TOWELS' ? 'Available Styles' : 'Available Sizes'}
                 </h3>
                 <div style={{
                   display: 'flex',
@@ -883,52 +889,52 @@ export default function MobileQuickViewModal({ product, onClose }: MobileQuickVi
                       </div>
                     </button>
                   ))}
-                  {product.clothingStylePrices?.map((style, index) => (
+                  {product.clothingStylePrices?.map((size, index) => (
                     <button
                       key={index}
-                      onClick={() => handleSizeSelect(style.size)}
+                      onClick={() => handleSizeSelect(size.size)}
                       style={{
-                        padding: '16px',
-                        borderRadius: '8px',
+                        padding: '16px 20px',
+                        borderRadius: '12px',
                         border: '1px solid',
-                        borderColor: selectedSize === style.size ? '#222' : '#eee',
-                        background: selectedSize === style.size ? '#f8f9fa' : 'transparent',
+                        borderColor: selectedSize === size.size ? '#222' : '#eee',
+                        background: selectedSize === size.size ? '#f8f9fa' : 'transparent',
                         color: '#444',
                         fontSize: '16px',
                         fontWeight: 500,
                         cursor: 'pointer',
+                        transition: 'all 0.2s ease',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'space-between',
                         textAlign: 'left',
                         width: '100%',
-                        touchAction: 'manipulation',
-                        WebkitTapHighlightColor: 'transparent'
+                        boxShadow: selectedSize === size.size ? '0 4px 12px rgba(0,0,0,0.1)' : 'none'
                       }}
                     >
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                        <span>{style.size}</span>
+                        <span>{size.size}</span>
                         <span style={{ 
                           fontSize: '12px', 
-                          color: style.stock > 0 ? '#4CAF50' : '#e53935',
+                          color: size.stock > 0 ? '#4CAF50' : '#e53935',
                           fontWeight: 500
                         }}>
-                          {style.stock > 0 ? `${style.stock} in stock` : 'Out of stock'}
+                          {size.stock > 0 ? `${size.stock} in stock` : 'Out of stock'}
                         </span>
                       </div>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                         <span style={{ color: '#e53935', fontWeight: 600 }}>
                           {formatPrice(product.clearanceDiscount
-                            ? style.salePrice * (1 - product.clearanceDiscount / 100)
+                            ? size.salePrice * (1 - product.clearanceDiscount / 100)
                             : (product.discount
-                              ? style.salePrice * (1 - product.discount / 100)
-                              : style.salePrice)
+                              ? size.salePrice * (1 - product.discount / 100)
+                              : size.salePrice)
                           )}
                         </span>
-                        {selectedSize === style.size && (
+                        {selectedSize === size.size && (
                           <svg
-                            width="20"
-                            height="20"
+                            width="24"
+                            height="24"
                             viewBox="0 0 24 24"
                             fill="none"
                             stroke="#222"
@@ -1120,10 +1126,10 @@ export default function MobileQuickViewModal({ product, onClose }: MobileQuickVi
             )}
 
             {/* Colors */}
-            {(product.beddingColors || product.throwsTowelsColors || product.rugsMatsColors) && (
-              <div style={{ marginBottom: '16px' }}>
+            {(product.beddingColors || product.throwsTowelsColors || product.rugsMatsColors || product.clothingColors) && (
+              <div style={{ marginBottom: '24px' }}>
                 <h3 style={{
-                  fontSize: '16px',
+                  fontSize: '18px',
                   fontWeight: 600,
                   marginBottom: '12px',
                   color: '#222'
@@ -1135,6 +1141,22 @@ export default function MobileQuickViewModal({ product, onClose }: MobileQuickVi
                   flexWrap: 'wrap',
                   gap: '8px'
                 }}>
+                  {product.clothingColors?.map((color, index) => (
+                    <div
+                      key={index}
+                      style={{
+                        padding: '8px 16px',
+                        borderRadius: '6px',
+                        border: '1px solid #eee',
+                        background: '#f8f9fa',
+                        color: '#444',
+                        fontSize: '14px',
+                        fontWeight: 500
+                      }}
+                    >
+                      {color}
+                    </div>
+                  ))}
                   {product.beddingColors?.map((color, index) => (
                     <div
                       key={index}
