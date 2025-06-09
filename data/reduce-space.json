@@ -1,0 +1,56 @@
+{
+  "sectionTitle": "Reduce Space, Increase Comfort",
+  "sectionDescription": "Transform your outdoor space with our premium collection of gravity chairs. Experience ultimate relaxation with our innovative designs that combine style, comfort, and functionality.",
+  "products": [
+    {
+      "id": "1",
+      "src": "/images/reduce-space/chair1.jpg",
+      "hoverSrc": "/images/reduce-space/chair1-hover.jpg",
+      "title": "2-in-1 Reclining Gravity Chair - Dark Green",
+      "price": "£199.99213",
+      "oldPrice": "£299.99",
+      "discount": "-33%",
+      "isHot": true,
+      "stock": 10,
+      "description": "",
+      "features": []
+    },
+    {
+      "id": "2",
+      "src": "/images/reduce-space/chair2.jpg",
+      "hoverSrc": "/images/reduce-space/chair2-hover.jpg",
+      "title": "2-in-1 Reclining Gravity Chair - Grey",
+      "price": "£199.99",
+      "oldPrice": "£299.99",
+      "discount": "-33%",
+      "stock": 5,
+      "description": "",
+      "features": []
+    },
+    {
+      "id": "3",
+      "src": "/images/reduce-space/chair3.jpg",
+      "hoverSrc": "/images/reduce-space/chair3-hover.jpg",
+      "title": "Zero Gravity Chair - Black",
+      "price": "£149.99",
+      "oldPrice": "£249.99",
+      "discount": "-40%",
+      "isHot": true,
+      "stock": 15,
+      "description": "",
+      "features": []
+    },
+    {
+      "id": "4",
+      "src": "/images/reduce-space/chair4.jpg",
+      "hoverSrc": "/images/reduce-space/chair4-hover.jpg",
+      "title": "Zero Gravity Chair - Grey",
+      "price": "£149.99",
+      "oldPrice": "£249.99",
+      "discount": "-40%",
+      "stock": 8,
+      "description": "",
+      "features": []
+    }
+  ]
+}

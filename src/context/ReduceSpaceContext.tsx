@@ -20,6 +20,7 @@ interface ReduceSpaceContextType {
   sectionTitle: string;
   sectionDescription: string;
   products: Product[];
+  isLoading: boolean;
   updateSectionTitle: (title: string) => Promise<void>;
   updateSectionDescription: (description: string) => Promise<void>;
   updateProduct: (product: Product) => Promise<void>;
@@ -86,54 +87,105 @@ const defaultDescription = 'Transform your outdoor space with our premium collec
 const ReduceSpaceContext = createContext<ReduceSpaceContextType | undefined>(undefined);
 
 export function ReduceSpaceProvider({ children }: { children: React.ReactNode }) {
-  const [sectionTitle, setSectionTitle] = useState('Reduce Your Space');
-  const [sectionDescription, setSectionDescription] = useState('Transform your outdoor space into a comfortable and stylish retreat with our premium furniture collection.');
-  const [products, setProducts] = useState<Product[]>(defaultProducts);
+  const [sectionTitle, setSectionTitle] = useState('');
+  const [sectionDescription, setSectionDescription] = useState('');
+  const [products, setProducts] = useState<Product[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const savedTitle = localStorage.getItem('reduceSpaceTitle');
-    const savedDescription = localStorage.getItem('reduceSpaceDescription');
-    const savedProducts = localStorage.getItem('reduceSpaceProducts');
-
-    if (savedTitle) setSectionTitle(savedTitle);
-    if (savedDescription) setSectionDescription(savedDescription);
-    if (savedProducts) setProducts(JSON.parse(savedProducts));
+    const fetchData = async () => {
+      try {
+        const response = await fetch('/api/reduce-space');
+        if (!response.ok) throw new Error('Failed to fetch data');
+        const data = await response.json();
+        setSectionTitle(data.sectionTitle);
+        setSectionDescription(data.sectionDescription);
+        setProducts(data.products);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchData();
   }, []);
 
   const updateSectionTitle = async (title: string) => {
-    setSectionTitle(title);
-    localStorage.setItem('reduceSpaceTitle', title);
+    try {
+      const response = await fetch('/api/reduce-space', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sectionTitle: title })
+      });
+      if (!response.ok) throw new Error('Failed to update title');
+      setSectionTitle(title);
+    } catch (error) {
+      console.error('Error updating title:', error);
+      throw error;
+    }
   };
 
   const updateSectionDescription = async (description: string) => {
-    setSectionDescription(description);
-    localStorage.setItem('reduceSpaceDescription', description);
+    try {
+      const response = await fetch('/api/reduce-space', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sectionDescription: description })
+      });
+      if (!response.ok) throw new Error('Failed to update description');
+      setSectionDescription(description);
+    } catch (error) {
+      console.error('Error updating description:', error);
+      throw error;
+    }
   };
 
   const updateProduct = async (product: Product) => {
-    setProducts(prevProducts => {
-      const newProducts = prevProducts.map(p => 
-        p.id === product.id ? product : p
-      );
-      localStorage.setItem('reduceSpaceProducts', JSON.stringify(newProducts));
-      return newProducts;
-    });
+    try {
+      const updatedProducts = products.map(p => p.id === product.id ? product : p);
+      const response = await fetch('/api/reduce-space', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ products: updatedProducts })
+      });
+      if (!response.ok) throw new Error('Failed to update product');
+      setProducts(updatedProducts);
+    } catch (error) {
+      console.error('Error updating product:', error);
+      throw error;
+    }
   };
 
   const deleteProduct = async (productId: string) => {
-    setProducts(prevProducts => {
-      const newProducts = prevProducts.filter(p => p.id !== productId);
-      localStorage.setItem('reduceSpaceProducts', JSON.stringify(newProducts));
-      return newProducts;
-    });
+    try {
+      const updatedProducts = products.filter(p => p.id !== productId);
+      const response = await fetch('/api/reduce-space', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ products: updatedProducts })
+      });
+      if (!response.ok) throw new Error('Failed to delete product');
+      setProducts(updatedProducts);
+    } catch (error) {
+      console.error('Error deleting product:', error);
+      throw error;
+    }
   };
 
   const addProduct = async (product: Product) => {
-    setProducts(prevProducts => {
-      const newProducts = [...prevProducts, product];
-      localStorage.setItem('reduceSpaceProducts', JSON.stringify(newProducts));
-      return newProducts;
-    });
+    try {
+      const updatedProducts = [...products, product];
+      const response = await fetch('/api/reduce-space', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ products: updatedProducts })
+      });
+      if (!response.ok) throw new Error('Failed to add product');
+      setProducts(updatedProducts);
+    } catch (error) {
+      console.error('Error adding product:', error);
+      throw error;
+    }
   };
 
   return (
@@ -141,6 +193,7 @@ export function ReduceSpaceProvider({ children }: { children: React.ReactNode })
       sectionTitle,
       sectionDescription,
       products,
+      isLoading,
       updateSectionTitle,
       updateSectionDescription,
       updateProduct,

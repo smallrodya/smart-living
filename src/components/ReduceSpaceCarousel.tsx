@@ -9,7 +9,7 @@ import { ExternalLink } from 'lucide-react';
 
 const DesktopReduceSpaceCarousel = () => {
   const router = useRouter();
-  const { sectionTitle, sectionDescription, products } = useReduceSpace();
+  const { sectionTitle, sectionDescription, products, isLoading } = useReduceSpace();
   const [hoveredProduct, setHoveredProduct] = useState<string | null>(null);
   const [selectedProduct, setSelectedProduct] = useState<string | null>(null);
 
@@ -20,6 +20,17 @@ const DesktopReduceSpaceCarousel = () => {
   const handleCloseModal = () => {
     setSelectedProduct(null);
   };
+
+  if (isLoading) {
+    return (
+      <div className="py-16 bg-gray-50">
+        <div className="container mx-auto px-4 text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading products...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <section className="py-16 bg-gray-50">
