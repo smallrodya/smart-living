@@ -1,33 +1,20 @@
 import { NextResponse } from 'next/server';
 import { v2 as cloudinary } from 'cloudinary';
 
-export const dynamic = 'force-dynamic';
-
-// Получаем значения переменных окружения
-const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
-const apiKey = process.env.CLOUDINARY_API_KEY;
-const apiSecret = process.env.CLOUDINARY_API_SECRET;
-
-// Логируем значения (без секретных данных)
-console.log('Cloudinary Config:', {
-  cloud_name: cloudName,
-  api_key: apiKey ? '***' : undefined,
-  api_secret: apiSecret ? '***' : undefined
-});
-
-// Конфигурируем Cloudinary
+// Конфигурация Cloudinary
 cloudinary.config({
-  cloud_name: cloudName,
-  api_key: apiKey,
-  api_secret: apiSecret,
-  secure: true // Принудительно используем HTTPS
+  cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
 });
+
+export const dynamic = 'force-dynamic';
 
 export async function POST(request: Request) {
   try {
     const formData = await request.formData();
     const file = formData.get('file') as File;
-
+    
     if (!file) {
       return NextResponse.json(
         { error: 'No file uploaded' },
@@ -35,48 +22,37 @@ export async function POST(request: Request) {
       );
     }
 
-    // Проверяем конфигурацию Cloudinary
-    if (!cloudName || !apiKey || !apiSecret) {
-      console.error('Cloudinary configuration missing:', {
-        cloud_name: !!cloudName,
-        api_key: !!apiKey,
-        api_secret: !!apiSecret,
-        env_vars: Object.keys(process.env).filter(key => key.includes('CLOUDINARY'))
-      });
-      return NextResponse.json(
-        { error: 'Cloudinary configuration is missing' },
-        { status: 500 }
-      );
-    }
-
-    // Конвертируем File в Buffer
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
-    // Создаем base64 строку из буфера
+    // Конвертируем буфер в base64
     const base64String = buffer.toString('base64');
     const dataURI = `data:${file.type};base64,${base64String}`;
 
-    // Загружаем файл в Cloudinary используя upload
-    const result = await cloudinary.uploader.upload(dataURI, {
-      folder: 'smartliving',
-      resource_type: 'auto',
-      use_filename: true,
-      unique_filename: true,
+    // Загружаем изображение в Cloudinary
+    const result = await new Promise((resolve, reject) => {
+      cloudinary.uploader.upload(
+        dataURI,
+        {
+          folder: 'smartliving',
+          resource_type: 'auto',
+        },
+        (error, result) => {
+          if (error) reject(error);
+          else resolve(result);
+        }
+      );
     });
 
-    if (!result || !result.secure_url) {
-      throw new Error('Failed to upload file to Cloudinary');
-    }
-
-    return NextResponse.json({
-      url: result.secure_url,
-      public_id: result.public_id
+    // Возвращаем URL загруженного изображения
+    return NextResponse.json({ 
+      url: (result as any).secure_url,
+      message: 'File uploaded successfully'
     });
-  } catch (error: any) {
-    console.error('Error uploading file:', error);
+  } catch (error) {
+    console.error('Upload error:', error);
     return NextResponse.json(
-      { error: `Error uploading file: ${error?.message || 'Unknown error'}` },
+      { error: 'Error uploading file' },
       { status: 500 }
     );
   }

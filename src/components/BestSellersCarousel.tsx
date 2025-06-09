@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { useReduceSpace } from '@/context/ReduceSpaceContext';
+import { useBestSellers } from '@/context/BestSellersContext';
 
 interface WishlistItem {
   id: string;
@@ -13,11 +13,11 @@ interface WishlistItem {
   discount: string;
 }
 
-const MobileReduceSpaceCarousel = () => {
+const BestSellersCarousel = () => {
   const router = useRouter();
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
   const [wishlist, setWishlist] = useState<string[]>([]);
-  const { sectionTitle, sectionDescription, products } = useReduceSpace();
+  const { sectionTitle, sectionDescription, products } = useBestSellers();
 
   useEffect(() => {
     const savedWishlist = localStorage.getItem('wishlist');
@@ -41,7 +41,7 @@ const MobileReduceSpaceCarousel = () => {
 
   const toggleWishlist = (id: number) => {
     setWishlist(prev => {
-      const prefixedId = `reduce_${id}`;
+      const prefixedId = `bestseller_${id}`;
       const newWishlist = prev.includes(prefixedId) 
         ? prev.filter(i => i !== prefixedId)
         : [...prev, prefixedId];
@@ -54,14 +54,14 @@ const MobileReduceSpaceCarousel = () => {
               typeof item === 'object' && 
               'id' in item && 
               typeof item.id === 'string' && 
-              !item.id.startsWith('reduce_')
+              !item.id.startsWith('bestseller_')
             )
           : [];
         
         const newItems = products
-          .filter((_, i) => newWishlist.includes(`reduce_${i}`))
+          .filter((_, i) => newWishlist.includes(`bestseller_${i}`))
           .map((item, i) => ({
-            id: `reduce_${i}`,
+            id: `bestseller_${i}`,
             src: item.src,
             hoverSrc: item.hoverSrc,
             title: item.title,
@@ -148,32 +148,32 @@ const MobileReduceSpaceCarousel = () => {
                   zIndex: 2,
                   boxShadow: '0 2px 12px rgba(0,0,0,0.15)',
                   transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                  transform: wishlist.includes(`reduce_${i}`) ? 'scale(1.1)' : 'scale(1)',
+                  transform: wishlist.includes(`bestseller_${i}`) ? 'scale(1.1)' : 'scale(1)',
                   backdropFilter: 'blur(4px)',
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = wishlist.includes(`reduce_${i}`) 
+                  e.currentTarget.style.transform = wishlist.includes(`bestseller_${i}`) 
                     ? 'scale(1.15)' 
                     : 'scale(1.05)';
                   e.currentTarget.style.boxShadow = '0 4px 16px rgba(0,0,0,0.2)';
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = wishlist.includes(`reduce_${i}`) 
+                  e.currentTarget.style.transform = wishlist.includes(`bestseller_${i}`) 
                     ? 'scale(1.1)' 
                     : 'scale(1)';
                   e.currentTarget.style.boxShadow = '0 2px 12px rgba(0,0,0,0.15)';
                 }}
               >
                 <div style={{
-                  color: wishlist.includes(`reduce_${i}`) ? '#e53935' : '#e53935',
+                  color: wishlist.includes(`bestseller_${i}`) ? '#e53935' : '#e53935',
                   transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                  transform: wishlist.includes(`reduce_${i}`) ? 'scale(1.1)' : 'scale(1)',
+                  transform: wishlist.includes(`bestseller_${i}`) ? 'scale(1.1)' : 'scale(1)',
                 }}>
                   <svg 
                     width="24" 
                     height="24" 
                     viewBox="0 0 24 24" 
-                    fill={wishlist.includes(`reduce_${i}`) ? '#e53935' : 'none'} 
+                    fill={wishlist.includes(`bestseller_${i}`) ? '#e53935' : 'none'} 
                     stroke="#e53935" 
                     strokeWidth="2" 
                     strokeLinecap="round" 
@@ -246,19 +246,21 @@ const MobileReduceSpaceCarousel = () => {
       {/* Text blocks section */}
       <div style={{
         display: 'flex',
-        flexDirection: 'column',
-        gap: 32,
+        justifyContent: 'space-around',
+        alignItems: 'flex-start',
         padding: '40px 20px',
         borderTop: '1px solid #eee',
         marginTop: 40,
         maxWidth: 1200,
         margin: '0 auto',
+        gap: 20,
       }}>
         <div style={{
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
           gap: 8,
+          flex: 1,
         }}>
           <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#222" strokeWidth="1.5">
             <path d="M20 7h-3V4H7v3H4v14h16V7zM7 7h10M12 12v6M9 12v6M15 12v6"/>
@@ -282,6 +284,7 @@ const MobileReduceSpaceCarousel = () => {
           flexDirection: 'column',
           alignItems: 'center',
           gap: 8,
+          flex: 1,
         }}>
           <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#222" strokeWidth="1.5">
             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
@@ -305,6 +308,7 @@ const MobileReduceSpaceCarousel = () => {
           flexDirection: 'column',
           alignItems: 'center',
           gap: 8,
+          flex: 1,
         }}>
           <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#222" strokeWidth="1.5">
             <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
@@ -329,6 +333,7 @@ const MobileReduceSpaceCarousel = () => {
           flexDirection: 'column',
           alignItems: 'center',
           gap: 8,
+          flex: 1,
         }}>
           <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#222" strokeWidth="1.5">
             <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
@@ -351,4 +356,4 @@ const MobileReduceSpaceCarousel = () => {
   );
 };
 
-export default MobileReduceSpaceCarousel; 
+export default BestSellersCarousel; 

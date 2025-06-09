@@ -3,368 +3,106 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import MobileReduceSpaceCarousel from './MobileReduceSpaceCarousel';
 import { useRouter } from 'next/navigation';
-
-interface WishlistItem {
-  id: string;
-  src: string;
-  hoverSrc: string;
-  title: string;
-  price: string;
-  discount: string;
-}
-
-const images = [
-  { src: '/reduce1.jpg', hoverSrc: '/reduce1-hover.jpg', title: '2 in 1 Reclining Gravity Chair and Lay Flat Sun lounger- Dark Green', price: '£34.99', oldPrice: '£99.99', discount: '-65%' },
-  { src: '/reduce2.jpg', hoverSrc: '/reduce2-hover.jpg', title: '2 in 1 Reclining Gravity Chair and Lay Flat Sun lounger- Grey', price: '£34.90', oldPrice: '£99.99', discount: '-65%' },
-  { src: '/reduce3.jpg', hoverSrc: '/reduce3-hover.jpg', title: 'Zero Gravity Chair with Cushion & Pillow – Black', price: '£60.99', oldPrice: '£119.99', discount: '-49%' },
-  { src: '/reduce4.jpg', hoverSrc: '/reduce4-hover.jpg', title: 'Zero Gravity Chair with Cushion & Pillow – Grey', price: '£60.99', oldPrice: '£119.99', discount: '-49%' },
-];
-
-const basketIcon = (
-  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-);
+import { useReduceSpace } from '@/context/ReduceSpaceContext';
+import OpenModal from './OpenModal';
+import { ExternalLink } from 'lucide-react';
 
 const DesktopReduceSpaceCarousel = () => {
   const router = useRouter();
-  const [hoveredCard, setHoveredCard] = useState<number | null>(null);
-  const [hoveredBtn, setHoveredBtn] = useState<number | null>(null);
-  const [wishlist, setWishlist] = useState<string[]>([]);
+  const { sectionTitle, sectionDescription, products } = useReduceSpace();
+  const [hoveredProduct, setHoveredProduct] = useState<string | null>(null);
+  const [selectedProduct, setSelectedProduct] = useState<string | null>(null);
 
-  useEffect(() => {
-    const savedWishlist = localStorage.getItem('wishlist');
-    if (savedWishlist) {
-      const items = JSON.parse(savedWishlist) as WishlistItem[];
-      setWishlist(items.map(item => item.id));
-    }
-  }, []);
-
-  const handleProductClick = (index: number) => {
-    if (index === 0) { // Index 0 corresponds to the Dark Green chair
-      router.push('/product/2-in-1-reclining-gravity-chair-dark-green');
-    } else if (index === 1) { // Index 1 corresponds to the Grey chair
-      router.push('/product/2-in-1-reclining-gravity-chair-grey');
-    } else if (index === 2) { // Index 2 corresponds to the Black chair
-      router.push('/product/zero-gravity-chair-black');
-    } else if (index === 3) { // Index 3 corresponds to the Grey Zero Gravity chair
-      router.push('/product/zero-gravity-chair-grey');
-    }
+  const handleProductClick = (productId: string) => {
+    setSelectedProduct(productId);
   };
 
-  const toggleWishlist = (id: number) => {
-    setWishlist(prev => {
-      const prefixedId = `reduce_${id}`;
-      const newWishlist = prev.includes(prefixedId) 
-        ? prev.filter(i => i !== prefixedId)
-        : [...prev, prefixedId];
-      
-      try {
-        const existingItems = JSON.parse(localStorage.getItem('wishlist') || '[]');
-        // Ensure we have an array and filter out invalid items
-        const validItems = Array.isArray(existingItems) 
-          ? existingItems.filter(item => 
-              item && 
-              typeof item === 'object' && 
-              'id' in item && 
-              typeof item.id === 'string' && 
-              !item.id.startsWith('reduce_')
-            )
-          : [];
-        
-        // Create new items array only for items that are in the new wishlist
-        const newItems = images
-          .filter((_, i) => newWishlist.includes(`reduce_${i}`))
-          .map((item, i) => ({
-            id: `reduce_${i}`,
-            src: item.src,
-            hoverSrc: item.hoverSrc,
-            title: item.title,
-            price: item.price,
-            discount: item.discount
-          }));
-        
-        const wishlistItems = [...validItems, ...newItems];
-        localStorage.setItem('wishlist', JSON.stringify(wishlistItems));
-        return newWishlist;
-      } catch (error) {
-        console.error('Error handling wishlist:', error);
-        // If there's an error, just update the state without modifying localStorage
-        return newWishlist;
-      }
-    });
+  const handleCloseModal = () => {
+    setSelectedProduct(null);
   };
 
   return (
-    <section style={{width: '100%', height: 'auto', margin: '0 auto 40px', padding: 0, textAlign: 'center'}}>
-      <h2 style={{fontSize: 26, fontWeight: 700, marginBottom: 12, letterSpacing: 0.2}}>REDUCE SPACE</h2>
-      <p style={{
-        fontSize: 17,
-        color: '#666',
-        marginBottom: 40,
-        maxWidth: 600,
-        marginLeft: 'auto',
-        marginRight: 'auto',
-        lineHeight: 1.5
-      }}>
-        Transform your living space with our innovative furniture solutions. Perfect for small apartments and cozy homes.
-      </p>
-      <div style={{
-        display: 'flex',
-        gap: 32,
-        overflowX: 'auto',
-        justifyContent: 'center',
-        padding: '10px 0',
-        width: '100%',
-        boxSizing: 'border-box',
-        marginBottom: 40,
-      }}>
-        {images.map((item, i) => (
-          <div
-            key={i}
-            style={{
-              minWidth: 300,
-              maxWidth: 320,
-              background: '#fff',
-              borderRadius: 16,
-              boxShadow: hoveredCard === i ? '0 8px 32px rgba(34,34,34,0.13)' : '0 2px 16px rgba(34,34,34,0.07)',
-              padding: 0,
-              position: 'relative',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              transition: 'box-shadow 0.22s cubic-bezier(.4,2,.6,1), transform 0.22s cubic-bezier(.4,2,.6,1)',
-              transform: hoveredCard === i ? 'translateY(-6px) scale(1.03)' : 'none',
-              flex: '0 0 auto',
-              cursor: 'pointer',
-            }}
-            onMouseEnter={() => setHoveredCard(i)}
-            onMouseLeave={() => setHoveredCard(null)}
-            onClick={() => handleProductClick(i)}
-          >
-            <div style={{width: '100%', aspectRatio: '4/3', overflow: 'hidden', borderTopLeftRadius: 16, borderTopRightRadius: 16, position: 'relative'}}>
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  toggleWishlist(i);
-                }}
-                style={{
-                  position: 'absolute',
-                  top: 10,
-                  right: 10,
-                  background: 'rgba(255, 255, 255, 0.95)',
-                  border: 'none',
-                  borderRadius: '50%',
-                  width: 44,
-                  height: 44,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  cursor: 'pointer',
-                  zIndex: 2,
-                  boxShadow: '0 2px 12px rgba(0,0,0,0.15)',
-                  transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                  transform: wishlist.includes(`reduce_${i}`) ? 'scale(1.1)' : 'scale(1)',
-                  backdropFilter: 'blur(4px)',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = wishlist.includes(`reduce_${i}`) 
-                    ? 'scale(1.15)' 
-                    : 'scale(1.05)';
-                  e.currentTarget.style.boxShadow = '0 4px 16px rgba(0,0,0,0.2)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = wishlist.includes(`reduce_${i}`) 
-                    ? 'scale(1.1)' 
-                    : 'scale(1)';
-                  e.currentTarget.style.boxShadow = '0 2px 12px rgba(0,0,0,0.15)';
-                }}
+    <section className="py-16 bg-gray-50">
+      <div className="container mx-auto px-4">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl font-bold mb-4">{sectionTitle}</h2>
+          <p className="text-gray-600 max-w-2xl mx-auto">{sectionDescription}</p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          {products.map((product) => (
+            <div
+              key={product.id}
+              className="group relative bg-white rounded-2xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-1"
+            >
+              {/* Статусы товара */}
+              <div className="absolute top-3 left-3 z-10 flex gap-2">
+                {product.isHot && (
+                  <span className="bg-red-500 text-white text-xs px-3 py-1.5 rounded-full font-medium shadow-md">
+                    Hot
+                  </span>
+                )}
+                {product.isSoldOut && (
+                  <span className="bg-gray-500 text-white text-xs px-3 py-1.5 rounded-full font-medium shadow-md">
+                    Sold Out
+                  </span>
+                )}
+                {product.stock && product.stock <= 5 && !product.isSoldOut && (
+                  <span className="bg-yellow-500 text-white text-xs px-3 py-1.5 rounded-full font-medium shadow-md">
+                    Low Stock
+                  </span>
+                )}
+              </div>
+
+              {/* Изображение */}
+              <div 
+                className="relative aspect-square overflow-hidden cursor-pointer"
+                onMouseEnter={() => setHoveredProduct(product.id)}
+                onMouseLeave={() => setHoveredProduct(null)}
+                onClick={() => handleProductClick(product.id)}
               >
-                <div style={{
-                  color: wishlist.includes(`reduce_${i}`) ? '#e53935' : '#e53935',
-                  transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                  transform: wishlist.includes(`reduce_${i}`) ? 'scale(1.1)' : 'scale(1)',
-                }}>
-                  <svg 
-                    width="24" 
-                    height="24" 
-                    viewBox="0 0 24 24" 
-                    fill={wishlist.includes(`reduce_${i}`) ? '#e53935' : 'none'} 
-                    stroke="#e53935" 
-                    strokeWidth="2" 
-                    strokeLinecap="round" 
-                    strokeLinejoin="round"
-                  >
-                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-                  </svg>
+                <Image
+                  src={hoveredProduct === product.id ? product.hoverSrc : product.src}
+                  alt={product.title}
+                  fill
+                  className="object-cover transition-all duration-500 group-hover:scale-110"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-black/0 to-black/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              </div>
+
+              {/* Информация о товаре */}
+              <div className="p-6">
+                <h3 className="text-lg font-semibold mb-3 line-clamp-2 text-gray-800 group-hover:text-black transition-colors">
+                  {product.title}
+                </h3>
+                <div className="flex items-center gap-3 mb-4">
+                  <span className="text-2xl font-bold text-red-600">{product.price}</span>
+                  <span className="text-sm text-gray-500 line-through">{product.oldPrice}</span>
+                  <span className="text-sm font-semibold text-red-600 bg-red-50 px-2 py-1 rounded-full">
+                    {product.discount}
+                  </span>
                 </div>
-              </button>
-              <Image
-                src={hoveredCard === i ? images[i].hoverSrc : images[i].src}
-                alt={images[i].title}
-                width={320}
-                height={240}
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover',
-                  transition: 'filter 0.22s cubic-bezier(.4,2,.6,1), transform 0.22s cubic-bezier(.4,2,.6,1)',
-                  filter: hoveredCard === i ? 'brightness(0.97) saturate(1.08)' : 'none',
-                  transform: hoveredCard === i ? 'scale(1.03)' : 'none',
-                  display: 'block',
-                }}
-              />
-            </div>
-            <div style={{padding: '14px 10px 10px 10px', width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-              <div style={{fontWeight: 600, fontSize: 15, marginBottom: 6, textAlign: 'center', letterSpacing: 0.1}}>{images[i].title}</div>
-              <div style={{ 
-                display: 'flex', 
-                alignItems: 'center', 
-                gap: '8px',
-                marginTop: '8px'
-              }}>
-                <span style={{ 
-                  textDecoration: 'line-through',
-                  color: '#999',
-                  fontSize: '14px'
-                }}>
-                  {images[i].oldPrice}
-                </span>
-                <span style={{ 
-                  fontWeight: '600',
-                  fontSize: '16px',
-                  color: '#e53935'
-                }}>
-                  {images[i].price}
-                </span>
+                <button
+                  onClick={() => handleProductClick(product.id)}
+                  className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-black text-white rounded-xl hover:bg-gray-800 transition-colors font-medium"
+                >
+                  <ExternalLink className="w-4 h-4" />
+                  Open Product
+                </button>
               </div>
             </div>
-            <span style={{
-              position: 'absolute',
-              top: 10,
-              left: 10,
-              background: '#e53935',
-              color: '#fff',
-              fontWeight: 700,
-              fontSize: 14,
-              borderRadius: '50%',
-              width: '47px',
-              height: '47px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              boxShadow: '0 1px 6px 0 rgba(229,57,53,0.10)',
-            }}>{images[i].discount}</span>
-          </div>
-        ))}
-      </div>
-
-      {/* Text blocks section */}
-      <div style={{
-        display: 'flex',
-        justifyContent: 'space-around',
-        alignItems: 'flex-start',
-        padding: '40px 20px',
-        borderTop: '1px solid #eee',
-        marginTop: 40,
-        maxWidth: 1200,
-        margin: '0 auto',
-        gap: 20,
-      }}>
-        <div style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: 8,
-          flex: 1,
-        }}>
-          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#222" strokeWidth="1.5">
-            <path d="M20 7h-3V4H7v3H4v14h16V7zM7 7h10M12 12v6M9 12v6M15 12v6"/>
-          </svg>
-          <span style={{ 
-            fontSize: 16, 
-            fontWeight: 600, 
-            color: '#222',
-            marginBottom: 4,
-          }}>FREE SHIPPING</span>
-          <span style={{ 
-            fontSize: 14, 
-            color: '#666', 
-            textAlign: 'center',
-            lineHeight: 1.4,
-          }}>All over the UK</span>
+          ))}
         </div>
 
-        <div style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: 8,
-          flex: 1,
-        }}>
-          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#222" strokeWidth="1.5">
-            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-          </svg>
-          <span style={{ 
-            fontSize: 16, 
-            fontWeight: 600, 
-            color: '#222',
-            marginBottom: 4,
-          }}>FREE RETURNS</span>
-          <span style={{ 
-            fontSize: 14, 
-            color: '#666', 
-            textAlign: 'center',
-            lineHeight: 1.4,
-          }}>30-days free return policy.</span>
-        </div>
-
-        <div style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: 8,
-          flex: 1,
-        }}>
-          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#222" strokeWidth="1.5">
-            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-          </svg>
-          <span style={{ 
-            fontSize: 16, 
-            fontWeight: 600, 
-            color: '#222',
-            marginBottom: 4,
-          }}>SECURED PAYMENTS</span>
-          <span style={{ 
-            fontSize: 14, 
-            color: '#666', 
-            textAlign: 'center',
-            lineHeight: 1.4,
-          }}>We accept all credit cards.</span>
-        </div>
-
-        <div style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: 8,
-          flex: 1,
-        }}>
-          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#222" strokeWidth="1.5">
-            <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
-          </svg>
-          <span style={{ 
-            fontSize: 16, 
-            fontWeight: 600, 
-            color: '#222',
-            marginBottom: 4,
-          }}>HELP CENTER</span>
-          <span style={{ 
-            fontSize: 14, 
-            color: '#666', 
-            textAlign: 'center',
-            lineHeight: 1.4,
-          }}>Dedicated 10:30 - 18:00 support</span>
-        </div>
+        {/* Модальное окно */}
+        {selectedProduct && (
+          <OpenModal
+            product={products.find(p => p.id === selectedProduct)!}
+            isOpen={!!selectedProduct}
+            onClose={handleCloseModal}
+          />
+        )}
       </div>
     </section>
   );
