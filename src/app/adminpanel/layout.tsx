@@ -11,7 +11,7 @@ const menuItems = [
   { name: 'Orders', path: '/adminpanel/orders', icon: '🛒' },
   { name: 'Users', path: '/adminpanel/users', icon: '👥' },
   { name: 'Edit main page', path: '', icon: '', isTitle: true },
-  { name: 'Reduce Spice Section', path: '/adminpanel/reduce-spice', icon: '🔧' },
+  { name: 'Reduce Space Section', path: '/adminpanel/reduce-space', icon: '🔧' },
   { name: 'Best Sellers Section', path: '/adminpanel/best-sellers', icon: '🔧' },
 ];
 
