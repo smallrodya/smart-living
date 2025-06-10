@@ -13,6 +13,7 @@ const nextConfig = {
       }
     ],
     unoptimized: true,
+    domains: ['res.cloudinary.com'],
   },
   async headers() {
     return [
@@ -62,6 +63,14 @@ const nextConfig = {
         ],
       }
     ];
+  },
+  experimental: {
+    optimizeCss: {
+      inlineThreshold: 0,
+    },
+  },
+  compiler: {
+    styledComponents: true,
   },
 };
 
