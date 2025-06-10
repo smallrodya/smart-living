@@ -107,12 +107,28 @@ function CheckoutPage() {
           return;
         }
 
-        // Set user email from cookie
-        console.log('Setting user email:', userData.email);
-        setForm(prev => ({
-          ...prev,
-          email: userData.email || ''
-        }));
+        // Загружаем полные данные пользователя из базы данных
+        const response = await fetch('/api/user/profile');
+        if (response.ok) {
+          const profileData = await response.json();
+          console.log('Profile data loaded:', profileData);
+          
+          // Заполняем форму данными пользователя
+          setForm(prev => ({
+            ...prev,
+            email: profileData.email || userData.email || '',
+            firstName: profileData.firstName || '',
+            lastName: profileData.lastName || '',
+            company: profileData.company || '',
+            country: profileData.country || 'United Kingdom (UK)',
+            address: profileData.address || '',
+            address2: profileData.address2 || '',
+            city: profileData.city || '',
+            county: profileData.county || '',
+            postcode: profileData.postcode || '',
+            phone: profileData.phone || ''
+          }));
+        }
 
         // Set Smart Coin balance
         console.log('Setting Smart Coin balance:', userData.smartCoins);
@@ -259,22 +275,27 @@ function CheckoutPage() {
 
         // Create order in database
         console.log('Creating order...');
+        const orderData = {
+          items,
+          total: totalWithShipping,
+          shipping,
+          paymentMethod: 'smart_coins',
+          customerDetails: {
+            ...form,
+            email: userData.email
+          },
+          status: 'DONE',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        };
+        console.log('Order data being sent:', orderData);
+
         const orderResponse = await fetch('/api/orders', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({
-            items,
-            total: totalWithShipping,
-            shipping,
-            paymentMethod: 'smart_coins',
-            customerDetails: {
-              ...form,
-              email: userData.email
-            },
-            status: 'DONE'
-          }),
+          body: JSON.stringify(orderData),
         });
 
         if (!orderResponse.ok) {
@@ -282,8 +303,8 @@ function CheckoutPage() {
           throw new Error(errorData.error || 'Failed to create order');
         }
 
-        const orderData = await orderResponse.json();
-        console.log('Order created:', orderData);
+        const orderResult = await orderResponse.json();
+        console.log('Order created:', orderResult);
 
         // Обновляем куки с новым балансом
         if (smartCoinData.userData) {
@@ -297,7 +318,7 @@ function CheckoutPage() {
         clearBasket();
 
         toast.success(`Order placed successfully using Smart Coins!`);
-        router.push("/basket");
+        router.push(`/ordercomplete?orderId=${orderResult._id}`);
         return;
       }
 
@@ -378,23 +399,28 @@ function CheckoutPage() {
 
       // Create order in database
       console.log('Creating order...');
+      const orderData = {
+        items,
+        total: totalWithShipping,
+        shipping,
+        paymentMethod,
+        paymentIntentId: paymentIntent.id,
+        customerDetails: {
+          ...form,
+          email: userData.email
+        },
+        status: 'DONE',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      };
+      console.log('Order data being sent:', orderData);
+
       const orderResponse = await fetch('/api/orders', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          items,
-          total: totalWithShipping,
-          shipping,
-          paymentMethod,
-          paymentIntentId: paymentIntent.id,
-          customerDetails: {
-            ...form,
-            email: userData.email
-          },
-          status: 'DONE'
-        }),
+        body: JSON.stringify(orderData),
       });
 
       if (!orderResponse.ok) {
@@ -402,22 +428,14 @@ function CheckoutPage() {
         throw new Error(errorData.error || 'Failed to create order');
       }
 
-      const orderData = await orderResponse.json();
-      console.log('Order created:', orderData);
-
-      // Обновляем куки с новым балансом
-      if (orderData.userData) {
-        setCookie('user', JSON.stringify(orderData.userData), {
-          maxAge: 30 * 24 * 60 * 60, // 30 дней
-          path: '/'
-        });
-      }
+      const orderResult = await orderResponse.json();
+      console.log('Order created:', orderResult);
 
       // Clear basket
       clearBasket();
 
-      toast.success(`Order placed successfully! You earned ${orderData.smartCoinEarned} Smart Coins!`);
-      router.push("/basket");
+      toast.success(`Order placed successfully! You earned ${orderResult.smartCoinEarned} Smart Coins!`);
+      router.push(`/ordercomplete?orderId=${orderResult._id}`);
     } catch (error) {
       console.error('Error placing order:', error);
       setPaymentError(error instanceof Error ? error.message : "Failed to place order. Please try again.");

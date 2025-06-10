@@ -25,14 +25,25 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   try {
     const orderData = await request.json();
+    console.log('Received order data:', orderData);
+
     const { db } = await connectToDatabase();
 
     // Создаем заказ
     const result = await db.collection('orders').insertOne({
       ...orderData,
-      createdAt: new Date(),
-      updatedAt: new Date()
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
     });
+
+    console.log('Order created with ID:', result.insertedId);
+
+    // Получаем созданный заказ
+    const createdOrder = await db.collection('orders').findOne({
+      _id: result.insertedId
+    });
+
+    console.log('Created order:', createdOrder);
 
     // Начисляем Smart Coin (5% от суммы subtotal)
     const subtotal = orderData.items.reduce((sum: number, item: any) => {
@@ -71,14 +82,24 @@ export async function POST(request: Request) {
         };
         return NextResponse.json({ 
           success: true, 
+          _id: result.insertedId,
           orderId: result.insertedId,
+          total: orderData.total,
+          paymentMethod: orderData.paymentMethod,
           smartCoinEarned: smartCoinAmount,
           userData
         });
       }
-    } else {
-      console.log('User not found for email:', orderData.customerDetails.email);
     }
+
+    return NextResponse.json({ 
+      success: true, 
+      _id: result.insertedId,
+      orderId: result.insertedId,
+      total: orderData.total,
+      paymentMethod: orderData.paymentMethod,
+      smartCoinEarned: smartCoinAmount
+    });
   } catch (error) {
     console.error('Error creating order:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });

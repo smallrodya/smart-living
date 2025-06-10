@@ -2,6 +2,33 @@ import { NextResponse } from 'next/server';
 import { connectToDatabase } from '@/lib/mongodb';
 import { ObjectId } from 'mongodb';
 
+export async function GET(
+  request: Request,
+  { params }: { params: { id: string } }
+) {
+  try {
+    const { db } = await connectToDatabase();
+    const order = await db.collection('orders').findOne({
+      _id: new ObjectId(params.id)
+    });
+
+    if (!order) {
+      return NextResponse.json(
+        { error: 'Order not found' },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json(order);
+  } catch (error) {
+    console.error('Error fetching order:', error);
+    return NextResponse.json(
+      { error: 'Failed to fetch order' },
+      { status: 500 }
+    );
+  }
+}
+
 export async function PATCH(
   request: Request,
   { params }: { params: { id: string } }
