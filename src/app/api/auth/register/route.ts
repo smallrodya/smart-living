@@ -1,24 +1,18 @@
 import { NextResponse } from 'next/server';
-import { MongoClient, ObjectId } from 'mongodb';
+import { connectToDatabase } from '@/lib/mongodb';
+import { ObjectId } from 'mongodb';
 import bcrypt from 'bcryptjs';
-
-const uri = process.env.MONGODB_URI as string;
-if (!uri) {
-  throw new Error('Please define the MONGODB_URI environment variable inside .env.local');
-}
 
 export async function POST(request: Request) {
   try {
     const { firstName, lastName, email, password } = await request.json();
 
     // Подключение к MongoDB
-    const client = await MongoClient.connect(uri);
-    const db = client.db('smartliving');
+    const { db } = await connectToDatabase();
 
     // Проверка существования пользователя
     const existingUser = await db.collection('users').findOne({ email });
     if (existingUser) {
-      await client.close();
       return NextResponse.json(
         { message: 'User with this email already exists' },
         { status: 400 }
@@ -41,8 +35,6 @@ export async function POST(request: Request) {
 
     // Сохранение пользователя в базу данных
     const result = await db.collection('users').insertOne(newUser);
-
-    await client.close();
 
     // Возвращаем данные пользователя без пароля
     const userResponse = {

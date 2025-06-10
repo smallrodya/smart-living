@@ -1,15 +1,10 @@
 import { NextResponse } from 'next/server';
-import { MongoClient, ObjectId } from 'mongodb';
-
-const uri = process.env.MONGODB_URI as string;
-if (!uri) {
-  throw new Error('Please define the MONGODB_URI environment variable inside .env.local');
-}
+import { connectToDatabase } from '@/lib/mongodb';
+import { ObjectId } from 'mongodb';
 
 export async function GET() {
   try {
-    const client = await MongoClient.connect(uri);
-    const db = client.db('smartliving');
+    const { db } = await connectToDatabase();
 
     const users = await db.collection('users')
       .find({})
@@ -17,8 +12,6 @@ export async function GET() {
         password: 0, // Исключаем пароль из результата
       })
       .toArray();
-
-    await client.close();
 
     // Преобразуем ObjectId в строки для JSON
     const formattedUsers = users.map(user => ({
@@ -48,12 +41,9 @@ export async function DELETE(request: Request) {
       );
     }
 
-    const client = await MongoClient.connect(uri);
-    const db = client.db('smartliving');
+    const { db } = await connectToDatabase();
 
     const result = await db.collection('users').deleteOne({ _id: new ObjectId(id) });
-
-    await client.close();
 
     if (result.deletedCount === 0) {
       return NextResponse.json(
@@ -92,8 +82,7 @@ export async function PATCH(request: Request) {
       );
     }
 
-    const client = await MongoClient.connect(uri);
-    const db = client.db('smartliving');
+    const { db } = await connectToDatabase();
 
     const result = await db.collection('users').updateOne(
       { _id: new ObjectId(id) },
@@ -101,7 +90,6 @@ export async function PATCH(request: Request) {
     );
 
     if (result.matchedCount === 0) {
-      await client.close();
       return NextResponse.json(
         { error: 'User not found' },
         { status: 404 }
@@ -111,14 +99,11 @@ export async function PATCH(request: Request) {
     // Получаем обновленные данные пользователя
     const updatedUser = await db.collection('users').findOne({ _id: new ObjectId(id) });
     if (!updatedUser) {
-      await client.close();
       return NextResponse.json(
         { error: 'User not found after update' },
         { status: 404 }
       );
     }
-
-    await client.close();
 
     return NextResponse.json({ 
       message: 'Smart Coins updated successfully',

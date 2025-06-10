@@ -1,11 +1,7 @@
 import { NextResponse } from 'next/server';
-import { MongoClient, ObjectId } from 'mongodb';
+import { connectToDatabase } from '@/lib/mongodb';
+import { ObjectId } from 'mongodb';
 import bcrypt from 'bcryptjs';
-
-const uri = process.env.MONGODB_URI as string;
-if (!uri) {
-  throw new Error('Please define the MONGODB_URI environment variable inside .env.local');
-}
 
 export async function POST(request: Request) {
   try {
@@ -18,12 +14,8 @@ export async function POST(request: Request) {
       );
     }
 
-    const client = await MongoClient.connect(uri);
-    const db = client.db('smartliving');
-
+    const { db } = await connectToDatabase();
     const user = await db.collection('users').findOne({ email });
-
-    await client.close();
 
     if (!user) {
       return NextResponse.json(

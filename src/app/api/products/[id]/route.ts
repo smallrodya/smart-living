@@ -1,10 +1,8 @@
 import { NextResponse } from 'next/server';
-import { MongoClient, ObjectId } from 'mongodb';
+import { connectToDatabase } from '@/lib/mongodb';
+import { ObjectId } from 'mongodb';
 
 export const dynamic = 'force-dynamic';
-
-const uri = process.env.MONGODB_URI;
-const client = new MongoClient(uri!);
 
 export async function GET(
   request: Request,
@@ -17,9 +15,8 @@ export async function GET(
       return NextResponse.json({ error: 'Product ID is required' }, { status: 400 });
     }
 
-    await client.connect();
-    const database = client.db('smartliving');
-    const products = database.collection('products');
+    const { db } = await connectToDatabase();
+    const products = db.collection('products');
     
     const product = await products.findOne({ _id: new ObjectId(id) });
     

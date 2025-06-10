@@ -1,12 +1,9 @@
 import { NextResponse } from 'next/server';
-import { MongoClient } from 'mongodb';
+import { connectToDatabase } from '@/lib/mongodb';
 import { Product } from '@/models/Product';
-import { ObjectId } from 'mongodb';
+import { ObjectId, MongoClient } from 'mongodb';
 
 export const dynamic = 'force-dynamic';
-
-const uri = process.env.MONGODB_URI;
-const client = new MongoClient(uri!);
 
 // Глобальная переменная для хранения всех активных SSE соединений
 let clients: Set<ReadableStreamDefaultController> = new Set();
@@ -21,9 +18,8 @@ function notifyClients(type: string) {
 
 export async function GET() {
   try {
-    await client.connect();
-    const database = client.db('smartliving');
-    const products = database.collection('products');
+    const { db } = await connectToDatabase();
+    const products = db.collection('products');
     
     const allProducts = await products.find({}).toArray();
     return NextResponse.json({ products: allProducts });
@@ -36,9 +32,8 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    await client.connect();
-    const database = client.db('smartliving');
-    const products = database.collection('products');
+    const { db } = await connectToDatabase();
+    const products = db.collection('products');
     
     const productData = {
       ...body,
@@ -72,9 +67,8 @@ export async function PUT(request: Request) {
     }
     
     const body = await request.json();
-    await client.connect();
-    const database = client.db('smartliving');
-    const products = database.collection('products');
+    const { db } = await connectToDatabase();
+    const products = db.collection('products');
     
     // Удаляем _id из данных обновления
     const { _id, ...updateData } = body;
@@ -120,9 +114,8 @@ export async function DELETE(request: Request) {
       return NextResponse.json({ error: 'Product ID is required' }, { status: 400 });
     }
     
-    await client.connect();
-    const database = client.db('smartliving');
-    const products = database.collection('products');
+    const { db } = await connectToDatabase();
+    const products = db.collection('products');
     
     await products.deleteOne({ _id: new ObjectId(id) });
     
