@@ -24,7 +24,6 @@ interface Product {
   discount?: number;
   isSoldOut?: boolean;
   isHot?: boolean;
-  additionalCategories?: Array<{ category: string; subcategory: string }>;
 }
 
 export default function ThreeDThrowsTowelsPage() {
@@ -67,7 +66,7 @@ export default function ThreeDThrowsTowelsPage() {
                 product.throwsTowelsStylePrices?.some(style => style.size === '3D'));
       });
       
-      console.log('Отфильтрованные товарыы:', filteredProducts);
+      console.log('Отфильтрованные товары:', filteredProducts);
       setProducts(filteredProducts);
     } catch (error) {
       console.error('Error fetching products:', error);
