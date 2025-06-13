@@ -9,6 +9,7 @@ const menuItems = [
   { name: 'Products', path: '/adminpanel/products', icon: '📦' },
   { name: 'Orders', path: '/adminpanel/orders', icon: '🛒' },
   { name: 'Users', path: '/adminpanel/users', icon: '👥' },
+  { name: 'Support', path: '/adminpanel/support', icon: '⚙️' },
 ];
 
 export default function AdminLayout({

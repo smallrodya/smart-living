@@ -139,10 +139,13 @@ const rugsMatsSizes = [
   '60 x 220 cm',
   '67 x 220 cm',
   '80 x 150 cm',
+  '80 x 200 cm',
   '80 x 300 cm',
   '120 x 170 cm',
+  '120 x 180 cm',
   '160 x 230 cm',
-  '200 x 290 cm'
+  '200 x 290 cm',
+  '200 x 300 cm'
 ];
 
 const rugsMatsStyles = [
@@ -268,8 +271,11 @@ const footwearSubcategories = [
 
 const footwearSizes = [
   'UK 3-4',
+  'UK 4-5',
   'UK 5-6',
+  'UK 6-7',
   'UK 7-8',
+  'UK 8-9',
   'UK 9-10',
   'UK 11-12',
   'Small',
