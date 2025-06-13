@@ -161,7 +161,7 @@ export default function FAQPage() {
                       <span className="text-red-600 mr-2">Q:</span>
                       <div>
                         <span className="font-semibold text-gray-900">How can I contact customer support?</span>
-                        <p className="text-gray-600 mt-1">You can reach us through the contact form on our "Contact" page, by phone, or email. Our customer service is available Monday to Friday, 10:30 AM to 6:00 PM.</p>
+                        <p className="text-gray-600 mt-1">You can reach us through the contact form on our "Contact" page, by phone, or email. Our customer service is available Monday to Friday, 9:00 AM to 6:00 PM.</p>
                       </div>
                     </li>
                     <li className="flex items-start">

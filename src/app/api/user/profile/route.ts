@@ -12,8 +12,8 @@ if (!uri) {
 export async function GET(request: Request) {
   try {
     // Проверяем наличие данных пользователя в куках
-    const cookieStore = cookies();
-    const userCookie = cookieStore.get('user');
+    const cookieStore = await cookies();
+    const userCookie = await cookieStore.get('user');
 
     if (!userCookie) {
       return NextResponse.json(
@@ -65,8 +65,8 @@ export async function POST(request: Request) {
   let client;
   try {
     // Проверяем наличие данных пользователя в куках
-    const cookieStore = cookies();
-    const userCookie = cookieStore.get('user');
+    const cookieStore = await cookies();
+    const userCookie = await cookieStore.get('user');
 
     if (!userCookie) {
       return NextResponse.json(

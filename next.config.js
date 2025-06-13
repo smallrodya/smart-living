@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  allowedDevOrigins: ['192.168.0.8'],
   images: {
     remotePatterns: [
       {
@@ -63,11 +64,6 @@ const nextConfig = {
         ],
       }
     ];
-  },
-  experimental: {
-    optimizeCss: {
-      inlineThreshold: 0,
-    },
   },
   compiler: {
     styledComponents: true,
