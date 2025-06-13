@@ -10,6 +10,7 @@ import Footer from "../components/Footer";
 import CookieBanner from "../components/CookieBanner";
 import Blog from "../components/Blog";
 import ThrowAndCurtainSection from "../components/BeddingAndRugsSection";
+import FeaturesSection from '@/components/FeaturesSection';
 
 export default function Home() {
   useEffect(() => {
@@ -27,17 +28,18 @@ export default function Home() {
   }, []);
 
   return (
-    <>
+    <main>
       <Header />
       <CategoriesSection />
       <Banner />
       <ReduceSpaceCarousel />
+      <FeaturesSection />
       <ThrowAndCurtainSection />
       <BestSellersSlider />
       <Blog />
       <SubscribeSection />
       <Footer />
       <CookieBanner />
-    </>
+    </main>
   );
 }
