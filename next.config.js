@@ -1,7 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  allowedDevOrigins: ['192.168.0.8'],
   images: {
     remotePatterns: [
       {
@@ -14,7 +13,6 @@ const nextConfig = {
       }
     ],
     unoptimized: true,
-    domains: ['res.cloudinary.com'],
   },
   async headers() {
     return [
@@ -64,9 +62,6 @@ const nextConfig = {
         ],
       }
     ];
-  },
-  compiler: {
-    styledComponents: true,
   },
 };
 
