@@ -5,6 +5,7 @@ import PopupBanner from '@/components/PopupBanner';
 import MobileLayout from '@/components/MobileLayout';
 import { Toaster } from 'react-hot-toast';
 import { BasketProvider } from '@/context/BasketContext';
+import TechSupport from '@/components/TechSupport';
 
 const inter = Inter({
   subsets: ["latin"],
@@ -49,6 +50,7 @@ export default function RootLayout({
           </MobileLayout>
         </BasketProvider>
         <Toaster position="top-right" />
+        <TechSupport />
       </body>
     </html>
   );
