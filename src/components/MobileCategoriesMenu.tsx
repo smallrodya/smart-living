@@ -29,6 +29,7 @@ const categories: Category[] = [
           { label: 'Complete Bedding Sets', href: '/shop/complete-bedding-set' },
           { label: 'Fitted Sheets', href: '/shop/fitted-sheets' },
           { label: 'Pillowcases', href: '/shop/pillowcases' },
+          { label: 'Cushions', href: '/shop/cushions' },
           { label: 'Fleece Bedding', href: '/shop/fleece-bedding' },
           { label: 'Weighted Blankets', href: '/shop/weighted-blankets' },
           { label: 'Kids Beding', href: '/shop/kids-bedding' },
@@ -44,6 +45,8 @@ const categories: Category[] = [
           { label: '3D', href: '/shop/3d' },
           { label: 'Teddy', href: '/shop/teddy' },
           { label: 'Hotel Quality', href: '/shop/hotel-quality' },
+          { label: 'Housewife Pillowcase', href: '/shop/housewife-pillowcase' },
+          { label: 'Oxford Pillowcase', href: '/shop/oxford-pillowcase' },
         ],
       },
       {
@@ -150,6 +153,8 @@ const categories: Category[] = [
           { label: 'Plain', href: '/shop/plain-throws-towels' },
           { label: '3D', href: '/shop/3d-throws-towels' },
           { label: 'Chunky Hand Knitted', href: '/shop/chunky-hand-knitted-throws-towels' },
+          { label: 'Large', href: '/shop/large-throws-towels' },
+          { label: 'XLarge', href: '/shop/xlarge-throws-towels' },
         ],
       },
       {
