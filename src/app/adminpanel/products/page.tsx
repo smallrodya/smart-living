@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import { Plus, Search, Loader2, Upload } from 'lucide-react';
+import { Plus, Search, Loader2, Upload, Download } from 'lucide-react';
 import AddProductModal from '../../../components/AddProductModal';
 import EditProductModal from '../../../components/EditProductModal';
 import UploadCSVModal from '../../../components/UploadCSVModal';
@@ -518,6 +518,140 @@ export default function ProductsPage() {
     }, 3000);
   };
 
+  // Функция для экспорта продуктов в CSV
+  const exportToCSV = () => {
+    // Создаем заголовки CSV
+    const headers = [
+      'Title',
+      'Description',
+      'Features',
+      'Category',
+      'Subcategory',
+      'Is Sold Out',
+      'Is Hot',
+      'Is Clearance',
+      'Clearance Discount',
+      'Images',
+      // Bedding specific
+      'Bedding Sizes',
+      'Bedding Styles',
+      'Bedding Colors',
+      // Rugs & Mats specific
+      'Rugs & Mats Type',
+      'Rugs & Mats Sizes',
+      'Rugs & Mats Colors',
+      'Rugs & Mats Styles',
+      // Throws & Towels specific
+      'Throws & Towels Style Prices',
+      'Throws & Towels Styles',
+      'Throws & Towels Colors',
+      // Curtains specific
+      'Curtains Sizes',
+      'Curtains Colors',
+      // Clothing specific
+      'Clothing Style Prices',
+      'Clothing Styles',
+      'Clothing Colors',
+      // Footwear specific
+      'Footwear Sizes',
+      'Footwear Colors',
+      // Outdoor specific
+      'Outdoor Price',
+      'Outdoor Colors',
+      // Additional categories
+      'Additional Categories'
+    ];
+
+    // Преобразуем данные продуктов в строки CSV
+    const rows = products.map(product => {
+      // Функция для форматирования массивов размеров и цен
+      const formatSizes = (sizes: any[]) => {
+        if (!sizes) return '';
+        return sizes.map(size => 
+          `${size.size}: £${size.regularPrice}->£${size.salePrice} (SKU: ${size.sku}, Stock: ${size.stock})`
+        ).join('; ');
+      };
+
+      // Функция для форматирования массивов
+      const formatArray = (arr: any[]) => {
+        if (!arr) return '';
+        return arr.join('; ');
+      };
+
+      // Функция для форматирования outdoor price
+      const formatOutdoorPrice = (price: any) => {
+        if (!price) return '';
+        return `SKU: ${price.sku}, Regular: £${price.regularPrice}, Sale: £${price.salePrice}, Stock: ${price.stock}`;
+      };
+
+      // Функция для форматирования дополнительных категорий
+      const formatAdditionalCategories = (categories: any[]) => {
+        if (!categories) return '';
+        return categories.map(cat => 
+          `${cat.category}${cat.subcategory ? ` - ${cat.subcategory}` : ''}`
+        ).join('; ');
+      };
+
+      return [
+        product.title,
+        product.description,
+        product.features,
+        product.category,
+        product.subcategory,
+        product.isSoldOut ? 'Yes' : 'No',
+        product.isHot ? 'Yes' : 'No',
+        product.isClearance ? 'Yes' : 'No',
+        product.clearanceDiscount || '',
+        formatArray(product.images),
+        // Bedding
+        formatSizes(product.beddingSizes),
+        formatArray(product.beddingStyles),
+        formatArray(product.beddingColors),
+        // Rugs & Mats
+        product.rugsMatsType || '',
+        formatSizes(product.rugsMatsSizes),
+        formatArray(product.rugsMatsColors),
+        formatArray(product.rugsMatsStyles),
+        // Throws & Towels
+        formatSizes(product.throwsTowelsStylePrices),
+        formatArray(product.throwsTowelsStyles),
+        formatArray(product.throwsTowelsColors),
+        // Curtains
+        formatSizes(product.curtainsSizes),
+        formatArray(product.curtainsColors),
+        // Clothing
+        formatSizes(product.clothingStylePrices),
+        formatArray(product.clothingStyles),
+        formatArray(product.clothingColors),
+        // Footwear
+        formatSizes(product.footwearSizes),
+        formatArray(product.footwearColors),
+        // Outdoor
+        formatOutdoorPrice(product.outdoorPrice),
+        formatArray(product.outdoorColors),
+        // Additional categories
+        formatAdditionalCategories(product.additionalCategories)
+      ];
+    });
+
+    // Создаем CSV контент
+    const csvContent = [
+      headers.join(','),
+      ...rows.map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(','))
+    ].join('\n');
+
+    // Создаем Blob и скачиваем файл
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', `products_export_${new Date().toISOString().split('T')[0]}.csv`);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {showConfetti && (
@@ -579,6 +713,13 @@ export default function ProductsPage() {
           >
             <Upload className="h-5 w-5" />
             Import CSV
+          </button>
+          <button
+            className="flex items-center gap-2 px-4 py-2 text-white bg-green-600 hover:bg-green-700 rounded-lg transition-colors"
+            onClick={exportToCSV}
+          >
+            <Download className="h-5 w-5" />
+            Export CSV
           </button>
           <button
             className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors"
