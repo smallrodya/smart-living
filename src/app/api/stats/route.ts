@@ -183,7 +183,7 @@ export async function POST(request: Request) {
       { page },
       {
         $inc: { total: 1 },
-        $push: {
+        $addToSet: {
           dailyViews: {
             date: today,
             count: 1
@@ -193,9 +193,13 @@ export async function POST(request: Request) {
             count: 1
           }
         },
-        $inc: {
-          [`deviceStats.${deviceType}`]: 1,
-          [`browserStats.${browser}`]: 1
+        $set: {
+          deviceStats: {
+            [deviceType]: 1
+          },
+          browserStats: {
+            [browser]: 1
+          }
         }
       },
       { upsert: true }

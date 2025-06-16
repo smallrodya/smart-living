@@ -6,6 +6,7 @@ import MobileLayout from '@/components/MobileLayout';
 import { Toaster } from 'react-hot-toast';
 import { BasketProvider } from '@/context/BasketContext';
 import TechSupport from '@/components/TechSupport';
+import Providers from './providers';
 
 const inter = Inter({
   subsets: ["latin"],
@@ -43,14 +44,16 @@ export default function RootLayout({
         <link rel="shortcut icon" href="/site-ico.ico" />
       </head>
       <body className={inter.className}>
-        <BasketProvider>
-          <MobileLayout>
-            {children}
-            <PopupBanner />
-          </MobileLayout>
-        </BasketProvider>
+        <Providers>
+          <BasketProvider>
+            <MobileLayout>
+              {children}
+              <PopupBanner />
+            </MobileLayout>
+          </BasketProvider>
+          <TechSupport />
+        </Providers>
         <Toaster position="top-right" />
-        <TechSupport />
       </body>
     </html>
   );
