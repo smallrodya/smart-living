@@ -187,7 +187,13 @@ const rugsMatsSizes = [
   '120 x 180 cm',
   '160 x 230 cm',
   '200 x 290 cm',
-  '200 x 300 cm'
+  '200 x 300 cm',
+  '220 x 44 cm',
+  '49 x 32 cm',
+  'Small',
+  'Medium',
+  'Large',
+  'Round'
 ];
 
 const rugsMatsStyles = [
