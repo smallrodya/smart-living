@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import CookieBanner from '@/components/CookieBanner';
+import QuickViewModal from '@/components/QuickViewModal';
 import { useRouter } from 'next/navigation';
 
 export const dynamic = 'force-dynamic';
@@ -30,6 +31,9 @@ interface WishlistItem {
 const WishlistPage = () => {
   const [wishlistItems, setWishlistItems] = useState<WishlistItem[]>([]);
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
+  const [isRemoving, setIsRemoving] = useState<string | null>(null);
+  const [selectedProduct, setSelectedProduct] = useState<any>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -45,12 +49,17 @@ const WishlistPage = () => {
     }
   }, []);
 
-  const removeFromWishlist = (id: string) => {
-    setWishlistItems(prev => {
-      const newItems = prev.filter(item => item.id !== id);
-      localStorage.setItem('wishlist', JSON.stringify(newItems));
-      return newItems;
-    });
+  const removeFromWishlist = async (id: string) => {
+    setIsRemoving(id);
+    // Add a small delay for animation
+    setTimeout(() => {
+      setWishlistItems(prev => {
+        const newItems = prev.filter(item => item.id !== id);
+        localStorage.setItem('wishlist', JSON.stringify(newItems));
+        return newItems;
+      });
+      setIsRemoving(null);
+    }, 300);
   };
 
   const getImageSrc = (item: WishlistItem, isHovered: boolean): string => {
@@ -64,299 +73,265 @@ const WishlistPage = () => {
     return item.name || item.title || '';
   };
 
+  // Function to clean price string (remove double £ symbols)
+  const cleanPrice = (price: string) => {
+    // Remove all £ symbols and add only one at the beginning
+    const cleanPrice = price.replace(/£/g, '');
+    return `£${cleanPrice}`;
+  };
+
+  // Function to open QuickView modal
+  const openQuickView = async (item: WishlistItem) => {
+    try {
+      // Extract the real MongoDB ObjectId from the prefixed wishlist ID
+      // Wishlist IDs have format like: "fleece_507f1f77bcf86cd799439011", "uk910_507f1f77bcf86cd799439011", etc.
+      const realId = item.id.includes('_') ? item.id.split('_')[1] : item.id;
+      
+      // Fetch product details from API
+      const response = await fetch(`/api/products/${realId}`);
+      if (response.ok) {
+        const product = await response.json();
+        setSelectedProduct(product);
+        setIsModalOpen(true);
+      } else {
+        console.error('Failed to fetch product details');
+        // Show user-friendly error message
+        alert('Unable to load product details. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error fetching product details:', error);
+      // Show user-friendly error message
+      alert('Unable to load product details. Please try again.');
+    }
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedProduct(null);
+  };
+
   return (
     <>
       <Header />
-      <main>
-        <div style={{
-          maxWidth: '1200px',
-          margin: '0 auto',
-          padding: '40px 20px',
-          minHeight: '100vh',
-          marginTop: '40px'
-        }}>
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '20px',
-            marginBottom: '40px'
-          }}>
+      
+      {/* Hero Section */}
+      <div className="relative bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 min-h-[300px] flex items-center justify-center overflow-hidden">
+        {/* Animated background elements */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-blue-400/20 to-purple-600/20 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-tr from-emerald-400/20 to-teal-600/20 rounded-full blur-3xl animate-pulse" style={{animationDelay: '2s'}}></div>
+        </div>
+        
+        <div className="relative z-10 text-center">
+          <div className="flex items-center justify-center mb-6">
             <button
               onClick={() => router.back()}
-              style={{
-                background: 'none',
-                border: 'none',
-                cursor: 'pointer',
-                padding: '8px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-                color: '#666',
-                fontSize: '16px',
-                transition: 'color 0.2s ease'
-              }}
-              onMouseEnter={(e) => e.currentTarget.style.color = '#222'}
-              onMouseLeave={(e) => e.currentTarget.style.color = '#666'}
+              className="group flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors duration-300 mr-8"
             >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M19 12H5M12 19l-7-7 7-7"/>
-              </svg>
-              Back
+              <div className="p-2 rounded-full bg-white/80 backdrop-blur-sm group-hover:bg-white transition-all duration-300 shadow-lg group-hover:shadow-xl">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M19 12H5M12 19l-7-7 7-7"/>
+                </svg>
+              </div>
+              <span className="font-medium">Back</span>
             </button>
-            <h1 style={{
-              fontSize: '32px',
-              fontWeight: 700,
-              color: '#222',
-              margin: 0
-            }}>Wishlist</h1>
+            
+            <div className="flex items-center gap-4">
+              <div className="p-4 rounded-2xl bg-white/80 backdrop-blur-sm shadow-xl">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-red-500">
+                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                </svg>
+              </div>
+              <div className="text-left">
+                <h1 className="text-4xl font-bold bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent mb-2">
+                  My Wishlist
+                </h1>
+                <p className="text-gray-600 font-medium">
+                  {wishlistItems.length} {wishlistItems.length === 1 ? 'item' : 'items'} saved
+                </p>
+              </div>
+            </div>
           </div>
+        </div>
+      </div>
 
+      <main className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+        <div className="max-w-7xl mx-auto px-4 py-12">
           {wishlistItems.length === 0 ? (
-            <div style={{
-              textAlign: 'center',
-              padding: '60px 20px',
-              background: '#f8f9fa',
-              borderRadius: '20px'
-            }}>
-              <svg
-                width="64"
-                height="64"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="#666"
-                strokeWidth="2"
-                style={{ marginBottom: '20px' }}
-              >
-                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-              </svg>
-              <h2 style={{
-                fontSize: '24px',
-                fontWeight: 600,
-                color: '#444',
-                marginBottom: '12px'
-              }}>Your wishlist is empty</h2>
-              <p style={{
-                fontSize: '16px',
-                color: '#666',
-                marginBottom: '24px'
-              }}>Add items to your wishlist to save them for later</p>
-              <button
-                onClick={() => router.push('/')}
-                style={{
-                  background: '#222',
-                  color: '#fff',
-                  border: 'none',
-                  borderRadius: '12px',
-                  padding: '14px 28px',
-                  fontSize: '16px',
-                  fontWeight: 600,
-                  cursor: 'pointer',
-                  transition: 'all 0.2s ease'
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = 'translateY(-2px)';
-                  e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.1)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = 'translateY(0)';
-                  e.currentTarget.style.boxShadow = 'none';
-                }}
-              >
-                Continue Shopping
-              </button>
+            <div className="text-center py-20">
+              <div className="max-w-md mx-auto">
+                <div className="relative mb-8">
+                  <div className="w-32 h-32 mx-auto bg-gradient-to-br from-red-100 to-pink-100 rounded-full flex items-center justify-center shadow-2xl">
+                    <svg
+                      width="64"
+                      height="64"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      className="text-red-500"
+                    >
+                      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                    </svg>
+                  </div>
+                  {/* Floating hearts animation */}
+                  <div className="absolute -top-4 -right-4 w-6 h-6 bg-red-400 rounded-full animate-bounce" style={{animationDelay: '0.5s'}}></div>
+                  <div className="absolute -bottom-4 -left-4 w-4 h-4 bg-pink-400 rounded-full animate-bounce" style={{animationDelay: '1s'}}></div>
+                </div>
+                
+                <h2 className="text-3xl font-bold text-gray-800 mb-4">
+                  Your wishlist is empty
+                </h2>
+                <p className="text-gray-600 mb-8 text-lg leading-relaxed">
+                  Start building your dream collection by adding items you love to your wishlist
+                </p>
+                
+                <button
+                  onClick={() => router.push('/')}
+                  className="group relative inline-flex items-center gap-3 bg-gradient-to-r from-gray-900 to-gray-700 text-white px-8 py-4 rounded-2xl font-semibold text-lg shadow-2xl hover:shadow-3xl transition-all duration-300 transform hover:-translate-y-1"
+                >
+                  <span>Start Shopping</span>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="group-hover:translate-x-1 transition-transform duration-300">
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                  </svg>
+                </button>
+              </div>
             </div>
           ) : (
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
-              gap: '32px'
-            }}>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
               {wishlistItems.map((item) => (
                 <div
                   key={item.id}
-                  style={{
-                    background: '#fff',
-                    borderRadius: '20px',
-                    boxShadow: hoveredItem === item.id 
-                      ? '0 8px 32px rgba(34,34,34,0.12)' 
-                      : '0 2px 16px rgba(34,34,34,0.07)',
-                    overflow: 'hidden',
-                    position: 'relative',
-                    transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                    transform: hoveredItem === item.id ? 'translateY(-4px)' : 'none'
-                  }}
+                  className={`group relative bg-white rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 overflow-hidden transform hover:-translate-y-2 ${
+                    isRemoving === item.id ? 'scale-95 opacity-0' : 'scale-100 opacity-100'
+                  }`}
                   onMouseEnter={() => setHoveredItem(item.id)}
                   onMouseLeave={() => setHoveredItem(null)}
                 >
-                  <div style={{
-                    width: '100%',
-                    aspectRatio: '4/3',
-                    position: 'relative',
-                    overflow: 'hidden'
-                  }}>
+                  {/* Product Image */}
+                  <div className="relative aspect-[4/3] overflow-hidden">
                     <Image
                       src={getImageSrc(item, hoveredItem === item.id)}
                       alt={getItemName(item)}
                       fill
-                      style={{
-                        objectFit: 'cover',
-                        transition: 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
-                        transform: hoveredItem === item.id ? 'scale(1.05)' : 'scale(1)'
-                      }}
+                      className="object-cover transition-transform duration-700 group-hover:scale-110"
                     />
-                    <button
-                      onClick={() => removeFromWishlist(item.id)}
-                      style={{
-                        position: 'absolute',
-                        top: '12px',
-                        right: '12px',
-                        background: 'rgba(255, 255, 255, 0.95)',
-                        border: 'none',
-                        borderRadius: '50%',
-                        width: '44px',
-                        height: '44px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        cursor: 'pointer',
-                        boxShadow: '0 2px 12px rgba(0,0,0,0.15)',
-                        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                        backdropFilter: 'blur(4px)'
-                      }}
-                    >
-                      <svg
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="#e53935"
-                        stroke="#e53935"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
+                    
+                    {/* Gradient overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    
+                    {/* Discount badge */}
+                    <div className="absolute top-4 left-4">
+                      <div className="bg-gradient-to-r from-red-500 to-pink-500 text-white font-bold text-sm px-3 py-2 rounded-full shadow-lg transform rotate-12">
+                        {item.discount}
+                      </div>
+                    </div>
+                    
+                    {/* Action buttons */}
+                    <div className="absolute top-4 right-4 flex flex-col gap-3 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-4 group-hover:translate-x-0">
+                      {/* Remove button */}
+                      <button
+                        onClick={() => removeFromWishlist(item.id)}
+                        className="p-3 bg-white/90 backdrop-blur-sm rounded-full shadow-lg hover:bg-red-50 hover:shadow-xl transition-all duration-300 group/btn"
                       >
-                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-                      </svg>
-                    </button>
-                    <button
-                      onClick={() => {/* Add to cart functionality */}}
-                      style={{
-                        position: 'absolute',
-                        top: '64px',
-                        right: '12px',
-                        background: 'rgba(255, 255, 255, 0.95)',
-                        border: 'none',
-                        borderRadius: '50%',
-                        width: '44px',
-                        height: '44px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        cursor: 'pointer',
-                        boxShadow: '0 2px 12px rgba(0,0,0,0.15)',
-                        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                        backdropFilter: 'blur(4px)'
-                      }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.transform = 'scale(1.1)';
-                        e.currentTarget.style.boxShadow = '0 4px 16px rgba(0,0,0,0.2)';
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.transform = 'scale(1)';
-                        e.currentTarget.style.boxShadow = '0 2px 12px rgba(0,0,0,0.15)';
-                      }}
-                    >
-                      <svg
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="#000"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
+                        <svg
+                          width="20"
+                          height="20"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          className="text-red-500 group-hover/btn:text-red-600 transition-colors duration-300"
+                        >
+                          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                        </svg>
+                      </button>
+                      
+                      {/* Add to cart button */}
+                      <button
+                        onClick={() => {/* Add to cart functionality */}}
+                        className="p-3 bg-white/90 backdrop-blur-sm rounded-full shadow-lg hover:bg-green-50 hover:shadow-xl transition-all duration-300 group/btn"
                       >
-                        <circle cx="9" cy="21" r="1"/>
-                        <circle cx="20" cy="21" r="1"/>
-                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
-                      </svg>
-                    </button>
-                    <span style={{
-                      position: 'absolute',
-                      top: '12px',
-                      left: '12px',
-                      background: '#e53935',
-                      color: '#fff',
-                      fontWeight: 700,
-                      fontSize: '14px',
-                      borderRadius: '50%',
-                      width: '47px',
-                      height: '47px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      boxShadow: '0 2px 8px rgba(229,57,53,0.2)',
-                      backdropFilter: 'blur(4px)'
-                    }}>
-                      {item.discount}
-                    </span>
+                        <svg
+                          width="20"
+                          height="20"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          className="text-gray-700 group-hover/btn:text-green-600 transition-colors duration-300"
+                        >
+                          <circle cx="9" cy="21" r="1"/>
+                          <circle cx="20" cy="21" r="1"/>
+                          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+                        </svg>
+                      </button>
+                    </div>
                   </div>
-                  <div style={{
-                    padding: '20px'
-                  }}>
-                    <h3 style={{
-                      fontSize: '16px',
-                      fontWeight: 600,
-                      marginBottom: '8px',
-                      color: '#222',
-                      lineHeight: '1.4'
-                    }}>{getItemName(item)}</h3>
-                    <div style={{
-                      color: '#e53935',
-                      fontWeight: 700,
-                      fontSize: '20px',
-                      marginBottom: '12px'
-                    }}>{item.price}</div>
+                  
+                  {/* Product Info */}
+                  <div className="p-6">
+                    <h3 className="font-bold text-lg text-gray-800 mb-3 line-clamp-2 group-hover:text-gray-900 transition-colors duration-300">
+                      {getItemName(item)}
+                    </h3>
+                    
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="text-2xl font-bold text-red-600">
+                        {cleanPrice(item.price)}
+                      </div>
+                      <div className="text-sm text-gray-500 font-medium">
+                        Free Shipping
+                      </div>
+                    </div>
+                    
+                    {/* Sizes */}
                     {item.sizes && (
-                      <div style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: '8px'
-                      }}>
-                        {Object.entries(item.sizes).map(([size, available]) => (
-                          <div
-                            key={size}
-                            style={{
-                              display: 'flex',
-                              alignItems: 'center',
-                              gap: '8px',
-                              fontSize: '14px',
-                              color: available ? '#444' : '#999'
-                            }}
-                          >
-                            <svg
-                              width="16"
-                              height="16"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              stroke={available ? '#222' : '#999'}
-                              strokeWidth="2"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
+                      <div className="space-y-2">
+                        <h4 className="text-sm font-semibold text-gray-700 mb-2">Available Sizes:</h4>
+                        <div className="grid grid-cols-2 gap-2">
+                          {Object.entries(item.sizes).map(([size, available]) => (
+                            <div
+                              key={size}
+                              className={`flex items-center gap-2 p-2 rounded-lg text-sm transition-all duration-300 ${
+                                available 
+                                  ? 'bg-green-50 text-green-700 border border-green-200' 
+                                  : 'bg-gray-50 text-gray-400 border border-gray-200'
+                              }`}
                             >
-                              {available ? (
-                                <path d="M20 6L9 17l-5-5"/>
-                              ) : (
-                                <path d="M18 6L6 18M6 6l12 12"/>
-                              )}
-                            </svg>
-                            {size === 'single' && 'Single (135cm x 200cm)'}
-                            {size === 'double' && 'Double (200cm x 200cm)'}
-                            {size === 'king' && 'King (220cm x 235cm)'}
-                            {size === 'superKing' && 'Super King (220cm x 260cm)'}
-                          </div>
-                        ))}
+                              <svg
+                                width="16"
+                                height="16"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                                className={available ? 'text-green-600' : 'text-gray-400'}
+                              >
+                                {available ? (
+                                  <path d="M20 6L9 17l-5-5"/>
+                                ) : (
+                                  <path d="M18 6L6 18M6 6l12 12"/>
+                                )}
+                              </svg>
+                              <span className="font-medium">
+                                {size === 'single' && 'Single'}
+                                {size === 'double' && 'Double'}
+                                {size === 'king' && 'King'}
+                                {size === 'superKing' && 'Super King'}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
                       </div>
                     )}
+                    
+                    {/* Quick action button */}
+                    <button 
+                      onClick={() => openQuickView(item)}
+                      className="w-full mt-4 bg-gradient-to-r from-gray-900 to-gray-700 text-white py-3 px-4 rounded-xl font-semibold hover:from-gray-800 hover:to-gray-600 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+                    >
+                      View Details
+                    </button>
                   </div>
                 </div>
               ))}
@@ -364,6 +339,15 @@ const WishlistPage = () => {
           )}
         </div>
       </main>
+      
+      {/* QuickView Modal */}
+      {isModalOpen && selectedProduct && (
+        <QuickViewModal 
+          product={selectedProduct} 
+          onClose={closeModal} 
+        />
+      )}
+      
       <Footer />
       <CookieBanner />
     </>

@@ -604,7 +604,7 @@ export default function MyAccountPage() {
                         <h3 className="text-lg font-medium text-gray-900 mb-2">No orders yet</h3>
                         <p className="text-gray-500 mb-6">Start shopping to see your orders here</p>
                         <button
-                          onClick={() => router.push('/shop')}
+                          onClick={() => router.push('/')}
                           className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                         >
                           Start Shopping
@@ -763,46 +763,115 @@ export default function MyAccountPage() {
                     <FiHeart className="mr-2" />
                     My Wishlist
                   </h2>
-                  <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
-                    {wishlistItems.length === 0 ? (
-                      <div className="p-8 text-center">
-                        <div className="mb-4">
-                          <FiHeart className="mx-auto h-12 w-12 text-gray-400" />
+                  
+                  {wishlistItems.length === 0 ? (
+                    <div className="text-center py-20">
+                      <div className="max-w-md mx-auto">
+                        <div className="relative mb-8">
+                          <div className="w-32 h-32 mx-auto bg-gradient-to-br from-red-100 to-pink-100 rounded-full flex items-center justify-center shadow-2xl">
+                            <FiHeart className="w-16 h-16 text-red-500" />
+                          </div>
+                          {/* Floating hearts animation */}
+                          <div className="absolute -top-4 -right-4 w-6 h-6 bg-red-400 rounded-full animate-bounce" style={{animationDelay: '0.5s'}}></div>
+                          <div className="absolute -bottom-4 -left-4 w-4 h-4 bg-pink-400 rounded-full animate-bounce" style={{animationDelay: '1s'}}></div>
                         </div>
-                        <h3 className="text-lg font-medium text-gray-900 mb-2">Your wishlist is empty</h3>
-                        <p className="text-gray-500 mb-6">Add items to your wishlist to save them for later</p>
+                        
+                        <h3 className="text-3xl font-bold text-gray-800 mb-4">
+                          Your wishlist is empty
+                        </h3>
+                        <p className="text-gray-600 mb-8 text-lg leading-relaxed">
+                          Start building your dream collection by adding items you love to your wishlist
+                        </p>
+                        
                         <button
                           onClick={() => router.push('/shop')}
-                          className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                          className="group relative inline-flex items-center gap-3 bg-gradient-to-r from-gray-900 to-gray-700 text-white px-8 py-4 rounded-2xl font-semibold text-lg shadow-2xl hover:shadow-3xl transition-all duration-300 transform hover:-translate-y-1"
                         >
-                          Start Shopping
-                </button>
-              </div>
-                    ) : (
-                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
-                        {wishlistItems.map((item) => (
-                          <div key={item.id} className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow">
-                            <div className="relative aspect-square">
-                              <img
-                                src={item.src}
-                                alt={item.title}
-                                className="w-full h-full object-cover"
-                              />
-                            </div>
-                            <div className="p-4">
-                              <h3 className="text-lg font-medium text-gray-900 mb-2">{item.title}</h3>
-                              <div className="flex items-center justify-between">
-                                <p className="text-lg font-semibold text-gray-900">{item.price}</p>
-                                {item.discount && (
-                                  <span className="text-sm font-medium text-red-600">{item.discount}</span>
-                                )}
+                          <span>Start Shopping</span>
+                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="group-hover:translate-x-1 transition-transform duration-300">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                          </svg>
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                      {wishlistItems.map((item) => (
+                        <div
+                          key={item.id}
+                          className="group relative bg-white rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 overflow-hidden transform hover:-translate-y-2"
+                        >
+                          {/* Product Image */}
+                          <div className="relative aspect-[4/3] overflow-hidden">
+                            <img
+                              src={item.src || item.image || '/placeholder.jpg'}
+                              alt={item.title || item.name}
+                              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                            />
+                            
+                            {/* Gradient overlay */}
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                            
+                            {/* Discount badge */}
+                            {item.discount && (
+                              <div className="absolute top-4 left-4">
+                                <div className="bg-gradient-to-r from-red-500 to-pink-500 text-white font-bold text-sm px-3 py-2 rounded-full shadow-lg transform rotate-12">
+                                  {item.discount}
+                                </div>
                               </div>
+                            )}
+                            
+                            {/* Action buttons */}
+                            <div className="absolute top-4 right-4 flex flex-col gap-3 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-4 group-hover:translate-x-0">
+                              {/* Remove button */}
+                              <button
+                                onClick={() => {
+                                  const updatedItems = wishlistItems.filter(wishlistItem => wishlistItem.id !== item.id);
+                                  setWishlistItems(updatedItems);
+                                  localStorage.setItem('wishlist', JSON.stringify(updatedItems));
+                                }}
+                                className="p-3 bg-white/90 backdrop-blur-sm rounded-full shadow-lg hover:bg-red-50 hover:shadow-xl transition-all duration-300 group/btn"
+                              >
+                                <FiHeart className="w-5 h-5 text-red-500 group-hover/btn:text-red-600 transition-colors duration-300" />
+                              </button>
+                              
+                              {/* Add to cart button */}
+                              <button
+                                onClick={() => {/* Add to cart functionality */}}
+                                className="p-3 bg-white/90 backdrop-blur-sm rounded-full shadow-lg hover:bg-green-50 hover:shadow-xl transition-all duration-300 group/btn"
+                              >
+                                <FiShoppingBag className="w-5 h-5 text-gray-700 group-hover/btn:text-green-600 transition-colors duration-300" />
+                              </button>
                             </div>
                           </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
+                          
+                          {/* Product Info */}
+                          <div className="p-6">
+                            <h3 className="font-bold text-lg text-gray-800 mb-3 line-clamp-2 group-hover:text-gray-900 transition-colors duration-300">
+                              {item.title || item.name}
+                            </h3>
+                            
+                            <div className="flex items-center justify-between mb-4">
+                              <div className="text-2xl font-bold text-red-600">
+                                {item.price}
+                              </div>
+                              <div className="text-sm text-gray-500 font-medium">
+                                Free Shipping
+                              </div>
+                            </div>
+                            
+                            {/* Quick action button */}
+                            <button 
+                              onClick={() => router.push('/wishlist')}
+                              className="w-full mt-4 bg-gradient-to-r from-gray-900 to-gray-700 text-white py-3 px-4 rounded-xl font-semibold hover:from-gray-800 hover:to-gray-600 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+                            >
+                              View Details
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               )}
             </div>
