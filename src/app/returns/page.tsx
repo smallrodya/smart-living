@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import CategoriesSection from "@/components/CategoriesSection";
@@ -20,6 +20,37 @@ declare global {
 }
 
 export default function ReturnsPage() {
+  const [scriptLoaded, setScriptLoaded] = useState(false);
+
+  useEffect(() => {
+    // Проверяем, не загружен ли уже скрипт
+    if (document.querySelector('script[src="https://button.atlast.co/at-last.js"]')) {
+      setScriptLoaded(true);
+      return;
+    }
+
+    // Создаем и загружаем скрипт
+    const script = document.createElement('script');
+    script.src = 'https://button.atlast.co/at-last.js';
+    script.type = 'module';
+    script.onload = () => {
+      setScriptLoaded(true);
+    };
+    script.onerror = () => {
+      console.error('Failed to load at-last script');
+    };
+    
+    document.head.appendChild(script);
+
+    // Очистка при размонтировании
+    return () => {
+      const existingScript = document.querySelector('script[src="https://button.atlast.co/at-last.js"]');
+      if (existingScript) {
+        existingScript.remove();
+      }
+    };
+  }, []);
+
   const formatDate = (date: Date) => {
     return date.toLocaleDateString('en-GB', {
       day: '2-digit',
@@ -190,15 +221,20 @@ export default function ReturnsPage() {
                       In order to start the Automatic Returns, Please click the button below
                     </p>
                     <div className="flex justify-center">
-                      <script type="module" src="https://button.atlast.co/at-last.js"></script>
-                      <at-last 
-                        merchant="smart-living" 
-                        icon="https://cdn.atlast.co/merchants/164c2a50-77e9-47f6-b2dd-12c277ed43ff/square-1711553919907.jpg" 
-                        color="#4F46E5" 
-                        shape="pill" 
-                        width="200" 
-                        height="50"
-                      ></at-last>
+                      {scriptLoaded ? (
+                        <at-last 
+                          merchant="smart-living" 
+                          icon="https://cdn.atlast.co/merchants/164c2a50-77e9-47f6-b2dd-12c277ed43ff/square-1711553919907.jpg" 
+                          color="#4F46E5" 
+                          shape="pill" 
+                          width="200" 
+                          height="50"
+                        ></at-last>
+                      ) : (
+                        <div className="w-[200px] h-[50px] bg-gray-200 rounded-full flex items-center justify-center">
+                          <div className="animate-pulse text-gray-500 text-sm">Loading...</div>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>

@@ -523,118 +523,113 @@ export default function ProductsPage() {
 
   // Функция для экспорта продуктов в CSV
   const exportToCSV = () => {
-    // Создаем заголовки CSV
+    // Создаем заголовки CSV - только 5 основных колонок
     const headers = [
-      'Title',
-      'Description',
-      'Features',
-      'Category',
-      'Subcategory',
-      'Is Sold Out',
-      'Is Hot',
-      'Is Clearance',
-      'Clearance Discount',
-      'Images',
-      // Bedding specific
-      'Bedding Sizes',
-      'Bedding Styles',
-      'Bedding Colors',
-      // Rugs & Mats specific
-      'Rugs & Mats Type',
-      'Rugs & Mats Sizes',
-      'Rugs & Mats Colors',
-      'Rugs & Mats Styles',
-      // Throws & Towels specific
-      'Throws & Towels Style Prices',
-      'Throws & Towels Styles',
-      'Throws & Towels Colors',
-      // Curtains specific
-      'Curtains Sizes',
-      'Curtains Colors',
-      // Clothing specific
-      'Clothing Style Prices',
-      'Clothing Styles',
-      'Clothing Colors',
-      // Footwear specific
-      'Footwear Sizes',
-      'Footwear Colors',
-      // Outdoor specific
-      'Outdoor Price',
-      'Outdoor Colors',
-      // Additional categories
-      'Additional Categories'
+      'SKU',
+      'Product Name',
+      'Stock',
+      'Regular Price',
+      'Sale Price'
     ];
 
     // Преобразуем данные продуктов в строки CSV
-    const rows = products.map(product => {
-      // Функция для форматирования массивов размеров и цен
-      const formatSizes = (sizes: any[]) => {
-        if (!sizes) return '';
-        return sizes.map(size => 
-          `${size.size}: £${size.regularPrice}->£${size.salePrice} (SKU: ${size.sku}, Stock: ${size.stock})`
-        ).join('; ');
+    const rows: string[][] = [];
+
+    products.forEach(product => {
+      // Функция для добавления строки для каждого размера/стиля продукта
+      const addProductRow = (sku: string, stock: number, regularPrice: number, salePrice: number) => {
+        if (sku) {
+          rows.push([
+            sku,
+            product.title,
+            stock.toString(),
+            `£${regularPrice.toFixed(2)}`,
+            `£${salePrice.toFixed(2)}`
+          ]);
+        }
       };
 
-      // Функция для форматирования массивов
-      const formatArray = (arr: any[]) => {
-        if (!arr) return '';
-        return arr.join('; ');
-      };
+      // Обрабатываем постельное белье
+      if (product.beddingSizes) {
+        product.beddingSizes.forEach((size: any) => {
+          addProductRow(
+            size.sku,
+            size.stock || 0,
+            size.regularPrice || size.price || 0,
+            size.salePrice || 0
+          );
+        });
+      }
 
-      // Функция для форматирования outdoor price
-      const formatOutdoorPrice = (price: any) => {
-        if (!price) return '';
-        return `SKU: ${price.sku}, Regular: £${price.regularPrice}, Sale: £${price.salePrice}, Stock: ${price.stock}`;
-      };
+      // Обрабатываем ковры и коврики
+      if (product.rugsMatsSizes) {
+        product.rugsMatsSizes.forEach((size: any) => {
+          addProductRow(
+            size.sku,
+            size.stock || 0,
+            size.regularPrice || size.price || 0,
+            size.salePrice || 0
+          );
+        });
+      }
 
-      // Функция для форматирования дополнительных категорий
-      const formatAdditionalCategories = (categories: any[]) => {
-        if (!categories) return '';
-        return categories.map(cat => 
-          `${cat.category}${cat.subcategory ? ` - ${cat.subcategory}` : ''}`
-        ).join('; ');
-      };
+      // Обрабатываем пледы и полотенца
+      if (product.throwsTowelsStylePrices) {
+        product.throwsTowelsStylePrices.forEach((style: any) => {
+          addProductRow(
+            style.sku,
+            style.stock || 0,
+            style.regularPrice || style.price || 0,
+            style.salePrice || 0
+          );
+        });
+      }
 
-      return [
-        product.title,
-        product.description,
-        product.features,
-        product.category,
-        product.subcategory,
-        product.isSoldOut ? 'Yes' : 'No',
-        product.isHot ? 'Yes' : 'No',
-        product.isClearance ? 'Yes' : 'No',
-        product.clearanceDiscount || '',
-        formatArray(product.images),
-        // Bedding
-        formatSizes(product.beddingSizes),
-        formatArray(product.beddingStyles),
-        formatArray(product.beddingColors),
-        // Rugs & Mats
-        product.rugsMatsType || '',
-        formatSizes(product.rugsMatsSizes),
-        formatArray(product.rugsMatsColors),
-        formatArray(product.rugsMatsStyles),
-        // Throws & Towels
-        formatSizes(product.throwsTowelsStylePrices),
-        formatArray(product.throwsTowelsStyles),
-        formatArray(product.throwsTowelsColors),
-        // Curtains
-        formatSizes(product.curtainsSizes),
-        formatArray(product.curtainsColors),
-        // Clothing
-        formatSizes(product.clothingStylePrices),
-        formatArray(product.clothingStyles),
-        formatArray(product.clothingColors),
-        // Footwear
-        formatSizes(product.footwearSizes),
-        formatArray(product.footwearColors),
-        // Outdoor
-        formatOutdoorPrice(product.outdoorPrice),
-        formatArray(product.outdoorColors),
-        // Additional categories
-        formatAdditionalCategories(product.additionalCategories)
-      ];
+      // Обрабатываем шторы
+      if (product.curtainsSizes) {
+        product.curtainsSizes.forEach((size: any) => {
+          addProductRow(
+            size.sku,
+            size.stock || 0,
+            size.regularPrice || size.price || 0,
+            size.salePrice || 0
+          );
+        });
+      }
+
+      // Обрабатываем обувь
+      if (product.footwearSizes) {
+        product.footwearSizes.forEach((size: any) => {
+          addProductRow(
+            size.sku,
+            size.stock || 0,
+            size.regularPrice || size.price || 0,
+            size.salePrice || 0
+          );
+        });
+      }
+
+      // Обрабатываем одежду
+      if (product.clothingStylePrices) {
+        product.clothingStylePrices.forEach((style: any) => {
+          addProductRow(
+            style.sku,
+            style.stock || 0,
+            style.regularPrice || style.price || 0,
+            style.salePrice || 0
+          );
+        });
+      }
+
+      // Обрабатываем товары категории OUTDOOR
+      if (product.outdoorPrice && product.outdoorPrice.sku) {
+        addProductRow(
+          product.outdoorPrice.sku,
+          product.outdoorPrice.stock || 0,
+          product.outdoorPrice.regularPrice || 0,
+          product.outdoorPrice.salePrice || 0
+        );
+      }
     });
 
     // Создаем CSV контент
