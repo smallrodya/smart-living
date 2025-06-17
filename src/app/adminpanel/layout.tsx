@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import AdminAuthGuard from '@/components/AdminAuthGuard';
@@ -38,7 +38,7 @@ export default function AdminLayout({
   }
 
   // Функция для получения количества продуктов
-  const fetchProductsCount = async () => {
+  const fetchProductsCount = useCallback(async () => {
     try {
       const response = await fetch('/api/products');
       const data = await response.json();
@@ -47,10 +47,10 @@ export default function AdminLayout({
       console.error('Error fetching products count:', error);
       return 0;
     }
-  };
+  }, []);
 
   // Функция для получения количества заказов
-  const fetchOrdersCount = async () => {
+  const fetchOrdersCount = useCallback(async () => {
     try {
       const response = await fetch('/api/orders');
       const data = await response.json();
@@ -59,10 +59,10 @@ export default function AdminLayout({
       console.error('Error fetching orders count:', error);
       return 0;
     }
-  };
+  }, []);
 
   // Функция для получения количества пользователей
-  const fetchUsersCount = async () => {
+  const fetchUsersCount = useCallback(async () => {
     try {
       const response = await fetch('/api/admin/users');
       const data = await response.json();
@@ -71,10 +71,10 @@ export default function AdminLayout({
       console.error('Error fetching users count:', error);
       return 0;
     }
-  };
+  }, []);
 
   // Функция для получения количества обращений в поддержке
-  const fetchSupportCount = async () => {
+  const fetchSupportCount = useCallback(async () => {
     try {
       const response = await fetch('/api/support/tickets');
       const data = await response.json();
@@ -83,39 +83,43 @@ export default function AdminLayout({
       console.error('Error fetching support count:', error);
       return 0;
     }
-  };
+  }, []);
 
   // Функция для обновления всех счетчиков
-  const updateCounters = async () => {
-    const [productsCount, ordersCount, usersCount, supportCount] = await Promise.all([
-      fetchProductsCount(),
-      fetchOrdersCount(),
-      fetchUsersCount(),
-      fetchSupportCount(),
-    ]);
+  const updateCounters = useCallback(async () => {
+    try {
+      const [productsCount, ordersCount, usersCount, supportCount] = await Promise.all([
+        fetchProductsCount(),
+        fetchOrdersCount(),
+        fetchUsersCount(),
+        fetchSupportCount(),
+      ]);
 
-    setCounters({
-      products: productsCount,
-      orders: ordersCount,
-      users: usersCount,
-      support: supportCount,
-    });
-  };
+      setCounters({
+        products: productsCount,
+        orders: ordersCount,
+        users: usersCount,
+        support: supportCount,
+      });
+    } catch (error) {
+      console.error('Error updating counters:', error);
+    }
+  }, [fetchProductsCount, fetchOrdersCount, fetchUsersCount, fetchSupportCount]);
 
   // Обновляем счетчики при загрузке и каждые 5 секунд
   useEffect(() => {
     updateCounters();
     const interval = setInterval(updateCounters, 5000);
     return () => clearInterval(interval);
-  }, []);
+  }, [updateCounters]);
 
-  const handleLogout = () => {
+  const handleLogout = useCallback(() => {
     localStorage.removeItem('adminAuth');
     window.location.href = '/adminpanel/login';
-  };
+  }, []);
 
   // Функция для получения стилей счетчика в зависимости от типа
-  const getCounterStyles = (key: string) => {
+  const getCounterStyles = useCallback((key: string) => {
     switch (key) {
       case 'products':
         return {
@@ -153,7 +157,7 @@ export default function AdminLayout({
           border: 'border-gray-300/30'
         };
     }
-  };
+  }, []);
 
   return (
     <AdminAuthGuard>
