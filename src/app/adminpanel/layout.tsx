@@ -263,7 +263,17 @@ export default function AdminLayout({
                 })}
               </nav>
 
-              <div className="absolute bottom-6 left-6 right-6">
+              <div className="absolute bottom-6 left-6 right-6 space-y-3">
+                <Link
+                  href="/"
+                  className="w-full flex items-center p-4 rounded-2xl text-blue-600 hover:bg-blue-50/80 transition-all duration-300 border border-blue-200/50 hover:border-blue-300/50 hover:shadow-lg group"
+                >
+                  <div className="p-3 rounded-xl bg-blue-100 group-hover:bg-blue-200 transition-colors duration-300">
+                    <span className="text-lg">🏠</span>
+                  </div>
+                  <span className="ml-4 font-semibold">Go to Home Page</span>
+                </Link>
+                
                 <button
                   onClick={handleLogout}
                   className="w-full flex items-center p-4 rounded-2xl text-red-600 hover:bg-red-50/80 transition-all duration-300 border border-red-200/50 hover:border-red-300/50 hover:shadow-lg group"
