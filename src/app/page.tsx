@@ -13,20 +13,6 @@ import ThrowAndCurtainSection from "../components/BeddingAndRugsSection";
 import FeaturesSection from '@/components/FeaturesSection';
 
 export default function Home() {
-  useEffect(() => {
-    // Отправляем данные о посещении
-    fetch('/api/stats', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ 
-        page: '/',
-        userAgent: navigator.userAgent
-      })
-    }).catch(console.error);
-  }, []);
-
   return (
     <main>
       <Header />

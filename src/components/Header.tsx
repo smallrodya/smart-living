@@ -5,6 +5,14 @@ import MobileHeader from './MobileHeader';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
+const styles = {
+  logoImage: {
+    width: '200px',
+    height: 'auto',
+    objectFit: 'contain' as const
+  }
+};
+
 const Header = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [isMobile, setIsMobile] = useState(false);
@@ -83,9 +91,12 @@ const Header = () => {
             <Image 
               src="/SmartLivingLogo.png" 
               alt="Smart Living" 
-              width={250}
-              height={50}
-              style={{ maxWidth: '250px' }}
+              width={200}
+              height={40}
+              priority
+              sizes="200px"
+              className="logo-image"
+              style={styles.logoImage}
             />
           </Link>
           <form 

@@ -20,17 +20,6 @@ interface Stats {
   orders: number;
   users: number;
   revenue: number;
-  pageViews: {
-    total: number;
-    dailyViews: Array<{
-      date: string;
-      count: number;
-    }>;
-    hourlyStats: Array<{
-      hour: number;
-      count: number;
-    }>;
-  };
 }
 
 export default function AdminDashboard() {
@@ -39,11 +28,6 @@ export default function AdminDashboard() {
     orders: 0,
     users: 0,
     revenue: 0,
-    pageViews: {
-      total: 0,
-      dailyViews: [],
-      hourlyStats: [],
-    }
   });
   const [recentOrders, setRecentOrders] = useState<RecentOrder[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -71,11 +55,6 @@ export default function AdminDashboard() {
         orders: data.orders || 0,
         users: data.users || 0,
         revenue: data.revenue || 0,
-        pageViews: data.pageViews || {
-          total: 0,
-          dailyViews: [],
-          hourlyStats: [],
-        }
       });
       setRecentOrders(data.recentOrders || []);
     } catch (error) {
@@ -97,63 +76,6 @@ export default function AdminDashboard() {
       hour: '2-digit',
       minute: '2-digit'
     });
-  };
-
-  const renderAnalyticsOverview = () => {
-    if (isLoading) {
-      return (
-        <div className="flex items-center justify-center h-96">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
-        </div>
-      );
-    }
-
-    if (stats.pageViews.dailyViews.length === 0) {
-      return (
-        <div className="text-center py-12">
-          <div className="text-4xl mb-4">📊</div>
-          <p className="text-gray-500">No analytics data available yet</p>
-        </div>
-      );
-    }
-
-    const totalViews = stats.pageViews.total;
-    const avgDailyViews = Math.round(totalViews / 7);
-    const maxDailyViews = Math.max(...stats.pageViews.dailyViews.map(d => d.count));
-
-    return (
-      <div className="space-y-8">
-        {/* Overview Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-medium text-gray-600">Total Views</h3>
-              <span className="text-3xl">👁️</span>
-            </div>
-            <p className="text-3xl font-bold text-gray-900">{totalViews.toLocaleString()}</p>
-            <p className="text-sm text-gray-500 mt-2">All time page views</p>
-          </div>
-
-          <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-medium text-gray-600">Average Daily Views</h3>
-              <span className="text-3xl">📈</span>
-            </div>
-            <p className="text-3xl font-bold text-gray-900">{avgDailyViews.toLocaleString()}</p>
-            <p className="text-sm text-gray-500 mt-2">Last 7 days average</p>
-          </div>
-
-          <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-medium text-gray-600">Peak Daily Views</h3>
-              <span className="text-3xl">📊</span>
-            </div>
-            <p className="text-3xl font-bold text-gray-900">{maxDailyViews.toLocaleString()}</p>
-            <p className="text-sm text-gray-500 mt-2">Highest daily traffic</p>
-          </div>
-        </div>
-      </div>
-    );
   };
 
   return (
@@ -208,20 +130,6 @@ export default function AdminDashboard() {
             <p className="text-3xl font-bold text-gray-900">£{isLoading ? '...' : stats.revenue.toLocaleString()}</p>
             <p className="text-sm text-gray-500 mt-2">Total sales amount</p>
           </div>
-
-          <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100 hover:shadow-md transition-shadow duration-200">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-medium text-gray-600">Page Views</h3>
-              <span className="text-3xl">👁️</span>
-            </div>
-            <p className="text-3xl font-bold text-gray-900">{isLoading ? '...' : stats.pageViews.total}</p>
-            <p className="text-sm text-gray-500 mt-2">Total homepage visits</p>
-          </div>
-        </div>
-
-        <div className="mb-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">Analytics Overview</h2>
-          {renderAnalyticsOverview()}
         </div>
 
         <div className="mt-8">
