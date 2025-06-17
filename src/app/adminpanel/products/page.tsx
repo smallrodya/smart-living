@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { Plus, Search, Loader2, Upload, Download } from 'lucide-react';
+import { createPortal } from 'react-dom';
 import AddProductModal from '../../../components/AddProductModal';
 import EditProductModal from '../../../components/EditProductModal';
 import UploadCSVModal from '../../../components/UploadCSVModal';
@@ -340,8 +341,10 @@ export default function ProductsPage() {
   };
 
   const handleEdit = (product: any) => {
+    console.log('Edit button clicked for product:', product._id);
     setEditingProduct(product);
     setEditModalOpen(true);
+    console.log('Edit modal state:', { editingProduct: product, editModalOpen: true });
   };
 
   const getSubcategories = (category: string) => {
@@ -663,24 +666,37 @@ export default function ProductsPage() {
           gravity={0.2}
         />
       )}
-      <AddProductModal 
-        open={modalOpen} 
-        onClose={() => setModalOpen(false)} 
-        onProductAdded={handleProductAdded}
-        validateUniqueSku={validateUniqueSku}
-      />
-      <EditProductModal 
-        open={editModalOpen} 
-        onClose={() => setEditModalOpen(false)} 
-        product={editingProduct} 
-        onProductEdited={fetchProducts}
-        validateUniqueSku={validateUniqueSku}
-      />
-      <UploadCSVModal
-        open={uploadModalOpen}
-        onClose={() => setUploadModalOpen(false)}
-        onUploadSuccess={fetchProducts}
-      />
+      {typeof window !== 'undefined' && createPortal(
+        <AddProductModal 
+          open={modalOpen} 
+          onClose={() => setModalOpen(false)} 
+          onProductAdded={handleProductAdded}
+          validateUniqueSku={validateUniqueSku}
+        />,
+        document.body
+      )}
+      {typeof window !== 'undefined' && createPortal(
+        <EditProductModal 
+          open={editModalOpen} 
+          onClose={() => {
+            console.log('Closing edit modal');
+            setEditModalOpen(false);
+            setEditingProduct(null);
+          }} 
+          product={editingProduct} 
+          onProductEdited={fetchProducts}
+          validateUniqueSku={validateUniqueSku}
+        />,
+        document.body
+      )}
+      {typeof window !== 'undefined' && createPortal(
+        <UploadCSVModal
+          open={uploadModalOpen}
+          onClose={() => setUploadModalOpen(false)}
+          onUploadSuccess={fetchProducts}
+        />,
+        document.body
+      )}
       
       <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8 gap-4">
         <h1 className="text-2xl font-bold text-gray-900">Products Management</h1>

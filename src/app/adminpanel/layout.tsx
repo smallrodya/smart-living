@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import AdminAuthGuard from '@/components/AdminAuthGuard';
@@ -32,13 +32,8 @@ export default function AdminLayout({
   });
   const pathname = usePathname();
 
-  // Если мы на странице входа, не показываем layout админ-панели
-  if (pathname === '/adminpanel/login') {
-    return <>{children}</>;
-  }
-
   // Функция для получения количества продуктов
-  const fetchProductsCount = useCallback(async () => {
+  const fetchProductsCount = async () => {
     try {
       const response = await fetch('/api/products');
       const data = await response.json();
@@ -47,10 +42,10 @@ export default function AdminLayout({
       console.error('Error fetching products count:', error);
       return 0;
     }
-  }, []);
+  };
 
   // Функция для получения количества заказов
-  const fetchOrdersCount = useCallback(async () => {
+  const fetchOrdersCount = async () => {
     try {
       const response = await fetch('/api/orders');
       const data = await response.json();
@@ -59,10 +54,10 @@ export default function AdminLayout({
       console.error('Error fetching orders count:', error);
       return 0;
     }
-  }, []);
+  };
 
   // Функция для получения количества пользователей
-  const fetchUsersCount = useCallback(async () => {
+  const fetchUsersCount = async () => {
     try {
       const response = await fetch('/api/admin/users');
       const data = await response.json();
@@ -71,10 +66,10 @@ export default function AdminLayout({
       console.error('Error fetching users count:', error);
       return 0;
     }
-  }, []);
+  };
 
   // Функция для получения количества обращений в поддержке
-  const fetchSupportCount = useCallback(async () => {
+  const fetchSupportCount = async () => {
     try {
       const response = await fetch('/api/support/tickets');
       const data = await response.json();
@@ -83,43 +78,39 @@ export default function AdminLayout({
       console.error('Error fetching support count:', error);
       return 0;
     }
-  }, []);
+  };
 
   // Функция для обновления всех счетчиков
-  const updateCounters = useCallback(async () => {
-    try {
-      const [productsCount, ordersCount, usersCount, supportCount] = await Promise.all([
-        fetchProductsCount(),
-        fetchOrdersCount(),
-        fetchUsersCount(),
-        fetchSupportCount(),
-      ]);
+  const updateCounters = async () => {
+    const [productsCount, ordersCount, usersCount, supportCount] = await Promise.all([
+      fetchProductsCount(),
+      fetchOrdersCount(),
+      fetchUsersCount(),
+      fetchSupportCount(),
+    ]);
 
-      setCounters({
-        products: productsCount,
-        orders: ordersCount,
-        users: usersCount,
-        support: supportCount,
-      });
-    } catch (error) {
-      console.error('Error updating counters:', error);
-    }
-  }, [fetchProductsCount, fetchOrdersCount, fetchUsersCount, fetchSupportCount]);
+    setCounters({
+      products: productsCount,
+      orders: ordersCount,
+      users: usersCount,
+      support: supportCount,
+    });
+  };
 
   // Обновляем счетчики при загрузке и каждые 5 секунд
   useEffect(() => {
     updateCounters();
     const interval = setInterval(updateCounters, 5000);
     return () => clearInterval(interval);
-  }, [updateCounters]);
-
-  const handleLogout = useCallback(() => {
-    localStorage.removeItem('adminAuth');
-    window.location.href = '/adminpanel/login';
   }, []);
 
+  const handleLogout = () => {
+    localStorage.removeItem('adminAuth');
+    window.location.href = '/adminpanel/login';
+  };
+
   // Функция для получения стилей счетчика в зависимости от типа
-  const getCounterStyles = useCallback((key: string) => {
+  const getCounterStyles = (key: string) => {
     switch (key) {
       case 'products':
         return {
@@ -157,7 +148,12 @@ export default function AdminLayout({
           border: 'border-gray-300/30'
         };
     }
-  }, []);
+  };
+
+  // Если мы на странице входа, не показываем layout админ-панели
+  if (pathname === '/adminpanel/login') {
+    return <>{children}</>;
+  }
 
   return (
     <AdminAuthGuard>
