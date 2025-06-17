@@ -116,7 +116,9 @@ export default function MyAccountPage() {
             setWishlistItems(items);
           }
         } else {
-          if (response.status === 401) {
+          if (response.status === 401 || response.status === 404) {
+            // Удаляем куки пользователя
+            document.cookie = 'user=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
             router.push('/user/login');
           } else {
             setError('Failed to load user data');

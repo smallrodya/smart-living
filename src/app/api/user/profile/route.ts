@@ -1,13 +1,9 @@
 import { NextResponse } from 'next/server';
-import { MongoClient, ObjectId } from 'mongodb';
+import { connectToDatabase } from '@/lib/mongodb';
+import { ObjectId } from 'mongodb';
 import { cookies } from 'next/headers';
 
 export const dynamic = 'force-dynamic';
-
-const uri = process.env.MONGODB_URI as string;
-if (!uri) {
-  throw new Error('Please define the MONGODB_URI environment variable inside .env.local');
-}
 
 export async function GET(request: Request) {
   try {
@@ -23,8 +19,7 @@ export async function GET(request: Request) {
     }
 
     const userData = JSON.parse(userCookie.value);
-    const client = await MongoClient.connect(uri);
-    const db = client.db('smartliving');
+    const { db } = await connectToDatabase();
 
     // Получаем данные пользователя по ID из сессии
     const user = await db.collection('users').findOne(
@@ -35,8 +30,6 @@ export async function GET(request: Request) {
         }
       }
     );
-
-    await client.close();
 
     if (!user) {
       return NextResponse.json(
@@ -62,7 +55,6 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-  let client;
   try {
     // Проверяем наличие данных пользователя в куках
     const cookieStore = await cookies();
@@ -76,8 +68,7 @@ export async function POST(request: Request) {
     }
 
     const userData = JSON.parse(userCookie.value);
-    client = await MongoClient.connect(uri);
-    const db = client.db('smartliving');
+    const { db } = await connectToDatabase();
 
     // Получаем данные из тела запроса
     const updateData = await request.json();
@@ -137,9 +128,5 @@ export async function POST(request: Request) {
       { message: 'Error updating user profile', error: error instanceof Error ? error.message : 'Unknown error' },
       { status: 500 }
     );
-  } finally {
-    if (client) {
-      await client.close();
-    }
   }
 } 
