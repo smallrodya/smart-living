@@ -287,7 +287,20 @@ const clothingSizes = [
   // Jeans & Joggers sizes
   '6', '7', '8', '9', '10', '11', '12', '14', '16', '18', '20', '22', '24', '26', '27', '28', '29', '30', '32', '33', '34', '36', '38', '40', '42', '44', '46', '48', '50', '52', '54', '56',
   // Other clothing sizes
-  'XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL', '2XL', '3XL', 'S/M', 'M/L', 'L/XL', 'One Size'
+  'XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL', '2XL', '3XL', 'S/M', 'M/L', 'L/XL', 'One Size',
+  // Kids year-based sizes
+  '3 – 4 Year',
+  '4 – 5 Year',
+  '5 – 6 Year',
+  '6 – 7 Year',
+  '7 – 8 Year',
+  '9 -10 Year',
+  '10 – 11 Year',
+  '11 – 12 Year',
+  '12 – 13 Year',
+  '13 – 14 Year',
+  '14 – 15 Year',
+  '15 – 16 Year'
 ];
 
 const clothingStyles = [

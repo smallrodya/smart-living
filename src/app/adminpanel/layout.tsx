@@ -266,6 +266,8 @@ export default function AdminLayout({
               <div className="absolute bottom-6 left-6 right-6 space-y-3">
                 <Link
                   href="/"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="w-full flex items-center p-4 rounded-2xl text-blue-600 hover:bg-blue-50/80 transition-all duration-300 border border-blue-200/50 hover:border-blue-300/50 hover:shadow-lg group"
                 >
                   <div className="p-3 rounded-xl bg-blue-100 group-hover:bg-blue-200 transition-colors duration-300">
