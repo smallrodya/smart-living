@@ -188,7 +188,9 @@ const rugsMatsColors = [
 ];
 
 const outdoorSubcategories = [
-  'Shop all'
+  'Shop all',
+  'Chairs',
+  'Cushions'
 ];
 
 const curtainsSubcategories = [
@@ -235,6 +237,7 @@ const clothingSizes = [
   '5 – 6 Year',
   '6 – 7 Year',
   '7 – 8 Year',
+  '8 - 9 Year',
   '9 -10 Year',
   '10 – 11 Year',
   '11 – 12 Year',

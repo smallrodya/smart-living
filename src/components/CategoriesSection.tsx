@@ -196,6 +196,14 @@ const megaMenus: MegaMenu[] = [
         ],
       },
       {
+        title: 'STYLE',
+        items: [
+          { label: 'Chairs', href: '/shop/outdoors-chairs' },
+          { label: 'Cushions', href: '/shop/outdoors-cushions' },
+        ],
+      },
+      {
+        
         items: [
           { img: '/outdoor-banner1.jpg', label: 'Perfect for your outdoor space', labelColor: 'red' },
         ],

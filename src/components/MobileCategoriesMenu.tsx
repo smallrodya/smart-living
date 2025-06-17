@@ -187,6 +187,13 @@ const categories: Category[] = [
           { label: 'Shop all', href: '/shop/outdoorshop-all' },
         ],
       },
+      {
+        title: 'STYLE',
+        items: [
+          { label: 'Chairs', href: '/shop/outdoors-chairs' },
+          { label: 'Cushions', href: '/shop/outdoors-cushions' },
+        ],
+      },
     ],
   },
   {
