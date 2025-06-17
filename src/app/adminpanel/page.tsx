@@ -78,106 +78,210 @@ export default function AdminDashboard() {
     });
   };
 
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'DONE':
+        return 'from-emerald-400 to-emerald-600';
+      case 'PROCESSING':
+        return 'from-blue-400 to-blue-600';
+      case 'SHIPPED':
+        return 'from-purple-400 to-purple-600';
+      case 'DELIVERED':
+        return 'from-gray-400 to-gray-600';
+      default:
+        return 'from-red-400 to-red-600';
+    }
+  };
+
+  const getStatusBg = (status: string) => {
+    switch (status) {
+      case 'DONE':
+        return 'bg-emerald-50 border-emerald-200 text-emerald-700';
+      case 'PROCESSING':
+        return 'bg-blue-50 border-blue-200 text-blue-700';
+      case 'SHIPPED':
+        return 'bg-purple-50 border-purple-200 text-purple-700';
+      case 'DELIVERED':
+        return 'bg-gray-50 border-gray-200 text-gray-700';
+      default:
+        return 'bg-red-50 border-red-200 text-red-700';
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
-          <button 
-            onClick={fetchStats}
-            className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors duration-200 flex items-center gap-2"
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-            </svg>
-            Refresh
-          </button>
+    <div className="space-y-8">
+      {/* Header */}
+      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+        <div>
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-gray-900 via-gray-800 to-gray-700 bg-clip-text text-transparent">
+            Dashboard Overview
+          </h1>
+          <p className="text-gray-600 mt-2 font-medium">
+            Welcome back! Here's what's happening with your store today.
+          </p>
         </div>
+        <button 
+          onClick={fetchStats}
+          className="group px-6 py-3 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-2xl hover:from-indigo-600 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center gap-3 font-semibold"
+        >
+          <svg className="w-5 h-5 group-hover:rotate-180 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+          </svg>
+          Refresh Data
+        </button>
+      </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100 hover:shadow-md transition-shadow duration-200">
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="group relative overflow-hidden bg-gradient-to-br from-emerald-50 to-teal-50 rounded-3xl p-6 border border-emerald-200/50 hover:shadow-2xl transition-all duration-500 transform hover:scale-105">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-emerald-400/20 to-teal-500/20 rounded-full blur-2xl group-hover:blur-3xl transition-all duration-500"></div>
+          <div className="relative z-10">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-medium text-gray-600">Total Products</h3>
-              <span className="text-3xl">📦</span>
+              <h3 className="text-lg font-semibold text-gray-700">Total Products</h3>
+              <div className="p-3 bg-gradient-to-r from-emerald-400 to-teal-500 rounded-2xl shadow-lg">
+                <span className="text-2xl">📦</span>
+              </div>
             </div>
-            <p className="text-3xl font-bold text-gray-900">{isLoading ? '...' : stats.products}</p>
-            <p className="text-sm text-gray-500 mt-2">Active products in store</p>
-          </div>
-
-          <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100 hover:shadow-md transition-shadow duration-200">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-medium text-gray-600">Total Orders</h3>
-              <span className="text-3xl">🛒</span>
+            <div className="text-4xl font-bold text-gray-900 mb-2">
+              {isLoading ? (
+                <div className="animate-pulse bg-gray-300 h-10 w-20 rounded"></div>
+              ) : (
+                stats.products.toLocaleString()
+              )}
             </div>
-            <p className="text-3xl font-bold text-gray-900">{isLoading ? '...' : stats.orders}</p>
-            <p className="text-sm text-gray-500 mt-2">Orders processed</p>
-          </div>
-
-          <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100 hover:shadow-md transition-shadow duration-200">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-medium text-gray-600">Total Users</h3>
-              <span className="text-3xl">👥</span>
-            </div>
-            <p className="text-3xl font-bold text-gray-900">{isLoading ? '...' : stats.users}</p>
-            <p className="text-sm text-gray-500 mt-2">Registered customers</p>
-          </div>
-
-          <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100 hover:shadow-md transition-shadow duration-200">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-medium text-gray-600">Total Revenue</h3>
-              <span className="text-3xl">💸</span>
-            </div>
-            <p className="text-3xl font-bold text-gray-900">£{isLoading ? '...' : stats.revenue.toLocaleString()}</p>
-            <p className="text-sm text-gray-500 mt-2">Total sales amount</p>
+            <p className="text-sm text-gray-600 font-medium">Active products in store</p>
           </div>
         </div>
 
-        <div className="mt-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">Recent Orders</h2>
-          <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
-            {isLoading ? (
-              <div className="flex items-center justify-center h-64">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
+        <div className="group relative overflow-hidden bg-gradient-to-br from-blue-50 to-indigo-50 rounded-3xl p-6 border border-blue-200/50 hover:shadow-2xl transition-all duration-500 transform hover:scale-105">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-400/20 to-indigo-500/20 rounded-full blur-2xl group-hover:blur-3xl transition-all duration-500"></div>
+          <div className="relative z-10">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold text-gray-700">Total Orders</h3>
+              <div className="p-3 bg-gradient-to-r from-blue-400 to-indigo-500 rounded-2xl shadow-lg">
+                <span className="text-2xl">🛒</span>
               </div>
-            ) : recentOrders.length === 0 ? (
-              <div className="text-center py-12">
-                <div className="text-4xl mb-4">📦</div>
-                <p className="text-gray-500">No orders yet</p>
+            </div>
+            <div className="text-4xl font-bold text-gray-900 mb-2">
+              {isLoading ? (
+                <div className="animate-pulse bg-gray-300 h-10 w-20 rounded"></div>
+              ) : (
+                stats.orders.toLocaleString()
+              )}
+            </div>
+            <p className="text-sm text-gray-600 font-medium">Orders processed</p>
+          </div>
+        </div>
+
+        <div className="group relative overflow-hidden bg-gradient-to-br from-purple-50 to-pink-50 rounded-3xl p-6 border border-purple-200/50 hover:shadow-2xl transition-all duration-500 transform hover:scale-105">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-purple-400/20 to-pink-500/20 rounded-full blur-2xl group-hover:blur-3xl transition-all duration-500"></div>
+          <div className="relative z-10">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold text-gray-700">Total Users</h3>
+              <div className="p-3 bg-gradient-to-r from-purple-400 to-pink-500 rounded-2xl shadow-lg">
+                <span className="text-2xl">👥</span>
               </div>
-            ) : (
-              <div className="space-y-4">
-                {recentOrders.map((order) => (
-                  <div 
-                    key={order._id} 
-                    className="border border-gray-100 rounded-lg p-4 hover:bg-gray-50 transition-colors duration-200"
-                  >
-                    <div className="flex justify-between items-start mb-3">
-                      <div>
-                        <p className="font-medium text-gray-900">
-                          {order.customerDetails.firstName} {order.customerDetails.lastName}
-                        </p>
-                        <p className="text-sm text-gray-500">{order.customerDetails.email}</p>
-                      </div>
-                      <span className="text-lg font-semibold text-indigo-600">£{order.total.toFixed(2)}</span>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span className="text-sm text-gray-500">{formatDate(order.createdAt)}</span>
-                      <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                        order.status === 'DONE' ? 'bg-green-100 text-green-800' :
-                        order.status === 'PROCESSING' ? 'bg-blue-100 text-blue-800' :
-                        order.status === 'SHIPPED' ? 'bg-purple-100 text-purple-800' :
-                        order.status === 'DELIVERED' ? 'bg-gray-100 text-gray-800' :
-                        'bg-red-100 text-red-800'
-                      }`}>
-                        {order.status}
+            </div>
+            <div className="text-4xl font-bold text-gray-900 mb-2">
+              {isLoading ? (
+                <div className="animate-pulse bg-gray-300 h-10 w-20 rounded"></div>
+              ) : (
+                stats.users.toLocaleString()
+              )}
+            </div>
+            <p className="text-sm text-gray-600 font-medium">Registered customers</p>
+          </div>
+        </div>
+
+        <div className="group relative overflow-hidden bg-gradient-to-br from-orange-50 to-red-50 rounded-3xl p-6 border border-orange-200/50 hover:shadow-2xl transition-all duration-500 transform hover:scale-105">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-orange-400/20 to-red-500/20 rounded-full blur-2xl group-hover:blur-3xl transition-all duration-500"></div>
+          <div className="relative z-10">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold text-gray-700">Total Revenue</h3>
+              <div className="p-3 bg-gradient-to-r from-orange-400 to-red-500 rounded-2xl shadow-lg">
+                <span className="text-2xl">💸</span>
+              </div>
+            </div>
+            <div className="text-4xl font-bold text-gray-900 mb-2">
+              {isLoading ? (
+                <div className="animate-pulse bg-gray-300 h-10 w-20 rounded"></div>
+              ) : (
+                `£${stats.revenue.toLocaleString()}`
+              )}
+            </div>
+            <p className="text-sm text-gray-600 font-medium">Total sales amount</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Recent Orders */}
+      <div className="bg-gradient-to-br from-white/80 to-gray-50/80 backdrop-blur-xl rounded-3xl p-8 border border-white/50 shadow-2xl">
+        <div className="flex items-center justify-between mb-8">
+          <h2 className="text-2xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
+            Recent Orders
+          </h2>
+          <div className="flex items-center gap-2 text-sm text-gray-500">
+            <div className="w-2 h-2 bg-gradient-to-r from-emerald-400 to-teal-500 rounded-full animate-pulse"></div>
+            Live updates
+          </div>
+        </div>
+        
+        {isLoading ? (
+          <div className="flex items-center justify-center h-64">
+            <div className="relative">
+              <div className="w-12 h-12 border-4 border-indigo-200 border-t-indigo-600 rounded-full animate-spin"></div>
+              <div className="absolute inset-0 w-12 h-12 border-4 border-transparent border-t-purple-600 rounded-full animate-spin" style={{animationDelay: '0.5s'}}></div>
+            </div>
+          </div>
+        ) : recentOrders.length === 0 ? (
+          <div className="text-center py-16">
+            <div className="w-24 h-24 bg-gradient-to-r from-gray-100 to-gray-200 rounded-3xl flex items-center justify-center mx-auto mb-6">
+              <span className="text-4xl">📦</span>
+            </div>
+            <h3 className="text-xl font-semibold text-gray-700 mb-2">No orders yet</h3>
+            <p className="text-gray-500">Orders will appear here once customers start shopping</p>
+          </div>
+        ) : (
+          <div className="space-y-4">
+            {recentOrders.map((order, index) => (
+              <div 
+                key={order._id} 
+                className="group relative overflow-hidden bg-white/60 backdrop-blur-sm border border-white/50 rounded-2xl p-6 hover:bg-white/80 hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02]"
+                style={{animationDelay: `${index * 100}ms`}}
+              >
+                <div className="flex justify-between items-start mb-4">
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+                      <span className="text-white font-bold text-lg">
+                        {order.customerDetails.firstName.charAt(0)}{order.customerDetails.lastName.charAt(0)}
                       </span>
                     </div>
+                    <div>
+                      <p className="font-semibold text-gray-900 text-lg">
+                        {order.customerDetails.firstName} {order.customerDetails.lastName}
+                      </p>
+                      <p className="text-gray-500 font-medium">{order.customerDetails.email}</p>
+                    </div>
                   </div>
-                ))}
+                  <div className="text-right">
+                    <span className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+                      £{order.total.toFixed(2)}
+                    </span>
+                  </div>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-gray-500 font-medium">{formatDate(order.createdAt)}</span>
+                  <div className={`px-4 py-2 rounded-xl border font-semibold text-sm ${getStatusBg(order.status)}`}>
+                    {order.status}
+                  </div>
+                </div>
+                
+                {/* Hover effect line */}
+                <div className="absolute bottom-0 left-0 h-1 bg-gradient-to-r from-indigo-500 to-purple-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></div>
               </div>
-            )}
+            ))}
           </div>
-        </div>
+        )}
       </div>
     </div>
   );
