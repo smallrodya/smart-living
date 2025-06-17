@@ -8,6 +8,12 @@ const MobileBanner = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
 
+  const isShow = (promoName: string): boolean => {
+    // Здесь можно будет управлять видимостью акций
+    // По умолчанию показываем только Summer Collection
+    return promoName === 'Summer Collection';
+  };
+
   const slides = [
     {
       image: '/banner.jpg',
@@ -16,24 +22,8 @@ const MobileBanner = () => {
       cta: 'Shop Now',
       link: '/summer-collection',
       color: '#FF6B6B'
-    },
-    {
-      image: '/banner2.jpg',
-      title: 'Home Essentials',
-      subtitle: 'Transform your space',
-      cta: 'Explore',
-      link: '/home-essentials',
-      color: '#4ECDC4'
-    },
-    {
-      image: '/banner3.jpg',
-      title: 'Special Offers',
-      subtitle: 'Up to 70% off',
-      cta: 'View Deals',
-      link: '/special-offers',
-      color: '#FFD93D'
     }
-  ];
+  ].filter(slide => isShow(slide.title));
 
   useEffect(() => {
     if (!isPaused) {
