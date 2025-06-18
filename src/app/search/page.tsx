@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import Header from '@/components/Header';
@@ -17,34 +17,35 @@ interface Product {
   category: string;
   subcategory: string;
   sku: string;
-  beddingSizes?: Array<{ size: string; price: number; salePrice: number }>;
+  beddingSizes?: Array<{ size: string; price: number; salePrice: number; sku?: string; stock?: number }>;
   beddingColors?: string[];
   beddingStyles?: string[];
-  rugsMatsSizes?: Array<{ size: string; price: number; salePrice: number }>;
+  rugsMatsSizes?: Array<{ size: string; price: number; salePrice: number; sku?: string; stock?: number }>;
   rugsMatsColors?: string[];
   rugsMatsStyles?: string[];
-  throwsTowelsStylePrices?: Array<{ style: string; price: number; salePrice: number }>;
+  throwsTowelsStylePrices?: Array<{ size: string; regularPrice: number; salePrice: number; sku: string; stock: number }>;
   throwsTowelsColors?: string[];
   throwsTowelsStyles?: string[];
-  curtainsSizes?: Array<{ size: string; price: number; salePrice: number }>;
+  curtainsSizes?: Array<{ size: string; price: number; salePrice: number; sku?: string; stock?: number }>;
   curtainsColors?: string[];
   curtainsStyles?: string[];
-  footwearSizes?: Array<{ size: string; price: number; salePrice: number }>;
+  footwearSizes?: Array<{ size: string; regularPrice: number; salePrice: number; sku: string; stock: number }>;
   footwearColors?: string[];
   footwearStyles?: string[];
-  clothingStylePrices?: Array<{ style: string; price: number; salePrice: number }>;
+  clothingStylePrices?: Array<{ size: string; regularPrice: number; salePrice: number; sku: string; stock: number }>;
   clothingColors?: string[];
   clothingStyles?: string[];
-  outdoorPrice?: { price: number; salePrice: number };
+  outdoorPrice?: { sku: string; regularPrice: number; salePrice: number; stock: number };
   images?: string[];
   discount?: number;
+  clearanceDiscount?: number;
   isSoldOut?: boolean;
   isHot?: boolean;
   isClearance?: boolean;
   additionalCategories?: Array<{ category: string; subcategory: string }>;
 }
 
-export default function SearchPage() {
+function SearchPageContent() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [hoveredProduct, setHoveredProduct] = useState<string | null>(null);
@@ -190,7 +191,7 @@ export default function SearchPage() {
         <Header />
         <main>
           <div className="min-h-screen flex items-center justify-center">
-            <div className="text-xl text-gray-600">Searching...</div>
+            <div className="text-xl text-gray-600">Loading...</div>
           </div>
         </main>
         <Footer />
@@ -542,5 +543,24 @@ export default function SearchPage() {
         onClose={() => setQuickViewProduct(null)} 
       />
     </>
+  );
+}
+
+export default function SearchPage() {
+  return (
+    <Suspense fallback={
+      <>
+        <Header />
+        <main>
+          <div className="min-h-screen flex items-center justify-center">
+            <div className="text-xl text-gray-600">Loading...</div>
+          </div>
+        </main>
+        <Footer />
+        <CookieBanner />
+      </>
+    }>
+      <SearchPageContent />
+    </Suspense>
   );
 } 
