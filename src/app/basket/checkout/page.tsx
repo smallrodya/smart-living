@@ -13,10 +13,58 @@ import StripeCardForm from '@/components/StripeCardForm';
 // Инициализация Stripe с fallback
 const stripePromise = (async () => {
   try {
+    console.log('Loading Stripe...');
     const { loadStripe } = await import('@stripe/stripe-js');
-    return await loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
+    
+    if (!process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY) {
+      console.error('Stripe publishable key is not configured');
+      return null;
+    }
+    
+    console.log('Stripe publishable key found, loading Stripe...');
+    const stripe = await loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
+    console.log('Stripe loaded successfully:', stripe ? 'Yes' : 'No');
+    return stripe;
   } catch (error) {
-    console.error('Failed to load Stripe:', error);
+    console.error('Failed to load Stripe from npm package:', error);
+    
+    // Try alternative loading method
+    try {
+      console.log('Trying alternative Stripe loading method...');
+      
+      // Check if Stripe is already loaded globally
+      if (typeof window !== 'undefined' && (window as any).Stripe) {
+        console.log('Stripe found globally, using it');
+        return (window as any).Stripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
+      }
+      
+      // Try to load from CDN
+      if (typeof window !== 'undefined') {
+        console.log('Loading Stripe from CDN...');
+        const script = document.createElement('script');
+        script.src = 'https://js.stripe.com/v3/';
+        script.async = true;
+        
+        return new Promise((resolve, reject) => {
+          script.onload = () => {
+            console.log('Stripe loaded from CDN');
+            if ((window as any).Stripe) {
+              resolve((window as any).Stripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY));
+            } else {
+              reject(new Error('Stripe not found after CDN load'));
+            }
+          };
+          script.onerror = () => {
+            console.error('Failed to load Stripe from CDN');
+            reject(new Error('Failed to load Stripe from CDN'));
+          };
+          document.head.appendChild(script);
+        });
+      }
+    } catch (alternativeError) {
+      console.error('Alternative Stripe loading also failed:', alternativeError);
+    }
+    
     return null;
   }
 })();
@@ -217,9 +265,26 @@ function CheckoutPage() {
   useEffect(() => {
     const checkStripe = async () => {
       try {
+        console.log('Checking Stripe availability...');
+        
+        // Check network connectivity
+        try {
+          const networkTest = await fetch('https://js.stripe.com/v3/', { 
+            method: 'HEAD',
+            mode: 'no-cors'
+          });
+          console.log('Network connectivity test passed');
+        } catch (networkError) {
+          console.warn('Network connectivity test failed:', networkError);
+        }
+        
         const stripeInstance = await stripePromise;
         if (!stripeInstance) {
-          setStripeError('Payment processing is temporarily unavailable. Please try again later or contact support.');
+          console.error('Stripe instance is null');
+          setStripeError('Payment processing is temporarily unavailable. Please check your internet connection and try again later.');
+        } else {
+          console.log('Stripe is available');
+          setStripeError(null);
         }
       } catch (error) {
         console.error('Stripe check error:', error);
@@ -1187,7 +1252,21 @@ function CheckoutPage() {
                                   setPaymentError('Apple Pay is available with simple configuration. Please contact support for full integration.');
                                 } else {
                                   console.log('Simple request also failed');
-                                  setPaymentError('Apple Pay is supported on this device, but there may be a configuration issue. Please check your Stripe Dashboard settings or try a different payment method.');
+                                  
+                                  // Check Stripe configuration
+                                  console.log('Checking Stripe configuration...');
+                                  try {
+                                    // Try to get Stripe configuration
+                                    const configResponse = await fetch('/api/stripe-config');
+                                    if (configResponse.ok) {
+                                      const config = await configResponse.json();
+                                      console.log('Stripe config:', config);
+                                    }
+                                  } catch (configError) {
+                                    console.error('Could not fetch Stripe config:', configError);
+                                  }
+                                  
+                                  setPaymentError('Apple Pay is supported on this device, but Stripe configuration may be incomplete. Please check your Stripe Dashboard settings: 1) Go to Settings > Payment methods > Apple Pay, 2) Ensure domain is verified, 3) Check account country is set to UK, or try a different payment method.');
                                 }
                               } catch (simpleError) {
                                 console.error('Simple payment request error:', simpleError);
@@ -1214,7 +1293,7 @@ function CheckoutPage() {
                                     'Content-Type': 'application/json',
                                   },
                                   body: JSON.stringify({
-                                    amount: Math.round(totalWithShipping * 100),
+                                    amount: totalWithShipping,
                                     currency: 'gbp',
                                     payment_method_types: ['card', 'apple_pay'],
                                     payment_method_data: {

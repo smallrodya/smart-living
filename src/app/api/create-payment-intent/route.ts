@@ -11,19 +11,33 @@ export async function POST(req: Request) {
     
     console.log('Creating payment intent with:', { amount, currency, payment_method_types, payment_method_data });
     
+    // Преобразуем сумму в центы (Stripe ожидает целые числа)
+    const amountInCents = Math.round(amount * 100);
+    
+    console.log('Amount in cents:', amountInCents);
+    
     // Создаем Payment Intent
-    const paymentIntent = await stripe.paymentIntents.create({
-      amount: Math.round(amount), // amount уже в центах
+    const paymentIntentConfig: any = {
+      amount: amountInCents, // amount в центах
       currency,
-      payment_method_types,
-      payment_method_data,
-      automatic_payment_methods: {
-        enabled: true,
-      },
       metadata: {
         integration_check: 'accept_a_payment'
       }
-    });
+    };
+
+    // Если переданы payment_method_types, используем их, иначе используем automatic_payment_methods
+    if (payment_method_types && payment_method_types.length > 0) {
+      paymentIntentConfig.payment_method_types = payment_method_types;
+      if (payment_method_data) {
+        paymentIntentConfig.payment_method_data = payment_method_data;
+      }
+    } else {
+      paymentIntentConfig.automatic_payment_methods = {
+        enabled: true,
+      };
+    }
+
+    const paymentIntent = await stripe.paymentIntents.create(paymentIntentConfig);
 
     console.log('Payment intent created:', paymentIntent.id);
 
