@@ -17,23 +17,58 @@ interface Product {
   category: string;
   subcategory: string;
   sku: string;
-  beddingSizes: Array<{ 
+  beddingSizes?: Array<{ 
     size: string; 
     price: number; 
     salePrice: number;
     regularPrice: number;
   }>;
-  throwsTowelsStylePrices: Array<{ 
+  throwsTowelsStylePrices?: Array<{ 
     size: string; 
     regularPrice: number; 
     salePrice: number; 
     sku: string; 
     stock: number 
   }>;
-  beddingColors: string[];
-  beddingStyles: string[];
-  throwsTowelsColors: string[];
-  throwsTowelsStyles: string[];
+  beddingColors?: string[];
+  beddingStyles?: string[];
+  throwsTowelsColors?: string[];
+  throwsTowelsStyles?: string[];
+  rugsMatsSizes?: Array<{ 
+    size: string; 
+    price: number; 
+    salePrice: number; 
+    sku?: string; 
+    stock?: number 
+  }>;
+  rugsMatsColors?: string[];
+  rugsMatsType?: 'RUGS' | 'MATS';
+  rugsMatsStyles?: string[];
+  outdoorPrice?: {
+    sku: string;
+    regularPrice: number;
+    salePrice: number;
+    stock: number;
+  };
+  outdoorColors?: string[];
+  clothingStylePrices?: Array<{ 
+    size: string; 
+    regularPrice: number; 
+    salePrice: number; 
+    sku: string; 
+    stock: number 
+  }>;
+  clothingStyles?: string[];
+  clothingColors?: string[];
+  footwearSizes?: Array<{ 
+    size: string; 
+    price: number; 
+    salePrice: number; 
+    regularPrice: number;
+    sku: string; 
+    stock: number 
+  }>;
+  footwearColors?: string[];
   images?: string[];
   discount?: number;
   isSoldOut?: boolean;
@@ -79,14 +114,68 @@ export default function ClearancePage() {
     }
   };
 
-  const allSizes = Array.from(new Set(products.flatMap(p => p.beddingSizes?.map(s => s.size) || [])));
-  const allColors = Array.from(new Set(products.flatMap(p => p.beddingColors || [])));
-  const allStyles = Array.from(new Set(products.flatMap(p => p.beddingStyles || [])));
+  const allSizes = Array.from(new Set(products.flatMap(p => {
+    if (p.category === 'THROWS & TOWELS') {
+      return p.throwsTowelsStylePrices?.map(s => s.size) || [];
+    } else if (p.category === 'RUGS & MATS') {
+      return p.rugsMatsSizes?.map(s => s.size) || [];
+    } else if (p.category === 'CLOTHING') {
+      return p.clothingStylePrices?.map(s => s.size) || [];
+    } else if (p.category === 'FOOTWEAR') {
+      return p.footwearSizes?.map(s => s.size) || [];
+    } else {
+      return p.beddingSizes?.map(s => s.size) || [];
+    }
+  })));
+  
+  const allColors = Array.from(new Set(products.flatMap(p => {
+    if (p.category === 'THROWS & TOWELS') {
+      return p.throwsTowelsColors || [];
+    } else if (p.category === 'RUGS & MATS') {
+      return p.rugsMatsColors || [];
+    } else if (p.category === 'OUTDOOR') {
+      return p.outdoorColors || [];
+    } else if (p.category === 'CLOTHING') {
+      return p.clothingColors || [];
+    } else if (p.category === 'FOOTWEAR') {
+      return p.footwearColors || [];
+    } else {
+      return p.beddingColors || [];
+    }
+  })));
+  
+  const allStyles = Array.from(new Set(products.flatMap(p => {
+    if (p.category === 'THROWS & TOWELS') {
+      return p.throwsTowelsStyles || [];
+    } else if (p.category === 'RUGS & MATS') {
+      return p.rugsMatsStyles || [];
+    } else if (p.category === 'CLOTHING') {
+      return p.clothingStyles || [];
+    } else {
+      return p.beddingStyles || [];
+    }
+  })));
 
   const getProductPrice = (product: Product) => {
     if (product.category === 'THROWS & TOWELS') {
       if (!product.throwsTowelsStylePrices || product.throwsTowelsStylePrices.length === 0) return 0;
       return product.throwsTowelsStylePrices[0].salePrice;
+    }
+    if (product.category === 'RUGS & MATS') {
+      if (!product.rugsMatsSizes || product.rugsMatsSizes.length === 0) return 0;
+      return product.rugsMatsSizes[0].salePrice;
+    }
+    if (product.category === 'OUTDOOR') {
+      if (!product.outdoorPrice) return 0;
+      return product.outdoorPrice.salePrice;
+    }
+    if (product.category === 'CLOTHING') {
+      if (!product.clothingStylePrices || product.clothingStylePrices.length === 0) return 0;
+      return product.clothingStylePrices[0].salePrice;
+    }
+    if (product.category === 'FOOTWEAR') {
+      if (!product.footwearSizes || product.footwearSizes.length === 0) return 0;
+      return product.footwearSizes[0].salePrice;
     }
     if (!product.beddingSizes || product.beddingSizes.length === 0) return 0;
     return product.beddingSizes[0].salePrice;
@@ -105,6 +194,57 @@ export default function ClearancePage() {
           return discountedPrice;
         }
         return style.salePrice;
+      });
+      const min = Math.min(...prices);
+      const max = Math.max(...prices);
+      return min === max ? formatPrice(min) : `${formatPrice(min)} - ${formatPrice(max)}`;
+    }
+
+    if (product.category === 'RUGS & MATS') {
+      if (!product.rugsMatsSizes || product.rugsMatsSizes.length === 0) return '£0.00';
+      const prices = product.rugsMatsSizes.map(size => {
+        if (product.clearanceDiscount) {
+          const discountedPrice = size.salePrice * (1 - product.clearanceDiscount / 100);
+          return discountedPrice;
+        }
+        return size.salePrice;
+      });
+      const min = Math.min(...prices);
+      const max = Math.max(...prices);
+      return min === max ? formatPrice(min) : `${formatPrice(min)} - ${formatPrice(max)}`;
+    }
+
+    if (product.category === 'OUTDOOR') {
+      if (!product.outdoorPrice) return '£0.00';
+      if (product.clearanceDiscount) {
+        const discountedPrice = product.outdoorPrice.salePrice * (1 - product.clearanceDiscount / 100);
+        return formatPrice(discountedPrice);
+      }
+      return formatPrice(product.outdoorPrice.salePrice);
+    }
+
+    if (product.category === 'CLOTHING') {
+      if (!product.clothingStylePrices || product.clothingStylePrices.length === 0) return '£0.00';
+      const prices = product.clothingStylePrices.map(style => {
+        if (product.clearanceDiscount) {
+          const discountedPrice = style.salePrice * (1 - product.clearanceDiscount / 100);
+          return discountedPrice;
+        }
+        return style.salePrice;
+      });
+      const min = Math.min(...prices);
+      const max = Math.max(...prices);
+      return min === max ? formatPrice(min) : `${formatPrice(min)} - ${formatPrice(max)}`;
+    }
+
+    if (product.category === 'FOOTWEAR') {
+      if (!product.footwearSizes || product.footwearSizes.length === 0) return '£0.00';
+      const prices = product.footwearSizes.map(size => {
+        if (product.clearanceDiscount) {
+          const discountedPrice = size.salePrice * (1 - product.clearanceDiscount / 100);
+          return discountedPrice;
+        }
+        return size.salePrice;
       });
       const min = Math.min(...prices);
       const max = Math.max(...prices);
@@ -133,6 +273,35 @@ export default function ClearancePage() {
       return min === max ? formatPrice(min) : `${formatPrice(min)} - ${formatPrice(max)}`;
     }
 
+    if (product.category === 'RUGS & MATS') {
+      if (!product.rugsMatsSizes || product.rugsMatsSizes.length === 0) return '£0.00';
+      const prices = product.rugsMatsSizes.map(size => size.salePrice);
+      const min = Math.min(...prices);
+      const max = Math.max(...prices);
+      return min === max ? formatPrice(min) : `${formatPrice(min)} - ${formatPrice(max)}`;
+    }
+
+    if (product.category === 'OUTDOOR') {
+      if (!product.outdoorPrice) return '£0.00';
+      return formatPrice(product.outdoorPrice.salePrice);
+    }
+
+    if (product.category === 'CLOTHING') {
+      if (!product.clothingStylePrices || product.clothingStylePrices.length === 0) return '£0.00';
+      const prices = product.clothingStylePrices.map(style => style.salePrice);
+      const min = Math.min(...prices);
+      const max = Math.max(...prices);
+      return min === max ? formatPrice(min) : `${formatPrice(min)} - ${formatPrice(max)}`;
+    }
+
+    if (product.category === 'FOOTWEAR') {
+      if (!product.footwearSizes || product.footwearSizes.length === 0) return '£0.00';
+      const prices = product.footwearSizes.map(size => size.salePrice);
+      const min = Math.min(...prices);
+      const max = Math.max(...prices);
+      return min === max ? formatPrice(min) : `${formatPrice(min)} - ${formatPrice(max)}`;
+    }
+
     if (!product.beddingSizes || product.beddingSizes.length === 0) return '£0.00';
     const prices = product.beddingSizes.map(size => size.salePrice);
     const min = Math.min(...prices);
@@ -144,20 +313,49 @@ export default function ClearancePage() {
     const matchesSize = !selectedSize || 
       (product.category === 'THROWS & TOWELS' 
         ? product.throwsTowelsStylePrices?.some(s => s.size === selectedSize)
+        : product.category === 'RUGS & MATS'
+        ? product.rugsMatsSizes?.some(s => s.size === selectedSize)
+        : product.category === 'CLOTHING'
+        ? product.clothingStylePrices?.some(s => s.size === selectedSize)
+        : product.category === 'FOOTWEAR'
+        ? product.footwearSizes?.some(s => s.size === selectedSize)
         : product.beddingSizes?.some(s => s.size === selectedSize));
+    
     const matchesColor = !selectedColor || 
       (product.category === 'THROWS & TOWELS'
         ? product.throwsTowelsColors?.includes(selectedColor)
+        : product.category === 'RUGS & MATS'
+        ? product.rugsMatsColors?.includes(selectedColor)
+        : product.category === 'OUTDOOR'
+        ? product.outdoorColors?.includes(selectedColor)
+        : product.category === 'CLOTHING'
+        ? product.clothingColors?.includes(selectedColor)
+        : product.category === 'FOOTWEAR'
+        ? product.footwearColors?.includes(selectedColor)
         : product.beddingColors?.includes(selectedColor));
+    
     const matchesStyle = !selectedStyle || 
       (product.category === 'THROWS & TOWELS'
         ? product.throwsTowelsStyles?.includes(selectedStyle)
+        : product.category === 'RUGS & MATS'
+        ? product.rugsMatsStyles?.includes(selectedStyle)
+        : product.category === 'CLOTHING'
+        ? product.clothingStyles?.includes(selectedStyle)
         : product.beddingStyles?.includes(selectedStyle));
+    
     const [minPrice, maxPrice] = priceRange;
     
     let productPrices;
     if (product.category === 'THROWS & TOWELS') {
       productPrices = product.throwsTowelsStylePrices?.map(s => s.salePrice) || [];
+    } else if (product.category === 'RUGS & MATS') {
+      productPrices = product.rugsMatsSizes?.map(s => s.salePrice) || [];
+    } else if (product.category === 'OUTDOOR') {
+      productPrices = product.outdoorPrice ? [product.outdoorPrice.salePrice] : [];
+    } else if (product.category === 'CLOTHING') {
+      productPrices = product.clothingStylePrices?.map(s => s.salePrice) || [];
+    } else if (product.category === 'FOOTWEAR') {
+      productPrices = product.footwearSizes?.map(s => s.salePrice) || [];
     } else {
       productPrices = product.beddingSizes?.map(s => s.salePrice) || [];
     }
@@ -200,7 +398,7 @@ export default function ClearancePage() {
             src: item.images?.[0] || '',
             hoverSrc: item.images?.[1] || item.images?.[0] || '',
             title: item.title,
-            price: `£${item.price}`,
+            price: formatPriceRange(item),
             discount: item.clearanceDiscount ? `-${item.clearanceDiscount}%` : ''
           }));
         
