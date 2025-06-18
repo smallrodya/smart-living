@@ -1095,6 +1095,18 @@ function CheckoutPage() {
                           return;
                         }
                         
+                        // Check domain verification
+                        console.log('Checking Apple Pay domain verification...');
+                        try {
+                          const domainCheck = await fetch('/.well-known/apple-developer-merchantid-domain-association');
+                          console.log('Domain verification file status:', domainCheck.status);
+                          if (!domainCheck.ok) {
+                            console.warn('Domain verification file not found or accessible');
+                          }
+                        } catch (error) {
+                          console.warn('Could not check domain verification file:', error);
+                        }
+                        
                         try {
                           // Create payment request with proper Apple Pay configuration
                           const pr = stripe.paymentRequest({
@@ -1110,12 +1122,20 @@ function CheckoutPage() {
                             disableWallets: ['googlePay', 'link'], // Disable other wallets to focus on Apple Pay
                           });
 
+                          console.log('Payment request created:', pr);
+
                           // Check if Apple Pay is available
                           const result = await pr.canMakePayment();
                           console.log('Payment request result:', result);
+                          console.log('Apple Pay available:', result?.applePay);
+                          console.log('Browser info:', {
+                            userAgent: navigator.userAgent,
+                            platform: navigator.platform,
+                            vendor: navigator.vendor
+                          });
                           
                           if (result && result.applePay) {
-                            console.log('Apple Pay is available');
+                            console.log('Apple Pay is available - proceeding with payment');
                             
                             // Set up payment method handler
                             pr.on('paymentmethod', async (event: any) => {
@@ -1151,6 +1171,8 @@ function CheckoutPage() {
                                 });
 
                                 if (!response.ok) {
+                                  const errorText = await response.text();
+                                  console.error('Payment intent creation failed:', errorText);
                                   throw new Error('Failed to create payment intent');
                                 }
 
@@ -1184,10 +1206,20 @@ function CheckoutPage() {
                             });
 
                             // Show the payment request
+                            console.log('Showing payment request...');
                             await pr.show();
                           } else {
-                            console.log('Apple Pay not available:', result);
-                            setPaymentError('Apple Pay is not available on this device. Please use Safari on macOS or iOS with Touch ID, Face ID, or Apple Watch.');
+                            console.log('Apple Pay not available. Result:', result);
+                            console.log('Available payment methods:', result);
+                            
+                            // More specific error message based on what's available
+                            if (result && result.googlePay) {
+                              setPaymentError('Apple Pay is not available, but Google Pay is. Please use Google Pay or another payment method.');
+                            } else if (result && result.link) {
+                              setPaymentError('Apple Pay is not available, but Link is. Please use Link or another payment method.');
+                            } else {
+                              setPaymentError('Apple Pay is not available on this device. Please use Safari on macOS or iOS with Touch ID, Face ID, or Apple Watch.');
+                            }
                           }
                         } catch (error) {
                           console.error('Apple Pay setup error:', error);
