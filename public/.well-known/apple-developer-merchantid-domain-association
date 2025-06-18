@@ -1,9 +1,1 @@
-# This is a placeholder file for Apple Pay domain verification
-# You need to download the actual file from your Stripe Dashboard:
-# 1. Go to Stripe Dashboard > Settings > Payment methods > Apple Pay
-# 2. Download the domain verification file
-# 3. Replace this content with the actual file content
-# 4. The file should be accessible at: https://yourdomain.com/.well-known/apple-developer-merchantid-domain-association
-
-# For now, this is just a placeholder to ensure the file exists
-# Replace with actual content from Stripe Dashboard 
+{"domain_association":{"domain":"smart-living.co.uk","merchant_identifier":"pmd_1NbX8hITL54KWsfnQ2r2oVNU","verification_data":{"type":"domain_association","version":"1.0"}}}

@@ -4,6 +4,7 @@ import Image from 'next/image';
 import MobileHeader from './MobileHeader';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import SearchSuggestions from './SearchSuggestions';
 
 const styles = {
   logoImage: {
@@ -17,6 +18,7 @@ const Header = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [isMobile, setIsMobile] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [showSuggestions, setShowSuggestions] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -40,6 +42,38 @@ const Header = () => {
 
     checkAuth();
   }, []);
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+      setShowSuggestions(false);
+    }
+  };
+
+  const handleSuggestionSelect = (suggestion: string) => {
+    setSearchQuery(suggestion);
+    setShowSuggestions(false);
+  };
+
+  const handleInputFocus = () => {
+    if (searchQuery.trim()) {
+      setShowSuggestions(true);
+    }
+  };
+
+  const handleInputBlur = () => {
+    // Небольшая задержка, чтобы пользователь мог кликнуть на подсказку
+    setTimeout(() => {
+      setShowSuggestions(false);
+    }, 200);
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setSearchQuery(value);
+    setShowSuggestions(value.trim().length > 0);
+  };
 
   if (isMobile) {
     return <MobileHeader />;
@@ -99,84 +133,101 @@ const Header = () => {
               style={styles.logoImage}
             />
           </Link>
-          <form 
-            role="search" 
-            method="get" 
-            className="searchform" 
-            action="/" 
-            style={{ 
-              display: 'flex', 
-              alignItems: 'center', 
-              gap: '8px',
-              flex: 1,
-              maxWidth: '400px',
-              position: 'relative'
-            }}
-          >
-            <input 
-              type="text" 
-              className="s" 
-              placeholder="Search products..." 
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              name="s" 
-              aria-label="Search" 
-              title="Search for products" 
-              required 
+          <div style={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            gap: '8px',
+            flex: 1,
+            maxWidth: '400px',
+            position: 'relative'
+          }}>
+            <form 
+              role="search" 
+              method="get" 
+              className="searchform" 
+              onSubmit={handleSearch}
               style={{ 
-                padding: '8px 16px',
-                width: '100%',
-                border: '1px solid #eee',
-                borderRadius: '20px',
-                fontSize: '14px',
-                boxShadow: '0 2px 4px rgba(0,0,0,0.03)',
-                transition: 'all 0.3s ease',
-                outline: 'none',
-                background: '#f8f8f8',
-                height: '36px'
-              }}
-              onFocus={(e) => {
-                e.target.style.background = '#fff';
-                e.target.style.boxShadow = '0 2px 8px rgba(0,0,0,0.08)';
-                e.target.style.borderColor = '#ddd';
-              }}
-              onBlur={(e) => {
-                e.target.style.background = '#f8f8f8';
-                e.target.style.boxShadow = '0 2px 4px rgba(0,0,0,0.03)';
-                e.target.style.borderColor = '#eee';
-              }}
-            />
-            <button
-              type="submit"
-              style={{
-                position: 'absolute',
-                right: '8px',
-                top: '50%',
-                transform: 'translateY(-50%)',
-                background: 'none',
-                border: 'none',
-                padding: '4px',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: '#666',
-                transition: 'all 0.3s ease'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.color = '#e53935';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.color = '#666';
+                display: 'flex', 
+                alignItems: 'center', 
+                gap: '8px',
+                flex: 1,
+                position: 'relative'
               }}
             >
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="11" cy="11" r="8"/>
-                <path d="M21 21l-4.35-4.35"/>
-              </svg>
-            </button>
-            <input type="hidden" name="post_type" value="product" />
-          </form>
+              <input 
+                type="text" 
+                className="s" 
+                placeholder="Search products..." 
+                value={searchQuery}
+                onChange={handleInputChange}
+                onFocus={(e) => {
+                  e.target.style.background = '#fff';
+                  e.target.style.boxShadow = '0 2px 8px rgba(0,0,0,0.08)';
+                  e.target.style.borderColor = '#ddd';
+                  handleInputFocus();
+                }}
+                onBlur={(e) => {
+                  e.target.style.background = '#f8f8f8';
+                  e.target.style.boxShadow = '0 2px 4px rgba(0,0,0,0.03)';
+                  e.target.style.borderColor = '#eee';
+                  handleInputBlur();
+                }}
+                name="s" 
+                aria-label="Search" 
+                title="Search for products" 
+                required 
+                style={{ 
+                  padding: '8px 16px',
+                  width: '100%',
+                  border: '1px solid #eee',
+                  borderRadius: '20px',
+                  fontSize: '14px',
+                  boxShadow: '0 2px 4px rgba(0,0,0,0.03)',
+                  transition: 'all 0.3s ease',
+                  outline: 'none',
+                  background: '#f8f8f8',
+                  height: '36px'
+                }}
+              />
+              <button
+                type="submit"
+                style={{
+                  position: 'absolute',
+                  right: '8px',
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  background: 'none',
+                  border: 'none',
+                  padding: '4px',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: '#666',
+                  transition: 'all 0.3s ease'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.color = '#e53935';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.color = '#666';
+                }}
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="11" cy="11" r="8"/>
+                  <path d="M21 21l-4.35-4.35"/>
+                </svg>
+              </button>
+              <input type="hidden" name="post_type" value="product" />
+            </form>
+            
+            {/* Search Suggestions */}
+            <SearchSuggestions
+              query={searchQuery}
+              onSelectSuggestion={handleSuggestionSelect}
+              isVisible={showSuggestions}
+            />
+          </div>
         </div>
         <div style={{ 
           display: 'flex', 

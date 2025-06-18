@@ -251,6 +251,16 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
   };
 
   const formatPriceRange = (product: Product) => {
+    // OUTDOOR категория
+    if (product.category === 'OUTDOOR') {
+      if (!product.outdoorPrice) return '£0.00';
+      const price = product.discount 
+        ? product.outdoorPrice.salePrice * (1 - product.discount / 100)
+        : product.outdoorPrice.salePrice;
+      return formatPrice(price);
+    }
+
+    // FOOTWEAR категория
     if (product.category === 'FOOTWEAR') {
       if (!product.footwearSizes || product.footwearSizes.length === 0) return '£0.00';
       const prices = product.footwearSizes.map(size => {
@@ -264,6 +274,7 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
       return min === max ? formatPrice(min) : `${formatPrice(min)} - ${formatPrice(max)}`;
     }
 
+    // THROWS & TOWELS категория
     if (product.category === 'THROWS & TOWELS') {
       if (!product.throwsTowelsStylePrices || product.throwsTowelsStylePrices.length === 0) return '£0.00';
       const prices = product.throwsTowelsStylePrices.map(style => {
@@ -278,6 +289,7 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
       return min === max ? formatPrice(min) : `${formatPrice(min)} - ${formatPrice(max)}`;
     }
 
+    // CLOTHING категория
     if (product.category === 'CLOTHING') {
       if (!product.clothingStylePrices || product.clothingStylePrices.length === 0) return '£0.00';
       const prices = product.clothingStylePrices.map(style => {
@@ -292,6 +304,37 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
       return min === max ? formatPrice(min) : `${formatPrice(min)} - ${formatPrice(max)}`;
     }
 
+    // RUGS & MATS категория
+    if (product.category === 'RUGS & MATS') {
+      if (!product.rugsMatsSizes || product.rugsMatsSizes.length === 0) return '£0.00';
+      const prices = product.rugsMatsSizes.map(size => {
+        if (product.clearanceDiscount) {
+          const discountedPrice = size.salePrice * (1 - product.clearanceDiscount / 100);
+          return discountedPrice;
+        }
+        return size.salePrice;
+      });
+      const min = Math.min(...prices);
+      const max = Math.max(...prices);
+      return min === max ? formatPrice(min) : `${formatPrice(min)} - ${formatPrice(max)}`;
+    }
+
+    // CURTAINS категория (используем beddingSizes как curtainsSizes)
+    if (product.category === 'CURTAINS') {
+      if (!product.beddingSizes || product.beddingSizes.length === 0) return '£0.00';
+      const prices = product.beddingSizes.map(size => {
+        if (product.clearanceDiscount) {
+          const discountedPrice = size.salePrice * (1 - product.clearanceDiscount / 100);
+          return discountedPrice;
+        }
+        return size.salePrice;
+      });
+      const min = Math.min(...prices);
+      const max = Math.max(...prices);
+      return min === max ? formatPrice(min) : `${formatPrice(min)} - ${formatPrice(max)}`;
+    }
+
+    // BEDDING и другие категории (по умолчанию)
     if (!product.beddingSizes || product.beddingSizes.length === 0) return '£0.00';
     const prices = product.beddingSizes.map(size => {
       if (product.clearanceDiscount) {
@@ -306,6 +349,13 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
   };
 
   const getOriginalPriceRange = (product: Product) => {
+    // OUTDOOR категория
+    if (product.category === 'OUTDOOR') {
+      if (!product.outdoorPrice) return '£0.00';
+      return formatPrice(product.outdoorPrice.regularPrice);
+    }
+
+    // FOOTWEAR категория
     if (product.category === 'FOOTWEAR') {
       if (!product.footwearSizes || product.footwearSizes.length === 0) return '£0.00';
       const prices = product.footwearSizes.map(size => size.salePrice);
@@ -314,6 +364,7 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
       return min === max ? formatPrice(min) : `${formatPrice(min)} - ${formatPrice(max)}`;
     }
 
+    // THROWS & TOWELS категория
     if (product.category === 'THROWS & TOWELS') {
       if (!product.throwsTowelsStylePrices || product.throwsTowelsStylePrices.length === 0) return '£0.00';
       const prices = product.throwsTowelsStylePrices.map(style => style.salePrice);
@@ -322,6 +373,34 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
       return min === max ? formatPrice(min) : `${formatPrice(min)} - ${formatPrice(max)}`;
     }
 
+    // CLOTHING категория
+    if (product.category === 'CLOTHING') {
+      if (!product.clothingStylePrices || product.clothingStylePrices.length === 0) return '£0.00';
+      const prices = product.clothingStylePrices.map(style => style.salePrice);
+      const min = Math.min(...prices);
+      const max = Math.max(...prices);
+      return min === max ? formatPrice(min) : `${formatPrice(min)} - ${formatPrice(max)}`;
+    }
+
+    // RUGS & MATS категория
+    if (product.category === 'RUGS & MATS') {
+      if (!product.rugsMatsSizes || product.rugsMatsSizes.length === 0) return '£0.00';
+      const prices = product.rugsMatsSizes.map(size => size.salePrice);
+      const min = Math.min(...prices);
+      const max = Math.max(...prices);
+      return min === max ? formatPrice(min) : `${formatPrice(min)} - ${formatPrice(max)}`;
+    }
+
+    // CURTAINS категория
+    if (product.category === 'CURTAINS') {
+      if (!product.beddingSizes || product.beddingSizes.length === 0) return '£0.00';
+      const prices = product.beddingSizes.map(size => size.salePrice);
+      const min = Math.min(...prices);
+      const max = Math.max(...prices);
+      return min === max ? formatPrice(min) : `${formatPrice(min)} - ${formatPrice(max)}`;
+    }
+
+    // BEDDING и другие категории (по умолчанию)
     if (!product.beddingSizes || product.beddingSizes.length === 0) return '£0.00';
     const prices = product.beddingSizes.map(size => size.salePrice);
     const min = Math.min(...prices);
