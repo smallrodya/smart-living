@@ -1131,6 +1131,18 @@ function CheckoutPage() {
                           });
 
                           console.log('Payment request created:', pr);
+                          console.log('Stripe instance:', stripe);
+                          console.log('Payment request options:', {
+                            country: 'GB',
+                            currency: 'gbp',
+                            total: {
+                              label: 'Smart Living Order',
+                              amount: Math.round(totalWithShipping * 100),
+                            },
+                            requestPayerName: true,
+                            requestPayerEmail: true,
+                            requestPayerPhone: true,
+                          });
 
                           // Check if Apple Pay is available
                           const result = await pr.canMakePayment();
@@ -1154,9 +1166,33 @@ function CheckoutPage() {
                             
                             console.log('Platform check:', { isSafari, isMacOS, isIOS });
                             
+                            // Try a simpler payment request
                             if (isSafari && (isMacOS || isIOS)) {
-                              console.log('Platform supports Apple Pay, but Stripe detection failed');
-                              setPaymentError('Apple Pay is supported on this device, but there may be a configuration issue. Please check your Stripe Dashboard settings or try a different payment method.');
+                              console.log('Trying simpler payment request...');
+                              try {
+                                const simplePr = stripe.paymentRequest({
+                                  country: 'GB',
+                                  currency: 'gbp',
+                                  total: {
+                                    label: 'Test Order',
+                                    amount: 1000, // £10.00
+                                  },
+                                });
+                                
+                                const simpleResult = await simplePr.canMakePayment();
+                                console.log('Simple payment request result:', simpleResult);
+                                
+                                if (simpleResult && simpleResult.applePay) {
+                                  console.log('Simple request works! Apple Pay is available');
+                                  setPaymentError('Apple Pay is available with simple configuration. Please contact support for full integration.');
+                                } else {
+                                  console.log('Simple request also failed');
+                                  setPaymentError('Apple Pay is supported on this device, but there may be a configuration issue. Please check your Stripe Dashboard settings or try a different payment method.');
+                                }
+                              } catch (simpleError) {
+                                console.error('Simple payment request error:', simpleError);
+                                setPaymentError('Apple Pay is supported on this device, but there may be a configuration issue. Please check your Stripe Dashboard settings or try a different payment method.');
+                              }
                             } else {
                               setPaymentError('Apple Pay is not available on this device. Please use Safari on macOS or iOS with Touch ID, Face ID, or Apple Watch.');
                             }
