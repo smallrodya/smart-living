@@ -54,19 +54,79 @@ export default function FleeceBeddingPage() {
       const res = await fetch('/api/products');
       const data = await res.json();
       console.log('All products:', data.products); // Для отладки
+      
+      // Более гибкая фильтрация для fleece bedding
       const fleeceBedding = data.products.filter(
-        (product: Product) => 
-          (product.category === 'FLEECE BEDDING' && 
-          product.subcategory === 'Fleece Bedding') ||
-          (product.additionalCategories && 
-           product.additionalCategories.some(
-             (ac: { category: string; subcategory: string }) => 
-               ac.category === 'FLEECE BEDDING' && 
-               ac.subcategory === 'Fleece Bedding'
-           ))
+        (product: Product) => {
+          // Проверяем основную категорию и подкатегорию
+          const isMainCategory = product.category === 'FLEECE BEDDING' || 
+                                product.category === 'FLEECE BEDDING' ||
+                                product.category === 'FLEECE_BEDDING' ||
+                                product.category === 'fleece bedding' ||
+                                product.category === 'fleece_bedding';
+          
+          const isMainSubcategory = product.subcategory === 'Fleece Bedding' ||
+                                   product.subcategory === 'fleece bedding' ||
+                                   product.subcategory === 'FLEECE BEDDING' ||
+                                   product.subcategory === 'FleeceBedding';
+          
+          // Проверяем дополнительные категории
+          const hasAdditionalCategory = product.additionalCategories && 
+            product.additionalCategories.some(
+              (ac: { category: string; subcategory: string }) => {
+                const acCategory = ac.category === 'FLEECE BEDDING' || 
+                                 ac.category === 'FLEECE_BEDDING' ||
+                                 ac.category === 'fleece bedding' ||
+                                 ac.category === 'fleece_bedding';
+                
+                const acSubcategory = ac.subcategory === 'Fleece Bedding' ||
+                                     ac.subcategory === 'fleece bedding' ||
+                                     ac.subcategory === 'FLEECE BEDDING' ||
+                                     ac.subcategory === 'FleeceBedding';
+                
+                return acCategory && acSubcategory;
+              }
+            );
+          
+          // Проверяем название товара на наличие ключевых слов
+          const hasFleeceInTitle = product.title.toLowerCase().includes('fleece') &&
+                                  (product.title.toLowerCase().includes('bedding') ||
+                                   product.title.toLowerCase().includes('duvet') ||
+                                   product.title.toLowerCase().includes('sheet') ||
+                                   product.title.toLowerCase().includes('pillow'));
+          
+          const result = isMainCategory || isMainSubcategory || hasAdditionalCategory || hasFleeceInTitle;
+          
+          console.log(`Product "${product.title}":`, {
+            category: product.category,
+            subcategory: product.subcategory,
+            additionalCategories: product.additionalCategories,
+            isMainCategory,
+            isMainSubcategory,
+            hasAdditionalCategory,
+            hasFleeceInTitle,
+            result
+          });
+          
+          return result;
+        }
       );
+      
       console.log('Filtered fleece bedding:', fleeceBedding); // Для отладки
-      setProducts(fleeceBedding);
+      
+      // Если не найдено товаров fleece bedding, показываем все товары для отладки
+      if (fleeceBedding.length === 0) {
+        console.warn('No fleece bedding products found. Showing all products for debugging.');
+        console.log('All products categories:', data.products.map((p: Product) => ({
+          title: p.title,
+          category: p.category,
+          subcategory: p.subcategory,
+          additionalCategories: p.additionalCategories
+        })));
+        setProducts(data.products);
+      } else {
+        setProducts(fleeceBedding);
+      }
     } catch (error) {
       console.error('Error fetching products:', error);
     } finally {
