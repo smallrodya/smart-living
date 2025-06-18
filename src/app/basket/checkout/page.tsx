@@ -1096,6 +1096,7 @@ function CheckoutPage() {
                         }
                         
                         try {
+                          // Create payment request with proper Apple Pay configuration
                           const pr = stripe.paymentRequest({
                             country: 'GB',
                             currency: 'gbp',
@@ -1106,13 +1107,22 @@ function CheckoutPage() {
                             requestPayerName: true,
                             requestPayerEmail: true,
                             requestPayerPhone: true,
+                            disableWallets: ['googlePay', 'link'], // Disable other wallets to focus on Apple Pay
                           });
 
+                          // Check if Apple Pay is available
                           const result = await pr.canMakePayment();
+                          console.log('Payment request result:', result);
+                          
                           if (result && result.applePay) {
+                            console.log('Apple Pay is available');
+                            
+                            // Set up payment method handler
                             pr.on('paymentmethod', async (event: any) => {
+                              console.log('Payment method received:', event);
                               setApplePayLoading(true);
                               try {
+                                // Create payment intent
                                 const response = await fetch('/api/create-payment-intent', {
                                   method: 'POST',
                                   headers: {
@@ -1122,38 +1132,66 @@ function CheckoutPage() {
                                     amount: Math.round(totalWithShipping * 100),
                                     currency: 'gbp',
                                     payment_method_types: ['card', 'apple_pay'],
+                                    payment_method_data: {
+                                      type: 'card',
+                                      billing_details: {
+                                        name: form.firstName + ' ' + form.lastName,
+                                        email: form.email,
+                                        phone: form.phone,
+                                        address: {
+                                          line1: form.address,
+                                          city: form.city,
+                                          state: form.county,
+                                          postal_code: form.postcode,
+                                          country: 'GB'
+                                        }
+                                      }
+                                    }
                                   }),
                                 });
 
+                                if (!response.ok) {
+                                  throw new Error('Failed to create payment intent');
+                                }
+
                                 const { clientSecret } = await response.json();
-                                const { error } = await stripe.confirmCardPayment(clientSecret, {
+                                console.log('Payment intent created:', clientSecret);
+
+                                // Confirm the payment
+                                const { error, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
                                   payment_method: event.paymentMethod.id,
                                 });
 
                                 if (error) {
+                                  console.error('Payment confirmation error:', error);
                                   setPaymentError(error.message || 'Payment failed');
                                   setApplePayLoading(false);
                                 } else {
+                                  console.log('Payment successful:', paymentIntent);
                                   await createOrder('apple_pay');
                                 }
                               } catch (error) {
-                                console.error('Apple Pay error:', error);
-                                setPaymentError('Apple Pay payment failed');
+                                console.error('Apple Pay processing error:', error);
+                                setPaymentError('Apple Pay payment failed. Please try again.');
                                 setApplePayLoading(false);
                               }
                             });
 
+                            // Handle cancellation
                             pr.on('cancel', () => {
+                              console.log('Payment request cancelled');
                               setApplePayLoading(false);
                             });
 
+                            // Show the payment request
                             await pr.show();
                           } else {
-                            setPaymentError('Apple Pay is not available on this device. Please use a different payment method.');
+                            console.log('Apple Pay not available:', result);
+                            setPaymentError('Apple Pay is not available on this device. Please use Safari on macOS or iOS with Touch ID, Face ID, or Apple Watch.');
                           }
                         } catch (error) {
-                          console.error('Apple Pay error:', error);
-                          setPaymentError('Apple Pay is not available on this device. Please use a different payment method.');
+                          console.error('Apple Pay setup error:', error);
+                          setPaymentError('Apple Pay setup failed. Please use a different payment method.');
                         }
                       }}
                       disabled={applePayLoading}
@@ -1167,7 +1205,7 @@ function CheckoutPage() {
                       ) : (
                         <>
                           <svg className="h-6 w-6" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+                            <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c-.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
                           </svg>
                           Pay with Apple Pay
                         </>

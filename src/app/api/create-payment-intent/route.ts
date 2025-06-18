@@ -7,12 +7,16 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 
 export async function POST(req: Request) {
   try {
-    const { amount, currency = 'gbp' } = await req.json();
+    const { amount, currency = 'gbp', payment_method_types = ['card'], payment_method_data } = await req.json();
+    
+    console.log('Creating payment intent with:', { amount, currency, payment_method_types, payment_method_data });
     
     // Создаем Payment Intent
     const paymentIntent = await stripe.paymentIntents.create({
-      amount: Math.round(amount * 100), // Stripe работает в центах
+      amount: Math.round(amount), // amount уже в центах
       currency,
+      payment_method_types,
+      payment_method_data,
       automatic_payment_methods: {
         enabled: true,
       },
@@ -20,6 +24,8 @@ export async function POST(req: Request) {
         integration_check: 'accept_a_payment'
       }
     });
+
+    console.log('Payment intent created:', paymentIntent.id);
 
     return NextResponse.json({ 
       clientSecret: paymentIntent.client_secret 
