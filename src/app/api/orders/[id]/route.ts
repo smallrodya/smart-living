@@ -4,12 +4,13 @@ import { ObjectId } from 'mongodb';
 
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const { db } = await connectToDatabase();
     const order = await db.collection('orders').findOne({
-      _id: new ObjectId(params.id)
+      _id: new ObjectId(id)
     });
 
     if (!order) {
@@ -31,14 +32,15 @@ export async function GET(
 
 export async function PATCH(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const { db } = await connectToDatabase();
     const { status } = await request.json();
 
     const result = await db.collection('orders').updateOne(
-      { _id: new ObjectId(params.id) },
+      { _id: new ObjectId(id) },
       { 
         $set: { 
           status,
@@ -66,13 +68,14 @@ export async function PATCH(
 
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const { db } = await connectToDatabase();
 
     const result = await db.collection('orders').deleteOne({
-      _id: new ObjectId(params.id)
+      _id: new ObjectId(id)
     });
 
     if (result.deletedCount === 0) {

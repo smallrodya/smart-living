@@ -176,7 +176,7 @@ export default function TrackOrderPage() {
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                     required
                   />
-                  <p className="mt-1 text-sm text-gray-500">Enter the order number as shown in your confirmation email</p>
+                  <p className="mt-1 text-sm text-gray-500">Enter your order number, you can find it in the "Myaccount" section "Orders"</p>
                 </div>
                 <div>
                   <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">

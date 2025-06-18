@@ -7,12 +7,19 @@ import Footer from "@/components/Footer";
 import Image from "next/image";
 import { getCookie, setCookie } from 'cookies-next';
 import { toast } from 'react-hot-toast';
-import { loadStripe } from '@stripe/stripe-js';
 import { Elements, useStripe, useElements, CardElement } from '@stripe/react-stripe-js';
 import StripeCardForm from '@/components/StripeCardForm';
 
-// Инициализация Stripe
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
+// Инициализация Stripe с fallback
+const stripePromise = (async () => {
+  try {
+    const { loadStripe } = await import('@stripe/stripe-js');
+    return await loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
+  } catch (error) {
+    console.error('Failed to load Stripe:', error);
+    return null;
+  }
+})();
 
 interface BasketItem {
   id: string;
@@ -49,6 +56,7 @@ function CheckoutPage() {
   const [authError, setAuthError] = useState('');
   const [cardElement, setCardElement] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [stripeError, setStripeError] = useState<string | null>(null);
 
   const [form, setForm] = useState({
     email: "",
@@ -107,29 +115,87 @@ function CheckoutPage() {
           return;
         }
 
-        // Set user email from cookie
-        console.log('Setting user email:', userData.email);
-        setForm(prev => ({
-          ...prev,
-          email: userData.email || ''
-        }));
+        // Fetch complete user data from API
+        try {
+          console.log('Fetching user profile data...');
+          const response = await fetch('/api/user/profile');
+          
+          if (response.ok) {
+            const profileData = await response.json();
+            console.log('Profile data received:', profileData);
+            
+            // Populate form with user data if available
+            setForm(prev => ({
+              ...prev,
+              email: profileData.email || userData.email || '',
+              firstName: profileData.firstName || '',
+              lastName: profileData.lastName || '',
+              company: profileData.company || '',
+              country: profileData.country || 'United Kingdom (UK)',
+              address: profileData.address || '',
+              address2: profileData.address2 || '',
+              city: profileData.city || '',
+              county: profileData.county || '',
+              postcode: profileData.postcode || '',
+              phone: profileData.phone || '',
+            }));
 
-        // Set Smart Coin balance
-        console.log('Setting Smart Coin balance:', userData.smartCoins);
-        if (typeof userData.smartCoins === 'number') {
-          setSmartCoinBalance(userData.smartCoins);
-        } else {
-          console.log('Smart Coins not found in user data, setting default value to 0');
-          setSmartCoinBalance(0);
-          // Обновляем данные пользователя в куки
-          const updatedUserData = {
-            ...userData,
-            smartCoins: 0
-          };
-          setCookie('user', JSON.stringify(updatedUserData), {
-            maxAge: 30 * 24 * 60 * 60, // 30 дней
-            path: '/'
-          });
+            // Set Smart Coin balance from profile data
+            if (typeof profileData.smartCoins === 'number') {
+              setSmartCoinBalance(profileData.smartCoins);
+            } else {
+              console.log('Smart Coins not found in profile data, setting default value to 0');
+              setSmartCoinBalance(0);
+            }
+          } else {
+            console.log('Failed to fetch profile data, using cookie data only');
+            // Fallback to cookie data
+            setForm(prev => ({
+              ...prev,
+              email: userData.email || ''
+            }));
+
+            // Set Smart Coin balance from cookie
+            if (typeof userData.smartCoins === 'number') {
+              setSmartCoinBalance(userData.smartCoins);
+            } else {
+              console.log('Smart Coins not found in user data, setting default value to 0');
+              setSmartCoinBalance(0);
+              // Обновляем данные пользователя в куки
+              const updatedUserData = {
+                ...userData,
+                smartCoins: 0
+              };
+              setCookie('user', JSON.stringify(updatedUserData), {
+                maxAge: 30 * 24 * 60 * 60, // 30 дней
+                path: '/'
+              });
+            }
+          }
+        } catch (profileError) {
+          console.error('Error fetching profile data:', profileError);
+          // Fallback to cookie data
+          setForm(prev => ({
+            ...prev,
+            email: userData.email || ''
+          }));
+
+          // Set Smart Coin balance from cookie
+          if (typeof userData.smartCoins === 'number') {
+            setSmartCoinBalance(userData.smartCoins);
+          } else {
+            console.log('Smart Coins not found in user data, setting default value to 0');
+            setSmartCoinBalance(0);
+            // Обновляем данные пользователя в куки
+            const updatedUserData = {
+              ...userData,
+              smartCoins: 0
+            };
+            setCookie('user', JSON.stringify(updatedUserData), {
+              maxAge: 30 * 24 * 60 * 60, // 30 дней
+              path: '/'
+            });
+          }
         }
 
         setIsLoading(false);
@@ -142,6 +208,23 @@ function CheckoutPage() {
 
     checkAuthAndBalance();
   }, [router]);
+
+  // Check Stripe availability
+  useEffect(() => {
+    const checkStripe = async () => {
+      try {
+        const stripeInstance = await stripePromise;
+        if (!stripeInstance) {
+          setStripeError('Payment processing is temporarily unavailable. Please try again later or contact support.');
+        }
+      } catch (error) {
+        console.error('Stripe check error:', error);
+        setStripeError('Payment processing is temporarily unavailable. Please try again later or contact support.');
+      }
+    };
+
+    checkStripe();
+  }, []);
 
   const validate = () => {
     const newErrors: any = {};
@@ -713,6 +796,14 @@ function CheckoutPage() {
             <div className="mt-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Payment Method</h3>
               
+              {/* Stripe Error Display */}
+              {stripeError && (
+                <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-4">
+                  <p className="font-medium">Payment System Error</p>
+                  <p className="text-sm mt-1">{stripeError}</p>
+                </div>
+              )}
+              
               {/* Payment method selection */}
               <div className="space-y-3 mb-6">
                 <label className={`flex items-center p-4 border rounded-lg cursor-pointer transition-all ${
@@ -929,10 +1020,10 @@ function CheckoutPage() {
               <button
                 type="button"
                 onClick={handleSubmit}
-                disabled={submitting || paymentProcessing || (paymentMethod === "card" && !cardComplete)}
+                disabled={submitting || paymentProcessing || (paymentMethod === "card" && !cardComplete) || !!stripeError}
                 className="w-full bg-black text-white py-3 px-6 rounded-lg font-medium hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors disabled:opacity-50 text-lg"
               >
-                {submitting || paymentProcessing ? "Processing payment..." : "Place Order"}
+                {submitting || paymentProcessing ? "Processing payment..." : stripeError ? "Payment Unavailable" : "Place Order"}
               </button>
             </div>
 

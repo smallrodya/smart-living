@@ -22,19 +22,20 @@ interface Ticket {
 
 export async function PATCH(
   request: Request,
-  { params }: { params: { ticketId: string } }
+  { params }: { params: Promise<{ ticketId: string }> }
 ) {
   try {
+    const { ticketId } = await params;
     const { status } = await request.json();
     if (!status || !['open', 'in-progress', 'closed'].includes(status)) {
       return new NextResponse('Invalid status', { status: 400 });
     }
 
     const { db } = await connectToDatabase();
-    const ticketId = new ObjectId(params.ticketId);
+    const ticketObjectId = new ObjectId(ticketId);
 
     const result = await db.collection('tickets').updateOne(
-      { _id: ticketId },
+      { _id: ticketObjectId },
       { 
         $set: { 
           status,
@@ -47,7 +48,7 @@ export async function PATCH(
       return new NextResponse('Ticket not found', { status: 404 });
     }
 
-    const updatedTicket = await db.collection('tickets').findOne({ _id: ticketId });
+    const updatedTicket = await db.collection('tickets').findOne({ _id: ticketObjectId });
     if (!updatedTicket) {
       return new NextResponse('Failed to fetch updated ticket', { status: 500 });
     }
@@ -71,13 +72,14 @@ export async function PATCH(
 
 export async function DELETE(
   request: Request,
-  { params }: { params: { ticketId: string } }
+  { params }: { params: Promise<{ ticketId: string }> }
 ) {
   try {
+    const { ticketId } = await params;
     const { db } = await connectToDatabase();
-    const ticketId = new ObjectId(params.ticketId);
+    const ticketObjectId = new ObjectId(ticketId);
 
-    const result = await db.collection('tickets').deleteOne({ _id: ticketId });
+    const result = await db.collection('tickets').deleteOne({ _id: ticketObjectId });
 
     if (result.deletedCount === 0) {
       return new NextResponse('Ticket not found', { status: 404 });
