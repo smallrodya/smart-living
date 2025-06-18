@@ -88,7 +88,6 @@ function CheckoutPage() {
   const [paymentError, setPaymentError] = useState<string | null>(null);
   const [smartCoinBalance, setSmartCoinBalance] = useState<number>(0);
   const [useSmartCoins, setUseSmartCoins] = useState(false);
-  const [applePayAvailable, setApplePayAvailable] = useState(false);
   const [applePayLoading, setApplePayLoading] = useState(false);
 
   useEffect(() => {
@@ -234,80 +233,6 @@ function CheckoutPage() {
   const subtotal = items.reduce((sum, item) => sum + (item.clearanceDiscount ? item.price * (1 - item.clearanceDiscount / 100) : item.price) * item.quantity, 0);
   const shippingPrice = SHIPPING_OPTIONS.find(opt => opt.value === shipping)?.price || 0;
   const totalWithShipping = subtotal + shippingPrice;
-
-  // Check Apple Pay availability
-  useEffect(() => {
-    const checkApplePay = async () => {
-      if (!stripe) return;
-
-      try {
-        const pr = stripe.paymentRequest({
-          country: 'GB',
-          currency: 'gbp',
-          total: {
-            label: 'Smart Living Order',
-            amount: Math.round(totalWithShipping * 100), // Convert to pence
-          },
-          requestPayerName: true,
-          requestPayerEmail: true,
-          requestPayerPhone: true,
-        });
-
-        // Check if Apple Pay is available
-        const result = await pr.canMakePayment();
-        if (result && result.applePay) {
-          setApplePayAvailable(true);
-          
-          // Handle Apple Pay payment
-          pr.on('paymentmethod', async (event: any) => {
-            setApplePayLoading(true);
-            try {
-              // Create payment intent
-              const response = await fetch('/api/create-payment-intent', {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                  amount: Math.round(totalWithShipping * 100),
-                  currency: 'gbp',
-                  payment_method_types: ['card', 'apple_pay'],
-                }),
-              });
-
-              const { clientSecret } = await response.json();
-
-              // Confirm payment
-              const { error } = await stripe.confirmCardPayment(clientSecret, {
-                payment_method: event.paymentMethod.id,
-              });
-
-              if (error) {
-                setPaymentError(error.message || 'Payment failed');
-                setApplePayLoading(false);
-              } else {
-                // Payment successful - proceed with order creation
-                await createOrder('apple_pay');
-              }
-            } catch (error) {
-              console.error('Apple Pay error:', error);
-              setPaymentError('Apple Pay payment failed');
-              setApplePayLoading(false);
-            }
-          });
-
-          pr.on('cancel', () => {
-            setApplePayLoading(false);
-          });
-        }
-      } catch (error) {
-        console.error('Apple Pay check error:', error);
-        setApplePayAvailable(false);
-      }
-    };
-
-    checkApplePay();
-  }, [stripe, totalWithShipping]);
 
   const validate = () => {
     const newErrors: any = {};
@@ -1053,28 +978,26 @@ function CheckoutPage() {
                 </label>
 
                 {/* Apple Pay Option */}
-                {applePayAvailable && (
-                  <label className={`flex items-center p-4 border rounded-lg cursor-pointer transition-all ${
-                    paymentMethod === "apple_pay" ? "border-blue-500 bg-blue-50" : "border-gray-200 hover:border-gray-300"
-                  }`}>
-                    <input
-                      type="radio"
-                      name="paymentMethod"
-                      value="apple_pay"
-                      checked={paymentMethod === "apple_pay"}
-                      onChange={() => setPaymentMethod("apple_pay")}
-                      className="accent-blue-600 mr-3"
-                    />
-                    <div className="flex items-center justify-between flex-1">
-                      <span className="font-medium">Apple Pay</span>
-                      <div className="flex items-center gap-2">
-                        <svg className="h-6 w-6" viewBox="0 0 24 24" fill="currentColor">
-                          <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
-                        </svg>
-                      </div>
+                <label className={`flex items-center p-4 border rounded-lg cursor-pointer transition-all ${
+                  paymentMethod === "apple_pay" ? "border-blue-500 bg-blue-50" : "border-gray-200 hover:border-gray-300"
+                }`}>
+                  <input
+                    type="radio"
+                    name="paymentMethod"
+                    value="apple_pay"
+                    checked={paymentMethod === "apple_pay"}
+                    onChange={() => setPaymentMethod("apple_pay")}
+                    className="accent-blue-600 mr-3"
+                  />
+                  <div className="flex items-center justify-between flex-1">
+                    <span className="font-medium">Apple Pay</span>
+                    <div className="flex items-center gap-2">
+                      <svg className="h-6 w-6" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+                      </svg>
                     </div>
-                  </label>
-                )}
+                  </div>
+                </label>
               </div>
 
               {/* Payment method forms */}
@@ -1167,7 +1090,11 @@ function CheckoutPage() {
                     <button
                       type="button"
                       onClick={async () => {
-                        if (!stripe) return;
+                        if (!stripe) {
+                          setPaymentError('Stripe is not available');
+                          return;
+                        }
+                        
                         try {
                           const pr = stripe.paymentRequest({
                             country: 'GB',
@@ -1221,10 +1148,12 @@ function CheckoutPage() {
                             });
 
                             await pr.show();
+                          } else {
+                            setPaymentError('Apple Pay is not available on this device. Please use a different payment method.');
                           }
                         } catch (error) {
                           console.error('Apple Pay error:', error);
-                          setPaymentError('Apple Pay is not available');
+                          setPaymentError('Apple Pay is not available on this device. Please use a different payment method.');
                         }
                       }}
                       disabled={applePayLoading}
@@ -1244,6 +1173,9 @@ function CheckoutPage() {
                         </>
                       )}
                     </button>
+                  </div>
+                  <div className="text-center text-sm text-gray-600">
+                    Apple Pay is available on Safari with Touch ID, Face ID, or Apple Watch
                   </div>
                   {paymentError && (
                     <div className="text-red-600 text-sm mt-2">
