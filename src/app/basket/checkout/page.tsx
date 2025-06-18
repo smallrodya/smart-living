@@ -21,6 +21,9 @@ const stripePromise = (async () => {
   }
 })();
 
+// Apple Pay Domain ID
+const APPLE_PAY_DOMAIN_ID = 'pmd_1NbX8hITL54KWsfnQ2r2oVNU';
+
 interface BasketItem {
   id: string;
   title: string;
@@ -85,6 +88,8 @@ function CheckoutPage() {
   const [paymentError, setPaymentError] = useState<string | null>(null);
   const [smartCoinBalance, setSmartCoinBalance] = useState<number>(0);
   const [useSmartCoins, setUseSmartCoins] = useState(false);
+  const [applePayAvailable, setApplePayAvailable] = useState(false);
+  const [applePayLoading, setApplePayLoading] = useState(false);
 
   useEffect(() => {
     const checkAuthAndBalance = async () => {
@@ -226,6 +231,84 @@ function CheckoutPage() {
     checkStripe();
   }, []);
 
+  const subtotal = items.reduce((sum, item) => sum + (item.clearanceDiscount ? item.price * (1 - item.clearanceDiscount / 100) : item.price) * item.quantity, 0);
+  const shippingPrice = SHIPPING_OPTIONS.find(opt => opt.value === shipping)?.price || 0;
+  const totalWithShipping = subtotal + shippingPrice;
+
+  // Check Apple Pay availability
+  useEffect(() => {
+    const checkApplePay = async () => {
+      if (!stripe) return;
+
+      try {
+        const pr = stripe.paymentRequest({
+          country: 'GB',
+          currency: 'gbp',
+          total: {
+            label: 'Smart Living Order',
+            amount: Math.round(totalWithShipping * 100), // Convert to pence
+          },
+          requestPayerName: true,
+          requestPayerEmail: true,
+          requestPayerPhone: true,
+        });
+
+        // Check if Apple Pay is available
+        const result = await pr.canMakePayment();
+        if (result && result.applePay) {
+          setApplePayAvailable(true);
+          
+          // Handle Apple Pay payment
+          pr.on('paymentmethod', async (event: any) => {
+            setApplePayLoading(true);
+            try {
+              // Create payment intent
+              const response = await fetch('/api/create-payment-intent', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  amount: Math.round(totalWithShipping * 100),
+                  currency: 'gbp',
+                  payment_method_types: ['card', 'apple_pay'],
+                }),
+              });
+
+              const { clientSecret } = await response.json();
+
+              // Confirm payment
+              const { error } = await stripe.confirmCardPayment(clientSecret, {
+                payment_method: event.paymentMethod.id,
+              });
+
+              if (error) {
+                setPaymentError(error.message || 'Payment failed');
+                setApplePayLoading(false);
+              } else {
+                // Payment successful - proceed with order creation
+                await createOrder('apple_pay');
+              }
+            } catch (error) {
+              console.error('Apple Pay error:', error);
+              setPaymentError('Apple Pay payment failed');
+              setApplePayLoading(false);
+            }
+          });
+
+          pr.on('cancel', () => {
+            setApplePayLoading(false);
+          });
+        }
+      } catch (error) {
+        console.error('Apple Pay check error:', error);
+        setApplePayAvailable(false);
+      }
+    };
+
+    checkApplePay();
+  }, [stripe, totalWithShipping]);
+
   const validate = () => {
     const newErrors: any = {};
     if (!form.email) newErrors.email = "Email is required";
@@ -248,6 +331,70 @@ function CheckoutPage() {
 
   const handleCardElementReady = (element: any) => {
     setCardElement(element);
+  };
+
+  // Function to create order
+  const createOrder = async (paymentMethod: string) => {
+    try {
+      // Update product stock
+      console.log('Updating stock...');
+      const response = await fetch('/api/products/update-stock', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          items: items.map(item => ({
+            title: item.title,
+            size: item.size,
+            quantity: item.quantity
+          }))
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to update stock');
+      }
+
+      // Create order in database
+      console.log('Creating order...');
+      const orderResponse = await fetch('/api/orders', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          items,
+          total: totalWithShipping,
+          shipping,
+          paymentMethod,
+          customerDetails: {
+            ...form,
+            email: form.email
+          },
+          status: 'DONE'
+        }),
+      });
+
+      if (!orderResponse.ok) {
+        const errorData = await orderResponse.json();
+        throw new Error(errorData.error || 'Failed to create order');
+      }
+
+      const orderData = await orderResponse.json();
+      console.log('Order created:', orderData);
+
+      // Clear basket
+      clearBasket();
+
+      toast.success(`Order placed successfully!`);
+      router.push("/basket");
+    } catch (error) {
+      console.error('Error creating order:', error);
+      setPaymentError(error instanceof Error ? error.message : 'Failed to create order');
+      setApplePayLoading(false);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -510,10 +657,6 @@ function CheckoutPage() {
       setPaymentProcessing(false);
     }
   };
-
-  const subtotal = items.reduce((sum, item) => sum + (item.clearanceDiscount ? item.price * (1 - item.clearanceDiscount / 100) : item.price) * item.quantity, 0);
-  const shippingPrice = SHIPPING_OPTIONS.find(opt => opt.value === shipping)?.price || 0;
-  const totalWithShipping = subtotal + shippingPrice;
 
   if (isLoading) {
     return (
@@ -908,6 +1051,30 @@ function CheckoutPage() {
                     <img src="/Klarna_Payment_Badge.svg.png" alt="Klarna" className="h-6 object-contain" />
                   </div>
                 </label>
+
+                {/* Apple Pay Option */}
+                {applePayAvailable && (
+                  <label className={`flex items-center p-4 border rounded-lg cursor-pointer transition-all ${
+                    paymentMethod === "apple_pay" ? "border-blue-500 bg-blue-50" : "border-gray-200 hover:border-gray-300"
+                  }`}>
+                    <input
+                      type="radio"
+                      name="paymentMethod"
+                      value="apple_pay"
+                      checked={paymentMethod === "apple_pay"}
+                      onChange={() => setPaymentMethod("apple_pay")}
+                      className="accent-blue-600 mr-3"
+                    />
+                    <div className="flex items-center justify-between flex-1">
+                      <span className="font-medium">Apple Pay</span>
+                      <div className="flex items-center gap-2">
+                        <svg className="h-6 w-6" viewBox="0 0 24 24" fill="currentColor">
+                          <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+                        </svg>
+                      </div>
+                    </div>
+                  </label>
+                )}
               </div>
 
               {/* Payment method forms */}
@@ -993,6 +1160,98 @@ function CheckoutPage() {
                   <span className="text-gray-600">You will be redirected to PayPal to complete your payment</span>
                 </div>
               )}
+
+              {paymentMethod === "apple_pay" && (
+                <div className="space-y-4 bg-gray-50 rounded-lg p-6 border mb-4">
+                  <div className="flex items-center justify-center">
+                    <button
+                      type="button"
+                      onClick={async () => {
+                        if (!stripe) return;
+                        try {
+                          const pr = stripe.paymentRequest({
+                            country: 'GB',
+                            currency: 'gbp',
+                            total: {
+                              label: 'Smart Living Order',
+                              amount: Math.round(totalWithShipping * 100),
+                            },
+                            requestPayerName: true,
+                            requestPayerEmail: true,
+                            requestPayerPhone: true,
+                          });
+
+                          const result = await pr.canMakePayment();
+                          if (result && result.applePay) {
+                            pr.on('paymentmethod', async (event: any) => {
+                              setApplePayLoading(true);
+                              try {
+                                const response = await fetch('/api/create-payment-intent', {
+                                  method: 'POST',
+                                  headers: {
+                                    'Content-Type': 'application/json',
+                                  },
+                                  body: JSON.stringify({
+                                    amount: Math.round(totalWithShipping * 100),
+                                    currency: 'gbp',
+                                    payment_method_types: ['card', 'apple_pay'],
+                                  }),
+                                });
+
+                                const { clientSecret } = await response.json();
+                                const { error } = await stripe.confirmCardPayment(clientSecret, {
+                                  payment_method: event.paymentMethod.id,
+                                });
+
+                                if (error) {
+                                  setPaymentError(error.message || 'Payment failed');
+                                  setApplePayLoading(false);
+                                } else {
+                                  await createOrder('apple_pay');
+                                }
+                              } catch (error) {
+                                console.error('Apple Pay error:', error);
+                                setPaymentError('Apple Pay payment failed');
+                                setApplePayLoading(false);
+                              }
+                            });
+
+                            pr.on('cancel', () => {
+                              setApplePayLoading(false);
+                            });
+
+                            await pr.show();
+                          }
+                        } catch (error) {
+                          console.error('Apple Pay error:', error);
+                          setPaymentError('Apple Pay is not available');
+                        }
+                      }}
+                      disabled={applePayLoading}
+                      className="w-full bg-black text-white py-3 px-6 rounded-lg font-medium hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                    >
+                      {applePayLoading ? (
+                        <>
+                          <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                          Processing...
+                        </>
+                      ) : (
+                        <>
+                          <svg className="h-6 w-6" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+                          </svg>
+                          Pay with Apple Pay
+                        </>
+                      )}
+                    </button>
+                  </div>
+                  {paymentError && (
+                    <div className="text-red-600 text-sm mt-2">
+                      {paymentError}
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
 
             {/* Place Order Button */}
@@ -1020,10 +1279,10 @@ function CheckoutPage() {
               <button
                 type="button"
                 onClick={handleSubmit}
-                disabled={submitting || paymentProcessing || (paymentMethod === "card" && !cardComplete) || !!stripeError}
+                disabled={submitting || paymentProcessing || (paymentMethod === "card" && !cardComplete) || !!stripeError || paymentMethod === "apple_pay"}
                 className="w-full bg-black text-white py-3 px-6 rounded-lg font-medium hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors disabled:opacity-50 text-lg"
               >
-                {submitting || paymentProcessing ? "Processing payment..." : stripeError ? "Payment Unavailable" : "Place Order"}
+                {submitting || paymentProcessing ? "Processing payment..." : stripeError ? "Payment Unavailable" : paymentMethod === "apple_pay" ? "Use Apple Pay Button Above" : "Place Order"}
               </button>
             </div>
 
