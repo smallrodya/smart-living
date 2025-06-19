@@ -466,8 +466,8 @@ export default function ProductsPage() {
                 <div className="flex justify-between items-center mt-1">
                   <span className="text-sm text-gray-600">Stock: {size.stock || 0}</span>
                   <div className="text-sm">
-                    <span className="text-gray-500 line-through mr-2">£{regularPrice}</span>
-                    <span className="text-green-600 font-medium">£{discountedPrice.toFixed(2)}</span>
+                    <span className="text-gray-500 line-through mr-2">£{regularPrice != null ? regularPrice.toFixed(2) : 'N/A'}</span>
+                    <span className="text-green-600 font-medium">£{discountedPrice != null ? discountedPrice.toFixed(2) : 'N/A'}</span>
                   </div>
                 </div>
               </div>
@@ -650,6 +650,94 @@ export default function ProductsPage() {
     document.body.removeChild(link);
   };
 
+  const checkProductsAndExport = () => {
+    const requiredFields = [
+      { key: 'description', label: 'Description' },
+      { key: 'features', label: 'Features' },
+    ];
+
+    // Helper to check a size/variant object
+    function checkSizeFields(size: any, parentSku: any): { sku: string; missing: string[] } {
+      const missing: string[] = [];
+      if (!size.sku) missing.push('SKU');
+      if (size.regularPrice == null && size.price == null) missing.push('Regular Price');
+      if (size.salePrice == null) missing.push('Sale Price');
+      return { sku: size.sku || parentSku || '', missing };
+    }
+
+    // Helper to check outdoorPrice
+    function checkOutdoorFields(outdoor: any, parentSku: any): { sku: string; missing: string[] } {
+      const missing: string[] = [];
+      if (!outdoor.sku) missing.push('SKU');
+      if (outdoor.regularPrice == null) missing.push('Regular Price');
+      if (outdoor.salePrice == null) missing.push('Sale Price');
+      return { sku: outdoor.sku || parentSku || '', missing };
+    }
+
+    const rows: string[][] = [['SKU', 'Missing Fields']];
+
+    products.forEach(product => {
+      // Check product-level fields
+      let missingFields: string[] = [];
+      requiredFields.forEach(field => {
+        if (!product[field.key] || (typeof product[field.key] === 'string' && !product[field.key].trim())) {
+          missingFields.push(field.label);
+        }
+      });
+
+      // Check all size/variant arrays
+      const sizeArrays = [
+        'beddingSizes',
+        'rugsMatsSizes',
+        'throwsTowelsStylePrices',
+        'curtainsSizes',
+        'footwearSizes',
+        'clothingStylePrices',
+      ];
+      sizeArrays.forEach(arrKey => {
+        if (Array.isArray(product[arrKey])) {
+          product[arrKey].forEach((size: any) => {
+            const { sku, missing } = checkSizeFields(size, product.sku);
+            if (missing.length > 0) {
+              rows.push([sku, missing.join('; ')]);
+            }
+          });
+        }
+      });
+
+      // Check outdoorPrice
+      if (product.outdoorPrice) {
+        const { sku, missing } = checkOutdoorFields(product.outdoorPrice, product.sku);
+        if (missing.length > 0) {
+          rows.push([sku, missing.join('; ')]);
+        }
+      }
+
+      // If product-level fields missing and no variants, add product SKU
+      if (missingFields.length > 0 && !sizeArrays.some(arrKey => Array.isArray(product[arrKey]) && product[arrKey].length > 0) && !product.outdoorPrice) {
+        rows.push([product.sku || '', missingFields.join('; ')]);
+      }
+    });
+
+    // If only header, all products are complete
+    if (rows.length === 1) {
+      toast.success('All products are fully filled!');
+      return;
+    }
+
+    // Create CSV
+    const csvContent = rows.map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(',')).join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', `products_check_${new Date().toISOString().split('T')[0]}.csv`);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {showConfetti && (
@@ -731,6 +819,12 @@ export default function ProductsPage() {
           >
             <Download className="h-5 w-5" />
             Export CSV
+          </button>
+          <button
+            className="flex items-center gap-2 px-4 py-2 text-white bg-yellow-500 hover:bg-yellow-600 rounded-lg transition-colors"
+            onClick={checkProductsAndExport}
+          >
+            CheckProduct
           </button>
           <button
             className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors"
@@ -1053,11 +1147,11 @@ export default function ProductsPage() {
                                   <div>
                                     <div className="flex justify-between items-center mb-2">
                                       <span className="text-sm text-gray-600">Regular Price:</span>
-                                      <span className="text-sm text-gray-500 line-through">£{product.outdoorPrice.regularPrice.toFixed(2)}</span>
+                                      <span className="text-sm text-gray-500 line-through">£{product.outdoorPrice.regularPrice != null ? product.outdoorPrice.regularPrice.toFixed(2) : 'N/A'}</span>
                                     </div>
                                     <div className="flex justify-between items-center">
                                       <span className="text-sm text-gray-600">Sale Price:</span>
-                                      <span className="text-sm text-green-600 font-medium">£{product.outdoorPrice.salePrice.toFixed(2)}</span>
+                                      <span className="text-sm text-green-600 font-medium">£{product.outdoorPrice.salePrice != null ? product.outdoorPrice.salePrice.toFixed(2) : 'N/A'}</span>
                                     </div>
                                   </div>
                                 </div>
@@ -1410,11 +1504,11 @@ export default function ProductsPage() {
                                             <div>
                                               <div className="flex justify-between items-center mb-2">
                                                 <span className="text-sm text-gray-600">Regular Price:</span>
-                                                <span className="text-sm text-gray-500 line-through">£{product.outdoorPrice.regularPrice.toFixed(2)}</span>
+                                                <span className="text-sm text-gray-500 line-through">£{product.outdoorPrice.regularPrice != null ? product.outdoorPrice.regularPrice.toFixed(2) : 'N/A'}</span>
                                               </div>
                                               <div className="flex justify-between items-center">
                                                 <span className="text-sm text-gray-600">Sale Price:</span>
-                                                <span className="text-sm text-green-600 font-medium">£{product.outdoorPrice.salePrice.toFixed(2)}</span>
+                                                <span className="text-sm text-green-600 font-medium">£{product.outdoorPrice.salePrice != null ? product.outdoorPrice.salePrice.toFixed(2) : 'N/A'}</span>
                                               </div>
                                             </div>
                                           </div>

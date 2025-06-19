@@ -246,7 +246,8 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
     setOpenSection(openSection === section ? null : section);
   };
 
-  const formatPrice = (price: number) => {
+  const formatPrice = (price: number | null | undefined) => {
+    if (price === null || price === undefined) return 'N/A';
     return `£${price.toFixed(2)}`;
   };
 
@@ -754,13 +755,13 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
                         textDecoration: 'line-through',
                         fontSize: '20px'
                       }}>
-                        £{product.outdoorPrice.regularPrice.toFixed(2)}
+                        {formatPrice(product.outdoorPrice.regularPrice)}
                       </span>
                       <span style={{
                         color: '#e53935',
                         fontSize: '28px'
                       }}>
-                        £{product.outdoorPrice.salePrice.toFixed(2)}
+                        {formatPrice(product.outdoorPrice.salePrice)}
                       </span>
                       <span style={{
                         background: '#e53935',
@@ -774,7 +775,7 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
                       </span>
                     </>
                   ) : (
-                    <span>£{product.outdoorPrice.salePrice.toFixed(2)}</span>
+                    <span>{formatPrice(product.outdoorPrice.salePrice)}</span>
                   )}
                 </>
               ) : (
@@ -810,125 +811,50 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
               )}
             </div>
 
-            {/* Description */}
-            <div style={{ marginBottom: '32px' }}>
-              <button
-                onClick={() => toggleSection('description')}
-                style={{
-                  width: '100%',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  background: 'none',
-                  border: 'none',
-                  padding: '0',
-                  cursor: 'pointer',
-                  marginBottom: openSection === 'description' ? '16px' : '0'
-                }}
-              >
-                <h3 style={{
-                  fontSize: '20px',
-                  fontWeight: 600,
-                  color: '#222',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  margin: 0
-                }}>
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-                  </svg>
-                  Description
-                </h3>
-                <svg
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  style={{
-                    transform: openSection === 'description' ? 'rotate(180deg)' : 'rotate(0deg)',
-                    transition: 'transform 0.3s ease'
-                  }}
-                >
-                  <path d="M6 9l6 6 6-6"/>
-                </svg>
-              </button>
-              {openSection === 'description' && (
-                <p style={{
-                  color: '#666',
-                  lineHeight: '1.8',
-                  fontSize: '16px',
-                  background: '#f8f9fa',
-                  padding: '20px',
-                  borderRadius: '12px',
-                  margin: 0
-                }}>
-                  {product.description}
-                </p>
-              )}
+            {/* Description Section */}
+            <div style={{
+              marginBottom: '32px',
+              background: '#f8f9fa',
+              borderRadius: '16px',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
+              padding: '28px 32px',
+              border: '1px solid #f0f0f0',
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 18 }}>
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#e53935" strokeWidth="2.2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                <h3 style={{ fontSize: 22, fontWeight: 700, color: '#222', margin: 0, letterSpacing: 0.2 }}>Description</h3>
+              </div>
+              <div style={{ color: '#444', fontSize: 16, lineHeight: 1.7, marginBottom: 0, whiteSpace: 'pre-line' }}>
+                {product.description}
+              </div>
             </div>
 
-            {/* Features */}
-            <div style={{ marginBottom: '32px' }}>
-              <button
-                onClick={() => toggleSection('features')}
-                style={{
-                  width: '100%',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  background: 'none',
-                  border: 'none',
-                  padding: '0',
-                  cursor: 'pointer',
-                  marginBottom: openSection === 'features' ? '16px' : '0'
-                }}
-              >
-                <h3 style={{
-                  fontSize: '20px',
-                  fontWeight: 600,
-                  color: '#222',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  margin: 0
-                }}>
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M20 6L9 17l-5-5"/>
-                  </svg>
-                  Features
-                </h3>
-                <svg
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  style={{
-                    transform: openSection === 'features' ? 'rotate(180deg)' : 'rotate(0deg)',
-                    transition: 'transform 0.3s ease'
-                  }}
-                >
-                  <path d="M6 9l6 6 6-6"/>
-                </svg>
-              </button>
-              {openSection === 'features' && (
-                <p style={{
-                  color: '#666',
-                  lineHeight: '1.8',
-                  fontSize: '16px',
-                  background: '#f8f9fa',
-                  padding: '20px',
-                  borderRadius: '12px',
-                  margin: 0
-                }}>
-                  {product.features}
-                </p>
-              )}
-            </div>
+            {/* Features Section */}
+            {product.features && (
+              <div style={{
+                marginBottom: '32px',
+                background: '#f8f9fa',
+                borderRadius: '16px',
+                boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
+                padding: '28px 32px',
+                border: '1px solid #f0f0f0',
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 18 }}>
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#43a047" strokeWidth="2.2"><path d="M20 6L9 17l-5-5"/></svg>
+                  <h3 style={{ fontSize: 22, fontWeight: 700, color: '#222', margin: 0, letterSpacing: 0.2 }}>Features</h3>
+                </div>
+                <ul style={{ paddingLeft: 0, margin: 0, listStyle: 'none', color: '#444', fontSize: 16, lineHeight: 1.7 }}>
+                  {typeof product.features === 'string'
+                    ? product.features.split(/\n|,/).filter(Boolean).map((f, i) => (
+                        <li key={i} style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
+                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#43a047" strokeWidth="2.2"><path d="M20 6L9 17l-5-5"/></svg>
+                          <span>{f.trim()}</span>
+                        </li>
+                      ))
+                    : null}
+                </ul>
+              </div>
+            )}
 
             {/* Shipping */}
             <div style={{ marginBottom: '32px' }}>
