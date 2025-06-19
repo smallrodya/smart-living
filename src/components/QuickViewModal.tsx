@@ -489,11 +489,11 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
               marginBottom: '20px',
               boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
             }}>
-              {product.images && product.images.length > 0 ? (
+              {product.images && product.images.length > 0 && product.images[currentImageIndex] ? (
                 <>
                   <Image
                     key={`main-${product._id}-${currentImageIndex}`}
-                    src={product.images[currentImageIndex]}
+                    src={product.images[currentImageIndex] || '/placeholder.jpg'}
                     alt={product.title}
                     fill
                     priority
@@ -676,49 +676,51 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
                 width: '100%'
               }}>
                 {product.images.map((image, index) => (
-                  <button
-                    key={`thumb-${product._id}-${index}`}
-                    onClick={() => setCurrentImageIndex(index)}
-                    style={{
-                      width: '100%',
-                      aspectRatio: '1',
-                      borderRadius: '12px',
-                      overflow: 'hidden',
-                      border: currentImageIndex === index ? '2px solid #222' : '2px solid transparent',
-                      padding: 0,
-                      cursor: 'pointer',
-                      background: 'none',
-                      margin: 0,
-                      transition: 'all 0.2s ease',
-                      boxShadow: currentImageIndex === index ? '0 4px 12px rgba(0,0,0,0.1)' : 'none'
-                    }}
-                    onMouseEnter={(e) => {
-                      if (currentImageIndex !== index) {
-                        e.currentTarget.style.transform = 'scale(1.05)';
-                        e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.1)';
-                      }
-                    }}
-                    onMouseLeave={(e) => {
-                      if (currentImageIndex !== index) {
-                        e.currentTarget.style.transform = 'scale(1)';
-                        e.currentTarget.style.boxShadow = 'none';
-                      }
-                    }}
-                  >
-                    <Image
-                      key={`thumb-img-${product._id}-${index}`}
-                      src={image}
-                      alt={`${product.title} - thumbnail ${index + 1}`}
-                      width={100}
-                      height={100}
-                      loading="eager"
-                      style={{ 
-                        objectFit: 'cover',
+                  image ? (
+                    <button
+                      key={`thumb-${product._id}-${index}`}
+                      onClick={() => setCurrentImageIndex(index)}
+                      style={{
                         width: '100%',
-                        height: '100%'
+                        aspectRatio: '1',
+                        borderRadius: '12px',
+                        overflow: 'hidden',
+                        border: currentImageIndex === index ? '2px solid #222' : '2px solid transparent',
+                        padding: 0,
+                        cursor: 'pointer',
+                        background: 'none',
+                        margin: 0,
+                        transition: 'all 0.2s ease',
+                        boxShadow: currentImageIndex === index ? '0 4px 12px rgba(0,0,0,0.1)' : 'none'
                       }}
-                    />
-                  </button>
+                      onMouseEnter={(e) => {
+                        if (currentImageIndex !== index) {
+                          e.currentTarget.style.transform = 'scale(1.05)';
+                          e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.1)';
+                        }
+                      }}
+                      onMouseLeave={(e) => {
+                        if (currentImageIndex !== index) {
+                          e.currentTarget.style.transform = 'scale(1)';
+                          e.currentTarget.style.boxShadow = 'none';
+                        }
+                      }}
+                    >
+                      <Image
+                        key={`thumb-img-${product._id}-${index}`}
+                        src={image}
+                        alt={`${product.title} - thumbnail ${index + 1}`}
+                        width={100}
+                        height={100}
+                        loading="eager"
+                        style={{ 
+                          objectFit: 'cover',
+                          width: '100%',
+                          height: '100%'
+                        }}
+                      />
+                    </button>
+                  ) : null
                 ))}
               </div>
             )}
