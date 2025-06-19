@@ -14,10 +14,10 @@ interface WishlistItem {
 }
 
 const images = [
-  { src: '/reduce1.jpg', hoverSrc: '/reduce1-hover.jpg', title: '2 in 1 Reclining Gravity Chair and Lay Flat Sun lounger- Dark Green', price: '£34.99', oldPrice: '£99.99', discount: '-65%' },
-  { src: '/reduce2.jpg', hoverSrc: '/reduce2-hover.jpg', title: '2 in 1 Reclining Gravity Chair and Lay Flat Sun lounger- Grey', price: '£34.90', oldPrice: '£99.99', discount: '-65%' },
-  { src: '/reduce3.jpg', hoverSrc: '/reduce3-hover.jpg', title: 'Zero Gravity Chair with Cushion & Pillow – Black', price: '£60.99', oldPrice: '£119.99', discount: '-49%' },
-  { src: '/reduce4.jpg', hoverSrc: '/reduce4-hover.jpg', title: 'Zero Gravity Chair with Cushion & Pillow – Grey', price: '£60.99', oldPrice: '£119.99', discount: '-49%' },
+  { src: '/reduce1.jpg', hoverSrc: '/reduce1-hover.jpg', title: '2 in 1 Reclining Gravity Chair and Lay Flat Sun lounger- Dark Green', price: '£32.99', oldPrice: '£99.99', discount: '-65%' },
+  { src: '/reduce2.jpg', hoverSrc: '/reduce2-hover.jpg', title: '2 in 1 Reclining Gravity Chair and Lay Flat Sun lounger- Grey', price: '£32.99', oldPrice: '£99.99', discount: '-65%' },
+  { src: '/reduce3.jpg', hoverSrc: '/reduce3-hover.jpg', title: 'Zero Gravity Chair with Cushion & Pillow – Black', price: '£56.99', oldPrice: '£119.99', discount: '-49%' },
+  { src: '/reduce4.jpg', hoverSrc: '/reduce4-hover.jpg', title: 'Zero Gravity Chair with Cushion & Pillow – Grey', price: '£56.99', oldPrice: '£119.99', discount: '-49%' },
 ];
 
 const DesktopReduceSpaceCarousel = () => {
