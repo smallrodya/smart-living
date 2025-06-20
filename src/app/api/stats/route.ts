@@ -21,7 +21,7 @@ export async function GET() {
     const revenueResult = await db.collection('orders').aggregate([
       {
         $match: {
-          status: { $in: ['DONE', 'DELIVERED'] }
+          status: { $in: ['DONE', 'DELIVERED', 'SHIPPED', 'PROCESSING'] }
         }
       },
       {

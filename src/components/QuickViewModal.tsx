@@ -1433,36 +1433,36 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
             )}
 
             {/* Add to Cart button */}
-            {!product.isSoldOut && (
+            {!((product.category === 'OUTDOOR' && product.outdoorPrice && product.outdoorPrice.stock === 0) || product.isSoldOut) && (
               <button
                 onClick={handleAddToCart}
-                disabled={product.category !== 'OUTDOOR' && !selectedSize}
+                disabled={product.category === 'OUTDOOR' ? (!product.outdoorPrice || product.outdoorPrice.stock === 0) : (!selectedSize)}
                 style={{
                   width: '100%',
                   padding: '20px',
-                  background: (product.category === 'OUTDOOR' || selectedSize) ? '#222' : '#ccc',
+                  background: (product.category === 'OUTDOOR' ? (product.outdoorPrice && product.outdoorPrice.stock > 0) : !!selectedSize) ? '#222' : '#ccc',
                   color: '#fff',
                   border: 'none',
                   borderRadius: '12px',
                   fontSize: '18px',
                   fontWeight: 600,
-                  cursor: (product.category === 'OUTDOOR' || selectedSize) ? 'pointer' : 'not-allowed',
+                  cursor: (product.category === 'OUTDOOR' ? (product.outdoorPrice && product.outdoorPrice.stock > 0) : !!selectedSize) ? 'pointer' : 'not-allowed',
                   transition: 'all 0.2s ease',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   gap: '12px',
-                  boxShadow: (product.category === 'OUTDOOR' || selectedSize) ? '0 4px 12px rgba(0,0,0,0.1)' : 'none'
+                  boxShadow: (product.category === 'OUTDOOR' ? (product.outdoorPrice && product.outdoorPrice.stock > 0) : !!selectedSize) ? '0 4px 12px rgba(0,0,0,0.1)' : 'none'
                 }}
                 onMouseEnter={(e) => {
-                  if (product.category === 'OUTDOOR' || selectedSize) {
+                  if (product.category === 'OUTDOOR' ? (product.outdoorPrice && product.outdoorPrice.stock > 0) : !!selectedSize) {
                     e.currentTarget.style.background = '#333';
                     e.currentTarget.style.transform = 'translateY(-2px)';
                     e.currentTarget.style.boxShadow = '0 6px 16px rgba(0,0,0,0.2)';
                   }
                 }}
                 onMouseLeave={(e) => {
-                  if (product.category === 'OUTDOOR' || selectedSize) {
+                  if (product.category === 'OUTDOOR' ? (product.outdoorPrice && product.outdoorPrice.stock > 0) : !!selectedSize) {
                     e.currentTarget.style.background = '#222';
                     e.currentTarget.style.transform = 'translateY(0)';
                     e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.1)';
@@ -1490,6 +1490,27 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
                       : 'Select Size'
                   )
                 )}
+              </button>
+            )}
+            {(product.category === 'OUTDOOR' && product.outdoorPrice && product.outdoorPrice.stock === 0) && (
+              <button
+                disabled
+                style={{
+                  width: '100%',
+                  padding: '20px',
+                  background: '#ccc',
+                  color: '#fff',
+                  border: 'none',
+                  borderRadius: '12px',
+                  fontSize: '18px',
+                  fontWeight: 600,
+                  cursor: 'not-allowed',
+                  marginTop: '0',
+                  marginBottom: '0',
+                  opacity: 1
+                }}
+              >
+                Out of stock
               </button>
             )}
           </div>

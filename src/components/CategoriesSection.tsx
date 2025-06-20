@@ -202,8 +202,7 @@ const megaMenus: MegaMenu[] = [
           { label: 'Cushions', href: '/shop/outdoors-cushions' },
         ],
       },
-      {
-        
+      {   
         items: [
           { img: '/outdoor-banner1.jpg', label: 'Perfect for your outdoor space', labelColor: 'red' },
         ],

@@ -965,9 +965,9 @@ export default function ProductsPage() {
                           {/* Product Status */}
                           <div className="flex items-center gap-4 mb-4">
                             <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                              product.isSoldOut ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'
+                              (product.category === 'OUTDOOR' && product.outdoorPrice && product.outdoorPrice.stock === 0) || product.isSoldOut ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'
                             }`}>
-                              {product.isSoldOut ? 'Sold Out' : 'In Stock'}
+                              {(product.category === 'OUTDOOR' && product.outdoorPrice && product.outdoorPrice.stock === 0) || product.isSoldOut ? 'Sold Out' : 'In Stock'}
                             </span>
                             {product.isHot && (
                               <span className="px-2 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
@@ -1322,9 +1322,9 @@ export default function ProductsPage() {
                                     {/* Product Status */}
                                     <div className="flex items-center gap-4 mb-4">
                                       <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                                        product.isSoldOut ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'
+                                        (product.category === 'OUTDOOR' && product.outdoorPrice && product.outdoorPrice.stock === 0) || product.isSoldOut ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'
                                       }`}>
-                                        {product.isSoldOut ? 'Sold Out' : 'In Stock'}
+                                        {(product.category === 'OUTDOOR' && product.outdoorPrice && product.outdoorPrice.stock === 0) || product.isSoldOut ? 'Sold Out' : 'In Stock'}
                                       </span>
                                       {product.isHot && (
                                         <span className="px-2 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
