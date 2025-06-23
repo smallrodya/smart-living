@@ -88,6 +88,7 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
   const [isFullscreen, setIsFullscreen] = useState(false);
   const { addItem } = useBasket();
   const isMobile = useIsMobile();
+  const [quantity, setQuantity] = useState<number>(1);
 
   if (isMobile) {
     return <MobileQuickViewModal product={product} onClose={onClose} />;
@@ -96,6 +97,11 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
   if (!product) return null;
 
   const handleAddToCart = () => {
+    if (product.isSoldOut || (product.category === 'OUTDOOR' && (!product.outdoorPrice || product.outdoorPrice.stock === 0)) || (product.category !== 'OUTDOOR' && isSelectedSizeOutOfStock())) {
+      toast.error('This product is out of stock');
+      return;
+    }
+
     if (product.category === 'OUTDOOR') {
       if (!product.outdoorPrice) {
         toast.error('Product data is incomplete');
@@ -113,7 +119,7 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
         image: product.images?.[0] || '/placeholder.jpg',
         category: product.category,
         sku: product.outdoorPrice.sku,
-        quantity: 1,
+        quantity: quantity,
         stock: product.outdoorPrice.stock,
         size: 'One Size',
         clearanceDiscount: product.clearanceDiscount
@@ -144,7 +150,7 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
         image: product.images?.[0] || '/placeholder.jpg',
         category: product.category,
         sku: size.sku,
-        quantity: 1,
+        quantity: quantity,
         stock: size.stock,
         clearanceDiscount: product.clearanceDiscount
       });
@@ -174,7 +180,7 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
         image: product.images?.[0] || '/placeholder.jpg',
         category: product.category,
         sku: style.sku,
-        quantity: 1,
+        quantity: quantity,
         stock: style.stock,
         clearanceDiscount: product.clearanceDiscount
       });
@@ -224,7 +230,7 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
           image: product.images?.[0] || '/placeholder.jpg',
           category: product.category,
           sku,
-          quantity: 1,
+          quantity: quantity,
           stock,
           clearanceDiscount: product.clearanceDiscount
         });
@@ -411,6 +417,56 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
 
   const handleSizeSelect = (size: string) => {
     setSelectedSize(size === selectedSize ? '' : size);
+  };
+
+  function isSelectedSizeOutOfStock() {
+    if (!product || !selectedSize) return false;
+    if (product.category === 'FOOTWEAR') {
+      const size = product.footwearSizes?.find(s => s.size === selectedSize);
+      return !size || size.stock === 0;
+    }
+    if (product.category === 'THROWS & TOWELS') {
+      const style = product.throwsTowelsStylePrices?.find(s => s.size === selectedSize);
+      return !style || style.stock === 0;
+    }
+    if (product.category === 'RUGS & MATS') {
+      const size = product.rugsMatsSizes?.find(s => s.size === selectedSize);
+      return !size || (size.stock || 0) === 0;
+    }
+    if (product.category === 'CLOTHING') {
+      const size = product.clothingStylePrices?.find(s => s.size === selectedSize);
+      return !size || size.stock === 0;
+    }
+    if (product.beddingSizes) {
+      const size = product.beddingSizes.find(s => s.size === selectedSize);
+      return !size || (size.stock || 0) === 0;
+    }
+    return false;
+  }
+
+  const getSelectedStock = () => {
+    if (!product || !selectedSize) return 0;
+    if (product.category === 'FOOTWEAR') {
+      const size = product.footwearSizes?.find(s => s.size === selectedSize);
+      return size?.stock || 0;
+    }
+    if (product.category === 'THROWS & TOWELS') {
+      const style = product.throwsTowelsStylePrices?.find(s => s.size === selectedSize);
+      return style?.stock || 0;
+    }
+    if (product.category === 'RUGS & MATS') {
+      const size = product.rugsMatsSizes?.find(s => s.size === selectedSize);
+      return size?.stock || 0;
+    }
+    if (product.category === 'CLOTHING') {
+      const size = product.clothingStylePrices?.find(s => s.size === selectedSize);
+      return size?.stock || 0;
+    }
+    if (product.beddingSizes) {
+      const size = product.beddingSizes.find(s => s.size === selectedSize);
+      return size?.stock || 0;
+    }
+    return 0;
   };
 
   return (
@@ -1432,41 +1488,81 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
               </div>
             )}
 
+            {/* Quantity Selector */}
+            {(selectedSize && getSelectedStock() > 0) && (
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
+                <button
+                  onClick={() => setQuantity(q => Math.max(1, q - 1))}
+                  disabled={quantity <= 1}
+                  style={{
+                    width: 36,
+                    height: 36,
+                    borderRadius: '50%',
+                    border: '1px solid #eee',
+                    background: '#fafafa',
+                    color: quantity <= 1 ? '#ccc' : '#222',
+                    fontSize: 22,
+                    fontWeight: 600,
+                    cursor: quantity <= 1 ? 'not-allowed' : 'pointer',
+                    transition: 'all 0.2s',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  −
+                </button>
+                <span style={{ minWidth: 32, textAlign: 'center', fontSize: 18, fontWeight: 600 }}>{quantity}</span>
+                <button
+                  onClick={() => setQuantity(q => Math.min(getSelectedStock(), q + 1))}
+                  disabled={quantity >= getSelectedStock()}
+                  style={{
+                    width: 36,
+                    height: 36,
+                    borderRadius: '50%',
+                    border: '1px solid #eee',
+                    background: '#fafafa',
+                    color: quantity >= getSelectedStock() ? '#ccc' : '#222',
+                    fontSize: 22,
+                    fontWeight: 600,
+                    cursor: quantity >= getSelectedStock() ? 'not-allowed' : 'pointer',
+                    transition: 'all 0.2s',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  +
+                </button>
+                <span style={{ color: '#888', fontSize: 14, marginLeft: 8 }}>
+                  in stock: {getSelectedStock()}
+                </span>
+              </div>
+            )}
+
             {/* Add to Cart button */}
             {!((product.category === 'OUTDOOR' && product.outdoorPrice && product.outdoorPrice.stock === 0) || product.isSoldOut) && (
               <button
                 onClick={handleAddToCart}
-                disabled={product.category === 'OUTDOOR' ? (!product.outdoorPrice || product.outdoorPrice.stock === 0) : (!selectedSize)}
+                disabled={product.isSoldOut || (product.category === 'OUTDOOR' ? (!product.outdoorPrice || product.outdoorPrice.stock === 0) : (!selectedSize || isSelectedSizeOutOfStock()))}
                 style={{
                   width: '100%',
                   padding: '20px',
-                  background: (product.category === 'OUTDOOR' ? (product.outdoorPrice && product.outdoorPrice.stock > 0) : !!selectedSize) ? '#222' : '#ccc',
+                  background: (product.isSoldOut || (product.category === 'OUTDOOR' ? (!product.outdoorPrice || product.outdoorPrice.stock === 0) : (!selectedSize || isSelectedSizeOutOfStock()))) ? '#bdbdbd' : '#222',
                   color: '#fff',
                   border: 'none',
                   borderRadius: '12px',
                   fontSize: '18px',
                   fontWeight: 600,
-                  cursor: (product.category === 'OUTDOOR' ? (product.outdoorPrice && product.outdoorPrice.stock > 0) : !!selectedSize) ? 'pointer' : 'not-allowed',
+                  cursor: (product.isSoldOut || (product.category === 'OUTDOOR' ? (!product.outdoorPrice || product.outdoorPrice.stock === 0) : (!selectedSize || isSelectedSizeOutOfStock()))) ? 'not-allowed' : 'pointer',
+                  filter: (product.isSoldOut || (product.category === 'OUTDOOR' ? (!product.outdoorPrice || product.outdoorPrice.stock === 0) : (!selectedSize || isSelectedSizeOutOfStock()))) ? 'blur(1px) grayscale(0.5)' : 'none',
+                  opacity: (product.isSoldOut || (product.category === 'OUTDOOR' ? (!product.outdoorPrice || product.outdoorPrice.stock === 0) : (!selectedSize || isSelectedSizeOutOfStock()))) ? 0.7 : 1,
                   transition: 'all 0.2s ease',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   gap: '12px',
-                  boxShadow: (product.category === 'OUTDOOR' ? (product.outdoorPrice && product.outdoorPrice.stock > 0) : !!selectedSize) ? '0 4px 12px rgba(0,0,0,0.1)' : 'none'
-                }}
-                onMouseEnter={(e) => {
-                  if (product.category === 'OUTDOOR' ? (product.outdoorPrice && product.outdoorPrice.stock > 0) : !!selectedSize) {
-                    e.currentTarget.style.background = '#333';
-                    e.currentTarget.style.transform = 'translateY(-2px)';
-                    e.currentTarget.style.boxShadow = '0 6px 16px rgba(0,0,0,0.2)';
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  if (product.category === 'OUTDOOR' ? (product.outdoorPrice && product.outdoorPrice.stock > 0) : !!selectedSize) {
-                    e.currentTarget.style.background = '#222';
-                    e.currentTarget.style.transform = 'translateY(0)';
-                    e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.1)';
-                  }
+                  boxShadow: (product.isSoldOut || (product.category === 'OUTDOOR' ? (!product.outdoorPrice || product.outdoorPrice.stock === 0) : (!selectedSize || isSelectedSizeOutOfStock()))) ? 'none' : '0 4px 12px rgba(0,0,0,0.1)'
                 }}
               >
                 <svg
@@ -1483,13 +1579,7 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
                   <circle cx="20" cy="21" r="1"/>
                   <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
                 </svg>
-                {product.category === 'OUTDOOR' ? 'Add to Cart' : (
-                  selectedSize ? 'Add to Cart' : (
-                    product.category === 'THROWS & TOWELS' 
-                      ? 'Select Style' 
-                      : 'Select Size'
-                  )
-                )}
+                {product.isSoldOut ? 'Out of Stock' : (product.category === 'OUTDOOR' ? 'Add to Cart' : (selectedSize ? 'Add to Cart' : (product.category === 'THROWS & TOWELS' ? 'Select Style' : 'Select Size')))}
               </button>
             )}
             {(product.category === 'OUTDOOR' && product.outdoorPrice && product.outdoorPrice.stock === 0) && (

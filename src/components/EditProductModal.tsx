@@ -369,6 +369,8 @@ interface FormData {
     category: string;
     subcategory: string;
   }[];
+  // Summer Collection specific
+  isSummerCollection: boolean;
 }
 
 export default function EditProductModal({ open, onClose, product, onProductEdited, validateUniqueSku }: EditProductModalProps) {
@@ -408,7 +410,8 @@ export default function EditProductModal({ open, onClose, product, onProductEdit
       stock: 0
     },
     outdoorColors: [],
-    additionalCategories: []
+    additionalCategories: [],
+    isSummerCollection: false,
   });
   const [images, setImages] = useState<string[]>([]);
   const [uploading, setUploading] = useState(false);
@@ -476,7 +479,8 @@ export default function EditProductModal({ open, onClose, product, onProductEdit
           stock: product.outdoorPrice?.stock || 0
         },
         outdoorColors: product.outdoorColors || [],
-        additionalCategories: product.additionalCategories || []
+        additionalCategories: product.additionalCategories || [],
+        isSummerCollection: product.isSummerCollection || false,
       });
     }
   }, [product]);
@@ -2031,6 +2035,15 @@ export default function EditProductModal({ open, onClose, product, onProductEdit
                 className="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
               />
               <span className="ml-2 text-sm font-medium text-gray-700">Add to Clearance</span>
+            </label>
+            <label className="inline-flex items-center">
+              <input
+                type="checkbox"
+                checked={formData.isSummerCollection}
+                onChange={(e) => setFormData(prev => ({ ...prev, isSummerCollection: e.target.checked }))}
+                className="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
+              />
+              <span className="ml-2 text-sm font-medium text-gray-700">Add to Summer Collection</span>
             </label>
           </div>
 

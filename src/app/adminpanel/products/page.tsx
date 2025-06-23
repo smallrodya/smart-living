@@ -244,6 +244,7 @@ export default function ProductsPage() {
   const [showConfetti, setShowConfetti] = useState(false);
   const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set());
   const [expandedSubcategories, setExpandedSubcategories] = useState<Set<string>>(new Set());
+  const [isSummerCollectionFilter, setIsSummerCollectionFilter] = useState(false);
 
   const fetchProducts = async () => {
     setLoading(true);
@@ -402,6 +403,11 @@ export default function ProductsPage() {
     // Если выбрана категория Hot, показываем все товары с isHot: true
     if (selectedCategory === 'HOT') {
       return matchesSearch && product.isHot;
+    }
+    
+    // Если выбран фильтр Summer Collection
+    if (isSummerCollectionFilter) {
+      return matchesSearch && product.isSummerCollection;
     }
     
     // Для остальных категорий
@@ -894,6 +900,15 @@ export default function ProductsPage() {
                   className="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
                 />
                 <span className="ml-2 text-sm text-gray-700">Hot</span>
+              </label>
+              <label className="inline-flex items-center">
+                <input
+                  type="checkbox"
+                  checked={isSummerCollectionFilter}
+                  onChange={(e) => setIsSummerCollectionFilter(e.target.checked)}
+                  className="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
+                />
+                <span className="ml-2 text-sm text-gray-700">Summer Collection</span>
               </label>
             </div>
           </div>

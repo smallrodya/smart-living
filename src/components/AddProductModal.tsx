@@ -67,6 +67,8 @@ interface FormData {
     category: string;
     subcategory: string;
   }[];
+  // Summer Collection specific
+  isSummerCollection: boolean;
 }
 
 const categories = [
@@ -441,7 +443,9 @@ export default function AddProductModal({ open, onClose, onProductAdded, validat
     },
     outdoorColors: [],
     // Additional categories
-    additionalCategories: []
+    additionalCategories: [],
+    // Summer Collection specific
+    isSummerCollection: false,
   });
 
   const [images, setImages] = useState<string[]>([]);
@@ -1952,6 +1956,15 @@ export default function AddProductModal({ open, onClose, onProductAdded, validat
                 className="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
               />
               <span className="ml-2 text-sm font-medium text-gray-700">Add to Clearance</span>
+            </label>
+            <label className="inline-flex items-center">
+              <input
+                type="checkbox"
+                checked={formData.isSummerCollection}
+                onChange={(e) => setFormData(prev => ({ ...prev, isSummerCollection: e.target.checked }))}
+                className="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
+              />
+              <span className="ml-2 text-sm font-medium text-gray-700">Add to Summer Collection</span>
             </label>
           </div>
 

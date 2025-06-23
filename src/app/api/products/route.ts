@@ -41,6 +41,7 @@ export async function POST(request: Request) {
       isHot: body.isHot || false,
       discount: body.discount || null,
       additionalCategories: body.additionalCategories || [],
+      isSummerCollection: body.isSummerCollection || false,
       createdAt: new Date(),
       updatedAt: new Date()
     };
@@ -76,6 +77,7 @@ export async function PUT(request: Request) {
     const finalUpdateData = {
       ...updateData,
       additionalCategories: updateData.additionalCategories || [],
+      isSummerCollection: updateData.isSummerCollection || false,
       updatedAt: new Date()
     };
     
