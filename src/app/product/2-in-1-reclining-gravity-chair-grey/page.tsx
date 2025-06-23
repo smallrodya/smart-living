@@ -9,7 +9,7 @@ export const dynamic = 'force-dynamic';
 const Page = () => {
   const product = {
     title: '2 in 1 Reclining Gravity Chair and Lay Flat Sun lounger- Grey',
-    price: '£34.90',
+    price: '£32.99',
     oldPrice: '£99.99',
     discount: '-65%',
     images: [

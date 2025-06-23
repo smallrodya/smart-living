@@ -9,7 +9,7 @@ export const dynamic = 'force-dynamic';
 const Page = () => {
   const product = {
     title: 'Zero Gravity Chair with Cushion & Pillow – Black',
-    price: '£60.99',
+    price: '£56.99',
     oldPrice: '£119.99',
     discount: '-49%',
     images: [
