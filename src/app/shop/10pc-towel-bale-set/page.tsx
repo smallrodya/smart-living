@@ -25,6 +25,7 @@ interface Product {
   isSoldOut?: boolean;
   isHot?: boolean;
   additionalCategories?: Array<{ category: string; subcategory: string }>;
+  _rating?: string;
 }
 
 export default function TowelBaleSetPage() {
@@ -38,6 +39,24 @@ export default function TowelBaleSetPage() {
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 1000]);
   const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
   const router = useRouter();
+
+  const getRandomRating = () => (4.3 + Math.random() * 0.7).toFixed(1);
+  const renderStars = (rating: string) => {
+    const value = parseFloat(rating);
+    const fullStars = Math.floor(value);
+    const halfStar = value - fullStars >= 0.5;
+    const stars = [];
+    for (let i = 0; i < fullStars; i++) {
+      stars.push(<span key={i} style={{ color: '#111', fontSize: 18 }}>★</span>);
+    }
+    if (halfStar) {
+      stars.push(<span key="half" style={{ color: '#111', fontSize: 18 }}>☆</span>);
+    }
+    while (stars.length < 5) {
+      stars.push(<span key={stars.length + 'empty'} style={{ color: '#e0e0e0', fontSize: 18 }}>★</span>);
+    }
+    return stars;
+  };
 
   useEffect(() => {
     fetchProducts();
@@ -716,6 +735,15 @@ export default function TowelBaleSetPage() {
                     color: '#222',
                     lineHeight: '1.4'
                   }}>{product.title}</h3>
+                  {(() => {
+                    const rating = (product as any)._rating || ((product as any)._rating = getRandomRating());
+                    return parseFloat(rating) >= 4.3 ? (
+                      <div style={{ display: 'flex', alignItems: 'center', marginBottom: 8 }}>
+                        {renderStars(rating)}
+                        <span style={{ color: '#222', fontWeight: 600, fontSize: 15, marginLeft: 4 }}>{rating}</span>
+                      </div>
+                    ) : null;
+                  })()}
                   <div style={{
                     color: '#e53935',
                     fontWeight: 700,
