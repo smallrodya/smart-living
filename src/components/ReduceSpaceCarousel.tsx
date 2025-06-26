@@ -73,10 +73,11 @@ const ReduceSpaceCarousel: React.FC = () => {
           product.showOnReduceSpace === true
         );
         setProducts(filtered.slice(0, 5)); // Only first 5 products
-        // Генерируем рейтинг для каждого товара
+        // Фиксированные рейтинги для каждого товара
         const newRatings: { [id: string]: string } = {};
-        filtered.slice(0, 5).forEach((product: Product) => {
-          newRatings[product._id] = getRandomRating();
+        const fixedRatings = ['4.8', '4.9', '4.7', '4.8', '4.9'];
+        filtered.slice(0, 5).forEach((product: Product, index: number) => {
+          newRatings[product._id] = fixedRatings[index] || '4.8';
         });
         setRatings(newRatings);
       } catch (e) {
