@@ -19,35 +19,7 @@ const blogPosts: BlogPost[] = [
     date: '2024-06-01',
     image: '/generated_image_large1.jpg',
     excerpt: 'Discover how to select bedding that fits your needs, style, and comfort for every season.',
-    content: `Choosing the right bedding is essential for a good night's sleep and a beautiful bedroom. Here are some key factors to consider:
-
-1. Material Matters
-- Cotton: Breathable and durable, perfect for all seasons
-- Linen: Naturally cooling and gets softer with each wash
-- Silk: Luxurious and temperature-regulating
-- Bamboo: Eco-friendly and moisture-wicking
-
-2. Thread Count
-- 200-400: Good for everyday use
-- 400-600: Premium quality
-- 800+: Ultra-luxury (but not always better)
-
-3. Weave Types
-- Percale: Crisp and cool
-- Sateen: Smooth and lustrous
-- Twill: Durable and warm
-
-4. Size Considerations
-- Measure your mattress before buying
-- Consider mattress topper thickness
-- Account for deep pocket options
-
-5. Style Elements
-- Color coordination with your room
-- Pattern vs. solid choices
-- Texture and layering options
-
-Remember: The best bedding is the one that makes you feel most comfortable and matches your personal style.`
+    content: `Choosing the right bedding is essential for a good night's sleep and a beautiful bedroom. Here are some key factors to consider:\n\n1. Material Matters\n- Cotton: Breathable and durable, perfect for all seasons\n- Linen: Naturally cooling and gets softer with each wash\n- Silk: Luxurious and temperature-regulating\n- Bamboo: Eco-friendly and moisture-wicking\n\n2. Thread Count\n- 200-400: Good for everyday use\n- 400-600: Premium quality\n- 800+: Ultra-luxury (but not always better)\n\n3. Weave Types\n- Percale: Crisp and cool\n- Sateen: Smooth and lustrous\n- Twill: Durable and warm\n\n4. Size Considerations\n- Measure your mattress before buying\n- Consider mattress topper thickness\n- Account for deep pocket options\n\n5. Style Elements\n- Color coordination with your room\n- Pattern vs. solid choices\n- Texture and layering options\n\nRemember: The best bedding is the one that makes you feel most comfortable and matches your personal style.`
   },
   {
     title: '10 Tips for Better Sleep',
@@ -265,94 +237,63 @@ Remember: Trends should enhance your personal style, not dictate it.`
 ];
 
 export default function Blog() {
-  const [current, setCurrent] = useState(0);
   const [selectedPost, setSelectedPost] = useState<BlogPost | null>(null);
-  const currentPost = blogPosts[current];
 
-  const prev = () => setCurrent((c) => (c === 0 ? blogPosts.length - 1 : c - 1));
-  const next = () => setCurrent((c) => (c === blogPosts.length - 1 ? 0 : c + 1));
-
-  const BlogCard = ({ post, index }: { post: BlogPost; index: number }) => (
+  const BlogCard = ({ post }: { post: BlogPost }) => (
     <div
       style={{
         position: 'relative',
-        flex: '1 1 380px',
-        minWidth: 320,
-        maxWidth: 800,
-        height: 420,
-        borderRadius: 12,
+        background: 'rgba(255,255,255,0.35)',
+        backdropFilter: 'blur(14px)',
+        WebkitBackdropFilter: 'blur(14px)',
+        border: '1.5px solid rgba(200,200,255,0.18)',
+        borderRadius: 24,
+        boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.10)',
         overflow: 'hidden',
-        boxShadow: '0 4px 32px rgba(34,34,34,0.10)',
-        background: '#f7f7f7',
         display: 'flex',
-        alignItems: 'flex-end',
+        flexDirection: 'column',
+        alignItems: 'stretch',
         cursor: 'pointer',
+        transition: 'box-shadow 0.25s, transform 0.25s',
+        minHeight: 480,
+        maxWidth: 480,
         margin: '0 auto',
       }}
+      onClick={() => setSelectedPost(post)}
+      onMouseEnter={e => (e.currentTarget.style.boxShadow = '0 12px 40px 0 rgba(31,38,135,0.18)')}
+      onMouseLeave={e => (e.currentTarget.style.boxShadow = '0 8px 32px 0 rgba(31,38,135,0.10)')}
     >
-      <div style={{
-        position: 'absolute',
-        inset: 0,
-        zIndex: 1,
-      }}>
+      <div style={{ position: 'relative', width: '100%', height: 220 }}>
         <Image
           src={post.image}
           alt={post.title}
           fill
-          style={{ objectFit: 'cover', borderRadius: 12 }}
-          sizes="(max-width: 900px) 100vw, 800px"
+          style={{ objectFit: 'cover', borderTopLeftRadius: 24, borderTopRightRadius: 24 }}
+          sizes="(max-width: 900px) 100vw, 480px"
         />
       </div>
-      <div style={{
-        position: 'absolute',
-        left: 0,
-        right: 0,
-        bottom: 0,
-        margin: '0 auto',
-        background: 'rgba(255,255,255,0.5)',
-        borderRadius: 8,
-        boxShadow: '0 2px 12px rgba(34,34,34,0.08)',
-        padding: '32px 24px 24px 24px',
-        maxWidth: 320,
-        zIndex: 2,
-        marginBottom: 32,
-        marginLeft: 'auto',
-        marginRight: 'auto',
-      }}>
-        <span style={{ 
-          color: '#666', 
-          fontSize: 14, 
-          marginBottom: 8,
-          display: 'block'
-        }}>
+      <div style={{ padding: '32px 28px 28px 28px', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'flex-start' }}>
+        <span style={{ color: '#666', fontSize: 14, marginBottom: 8, display: 'block' }}>
           {new Date(post.date).toLocaleDateString('en-GB', { year: 'numeric', month: 'short', day: 'numeric' })}
         </span>
-        <h3 style={{ 
-          fontSize: 22, 
-          fontWeight: 700, 
-          marginBottom: 8,
-          color: '#111'
-        }}>{post.title}</h3>
-        <p style={{ 
-          fontSize: 15, 
-          color: '#111', 
-          marginBottom: 18,
-          lineHeight: 1.5
-        }}>{post.excerpt}</p>
-        <button 
-          onClick={() => setSelectedPost(post)}
+        <h3 style={{ fontSize: 24, fontWeight: 800, marginBottom: 10, color: '#1a1a1a', lineHeight: 1.2 }}>{post.title}</h3>
+        <p style={{ fontSize: 16, color: '#222', marginBottom: 22, lineHeight: 1.6 }}>{post.excerpt}</p>
+        <button
+          onClick={e => { e.stopPropagation(); setSelectedPost(post); }}
           style={{
             background: '#111',
             color: '#fff',
             border: 'none',
-            borderRadius: 4,
-            padding: '12px 28px',
-            fontSize: 15,
-            fontWeight: 600,
+            borderRadius: 8,
+            padding: '14px 36px',
+            fontSize: 17,
+            fontWeight: 700,
             cursor: 'pointer',
             boxShadow: '0 2px 8px rgba(34,34,34,0.10)',
-            textDecoration: 'none',
-            display: 'inline-block'
+            transition: 'background 0.2s, transform 0.2s',
+            letterSpacing: 0.5,
+            marginTop: 'auto',
+            alignSelf: 'flex-start',
           }}
         >
           READ MORE
@@ -363,91 +304,49 @@ export default function Blog() {
 
   return (
     <section style={{
-      width: '100%',
-      padding: '60px 0 40px 0',
-      background: '#fff',
+      width: '100vw',
+      minWidth: '100%',
+      marginLeft: 'calc(50% - 50vw)',
+      padding: '90px 0 70px 0',
+      background: 'linear-gradient(120deg, #e9e4f0 0%, #f8fafc 100%)',
       textAlign: 'center',
+      position: 'relative',
+      overflow: 'hidden',
     }}>
       <h2 style={{
-        fontSize: 28,
-        fontWeight: 700,
-        marginBottom: 12,
+        fontSize: 38,
+        fontWeight: 900,
+        marginBottom: 18,
         letterSpacing: 0.2,
+        color: '#1a1a1a',
+        fontFamily: 'Montserrat, sans-serif',
       }}>
         Smart Living Blog
       </h2>
       <p style={{
-        fontSize: 17,
+        fontSize: 21,
         color: '#444',
-        marginBottom: 40,
-        maxWidth: 600,
+        marginBottom: 54,
+        maxWidth: 800,
         marginLeft: 'auto',
         marginRight: 'auto',
+        fontFamily: 'Montserrat, sans-serif',
       }}>
         Tips, trends, and inspiration for a cozy and stylish home. Everything about bedding, rugs, throws, and more!
       </p>
-
       <div style={{
-        position: 'relative',
-        maxWidth: 1200,
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))',
+        gap: 48,
+        width: '100%',
+        maxWidth: 1440,
         margin: '0 auto',
-        padding: '0 24px'
+        padding: '0 32px',
       }}>
-        <div style={{ position: 'relative' }}>
-          <BlogCard post={currentPost} index={0} />
-          <button 
-            onClick={prev} 
-            aria-label="Previous blog" 
-            style={{
-              position: 'absolute',
-              left: '7%',
-              top: '52%',
-              transform: 'translate(-50%, -50%)',
-              background: 'rgba(255,255,255,0.9)',
-              border: 'none',
-              borderRadius: '50%',
-              width: 48,
-              height: 48,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-              cursor: 'pointer',
-              zIndex: 3,
-            }}
-          >
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M15 18l-6-6 6-6"/>
-            </svg>
-          </button>
-          <button 
-            onClick={next} 
-            aria-label="Next blog" 
-            style={{
-              position: 'absolute',
-              right: '7%',
-              top: '52%',
-              transform: 'translate(50%, -50%)',
-              background: 'rgba(255,255,255,0.9)',
-              border: 'none',
-              borderRadius: '50%',
-              width: 48,
-              height: 48,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              boxShadow: '0 4px 12px rgba(255, 0, 0, 0.1)',
-              cursor: 'pointer',
-              zIndex: 3,
-            }}
-          >
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M9 6l6 6-6 6"/>
-            </svg>
-          </button>
-        </div>
+        {blogPosts.map((post, idx) => (
+          <BlogCard key={post.slug} post={post} />
+        ))}
       </div>
-
       {selectedPost && (
         <div style={{
           position: 'fixed',
@@ -468,9 +367,10 @@ export default function Blog() {
             width: '100%',
             maxHeight: '90vh',
             overflowY: 'auto',
-            borderRadius: 12,
+            borderRadius: 18,
             padding: '60px 80px',
             position: 'relative',
+            boxShadow: '0 8px 40px rgba(31,38,135,0.13)',
           }}>
             <button
               onClick={() => setSelectedPost(null)}
@@ -496,7 +396,6 @@ export default function Blog() {
             >
               ×
             </button>
-
             <div style={{
               maxWidth: 800,
               margin: '0 auto',
@@ -510,7 +409,6 @@ export default function Blog() {
               }}>
                 {selectedPost.title}
               </h2>
-
               <div style={{
                 color: '#666',
                 marginBottom: 40,
@@ -531,7 +429,6 @@ export default function Blog() {
                   day: 'numeric' 
                 })}
               </div>
-
               <div style={{
                 position: 'relative',
                 width: '100%',
@@ -548,7 +445,6 @@ export default function Blog() {
                   style={{ objectFit: 'cover' }}
                 />
               </div>
-
               <div style={{
                 fontSize: 17,
                 lineHeight: 1.8,

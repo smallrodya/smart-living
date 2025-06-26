@@ -14,6 +14,30 @@ const MobileSubscribeSection = () => {
     }}>
       <div style={{
         width: '100%',
+        textAlign: 'center',
+        marginBottom: 24
+      }}>
+        <h2 style={{
+          fontSize: 32,
+          fontWeight: 700,
+          marginBottom: 12,
+          letterSpacing: 0.2,
+          color: '#222'
+        }}>
+          Stay Connected
+        </h2>
+        <p style={{
+          fontSize: 17,
+          color: '#666',
+          maxWidth: 800,
+          margin: '0 auto',
+          lineHeight: 1.5
+        }}>
+          Join our community to receive exclusive offers, new product updates, and home decor inspiration
+        </p>
+      </div>
+      <div style={{
+        width: '100%',
         background: '#fff',
         borderRadius: 14,
         padding: '24px 16px',

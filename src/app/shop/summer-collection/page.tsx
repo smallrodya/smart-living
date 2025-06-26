@@ -261,7 +261,7 @@ export default function SummerCollectionPage() {
           marginBottom: '60px'
         }}>
           <Image
-            src="/summer-collection.jpg"
+            src="/baner.PNG"
             alt="Summer Collection"
             fill
             style={{

@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import { FaTruck, FaUndo, FaCreditCard, FaHeadset } from 'react-icons/fa';
+import { useIsMobile } from '@/hooks/useIsMobile';
+import MobileFeaturesSection from './MobileFeaturesSection';
 
 const FeaturesSection = () => {
+  const isMobile = useIsMobile();
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   const features = [
@@ -51,6 +54,8 @@ const FeaturesSection = () => {
     }
   ];
 
+  if (isMobile) return <MobileFeaturesSection />;
+
   return (
     <div className="bg-gradient-to-b from-gray-50 to-white py-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -63,16 +68,22 @@ const FeaturesSection = () => {
               onMouseLeave={() => setHoveredIndex(null)}
             >
               <div 
-                className="absolute inset-0 bg-gradient-to-r opacity-0 group-hover:opacity-10 transition-all duration-500 rounded-2xl"
+                className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-all duration-500 rounded-2xl"
                 style={{ 
                   backgroundImage: `linear-gradient(to right, ${feature.gradient.split(' ')[1]}, ${feature.gradient.split(' ')[3]})`,
                   transform: hoveredIndex === index ? 'scale(1.05)' : 'scale(1)'
                 }} 
               />
               <div 
-                className="relative bg-white rounded-2xl p-8 shadow-sm hover:shadow-2xl transition-all duration-500 border border-gray-100"
+                className="relative p-8 transition-all duration-500 border border-gray-100"
                 style={{
-                  transform: hoveredIndex === index ? 'translateY(-8px)' : 'translateY(0)'
+                  borderRadius: '24px',
+                  background: 'rgba(255,255,255,0.35)',
+                  backdropFilter: 'blur(14px)',
+                  WebkitBackdropFilter: 'blur(14px)',
+                  boxShadow: hoveredIndex === index ? '0 12px 40px 0 rgba(31,38,135,0.13)' : '0 4px 24px rgba(160,132,232,0.07)',
+                  transform: hoveredIndex === index ? 'translateY(-8px) scale(1.03)' : 'translateY(0) scale(1)',
+                  transition: 'box-shadow 0.3s, transform 0.3s',
                 }}
               >
                 <div 
@@ -85,7 +96,6 @@ const FeaturesSection = () => {
                 </div>
                 <h3 className="text-xl font-bold text-gray-900 mb-3">{feature.title}</h3>
                 <p className="text-gray-600 mb-4">{feature.description}</p>
-                
                 <div 
                   className="overflow-hidden transition-all duration-500"
                   style={{

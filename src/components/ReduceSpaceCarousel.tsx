@@ -84,7 +84,7 @@ const ReduceSpaceCarousel: React.FC = () => {
     <section style={{
       width: '100%',
       minHeight: 400,
-      background: 'linear-gradient(120deg, #e0c3fc 0%, #f8fafc 100%)',
+      background: '#fff',
       padding: '80px 0',
       display: 'flex',
       flexDirection: 'column',
@@ -124,11 +124,14 @@ const ReduceSpaceCarousel: React.FC = () => {
         }}>
           {[1,2,3,4,5].map((n) => (
             <div key={n} style={{
-              width: 260,
-              height: 340,
-              background: '#f3f0fa',
+              width: 300,
+              height: 360,
+              background: 'rgba(255,255,255,0.25)',
+              backdropFilter: 'blur(10px)',
+              WebkitBackdropFilter: 'blur(10px)',
+              border: '1.5px solid rgba(200,200,255,0.13)',
               borderRadius: 24,
-              boxShadow: '0 4px 24px rgba(160,132,232,0.07)',
+              boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.07)',
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
@@ -138,7 +141,7 @@ const ReduceSpaceCarousel: React.FC = () => {
               fontWeight: 700,
               fontFamily: 'Montserrat, sans-serif',
               opacity: 1,
-              padding: 16,
+              padding: 20,
               cursor: 'default',
               transition: 'box-shadow 0.2s',
               position: 'relative',
@@ -208,11 +211,14 @@ const ReduceSpaceCarousel: React.FC = () => {
         }}>
           {products.map((product) => (
             <div key={product._id} style={{
-              width: 260,
-              height: 340,
-              background: '#fff',
+              width: 300,
+              height: 360,
+              background: 'rgba(255,255,255,0.35)',
+              backdropFilter: 'blur(12px)',
+              WebkitBackdropFilter: 'blur(12px)',
+              border: '1.5px solid rgba(200,200,255,0.18)',
               borderRadius: 24,
-              boxShadow: '0 4px 24px rgba(160,132,232,0.09)',
+              boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.10)',
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
@@ -222,7 +228,7 @@ const ReduceSpaceCarousel: React.FC = () => {
               fontWeight: 700,
               fontFamily: 'Montserrat, sans-serif',
               opacity: 1,
-              padding: 16,
+              padding: 20,
               cursor: 'default',
               transition: 'box-shadow 0.2s',
             }}
