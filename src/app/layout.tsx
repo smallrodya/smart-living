@@ -6,6 +6,7 @@ import MobileLayout from '@/components/MobileLayout';
 import { Toaster } from 'react-hot-toast';
 import { BasketProvider } from '@/context/BasketContext';
 import TechSupport from '@/components/TechSupport';
+import MobileTechSupport from '@/components/mobileTechSupport';
 import Providers from './providers';
 
 const inter = Inter({
@@ -51,7 +52,14 @@ export default function RootLayout({
               <PopupBanner />
             </MobileLayout>
           </BasketProvider>
-          <TechSupport />
+          {/* Desktop support only on md+ */}
+          <div className="hidden md:block">
+            <TechSupport />
+          </div>
+          {/* Mobile support only on mobile */}
+          <div className="md:hidden block">
+            <MobileTechSupport />
+          </div>
         </Providers>
         <Toaster position="top-right" />
       </body>
