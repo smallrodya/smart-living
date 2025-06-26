@@ -25,6 +25,7 @@ interface Product {
   isSoldOut?: boolean;
   isHot?: boolean;
   additionalCategories?: Array<{ category: string; subcategory: string }>;
+  _rating?: string;
 }
 
 export default function ThreeDPage() {
@@ -145,6 +146,27 @@ export default function ThreeDPage() {
       }
     });
   };
+
+  function getRandomRating() {
+    return (Math.random() * 0.5 + 4.5).toFixed(1);
+  }
+
+  function renderStars(rating: string) {
+    const value = parseFloat(rating);
+    const fullStars = Math.floor(value);
+    const halfStar = value - fullStars >= 0.5;
+    const stars = [];
+    for (let i = 0; i < fullStars; i++) {
+      stars.push(<span key={i} style={{ color: '#111', fontSize: 18 }}>★</span>);
+    }
+    if (halfStar) {
+      stars.push(<span key="half" style={{ color: '#111', fontSize: 18 }}>☆</span>);
+    }
+    while (stars.length < 5) {
+      stars.push(<span key={stars.length + 'empty'} style={{ color: '#e0e0e0', fontSize: 18 }}>★</span>);
+    }
+    return stars;
+  }
 
   if (loading) {
     return (
@@ -789,6 +811,15 @@ export default function ThreeDPage() {
                     color: '#222',
                     lineHeight: '1.4'
                   }}>{product.title}</h3>
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 6,
+                    marginBottom: 12
+                  }}>
+                    {renderStars(product._rating || (product._rating = getRandomRating()))}
+                    <span style={{ color: '#222', fontWeight: 600, fontSize: 15, marginLeft: 4 }}>{product._rating || (product._rating = getRandomRating())}</span>
+                  </div>
                   <div style={{
                     color: '#e53935',
                     fontWeight: 700,
