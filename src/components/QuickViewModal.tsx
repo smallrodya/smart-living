@@ -93,7 +93,7 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
-      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+      if (modalRef.current && !modalRef.current.contains(event.target as Node) && !isFullscreen) {
         onClose();
       }
     }
@@ -101,7 +101,7 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [onClose]);
+  }, [onClose, isFullscreen]);
 
   if (isMobile) {
     return <MobileQuickViewModal product={product} onClose={onClose} />;

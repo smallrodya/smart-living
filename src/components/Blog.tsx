@@ -354,33 +354,42 @@ export default function Blog() {
           left: 0,
           right: 0,
           bottom: 0,
-          background: 'rgba(0,0,0,0.8)',
+          background: '#fff',
           zIndex: 1000,
           display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          padding: '20px',
+          flexDirection: 'column',
+          overflow: 'hidden',
         }}>
+          {/* Header */}
           <div style={{
+            position: 'sticky',
+            top: 0,
             background: '#fff',
-            maxWidth: 1000,
-            width: '100%',
-            maxHeight: '90vh',
-            overflowY: 'auto',
-            borderRadius: 18,
-            padding: '60px 80px',
-            position: 'relative',
-            boxShadow: '0 8px 40px rgba(31,38,135,0.13)',
+            padding: '16px 20px',
+            borderBottom: '1px solid #eee',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            zIndex: 10,
+            boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
           }}>
+            <h2 style={{
+              fontSize: '18px',
+              fontWeight: 600,
+              color: '#222',
+              margin: 0,
+              flex: 1,
+              paddingRight: '16px',
+              lineHeight: 1.3,
+            }}>
+              {selectedPost.title}
+            </h2>
             <button
               onClick={() => setSelectedPost(null)}
               style={{
-                position: 'absolute',
-                top: 30,
-                right: 30,
                 background: 'none',
                 border: 'none',
-                fontSize: 32,
+                fontSize: 24,
                 cursor: 'pointer',
                 color: '#666',
                 width: 40,
@@ -390,29 +399,31 @@ export default function Blog() {
                 justifyContent: 'center',
                 borderRadius: '50%',
                 transition: 'background-color 0.2s',
+                flexShrink: 0,
               }}
               onMouseEnter={e => e.currentTarget.style.backgroundColor = '#f5f5f5'}
               onMouseLeave={e => e.currentTarget.style.backgroundColor = 'transparent'}
             >
               ×
             </button>
+          </div>
+
+          {/* Content */}
+          <div style={{
+            flex: 1,
+            overflowY: 'auto',
+            WebkitOverflowScrolling: 'touch',
+            padding: '20px',
+            background: '#fff',
+          }}>
             <div style={{
               maxWidth: 800,
               margin: '0 auto',
             }}>
-              <h2 style={{
-                fontSize: 36,
-                fontWeight: 700,
-                marginBottom: 16,
-                color: '#111',
-                lineHeight: 1.3,
-              }}>
-                {selectedPost.title}
-              </h2>
               <div style={{
                 color: '#666',
-                marginBottom: 40,
-                fontSize: 15,
+                marginBottom: 24,
+                fontSize: 14,
                 display: 'flex',
                 alignItems: 'center',
                 gap: 8,
@@ -429,14 +440,15 @@ export default function Blog() {
                   day: 'numeric' 
                 })}
               </div>
+              
               <div style={{
                 position: 'relative',
                 width: '100%',
-                height: 500,
-                marginBottom: 48,
+                height: 250,
+                marginBottom: 32,
                 borderRadius: 12,
                 overflow: 'hidden',
-                boxShadow: '0 4px 24px rgba(0,0,0,0.1)',
+                boxShadow: '0 4px 16px rgba(0,0,0,0.1)',
               }}>
                 <Image
                   src={selectedPost.image}
@@ -445,8 +457,9 @@ export default function Blog() {
                   style={{ objectFit: 'cover' }}
                 />
               </div>
+              
               <div style={{
-                fontSize: 17,
+                fontSize: 16,
                 lineHeight: 1.8,
                 color: '#333',
                 whiteSpace: 'pre-line',
@@ -456,24 +469,24 @@ export default function Blog() {
                   if (/^\d+\./.test(section)) {
                     const [title, ...points] = section.split('\n');
                     return (
-                      <div key={index} style={{ marginBottom: 40 }}>
+                      <div key={index} style={{ marginBottom: 32 }}>
                         <h3 style={{
-                          fontSize: 22,
+                          fontSize: 20,
                           fontWeight: 700,
                           color: '#111',
                           marginBottom: 16,
-                          paddingBottom: 10,
+                          paddingBottom: 8,
                           borderBottom: '2px solid #f0f0f0',
                         }}>{title}</h3>
                         <ul style={{
                           listStyle: 'disc',
-                          paddingLeft: 28,
+                          paddingLeft: 24,
                           margin: 0,
                         }}>
                           {points.filter(Boolean).map((point, pointIndex) => (
                             <li key={pointIndex} style={{
-                              marginBottom: 10,
-                              fontSize: 17,
+                              marginBottom: 12,
+                              fontSize: 16,
                               color: '#333',
                               lineHeight: 1.7,
                             }}>
@@ -486,17 +499,18 @@ export default function Blog() {
                   } else if (section.startsWith('Remember:')) {
                     return (
                       <div key={index} style={{
-                        marginTop: 48,
-                        padding: 24,
+                        marginTop: 32,
+                        padding: 20,
                         background: '#f8f8f8',
-                        borderRadius: 8,
+                        borderRadius: 12,
                         borderLeft: '4px solid #111',
                       }}>
                         <p style={{
                           margin: 0,
-                          fontSize: 18,
+                          fontSize: 16,
                           fontWeight: 500,
                           color: '#111',
+                          lineHeight: 1.6,
                         }}>
                           {section}
                         </p>
@@ -505,8 +519,8 @@ export default function Blog() {
                   } else {
                     return (
                       <p key={index} style={{
-                        marginBottom: 24,
-                        fontSize: 17,
+                        marginBottom: 20,
+                        fontSize: 16,
                         lineHeight: 1.7,
                         color: '#333',
                       }}>
