@@ -1,20 +1,24 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import ReactDOM from 'react-dom';
 
 interface SearchSuggestionsProps {
   query: string;
   onSelectSuggestion: (suggestion: string) => void;
   isVisible: boolean;
+  inputRef: React.RefObject<HTMLInputElement>;
 }
 
 const SearchSuggestions: React.FC<SearchSuggestionsProps> = ({ 
   query, 
   onSelectSuggestion, 
-  isVisible 
+  isVisible,
+  inputRef
 }) => {
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
+  const [dropdownStyle, setDropdownStyle] = useState<React.CSSProperties>({});
   const router = useRouter();
 
   // Популярные поисковые запросы
@@ -83,6 +87,26 @@ const SearchSuggestions: React.FC<SearchSuggestionsProps> = ({
   ];
 
   useEffect(() => {
+    if (isVisible && inputRef?.current) {
+      const rect = inputRef.current.getBoundingClientRect();
+      setDropdownStyle({
+        position: 'fixed',
+        top: rect.bottom + window.scrollY,
+        left: rect.left + window.scrollX,
+        width: rect.width,
+        zIndex: 2001,
+        background: '#fff',
+        border: '1px solid #eee',
+        borderTop: 'none',
+        borderRadius: '0 0 20px 20px',
+        boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+        maxHeight: '300px',
+        overflow: 'auto',
+      });
+    }
+  }, [isVisible, inputRef?.current]);
+
+  useEffect(() => {
     if (!isVisible || !query.trim()) {
       setSuggestions([]);
       return;
@@ -133,8 +157,8 @@ const SearchSuggestions: React.FC<SearchSuggestionsProps> = ({
     return null;
   }
 
-  return (
-    <div style={{
+  const dropdownContent = (
+    <div style={inputRef?.current ? dropdownStyle : {
       position: 'absolute',
       top: '100%',
       left: 0,
@@ -144,7 +168,7 @@ const SearchSuggestions: React.FC<SearchSuggestionsProps> = ({
       borderTop: 'none',
       borderRadius: '0 0 20px 20px',
       boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-      zIndex: 1000,
+      zIndex: 2001,
       maxHeight: '300px',
       overflow: 'auto'
     }}>
@@ -232,6 +256,11 @@ const SearchSuggestions: React.FC<SearchSuggestionsProps> = ({
       `}</style>
     </div>
   );
+
+  if (typeof window !== 'undefined' && inputRef?.current && document.body) {
+    return ReactDOM.createPortal(dropdownContent, document.body);
+  }
+  return dropdownContent;
 };
 
 // Функция для получения похожих слов

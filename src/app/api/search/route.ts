@@ -15,130 +15,50 @@ export async function GET(request: Request) {
     const { db } = await connectToDatabase();
     const products = db.collection('products');
 
-    // Создаем массив поисковых терминов
-    const searchTerms = query.toLowerCase().split(' ').filter(term => term.length > 0);
-    
-    // Базовый фильтр для поиска
-    const searchFilter: any = {
+    const queryLower = query.trim().toLowerCase();
+
+    // 1. Точное совпадение по названию, категории или подкатегории
+    let exactMatchFilter = {
       $or: [
-        // Поиск по названию товара
-        { title: { $regex: query, $options: 'i' } },
-        // Поиск по описанию
-        { description: { $regex: query, $options: 'i' } },
-        // Поиск по категории
-        { category: { $regex: query, $options: 'i' } },
-        // Поиск по подкатегории
-        { subcategory: { $regex: query, $options: 'i' } },
-        // Поиск по SKU
-        { 'beddingSizes.sku': { $regex: query, $options: 'i' } },
-        { 'rugsMatsSizes.sku': { $regex: query, $options: 'i' } },
-        { 'throwsTowelsStylePrices.sku': { $regex: query, $options: 'i' } },
-        { 'curtainsSizes.sku': { $regex: query, $options: 'i' } },
-        { 'footwearSizes.sku': { $regex: query, $options: 'i' } },
-        { 'clothingStylePrices.sku': { $regex: query, $options: 'i' } },
-        { 'outdoorPrice.sku': { $regex: query, $options: 'i' } },
-        // Поиск по цветам
-        { beddingColors: { $regex: query, $options: 'i' } },
-        { rugsMatsColors: { $regex: query, $options: 'i' } },
-        { throwsTowelsColors: { $regex: query, $options: 'i' } },
-        { curtainsColors: { $regex: query, $options: 'i' } },
-        { footwearColors: { $regex: query, $options: 'i' } },
-        { clothingColors: { $regex: query, $options: 'i' } },
-        // Поиск по стилям
-        { beddingStyles: { $regex: query, $options: 'i' } },
-        { rugsMatsStyles: { $regex: query, $options: 'i' } },
-        { throwsTowelsStyles: { $regex: query, $options: 'i' } },
-        { curtainsStyles: { $regex: query, $options: 'i' } },
-        { footwearStyles: { $regex: query, $options: 'i' } },
-        { clothingStyles: { $regex: query, $options: 'i' } },
-        // Поиск по дополнительным категориям
-        { 'additionalCategories.category': { $regex: query, $options: 'i' } },
-        { 'additionalCategories.subcategory': { $regex: query, $options: 'i' } }
+        { title: { $regex: `^${queryLower}$`, $options: 'i' } },
+        { category: { $regex: `^${queryLower}$`, $options: 'i' } },
+        { subcategory: { $regex: `^${queryLower}$`, $options: 'i' } }
       ]
     };
 
-    // Если есть несколько поисковых терминов, добавляем поиск по каждому термину отдельно
-    if (searchTerms.length > 1) {
-      const multiTermFilter = {
-        $and: searchTerms.map(term => ({
-          $or: [
-            { title: { $regex: term, $options: 'i' } },
-            { description: { $regex: term, $options: 'i' } },
-            { category: { $regex: term, $options: 'i' } },
-            { subcategory: { $regex: term, $options: 'i' } },
-            { beddingColors: { $regex: term, $options: 'i' } },
-            { rugsMatsColors: { $regex: term, $options: 'i' } },
-            { throwsTowelsColors: { $regex: term, $options: 'i' } },
-            { curtainsColors: { $regex: term, $options: 'i' } },
-            { footwearColors: { $regex: term, $options: 'i' } },
-            { clothingColors: { $regex: term, $options: 'i' } },
-            { beddingStyles: { $regex: term, $options: 'i' } },
-            { rugsMatsStyles: { $regex: term, $options: 'i' } },
-            { throwsTowelsStyles: { $regex: term, $options: 'i' } },
-            { curtainsStyles: { $regex: term, $options: 'i' } },
-            { footwearStyles: { $regex: term, $options: 'i' } },
-            { clothingStyles: { $regex: term, $options: 'i' } }
-          ]
-        }))
-      };
+    let searchResults = await products.find(exactMatchFilter).toArray();
 
-      // Объединяем фильтры
-      searchFilter.$or.push(multiTermFilter);
-    }
-
-    // Добавляем поиск по похожим словам
-    const similarWords = getSimilarWords(query);
-    if (similarWords.length > 0) {
-      const similarFilters = similarWords.map(word => ({
+    // 2. Если ничего не найдено, ищем по подстроке (начинается с... или содержит)
+    if (searchResults.length === 0) {
+      let broadMatchFilter = {
         $or: [
-          { title: { $regex: word, $options: 'i' } },
-          { description: { $regex: word, $options: 'i' } },
-          { category: { $regex: word, $options: 'i' } },
-          { subcategory: { $regex: word, $options: 'i' } }
+          { title: { $regex: query, $options: 'i' } },
+          { category: { $regex: query, $options: 'i' } },
+          { subcategory: { $regex: query, $options: 'i' } }
         ]
-      }));
-      
-      // Добавляем каждый фильтр отдельно
-      similarFilters.forEach(filter => {
-        searchFilter.$or.push(filter);
-      });
+      };
+      searchResults = await products.find(broadMatchFilter).toArray();
     }
 
-    const searchResults = await products.find(searchFilter).toArray();
-
-    // Сортируем результаты по релевантности
+    // 3. Сортируем: сначала точные совпадения, потом частичные
     const scoredResults = searchResults.map(product => {
       let score = 0;
-      const queryLower = query.toLowerCase();
-      const titleLower = product.title.toLowerCase();
-      const descriptionLower = product.description.toLowerCase();
-      const categoryLower = product.category.toLowerCase();
+      const titleLower = product.title?.toLowerCase() || '';
+      const categoryLower = product.category?.toLowerCase() || '';
       const subcategoryLower = product.subcategory?.toLowerCase() || '';
 
-      // Высший приоритет - точное совпадение в названии
-      if (titleLower.includes(queryLower)) {
-        score += 100;
-        if (titleLower.startsWith(queryLower)) score += 50;
-      }
-
-      // Приоритет по категории
-      if (categoryLower.includes(queryLower)) score += 30;
-      if (subcategoryLower.includes(queryLower)) score += 25;
-
-      // Приоритет по описанию
-      if (descriptionLower.includes(queryLower)) score += 10;
-
-      // Бонус за горячие товары и товары со скидкой
-      if (product.isHot) score += 5;
-      if (product.discount) score += 3;
-
+      if (titleLower === queryLower) score += 100;
+      if (categoryLower === queryLower) score += 90;
+      if (subcategoryLower === queryLower) score += 80;
+      if (titleLower.startsWith(queryLower)) score += 50;
+      if (categoryLower.startsWith(queryLower)) score += 40;
+      if (subcategoryLower.startsWith(queryLower)) score += 30;
+      if (titleLower.includes(queryLower)) score += 20;
+      if (categoryLower.includes(queryLower)) score += 10;
+      if (subcategoryLower.includes(queryLower)) score += 5;
       return { ...product, relevanceScore: score };
     });
-
-    // Сортируем по релевантности
     scoredResults.sort((a, b) => b.relevanceScore - a.relevanceScore);
-
-    // Удаляем score из результатов
     const finalResults = scoredResults.map(({ relevanceScore, ...product }) => product);
 
     return NextResponse.json({ 
@@ -146,7 +66,6 @@ export async function GET(request: Request) {
       total: finalResults.length,
       query: query
     });
-
   } catch (error) {
     console.error('Search error:', error);
     return NextResponse.json({ error: 'Failed to search products' }, { status: 500 });

@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import MobileHeader from './MobileHeader';
 import Link from 'next/link';
@@ -20,6 +20,7 @@ const Header = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const router = useRouter();
+  const searchInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const checkMobile = () => {
@@ -155,6 +156,7 @@ const Header = () => {
               }}
             >
               <input 
+                ref={searchInputRef}
                 type="text" 
                 className="s" 
                 placeholder="Search products..." 
@@ -226,6 +228,7 @@ const Header = () => {
               query={searchQuery}
               onSelectSuggestion={handleSuggestionSelect}
               isVisible={showSuggestions}
+              inputRef={searchInputRef}
             />
           </div>
         </div>

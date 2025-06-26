@@ -1,8 +1,9 @@
 'use client';
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect, useLayoutEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import styles from './CategoriesSection.module.css';
+import ReactDOM from 'react-dom';
 
 interface MenuColumn {
   title?: string;
@@ -74,8 +75,8 @@ const megaMenus: MegaMenu[] = [
       },
       {
         items: [
-          { img: '/Adrianna.jpg', label: 'New in summer collection', labelColor: 'red' },
-          { img: '/Bardsley_Check_Grey-scaled-2.jpg', label: 'Summer sale upto 70% off', labelColor: 'red' },
+          { img: '/cresf9cbntbcf1lw4pz5.jpg', label: 'New in summer collection', labelColor: 'red' },
+          { img: '/jfnaaklhqkb63ewq62wc.jpg', label: 'Summer sale upto 70% off', labelColor: 'red' },
         ],
       },
     ],
@@ -308,7 +309,29 @@ const megaMenus: MegaMenu[] = [
 const CategoriesSection = () => {
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [dropdownTop, setDropdownTop] = useState<number>(138); // default fallback
   const closeTimeout = useRef<NodeJS.Timeout | null>(null);
+  const menuRefs = useRef<(HTMLLIElement | null)[]>([]);
+  const navRef = useRef<HTMLElement | null>(null);
+
+  const updateDropdownTop = () => {
+    if (navRef.current) {
+      const rect = navRef.current.getBoundingClientRect();
+      setDropdownTop(rect.bottom);
+    }
+  };
+
+  useLayoutEffect(() => {
+    if (dropdownOpen) {
+      updateDropdownTop();
+      window.addEventListener('scroll', updateDropdownTop, true);
+      window.addEventListener('resize', updateDropdownTop);
+      return () => {
+        window.removeEventListener('scroll', updateDropdownTop, true);
+        window.removeEventListener('resize', updateDropdownTop);
+      };
+    }
+  }, [dropdownOpen]);
 
   const handleMouseEnter = (idx: number) => {
     if (closeTimeout.current) clearTimeout(closeTimeout.current);
@@ -324,11 +347,12 @@ const CategoriesSection = () => {
   };
 
   return (
-    <nav className={styles.menuBar} aria-label="Main categories">
+    <nav className={styles.menuBar} aria-label="Main categories" ref={navRef}>
       <ul className={styles.menuList} role="menubar">
         {megaMenus.map((cat, idx) => (
           <li
             key={cat.name}
+            ref={el => menuRefs.current[idx] = el}
             className={styles.menuItem + (hoveredIdx === idx && dropdownOpen ? ' ' + styles.active : '')}
             onMouseEnter={() => cat.name !== 'CLEARANCE' && handleMouseEnter(idx)}
             onMouseLeave={handleMouseLeave}
@@ -347,44 +371,58 @@ const CategoriesSection = () => {
               </span>
             )}
             {hoveredIdx === idx && dropdownOpen && cat.name !== 'CLEARANCE' && (
-              <div className={styles.dropdown} role="menu">
-                <div className={styles.dropdownContent}>
-                  {cat.columns.map((col, colIdx) => (
-                    <div key={colIdx} className={styles.dropdownCol}>
-                      {col.title && <div className={styles.dropdownColTitle}>{col.title}</div>}
-                      {col.title === 'TRENDING COLOURS' ? (
-                        <div className={styles.colorDotsGrid}>
-                          {col.items.map((item, itemIdx) => (
-                            <span key={itemIdx} className={styles.colorDot} title={item.label} style={{ background: item.color }}></span>
-                          ))}
-                        </div>
-                      ) : (
-                        col.items[0]?.img ? (
-                          <div className={styles.promoRow}>
-                            {col.items.map((item, itemIdx) => (
-                              <div key={itemIdx} className={styles.promoBlock}>
-                                <Link href={item.href || '#'}>
-                                  <Image src={item.img ?? '/placeholder.jpg'} alt={item.label} width={180} height={120} className={styles.promoImg} />
-                                  <div className={styles.promoText} style={item.labelColor ? { color: item.labelColor } : undefined}>{item.label}</div>
-                                  <div className={styles.promoDesc}>{item.description}</div>
-                                </Link>
+              typeof window !== 'undefined' && document.body ?
+                ReactDOM.createPortal(
+                  <div
+                    className={styles.dropdown}
+                    role="menu"
+                    style={{
+                      top: dropdownTop,
+                      left: '50%',
+                      transform: 'translateX(-50%)',
+                      position: 'fixed',
+                      zIndex: 10
+                    }}
+                  >
+                    <div className={styles.dropdownContent}>
+                      {cat.columns.map((col, colIdx) => (
+                        <div key={colIdx} className={styles.dropdownCol}>
+                          {col.title && <div className={styles.dropdownColTitle}>{col.title}</div>}
+                          {col.title === 'TRENDING COLOURS' ? (
+                            <div className={styles.colorDotsGrid}>
+                              {col.items.map((item, itemIdx) => (
+                                <span key={itemIdx} className={styles.colorDot} title={item.label} style={{ background: item.color }}></span>
+                              ))}
+                            </div>
+                          ) : (
+                            col.items[0]?.img ? (
+                              <div className={styles.promoRow}>
+                                {col.items.map((item, itemIdx) => (
+                                  <div key={itemIdx} className={styles.promoBlock}>
+                                    <Link href={item.href || '#'}>
+                                      <Image src={item.img ?? '/placeholder.jpg'} alt={item.label} width={180} height={120} className={styles.promoImg} />
+                                      <div className={styles.promoText} style={item.labelColor ? { color: item.labelColor } : undefined}>{item.label}</div>
+                                      <div className={styles.promoDesc}>{item.description}</div>
+                                    </Link>
+                                  </div>
+                                ))}
                               </div>
-                            ))}
-                          </div>
-                        ) : (
-                          <ul className={styles.dropdownLinks}>
-                            {col.items.map((item, itemIdx) => (
-                              <li key={itemIdx} className={styles.dropdownLink}>
-                                <Link href={item.href || '#'} tabIndex={0} style={item.style}>{item.label}</Link>
-                              </li>
-                            ))}
-                          </ul>
-                        )
-                      )}
+                            ) : (
+                              <ul className={styles.dropdownLinks}>
+                                {col.items.map((item, itemIdx) => (
+                                  <li key={itemIdx} className={styles.dropdownLink}>
+                                    <Link href={item.href || '#'} tabIndex={0} style={item.style}>{item.label}</Link>
+                                  </li>
+                                ))}
+                              </ul>
+                            )
+                          )}
+                        </div>
+                      ))}
                     </div>
-                  ))}
-                </div>
-              </div>
+                  </div>,
+                  document.body
+                ) : null
             )}
           </li>
         ))}

@@ -35,6 +35,7 @@ export default function SmallSizePage() {
   const [wishlist, setWishlist] = useState<string[]>([]);
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 1000]);
   const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
+  const [showCount, setShowCount] = useState(30);
   const router = useRouter();
 
   useEffect(() => {
@@ -44,6 +45,7 @@ export default function SmallSizePage() {
       const items = JSON.parse(savedWishlist);
       setWishlist(items.map((item: any) => item.id));
     }
+    setShowCount(30);
   }, []);
 
   const fetchProducts = async () => {
@@ -129,6 +131,10 @@ export default function SmallSizePage() {
       }
     });
   };
+
+  useEffect(() => {
+    setShowCount(30);
+  }, [selectedColor, priceRange]);
 
   if (loading) {
     return (
@@ -480,7 +486,7 @@ export default function SmallSizePage() {
             gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
             gap: '32px'
           }}>
-            {filteredProducts.map((product) => (
+            {filteredProducts.slice(0, showCount).map((product) => (
               <div 
                 key={product._id} 
                 style={{
@@ -712,6 +718,30 @@ export default function SmallSizePage() {
               </div>
             ))}
           </div>
+
+          {filteredProducts.length > showCount && (
+            <div style={{ textAlign: 'center', margin: '40px 0' }}>
+              <button
+                onClick={() => setShowCount(showCount + 30)}
+                style={{
+                  padding: '14px 38px',
+                  borderRadius: '8px',
+                  background: '#222',
+                  color: '#fff',
+                  fontWeight: 700,
+                  fontSize: '18px',
+                  border: 'none',
+                  cursor: 'pointer',
+                  boxShadow: '0 2px 8px rgba(34,34,34,0.10)',
+                  transition: 'background 0.2s, transform 0.2s',
+                }}
+                onMouseEnter={e => e.currentTarget.style.background = '#333'}
+                onMouseLeave={e => e.currentTarget.style.background = '#222'}
+              >
+                Show more
+              </button>
+            </div>
+          )}
 
           {filteredProducts.length === 0 && (
             <div style={{

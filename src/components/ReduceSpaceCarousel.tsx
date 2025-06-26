@@ -1,5 +1,5 @@
 // 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import QuickViewModal from './QuickViewModal';
 
 interface Product {
@@ -27,12 +27,38 @@ function getRandomRating() {
   return (Math.random() * 0.4 + 4.6).toFixed(1);
 }
 
+const isMobile = () => typeof window !== 'undefined' && window.innerWidth <= 900;
+
 const ReduceSpaceCarousel: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
   const [ratings, setRatings] = useState<{ [id: string]: string }>({});
+  const [mobile, setMobile] = useState(false);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [showLeftHint, setShowLeftHint] = useState(false);
+  const [showRightHint, setShowRightHint] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => setMobile(isMobile());
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  useEffect(() => {
+    if (!mobile || !scrollRef.current) return;
+    const checkHints = () => {
+      const el = scrollRef.current;
+      if (!el) return;
+      setShowLeftHint(el.scrollLeft > 10);
+      setShowRightHint(el.scrollLeft + el.offsetWidth < el.scrollWidth - 10);
+    };
+    checkHints();
+    scrollRef.current.addEventListener('scroll', checkHints);
+    return () => scrollRef.current?.removeEventListener('scroll', checkHints);
+  }, [mobile, products]);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -69,10 +95,10 @@ const ReduceSpaceCarousel: React.FC = () => {
     const halfStar = value - fullStars >= 0.5;
     const stars = [];
     for (let i = 0; i < fullStars; i++) {
-      stars.push(<span key={i} style={{ color: '#FFD700', fontSize: 18 }}>★</span>);
+      stars.push(<span key={i} style={{ color: '#111', fontSize: 18 }}>★</span>);
     }
     if (halfStar) {
-      stars.push(<span key="half" style={{ color: '#FFD700', fontSize: 18 }}>☆</span>);
+      stars.push(<span key="half" style={{ color: '#111', fontSize: 18 }}>☆</span>);
     }
     while (stars.length < 5) {
       stars.push(<span key={stars.length + 'empty'} style={{ color: '#e0e0e0', fontSize: 18 }}>★</span>);
@@ -202,75 +228,146 @@ const ReduceSpaceCarousel: React.FC = () => {
         <div style={{fontSize: 18, color: '#bdbdbd', margin: 40}}>No products found in OUTDOOR Chairs category</div>
       ) : (
         <div style={{
-          display: 'grid',
-          gridTemplateColumns: `repeat(${products.length}, 1fr)` ,
-          gap: 32,
-          justifyContent: 'center',
+          position: 'relative',
           width: '100%',
           maxWidth: 1400,
+          margin: '0 auto',
         }}>
-          {products.map((product) => (
-            <div key={product._id} style={{
-              width: 300,
-              height: 360,
-              background: 'rgba(255,255,255,0.35)',
-              backdropFilter: 'blur(12px)',
-              WebkitBackdropFilter: 'blur(12px)',
-              border: '1.5px solid rgba(200,200,255,0.18)',
-              borderRadius: 24,
-              boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.10)',
+          {mobile && (
+            <>
+              {showLeftHint && <div style={{position:'absolute',left:0,top:0,bottom:0,width:32,pointerEvents:'none',zIndex:2,background:'linear-gradient(to right, #fff 70%, rgba(255,255,255,0))'}} />}
+              {showRightHint && <div style={{position:'absolute',right:0,top:0,bottom:0,width:32,pointerEvents:'none',zIndex:2,background:'linear-gradient(to left, #fff 70%, rgba(255,255,255,0))'}} />}
+            </>
+          )}
+          <div
+            ref={scrollRef}
+            style={mobile ? {
+              overflowX: 'auto',
+              overflowY: 'hidden',
+              WebkitOverflowScrolling: 'touch',
               display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'flex-start',
-              fontSize: 18,
-              color: '#a084e8',
-              fontWeight: 700,
-              fontFamily: 'Montserrat, sans-serif',
-              opacity: 1,
-              padding: 20,
-              cursor: 'default',
-              transition: 'box-shadow 0.2s',
+              gap: 16,
+              paddingBottom: 8,
+              scrollbarWidth: 'none',
+              msOverflowStyle: 'none',
+              scrollSnapType: 'x mandatory',
+              scrollBehavior: 'smooth',
+            } : {
+              display: 'grid',
+              gridTemplateColumns: `repeat(${products.length}, 1fr)` ,
+              gap: 32,
+              justifyContent: 'center',
+              width: '100%',
+              maxWidth: 1400,
             }}
-            >
-              <div style={{width: '100%', height: 140, marginBottom: 16, borderRadius: 16, overflow: 'hidden', background: '#f3f0fa', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-                {product.images && product.images[0] ? (
-                  <img src={product.images[0]} alt={product.title} style={{width: '100%', height: '100%', objectFit: 'cover'}} />
-                ) : (
-                  <span style={{fontSize: 48}}>🪑</span>
-                )}
-              </div>
-              <div style={{fontWeight: 700, fontSize: 18, marginBottom: 8, textAlign: 'center', color: '#1a1a1a'}}>{product.title}</div>
-              <div style={{fontSize: 16, color: '#a084e8', marginBottom: 8}}>
-                {product.outdoorPrice ? `£${product.outdoorPrice.salePrice.toFixed(2)}` : 'No price'}
-              </div>
-              {/* Рейтинг */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 12 }}>
-                {renderStars(ratings[product._id] || '4.8')}
-                <span style={{ color: '#222', fontWeight: 600, fontSize: 15, marginLeft: 4 }}>{ratings[product._id] || '4.8'}</span>
-              </div>
-              {/* Кнопка View */}
-              <button
-                style={{
-                  width: '100%',
-                  padding: '12px 0',
-                  background: '#111',
-                  color: '#fff',
-                  border: 'none',
-                  borderRadius: 8,
-                  fontSize: 16,
-                  fontWeight: 700,
-                  cursor: 'pointer',
-                  marginTop: 'auto',
-                  transition: 'background 0.2s',
-                  letterSpacing: 0.5,
-                }}
-                onClick={() => setQuickViewProduct(product)}
+            className={mobile ? 'mobile-carousel-scroll' : ''}
+          >
+            {products.map((product) => (
+              <div key={product._id} style={{
+                width: 340,
+                minWidth: 260,
+                maxWidth: 300,
+                height: 400,
+                background: 'rgba(255,255,255,0.35)',
+                backdropFilter: 'blur(12px)',
+                WebkitBackdropFilter: 'blur(12px)',
+                border: '1.5px solid rgba(200,200,255,0.18)',
+                borderRadius: 24,
+                boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.10)',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'flex-start',
+                fontSize: 18,
+                color: '#a084e8',
+                fontWeight: 700,
+                fontFamily: 'Montserrat, sans-serif',
+                opacity: 1,
+                padding: 20,
+                cursor: 'default',
+                transition: 'box-shadow 0.2s',
+                scrollSnapAlign: mobile ? 'start' : undefined,
+                marginRight: mobile ? 8 : undefined,
+              }}
               >
-                View
-              </button>
-            </div>
-          ))}
+                <div style={{width: '100%', height: 200, marginBottom: 16, borderRadius: 16, overflow: 'hidden', background: '#f3f0fa', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative'}}>
+                  {/* HOT icon */}
+                  <span style={{
+                    position: 'absolute',
+                    top: 12,
+                    left: 12,
+                    background: '#000',
+                    color: '#fff',
+                    fontWeight: 700,
+                    fontSize: 14,
+                    borderRadius: '50%',
+                    width: 47,
+                    height: 47,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    boxShadow: '0 2px 8px rgba(0,0,0,0.2)',
+                    zIndex: 2
+                  }}>
+                    HOT
+                  </span>
+                  {product.images && product.images[0] ? (
+                    <img src={product.images[0]} alt={product.title} style={{width: '100%', height: '100%', objectFit: 'cover'}} />
+                  ) : (
+                    <span style={{fontSize: 48}}>🪑</span>
+                  )}
+                </div>
+                <div style={{fontWeight: 700, fontSize: 18, marginBottom: 8, textAlign: 'center', color: '#1a1a1a'}}>{product.title}</div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
+                  {product.outdoorPrice && (
+                    <span style={{ 
+                      textDecoration: 'line-through',
+                      color: '#999',
+                      fontSize: 15
+                    }}>
+                      £{product.outdoorPrice.regularPrice.toFixed(2)}
+                    </span>
+                  )}
+                  <span style={{
+                    fontWeight: '600',
+                    fontSize: '17px',
+                    color: '#e53935'
+                  }}>
+                    {product.outdoorPrice ? `£${product.outdoorPrice.salePrice.toFixed(2)}` : 'No price'}
+                  </span>
+                </div>
+                {/* Рейтинг */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 12 }}>
+                  {renderStars(ratings[product._id] || '4.8')}
+                  <span style={{ color: '#222', fontWeight: 600, fontSize: 15, marginLeft: 4 }}>{ratings[product._id] || '4.8'}</span>
+                </div>
+                {/* Кнопка View */}
+                <button
+                  style={{
+                    width: '100%',
+                    padding: '12px 0',
+                    background: '#111',
+                    color: '#fff',
+                    border: 'none',
+                    borderRadius: 8,
+                    fontSize: 16,
+                    fontWeight: 700,
+                    cursor: 'pointer',
+                    marginTop: 'auto',
+                    transition: 'background 0.2s',
+                    letterSpacing: 0.5,
+                  }}
+                  onClick={() => setQuickViewProduct(product)}
+                >
+                  View
+                </button>
+              </div>
+            ))}
+          </div>
+          <style>{`
+            .mobile-carousel-scroll::-webkit-scrollbar { display: none; }
+            .mobile-carousel-scroll { -ms-overflow-style: none; scrollbar-width: none; }
+          `}</style>
         </div>
       )}
       {quickViewProduct && (

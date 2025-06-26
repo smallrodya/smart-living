@@ -247,12 +247,20 @@ export default function BasketPage() {
             <div className="px-4 md:px-6 py-4 bg-gray-50 border-t">
               <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
                 <div className="text-lg font-medium">Total: £{total.toFixed(2)}</div>
-                <button
-                  onClick={() => router.push('/basket/checkout')}
-                  className="w-full md:w-auto bg-black text-white px-6 py-2 rounded-lg hover:bg-gray-800 transition-colors"
-                >
-                  Proceed to Checkout
-                </button>
+                <div className="flex flex-col md:flex-row gap-3 w-full md:w-auto md:items-center">
+                  <button
+                    onClick={() => router.push('/')}
+                    className="w-full md:w-auto bg-white text-black border border-gray-300 px-6 py-2 rounded-lg hover:bg-gray-100 transition-colors"
+                  >
+                    Continue Shopping
+                  </button>
+                  <button
+                    onClick={() => router.push('/basket/checkout')}
+                    className="w-full md:w-auto bg-black text-white px-6 py-2 rounded-lg hover:bg-gray-800 transition-colors"
+                  >
+                    Proceed to Checkout
+                  </button>
+                </div>
               </div>
             </div>
           </div>

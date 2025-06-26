@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { useBasket } from '@/context/BasketContext';
 import toast from 'react-hot-toast';
@@ -89,6 +89,19 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
   const { addItem } = useBasket();
   const isMobile = useIsMobile();
   const [quantity, setQuantity] = useState<number>(1);
+  const modalRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+        onClose();
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [onClose]);
 
   if (isMobile) {
     return <MobileQuickViewModal product={product} onClose={onClose} />;
@@ -484,7 +497,7 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
       padding: '20px',
       backdropFilter: 'blur(5px)'
     }}>
-      <div style={{
+      <div ref={modalRef} style={{
         background: '#fff',
         borderRadius: '24px',
         maxWidth: '1200px',
@@ -869,146 +882,8 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
               )}
             </div>
 
-            {/* Description Section */}
-            <div style={{
-              marginBottom: '32px',
-              background: '#f8f9fa',
-              borderRadius: '16px',
-              boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
-              padding: '28px 32px',
-              border: '1px solid #f0f0f0',
-            }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 18 }}>
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#e53935" strokeWidth="2.2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-                <h3 style={{ fontSize: 22, fontWeight: 700, color: '#222', margin: 0, letterSpacing: 0.2 }}>Description</h3>
-              </div>
-              <div style={{ color: '#444', fontSize: 16, lineHeight: 1.7, marginBottom: 0, whiteSpace: 'pre-line' }}>
-                {product.description}
-              </div>
-            </div>
-
-            {/* Features Section */}
-            {product.features && (
-              <div style={{
-                marginBottom: '32px',
-                background: '#f8f9fa',
-                borderRadius: '16px',
-                boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
-                padding: '28px 32px',
-                border: '1px solid #f0f0f0',
-              }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 18 }}>
-                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#43a047" strokeWidth="2.2"><path d="M20 6L9 17l-5-5"/></svg>
-                  <h3 style={{ fontSize: 22, fontWeight: 700, color: '#222', margin: 0, letterSpacing: 0.2 }}>Features</h3>
-                </div>
-                <ul style={{ paddingLeft: 0, margin: 0, listStyle: 'none', color: '#444', fontSize: 16, lineHeight: 1.7 }}>
-                  {typeof product.features === 'string'
-                    ? product.features.split(/\n|,/).filter(Boolean).map((f, i) => (
-                        <li key={i} style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
-                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#43a047" strokeWidth="2.2"><path d="M20 6L9 17l-5-5"/></svg>
-                          <span>{f.trim()}</span>
-                        </li>
-                      ))
-                    : null}
-                </ul>
-              </div>
-            )}
-
-            {/* Shipping */}
-            <div style={{ marginBottom: '32px' }}>
-              <button
-                onClick={() => toggleSection('shipping')}
-                style={{
-                  width: '100%',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  background: 'none',
-                  border: 'none',
-                  padding: '0',
-                  cursor: 'pointer',
-                  marginBottom: openSection === 'shipping' ? '16px' : '0'
-                }}
-              >
-                <h3 style={{
-                  fontSize: '20px',
-                  fontWeight: 600,
-                  color: '#222',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  margin: 0
-                }}>
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/>
-                  </svg>
-                  Shipping
-                </h3>
-                <svg
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  style={{
-                    transform: openSection === 'shipping' ? 'rotate(180deg)' : 'rotate(0deg)',
-                    transition: 'transform 0.3s ease'
-                  }}
-                >
-                  <path d="M6 9l6 6 6-6"/>
-                </svg>
-              </button>
-              {openSection === 'shipping' && (
-                <div style={{
-                  color: '#666',
-                  lineHeight: '1.8',
-                  fontSize: '16px',
-                  background: '#f8f9fa',
-                  padding: '20px',
-                  borderRadius: '12px',
-                  margin: 0
-                }}>
-                  <div style={{ marginBottom: '16px' }}>
-                    <h4 style={{ color: '#222', marginBottom: '8px', fontSize: '18px' }}>Free Mainland UK Delivery</h4>
-                    <p>We offer complimentary delivery on all orders within mainland UK — no minimum spend required.</p>
-                  </div>
-
-                  <div style={{ marginBottom: '16px' }}>
-                    <h4 style={{ color: '#222', marginBottom: '8px', fontSize: '18px' }}>Same-Day Dispatch</h4>
-                    <p>Orders placed by 8:00 AM (Monday to Friday) are dispatched the same day. Orders placed after this time, or during weekends and bank holidays, will be dispatched on the next working day.</p>
-                  </div>
-
-                  <div style={{ marginBottom: '16px' }}>
-                    <h4 style={{ color: '#222', marginBottom: '8px', fontSize: '18px' }}>Delivery Timeframes</h4>
-                    <p>Standard Delivery (Free): Estimated delivery within 2 to 5 working days.<br />
-                    Express Delivery (Paid): Delivered on the next working day.</p>
-                  </div>
-
-                  <div style={{ marginBottom: '16px' }}>
-                    <h4 style={{ color: '#222', marginBottom: '8px', fontSize: '18px' }}>Packaging Information</h4>
-                    <p>Please note: Due to courier requirements, larger rugs may be shipped folded rather than rolled. This does not impact the quality or performance of the product.</p>
-                  </div>
-
-                  <div style={{ marginBottom: '16px' }}>
-                    <h4 style={{ color: '#222', marginBottom: '8px', fontSize: '18px' }}>Order Tracking</h4>
-                    <p>A tracking link will be emailed to you once your order has been dispatched, so you can monitor your delivery status in real time.</p>
-                  </div>
-
-                  <div>
-                    <h4 style={{ color: '#222', marginBottom: '8px', fontSize: '18px' }}>Need Help?</h4>
-                    <p>If you experience any issues with your delivery, our customer service team is happy to assist.</p>
-                    <div style={{ marginTop: '8px' }}>
-                      <p>📧 Email: support@smart-living.co.uk</p>
-                      <p>📞 Phone: 01384 521170</p>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
-
             {/* Sizes */}
-            {(product.beddingSizes || product.throwsTowelsStylePrices || product.rugsMatsSizes || product.clothingStylePrices || product.footwearSizes) && (
+            {(product.category !== 'OUTDOOR') && (product.beddingSizes || product.throwsTowelsStylePrices || product.rugsMatsSizes || product.clothingStylePrices || product.footwearSizes) && (
               <div style={{ marginBottom: '32px' }}>
                 <h3 style={{
                   fontSize: '20px',
@@ -1404,8 +1279,265 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
               </div>
             )}
 
+            {/* Quantity and Add to Cart */}
+            {(
+              (product.category === 'OUTDOOR' && product.outdoorPrice && product.outdoorPrice.stock > 0) ||
+              (product.category !== 'OUTDOOR' && selectedSize && getSelectedStock() > 0)
+            ) && (
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
+                <button
+                  onClick={() => setQuantity(q => Math.max(1, q - 1))}
+                  disabled={quantity <= 1}
+                  style={{
+                    width: 36,
+                    height: 36,
+                    borderRadius: '50%',
+                    border: '1px solid #eee',
+                    background: '#fafafa',
+                    color: quantity <= 1 ? '#ccc' : '#222',
+                    fontSize: 22,
+                    fontWeight: 600,
+                    cursor: quantity <= 1 ? 'not-allowed' : 'pointer',
+                    transition: 'all 0.2s',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  −
+                </button>
+                <span style={{ minWidth: 32, textAlign: 'center', fontSize: 18, fontWeight: 600 }}>{quantity}</span>
+                <button
+                  onClick={() => setQuantity(q => Math.min((product.category === 'OUTDOOR' ? product.outdoorPrice?.stock || 1 : getSelectedStock()), q + 1))}
+                  disabled={quantity >= (product.category === 'OUTDOOR' ? product.outdoorPrice?.stock || 1 : getSelectedStock())}
+                  style={{
+                    width: 36,
+                    height: 36,
+                    borderRadius: '50%',
+                    border: '1px solid #eee',
+                    background: '#fafafa',
+                    color: quantity >= (product.category === 'OUTDOOR' ? product.outdoorPrice?.stock || 1 : getSelectedStock()) ? '#ccc' : '#222',
+                    fontSize: 22,
+                    fontWeight: 600,
+                    cursor: quantity >= (product.category === 'OUTDOOR' ? product.outdoorPrice?.stock || 1 : getSelectedStock()) ? 'not-allowed' : 'pointer',
+                    transition: 'all 0.2s',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  +
+                </button>
+                <span style={{ color: '#888', fontSize: 14, marginLeft: 8 }}>
+                  in stock: {product.category === 'OUTDOOR' ? product.outdoorPrice?.stock : getSelectedStock()}
+                </span>
+              </div>
+            )}
+
+            {/* Add to Cart button */}
+            {!((product.category === 'OUTDOOR' && product.outdoorPrice && product.outdoorPrice.stock === 0) || product.isSoldOut) && (
+              <button
+                onClick={handleAddToCart}
+                disabled={product.isSoldOut || (product.category === 'OUTDOOR' ? (!product.outdoorPrice || product.outdoorPrice.stock === 0) : (!selectedSize || isSelectedSizeOutOfStock()))}
+                style={{
+                  width: '100%',
+                  padding: '20px',
+                  background: (product.isSoldOut || (product.category === 'OUTDOOR' ? (!product.outdoorPrice || product.outdoorPrice.stock === 0) : (!selectedSize || isSelectedSizeOutOfStock()))) ? '#bdbdbd' : '#222',
+                  color: '#fff',
+                  border: 'none',
+                  borderRadius: '12px',
+                  fontSize: '18px',
+                  fontWeight: 600,
+                  cursor: (product.isSoldOut || (product.category === 'OUTDOOR' ? (!product.outdoorPrice || product.outdoorPrice.stock === 0) : (!selectedSize || isSelectedSizeOutOfStock()))) ? 'not-allowed' : 'pointer',
+                  filter: (product.isSoldOut || (product.category === 'OUTDOOR' ? (!product.outdoorPrice || product.outdoorPrice.stock === 0) : (!selectedSize || isSelectedSizeOutOfStock()))) ? 'blur(1px) grayscale(0.5)' : 'none',
+                  opacity: (product.isSoldOut || (product.category === 'OUTDOOR' ? (!product.outdoorPrice || product.outdoorPrice.stock === 0) : (!selectedSize || isSelectedSizeOutOfStock()))) ? 0.7 : 1,
+                  transition: 'all 0.2s ease',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '12px',
+                  boxShadow: (product.isSoldOut || (product.category === 'OUTDOOR' ? (!product.outdoorPrice || product.outdoorPrice.stock === 0) : (!selectedSize || isSelectedSizeOutOfStock()))) ? 'none' : '0 4px 12px rgba(0,0,0,0.1)'
+                }}
+              >
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <circle cx="9" cy="21" r="1"/>
+                  <circle cx="20" cy="21" r="1"/>
+                  <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+                </svg>
+                {product.isSoldOut ? 'Out of Stock' : (product.category === 'OUTDOOR' ? 'Add to Cart' : (selectedSize ? 'Add to Cart' : (product.category === 'THROWS & TOWELS' ? 'Select Style' : 'Select Size')))}
+              </button>
+            )}
+            {(product.category === 'OUTDOOR' && product.outdoorPrice && product.outdoorPrice.stock === 0) && (
+              <button
+                disabled
+                style={{
+                  width: '100%',
+                  padding: '20px',
+                  background: '#ccc',
+                  color: '#fff',
+                  border: 'none',
+                  borderRadius: '12px',
+                  fontSize: '18px',
+                  fontWeight: 600,
+                  cursor: 'not-allowed',
+                  marginTop: '0',
+                  marginBottom: '0',
+                  opacity: 1
+                }}
+              >
+                Out of stock
+              </button>
+            )}
+
+            {/* Description Section */}
+            <div style={{
+              marginBottom: '32px',
+              background: '#f8f9fa',
+              borderRadius: '16px',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
+              padding: '28px 32px',
+              border: '1px solid #f0f0f0',
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 18 }}>
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#e53935" strokeWidth="2.2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                <h3 style={{ fontSize: 22, fontWeight: 700, color: '#222', margin: 0, letterSpacing: 0.2 }}>Description</h3>
+              </div>
+              <div style={{ color: '#444', fontSize: 16, lineHeight: 1.7, marginBottom: 0, whiteSpace: 'pre-line' }}>
+                {product.description}
+              </div>
+            </div>
+
+            {/* Features Section */}
+            {product.features && (
+              <div style={{
+                marginBottom: '32px',
+                background: '#f8f9fa',
+                borderRadius: '16px',
+                boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
+                padding: '28px 32px',
+                border: '1px solid #f0f0f0',
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 18 }}>
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#43a047" strokeWidth="2.2"><path d="M20 6L9 17l-5-5"/></svg>
+                  <h3 style={{ fontSize: 22, fontWeight: 700, color: '#222', margin: 0, letterSpacing: 0.2 }}>Features</h3>
+                </div>
+                <ul style={{ paddingLeft: 0, margin: 0, listStyle: 'none', color: '#444', fontSize: 16, lineHeight: 1.7 }}>
+                  {typeof product.features === 'string'
+                    ? product.features.split(/\n|,/).filter(Boolean).map((f, i) => (
+                        <li key={i} style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
+                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#43a047" strokeWidth="2.2"><path d="M20 6L9 17l-5-5"/></svg>
+                          <span>{f.trim()}</span>
+                        </li>
+                      ))
+                    : null}
+                </ul>
+              </div>
+            )}
+
+            {/* Shipping */}
+            <div style={{ marginBottom: '32px' }}>
+              <button
+                onClick={() => toggleSection('shipping')}
+                style={{
+                  width: '100%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  background: 'none',
+                  border: 'none',
+                  padding: '0',
+                  cursor: 'pointer',
+                  marginBottom: openSection === 'shipping' ? '16px' : '0'
+                }}
+              >
+                <h3 style={{
+                  fontSize: '20px',
+                  fontWeight: 600,
+                  color: '#222',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  margin: 0
+                }}>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/>
+                  </svg>
+                  Shipping
+                </h3>
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  style={{
+                    transform: openSection === 'shipping' ? 'rotate(180deg)' : 'rotate(0deg)',
+                    transition: 'transform 0.3s ease'
+                  }}
+                >
+                  <path d="M6 9l6 6 6-6"/>
+                </svg>
+              </button>
+              {openSection === 'shipping' && (
+                <div style={{
+                  color: '#666',
+                  lineHeight: '1.8',
+                  fontSize: '16px',
+                  background: '#f8f9fa',
+                  padding: '20px',
+                  borderRadius: '12px',
+                  margin: 0
+                }}>
+                  <div style={{ marginBottom: '16px' }}>
+                    <h4 style={{ color: '#222', marginBottom: '8px', fontSize: '18px' }}>Free Mainland UK Delivery</h4>
+                    <p>We offer complimentary delivery on all orders within mainland UK — no minimum spend required.</p>
+                  </div>
+
+                  <div style={{ marginBottom: '16px' }}>
+                    <h4 style={{ color: '#222', marginBottom: '8px', fontSize: '18px' }}>Same-Day Dispatch</h4>
+                    <p>Orders placed by 8:00 AM (Monday to Friday) are dispatched the same day. Orders placed after this time, or during weekends and bank holidays, will be dispatched on the next working day.</p>
+                  </div>
+
+                  <div style={{ marginBottom: '16px' }}>
+                    <h4 style={{ color: '#222', marginBottom: '8px', fontSize: '18px' }}>Delivery Timeframes</h4>
+                    <p>Standard Delivery (Free): Estimated delivery within 2 to 5 working days.<br />
+                    Express Delivery (Paid): Delivered on the next working day.</p>
+                  </div>
+
+                  <div style={{ marginBottom: '16px' }}>
+                    <h4 style={{ color: '#222', marginBottom: '8px', fontSize: '18px' }}>Packaging Information</h4>
+                    <p>Please note: Due to courier requirements, larger rugs may be shipped folded rather than rolled. This does not impact the quality or performance of the product.</p>
+                  </div>
+
+                  <div style={{ marginBottom: '16px' }}>
+                    <h4 style={{ color: '#222', marginBottom: '8px', fontSize: '18px' }}>Order Tracking</h4>
+                    <p>A tracking link will be emailed to you once your order has been dispatched, so you can monitor your delivery status in real time.</p>
+                  </div>
+
+                  <div>
+                    <h4 style={{ color: '#222', marginBottom: '8px', fontSize: '18px' }}>Need Help?</h4>
+                    <p>If you experience any issues with your delivery, our customer service team is happy to assist.</p>
+                    <div style={{ marginTop: '8px' }}>
+                      <p>📧 Email: support@smart-living.co.uk</p>
+                      <p>📞 Phone: 01384 521170</p>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
             {/* Colors */}
-            {(product.beddingColors || product.throwsTowelsColors || product.rugsMatsColors || product.clothingColors) && (
+            {(product.category !== 'OUTDOOR') && (product.beddingColors || product.throwsTowelsColors || product.rugsMatsColors || product.clothingColors) && (
               <div style={{ marginBottom: '24px' }}>
                 <h3 style={{
                   fontSize: '18px',
@@ -1486,122 +1618,6 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
                   ))}
                 </div>
               </div>
-            )}
-
-            {/* Quantity Selector */}
-            {(selectedSize && getSelectedStock() > 0) && (
-              <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
-                <button
-                  onClick={() => setQuantity(q => Math.max(1, q - 1))}
-                  disabled={quantity <= 1}
-                  style={{
-                    width: 36,
-                    height: 36,
-                    borderRadius: '50%',
-                    border: '1px solid #eee',
-                    background: '#fafafa',
-                    color: quantity <= 1 ? '#ccc' : '#222',
-                    fontSize: 22,
-                    fontWeight: 600,
-                    cursor: quantity <= 1 ? 'not-allowed' : 'pointer',
-                    transition: 'all 0.2s',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
-                  −
-                </button>
-                <span style={{ minWidth: 32, textAlign: 'center', fontSize: 18, fontWeight: 600 }}>{quantity}</span>
-                <button
-                  onClick={() => setQuantity(q => Math.min(getSelectedStock(), q + 1))}
-                  disabled={quantity >= getSelectedStock()}
-                  style={{
-                    width: 36,
-                    height: 36,
-                    borderRadius: '50%',
-                    border: '1px solid #eee',
-                    background: '#fafafa',
-                    color: quantity >= getSelectedStock() ? '#ccc' : '#222',
-                    fontSize: 22,
-                    fontWeight: 600,
-                    cursor: quantity >= getSelectedStock() ? 'not-allowed' : 'pointer',
-                    transition: 'all 0.2s',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
-                  +
-                </button>
-                <span style={{ color: '#888', fontSize: 14, marginLeft: 8 }}>
-                  in stock: {getSelectedStock()}
-                </span>
-              </div>
-            )}
-
-            {/* Add to Cart button */}
-            {!((product.category === 'OUTDOOR' && product.outdoorPrice && product.outdoorPrice.stock === 0) || product.isSoldOut) && (
-              <button
-                onClick={handleAddToCart}
-                disabled={product.isSoldOut || (product.category === 'OUTDOOR' ? (!product.outdoorPrice || product.outdoorPrice.stock === 0) : (!selectedSize || isSelectedSizeOutOfStock()))}
-                style={{
-                  width: '100%',
-                  padding: '20px',
-                  background: (product.isSoldOut || (product.category === 'OUTDOOR' ? (!product.outdoorPrice || product.outdoorPrice.stock === 0) : (!selectedSize || isSelectedSizeOutOfStock()))) ? '#bdbdbd' : '#222',
-                  color: '#fff',
-                  border: 'none',
-                  borderRadius: '12px',
-                  fontSize: '18px',
-                  fontWeight: 600,
-                  cursor: (product.isSoldOut || (product.category === 'OUTDOOR' ? (!product.outdoorPrice || product.outdoorPrice.stock === 0) : (!selectedSize || isSelectedSizeOutOfStock()))) ? 'not-allowed' : 'pointer',
-                  filter: (product.isSoldOut || (product.category === 'OUTDOOR' ? (!product.outdoorPrice || product.outdoorPrice.stock === 0) : (!selectedSize || isSelectedSizeOutOfStock()))) ? 'blur(1px) grayscale(0.5)' : 'none',
-                  opacity: (product.isSoldOut || (product.category === 'OUTDOOR' ? (!product.outdoorPrice || product.outdoorPrice.stock === 0) : (!selectedSize || isSelectedSizeOutOfStock()))) ? 0.7 : 1,
-                  transition: 'all 0.2s ease',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '12px',
-                  boxShadow: (product.isSoldOut || (product.category === 'OUTDOOR' ? (!product.outdoorPrice || product.outdoorPrice.stock === 0) : (!selectedSize || isSelectedSizeOutOfStock()))) ? 'none' : '0 4px 12px rgba(0,0,0,0.1)'
-                }}
-              >
-                <svg
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <circle cx="9" cy="21" r="1"/>
-                  <circle cx="20" cy="21" r="1"/>
-                  <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
-                </svg>
-                {product.isSoldOut ? 'Out of Stock' : (product.category === 'OUTDOOR' ? 'Add to Cart' : (selectedSize ? 'Add to Cart' : (product.category === 'THROWS & TOWELS' ? 'Select Style' : 'Select Size')))}
-              </button>
-            )}
-            {(product.category === 'OUTDOOR' && product.outdoorPrice && product.outdoorPrice.stock === 0) && (
-              <button
-                disabled
-                style={{
-                  width: '100%',
-                  padding: '20px',
-                  background: '#ccc',
-                  color: '#fff',
-                  border: 'none',
-                  borderRadius: '12px',
-                  fontSize: '18px',
-                  fontWeight: 600,
-                  cursor: 'not-allowed',
-                  marginTop: '0',
-                  marginBottom: '0',
-                  opacity: 1
-                }}
-              >
-                Out of stock
-              </button>
             )}
           </div>
         </div>

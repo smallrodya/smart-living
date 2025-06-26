@@ -47,7 +47,7 @@ const MobileBanner = () => {
 
   const bannerStyles: React.CSSProperties = {
     width: '100%',
-    height: '400px',
+    height: '250px',
     position: 'relative' as const,
     overflow: 'hidden',
     marginBottom: '20px',
