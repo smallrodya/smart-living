@@ -17,7 +17,7 @@ interface Product {
   category: string;
   subcategory: string;
   sku: string;
-  beddingSizes: Array<{ size: string; price: number; salePrice: number; regularPrice: number }>;
+  beddingSizes: Array<{ size: string; price: number; salePrice: number }>;
   beddingColors: string[];
   beddingStyles: string[];
   images?: string[];
@@ -82,18 +82,10 @@ export default function ThreeDPage() {
 
   const formatPriceRange = (product: Product) => {
     if (!product.beddingSizes || product.beddingSizes.length === 0) return '£0.00';
-    const salePrices = product.beddingSizes.map(size => size.salePrice);
-    const minSale = Math.min(...salePrices);
-    const maxSale = Math.max(...salePrices);
-    return minSale === maxSale ? formatPrice(minSale) : `${formatPrice(minSale)} - ${formatPrice(maxSale)}`;
-  };
-
-  const formatRegularPriceRange = (product: Product) => {
-    if (!product.beddingSizes || product.beddingSizes.length === 0) return '';
-    const regularPrices = product.beddingSizes.map(size => size.regularPrice ?? size.price ?? size.salePrice);
-    const minReg = Math.min(...regularPrices);
-    const maxReg = Math.max(...regularPrices);
-    return minReg === maxReg ? formatPrice(minReg) : `${formatPrice(minReg)} - ${formatPrice(maxReg)}`;
+    const prices = product.beddingSizes.map(size => size.salePrice);
+    const min = Math.min(...prices);
+    const max = Math.max(...prices);
+    return min === max ? formatPrice(min) : `${formatPrice(min)} - ${formatPrice(max)}`;
   };
 
   const filteredProducts = products.filter(product => {
@@ -803,20 +795,20 @@ export default function ThreeDPage() {
                     fontSize: '20px',
                     marginBottom: '20px'
                   }}>
-                    {product.discount && product.beddingSizes.some(s => s.regularPrice > s.salePrice) ? (
+                    {product.discount ? (
                       <>
-                        <span>{formatPriceRange(product)}</span>
+                        {formatPriceRange(product)}
                         <span style={{
                           color: '#999',
                           textDecoration: 'line-through',
                           marginLeft: '8px',
                           fontSize: '16px'
                         }}>
-                          {formatRegularPriceRange(product)}
+                          {formatPriceRange({ ...product, discount: undefined })}
                         </span>
                       </>
                     ) : (
-                      <span>{formatPriceRange(product)}</span>
+                      formatPriceRange(product)
                     )}
                   </div>
                   {!product.isSoldOut && (

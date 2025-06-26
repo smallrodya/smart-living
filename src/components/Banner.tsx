@@ -18,7 +18,7 @@ const Banner = () => {
 
   const slides = [
     {
-      image: '/banner.jpg',
+      image: '/banner.PNG',
       title: 'Summer Collection',
       subtitle: 'Discover our new arrivals',
       cta: 'Shop Now',
@@ -66,7 +66,7 @@ const Banner = () => {
 
   const bannerStyles: React.CSSProperties = {
     width: '100%',
-    height: '600px',
+    height: '1000px',
     position: 'relative' as const,
     overflow: 'hidden',
     marginBottom: '40px',
@@ -169,7 +169,7 @@ const Banner = () => {
             src={slide.image}
             alt={slide.title}
             fill
-            style={{ objectFit: 'cover' }}
+            style={{ objectFit: 'cover', objectPosition: 'right' }}
             priority={index === 0}
           />
           <div style={overlayStyles} />

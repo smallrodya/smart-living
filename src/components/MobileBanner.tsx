@@ -16,11 +16,11 @@ const MobileBanner = () => {
 
   const slides = [
     {
-      image: '/banner.jpg',
+      image: '/banner.PNG',
       title: 'Summer Collection',
       subtitle: 'Discover our new arrivals',
       cta: 'Shop Now',
-      link: '/summer-collection',
+      link: '/shop/summer-collection',
       color: '#FF6B6B'
     }
   ].filter(slide => isShow(slide.title));
@@ -47,7 +47,7 @@ const MobileBanner = () => {
 
   const bannerStyles: React.CSSProperties = {
     width: '100%',
-    height: '200px',
+    height: '400px',
     position: 'relative' as const,
     overflow: 'hidden',
     marginBottom: '20px',

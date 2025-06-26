@@ -17,6 +17,7 @@ const menuItems = [
   { name: 'Orders', path: '/adminpanel/orders', icon: '🛒', key: 'orders' },
   { name: 'Users', path: '/adminpanel/users', icon: '👥', key: 'users' },
   { name: 'Support', path: '/adminpanel/support', icon: '💬', key: 'support' },
+  { name: 'Reduce Space Section', path: '/adminpanel/reduce-space-section', icon: '⚙️'},
 ];
 
 export default function AdminLayout({
