@@ -4,6 +4,7 @@ import { useBasket } from '@/context/BasketContext';
 import toast from 'react-hot-toast';
 import { useIsMobile } from '@/hooks/useIsMobile';
 import MobileQuickViewModal from './MobileQuickViewModal';
+import { usePathname } from 'next/navigation';
 
 interface BeddingSize {
   size: string;
@@ -90,6 +91,73 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
   const isMobile = useIsMobile();
   const [quantity, setQuantity] = useState<number>(1);
   const modalRef = useRef<HTMLDivElement>(null);
+  const pathname = usePathname();
+
+  // Function to get the target size based on current page
+  const getTargetSize = () => {
+    if (pathname.includes('/shop/single')) return 'Single';
+    if (pathname.includes('/shop/double')) return 'Double';
+    if (pathname.includes('/shop/king')) return 'King';
+    if (pathname.includes('/shop/super-king')) return 'Super King';
+    if (pathname.includes('/shop/crib') || pathname.includes('/shop/kids-bedding')) return 'Crib';
+    return null; // No specific size filter
+  };
+
+  // Function to filter sizes based on current page
+  const getFilteredSizes = (sizes: any[]) => {
+    const targetSize = getTargetSize();
+    if (!targetSize) return sizes; // Show all sizes if no specific page
+    
+    return sizes.filter(size => size.size === targetSize);
+  };
+
+  // Function to filter bedding sizes
+  const getFilteredBeddingSizes = () => {
+    if (!product?.beddingSizes) return [];
+    return getFilteredSizes(product.beddingSizes);
+  };
+
+  // Function to filter rugs/mats sizes
+  const getFilteredRugsMatsSizes = () => {
+    if (!product?.rugsMatsSizes) return [];
+    return getFilteredSizes(product.rugsMatsSizes);
+  };
+
+  // Function to filter throws/towels styles
+  const getFilteredThrowsTowelsStyles = () => {
+    if (!product?.throwsTowelsStylePrices) return [];
+    return getFilteredSizes(product.throwsTowelsStylePrices);
+  };
+
+  // Function to filter clothing styles
+  const getFilteredClothingStyles = () => {
+    if (!product?.clothingStylePrices) return [];
+    return getFilteredSizes(product.clothingStylePrices);
+  };
+
+  // Function to filter footwear sizes
+  const getFilteredFootwearSizes = () => {
+    if (!product?.footwearSizes) return [];
+    return getFilteredSizes(product.footwearSizes);
+  };
+
+  // Auto-select the target size when modal opens
+  useEffect(() => {
+    const targetSize = getTargetSize();
+    if (targetSize) {
+      // Check if the target size exists in the product
+      const hasTargetSize = 
+        (product?.beddingSizes?.some(s => s.size === targetSize)) ||
+        (product?.rugsMatsSizes?.some(s => s.size === targetSize)) ||
+        (product?.throwsTowelsStylePrices?.some(s => s.size === targetSize)) ||
+        (product?.clothingStylePrices?.some(s => s.size === targetSize)) ||
+        (product?.footwearSizes?.some(s => s.size === targetSize));
+      
+      if (hasTargetSize) {
+        setSelectedSize(targetSize);
+      }
+    }
+  }, [product]);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -904,7 +972,7 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
                   flexDirection: 'column',
                   gap: '12px'
                 }}>
-                  {product.footwearSizes?.map((size, index) => (
+                  {getFilteredFootwearSizes().map((size, index) => (
                     <button
                       key={index}
                       onClick={() => handleSizeSelect(size.size)}
@@ -957,9 +1025,7 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
                         <span style={{ color: '#e53935', fontWeight: 600 }}>
                           {formatPrice(product.clearanceDiscount
                             ? size.salePrice * (1 - product.clearanceDiscount / 100)
-                            : (product.discount
-                              ? size.salePrice * (1 - product.discount / 100)
-                              : size.salePrice)
+                            : size.salePrice
                           )}
                         </span>
                         {selectedSize === size.size && (
@@ -979,7 +1045,7 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
                       </div>
                     </button>
                   ))}
-                  {product.throwsTowelsStylePrices?.map((style, index) => (
+                  {getFilteredThrowsTowelsStyles().map((style, index) => (
                     <button
                       key={index}
                       onClick={() => handleSizeSelect(style.size)}
@@ -1054,7 +1120,7 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
                       </div>
                     </button>
                   ))}
-                  {product.beddingSizes?.map((size, index) => (
+                  {getFilteredBeddingSizes().map((size, index) => (
                     <button
                       key={index}
                       onClick={() => handleSizeSelect(size.size)}
@@ -1127,7 +1193,7 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
                       </div>
                     </button>
                   ))}
-                  {product.rugsMatsSizes?.map((size, index) => (
+                  {getFilteredRugsMatsSizes().map((size, index) => (
                     <button
                       key={index}
                       onClick={() => handleSizeSelect(size.size)}
@@ -1200,7 +1266,7 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
                       </div>
                     </button>
                   ))}
-                  {product.clothingStylePrices?.map((size, index) => (
+                  {getFilteredClothingStyles().map((size, index) => (
                     <button
                       key={index}
                       onClick={() => handleSizeSelect(size.size)}
@@ -1253,9 +1319,7 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
                         <span style={{ color: '#e53935', fontWeight: 600 }}>
                           {formatPrice(product.clearanceDiscount
                             ? size.salePrice * (1 - product.clearanceDiscount / 100)
-                            : (product.discount
-                              ? size.salePrice * (1 - product.discount / 100)
-                              : size.salePrice)
+                            : size.salePrice
                           )}
                         </span>
                         {selectedSize === size.size && (

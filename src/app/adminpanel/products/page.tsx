@@ -245,6 +245,7 @@ export default function ProductsPage() {
   const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set());
   const [expandedSubcategories, setExpandedSubcategories] = useState<Set<string>>(new Set());
   const [isSummerCollectionFilter, setIsSummerCollectionFilter] = useState(false);
+  const [isBestSellerFilter, setIsBestSellerFilter] = useState(false);
 
   const fetchProducts = async () => {
     setLoading(true);
@@ -408,6 +409,11 @@ export default function ProductsPage() {
     // Если выбран фильтр Summer Collection
     if (isSummerCollectionFilter) {
       return matchesSearch && product.isSummerCollection;
+    }
+
+    // Если выбран фильтр Best Sellers
+    if (isBestSellerFilter) {
+      return matchesSearch && product.isBestSeller;
     }
     
     // Для остальных категорий
@@ -910,6 +916,15 @@ export default function ProductsPage() {
                 />
                 <span className="ml-2 text-sm text-gray-700">Summer Collection</span>
               </label>
+              <label className="inline-flex items-center">
+                <input
+                  type="checkbox"
+                  checked={isBestSellerFilter}
+                  onChange={(e) => setIsBestSellerFilter(e.target.checked)}
+                  className="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
+                />
+                <span className="ml-2 text-sm text-gray-700">Best Sellers</span>
+              </label>
             </div>
           </div>
         </div>
@@ -927,8 +942,8 @@ export default function ProductsPage() {
           </div>
         ) : (
           <div className="divide-y divide-gray-200">
-            {/* Если есть активные фильтры (поиск, Clearance или Hot), показываем товары напрямую */}
-            {(searchQuery || selectedCategory === 'CLEARANCE' || selectedCategory === 'HOT') ? (
+            {/* Если есть активные фильтры (поиск, Clearance, Hot, Summer Collection или Best Sellers), показываем товары напрямую */}
+            {(searchQuery || selectedCategory === 'CLEARANCE' || selectedCategory === 'HOT' || isSummerCollectionFilter || isBestSellerFilter) ? (
               <div className="p-6">
                 <div className="space-y-4">
                   {filteredProducts.map((product) => (

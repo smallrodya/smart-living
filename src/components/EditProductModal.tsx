@@ -330,6 +330,7 @@ interface FormData {
   images: string[];
   isSoldOut: boolean;
   isHot: boolean;
+  isBestSeller: boolean;
   // Bedding specific
   beddingSizes: SizePrice[];
   beddingStyles: string[];
@@ -384,6 +385,7 @@ export default function EditProductModal({ open, onClose, product, onProductEdit
     images: [],
     isSoldOut: false,
     isHot: false,
+    isBestSeller: false,
     beddingSizes: [],
     beddingStyles: [],
     beddingColors: [],
@@ -429,6 +431,7 @@ export default function EditProductModal({ open, onClose, product, onProductEdit
         images: product.images || [],
         isSoldOut: product.isSoldOut || false,
         isHot: product.isHot || false,
+        isBestSeller: product.isBestSeller || false,
         beddingSizes: product.beddingSizes?.map((size: any) => ({
           size: typeof size === 'string' ? size : size.size,
           regularPrice: typeof size === 'string' ? 0 : size.regularPrice || 0,
@@ -2026,6 +2029,15 @@ export default function EditProductModal({ open, onClose, product, onProductEdit
                 className="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
               />
               <span className="ml-2 text-sm font-medium text-gray-700">Hot</span>
+            </label>
+            <label className="inline-flex items-center">
+              <input
+                type="checkbox"
+                checked={formData.isBestSeller}
+                onChange={(e) => setFormData(prev => ({ ...prev, isBestSeller: e.target.checked }))}
+                className="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
+              />
+              <span className="ml-2 text-sm font-medium text-gray-700">Best Seller</span>
             </label>
             <label className="inline-flex items-center">
               <input

@@ -1,9 +1,30 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import Image from 'next/image';
-import MobileBestSellersSlider from './MobileBestSellersSlider';
-import MobileBottomMenu from './MobileBottomMenu';
-import { useRouter } from 'next/navigation';
+import { Heart, Star, Eye } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import QuickViewModal from './QuickViewModal';
+import MobileQuickViewModal from './MobileQuickViewModal';
+
+interface Product {
+  _id: string;
+  title: string;
+  description: string;
+  price: string;
+  images?: string[];
+  discount?: number;
+  isBestSeller?: boolean;
+  category: string;
+  subcategory: string;
+  features?: string[];
+  sku?: string;
+  beddingSizes?: Array<{ size: string; price: number; salePrice: number }>;
+  rugsMatsSizes?: Array<{ size: string; price: number; salePrice: number }>;
+  throwsTowelsStylePrices?: Array<{ size: string; price: number; salePrice: number }>;
+  curtainsSizes?: Array<{ size: string; price: number; salePrice: number }>;
+  clothingStylePrices?: Array<{ size: string; price: number; salePrice: number }>;
+  footwearSizes?: Array<{ size: string; price: number; salePrice: number }>;
+  outdoorPrice?: { sku: string; regularPrice: number; salePrice: number; stock: number };
+}
 
 interface WishlistItem {
   id: string;
@@ -19,362 +40,429 @@ interface WishlistItem {
   };
 }
 
-const products = [
-  { 
-    id: 1, 
-    name: '3D Duvet Cover and Pillowcase Set – Black Panther', 
-    price: '£14.99 - £17.72', 
-    image: '/best1.jpg', 
-    hoverImage: '/best1.jpg', 
-    discount: '-71%',
-    sizes: {
-      single: true,
-      double: true,
-      king: true
-    }
-  },
-  { 
-    id: 2, 
-    name: 'Reversible Polycotton Elephant Mandala Duvet Cover', 
-    price: '£10.37 - £12.97', 
-    image: '/best2.jpg', 
-    hoverImage: '/best2-hover.jpg', 
-    discount: '-71%',
-    sizes: {
-      single: true,
-      double: true,
-      king: true
-    }
-  },
-  { 
-    id: 3, 
-    name: 'Diamante 5pc Bed in a Bag – Chocolate', 
-    price: '£17.99 – £19.99', 
-    image: '/best3.jpg', 
-    hoverImage: '/best3.jpg', 
-    discount: '-56%',
-    sizes: {
-      single: true,
-      double: true,
-      king: true
-    }
-  },
-  { 
-    id: 4, 
-    name: 'Hug N Snug Duvet Cover and Pillowcase Set – Blush Pink', 
-    price: '£26.49 – £33.99', 
-    image: '/best4.jpg', 
-    hoverImage: '/best4.jpg', 
-    discount: '-51%',
-    sizes: {
-      single: true,
-      double: true,
-      king: true
-    }
-  },
-  { 
-    id: 5, 
-    name: 'Hug N Snug Duvet Cover and Pillowcase Set – Charcoal', 
-    price: '£26.49 – £33.99', 
-    image: '/best5.jpg', 
-    hoverImage: '/best5-hover.jpg', 
-    discount: '-51%',
-    sizes: {
-      single: true,
-      double: true,
-      king: true
-    }
-  },
-  { 
-    id: 6, 
-    name: 'Reversible Polycotton Fern Rouched Duvet Cover', 
-    price: '£10.37 – £12.97', 
-    image: '/best6.jpg', 
-    hoverImage: '/best6-hover.jpg', 
-    discount: '-81%',
-    sizes: {
-      single: true,
-      double: true,
-      king: true
-    }
-  },
-];
-
-const DesktopBestSellersSlider = () => {
-  const [hoveredCard, setHoveredCard] = useState<number | null>(null);
-  const [hoveredBtn, setHoveredBtn] = useState<number | null>(null);
-  const [wishlist, setWishlist] = useState<string[]>([]);
-  const router = useRouter();
+const BestSellersSlider = () => {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [wishlist, setWishlist] = useState<Set<string>>(new Set());
+  const [hoveredProduct, setHoveredProduct] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    const savedWishlist = localStorage.getItem('wishlist');
-    if (savedWishlist) {
-      const items = JSON.parse(savedWishlist) as WishlistItem[];
-      setWishlist(items.map(item => item.id));
-    }
+    fetchBestSellers();
+    checkMobile();
   }, []);
 
-  const toggleWishlist = (id: number) => {
+  useEffect(() => {
+    console.log('Products state updated:', products);
+    console.log('Products with isBestSeller:', products.filter(p => p.isBestSeller));
+  }, [products]);
+
+  const checkMobile = () => {
+    setIsMobile(window.innerWidth < 768);
+  };
+
+  const fetchBestSellers = async () => {
+    try {
+      const response = await fetch('/api/products');
+      if (response.ok) {
+        const data = await response.json();
+        // Проверяем структуру ответа и извлекаем массив продуктов
+        const allProducts = data.products || data || [];
+        console.log('All products:', allProducts);
+        console.log('All products length:', allProducts.length);
+        
+        const bestSellers = allProducts.filter((product: Product) => product.isBestSeller);
+        console.log('Best sellers found:', bestSellers);
+        console.log('Best sellers length:', bestSellers.length);
+        
+        setProducts(bestSellers);
+      } else {
+        console.error('Failed to fetch products:', response.status, response.statusText);
+      }
+    } catch (error) {
+      console.error('Error fetching best sellers:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const formatPriceRange = (product: Product) => {
+    if (product.price) return product.price;
+    
+    let prices: number[] = [];
+    
+    if (product.beddingSizes && product.beddingSizes.length > 0) {
+      prices = product.beddingSizes.map(size => size.salePrice || size.price);
+    } else if (product.rugsMatsSizes && product.rugsMatsSizes.length > 0) {
+      prices = product.rugsMatsSizes.map(size => size.salePrice || size.price);
+    } else if (product.throwsTowelsStylePrices && product.throwsTowelsStylePrices.length > 0) {
+      prices = product.throwsTowelsStylePrices.map(size => size.salePrice || size.price);
+    } else if (product.curtainsSizes && product.curtainsSizes.length > 0) {
+      prices = product.curtainsSizes.map(size => size.salePrice || size.price);
+    } else if (product.clothingStylePrices && product.clothingStylePrices.length > 0) {
+      prices = product.clothingStylePrices.map(size => size.salePrice || size.price);
+    } else if (product.footwearSizes && product.footwearSizes.length > 0) {
+      prices = product.footwearSizes.map(size => size.salePrice || size.price);
+    } else if (product.outdoorPrice) {
+      prices = [product.outdoorPrice.salePrice];
+    }
+    
+    if (prices.length === 0) return '£0';
+    if (prices.length === 1) return `£${prices[0]}`;
+    
+    const minPrice = Math.min(...prices);
+    const maxPrice = Math.max(...prices);
+    
+    return minPrice === maxPrice ? `£${minPrice}` : `£${minPrice} - £${maxPrice}`;
+  };
+
+  const toggleWishlist = (productId: string) => {
     setWishlist(prev => {
-      const prefixedId = `best_${id}`;
-      const newWishlist = prev.includes(prefixedId) 
-        ? prev.filter(i => i !== prefixedId)
-        : [...prev, prefixedId];
-      
-      // Получаем существующие товары из localStorage
-      const existingItems = JSON.parse(localStorage.getItem('wishlist') || '[]') as WishlistItem[];
-      
-      // Фильтруем существующие товары, удаляя текущий товар если он есть
-      const filteredItems = existingItems.filter(item => !item.id.startsWith('best_'));
-      
-      // Добавляем новые товары из текущей секции
-      const newItems = products
-        .filter((_, index) => newWishlist.includes(`best_${index + 1}`))
-        .map((item) => ({
-          id: `best_${item.id}`,
-          src: item.image,
-          hoverSrc: item.hoverImage,
-          title: item.name,
-          price: item.price,
-          discount: item.discount,
-          sizes: item.sizes
-        }));
-      
-      // Объединяем существующие и новые товары
-      const wishlistItems = [...filteredItems, ...newItems];
-      
-      localStorage.setItem('wishlist', JSON.stringify(wishlistItems));
+      const newWishlist = new Set(prev);
+      if (newWishlist.has(productId)) {
+        newWishlist.delete(productId);
+      } else {
+        newWishlist.add(productId);
+      }
       return newWishlist;
     });
   };
 
-  const handleProductClick = (id: number) => {
-    router.push(`/product/bestseller/${id}`);
+  const handleQuickView = (product: Product) => {
+    setQuickViewProduct(product);
   };
 
-  return (
-    <section style={{
-      width: '100%',
-      padding: '60px 0',
-      backgroundColor: '#f8f8f8',
-      position: 'relative',
-    }}>
-      <div style={{
-        maxWidth: 1200,
-        margin: '0 auto',
-        padding: '0 20px',
-      }}>
-        <h2 style={{
-          fontSize: 28,
-          fontWeight: 700,
-          marginBottom: 12,
-          textAlign: 'center',
-          letterSpacing: 0.5,
-          color: '#222',
-        }}>BESTSELLERS</h2>
-        <p style={{
-          fontSize: 17,
-          color: '#666',
-          marginBottom: 40,
-          textAlign: 'center',
-          maxWidth: 600,
-          marginLeft: 'auto',
-          marginRight: 'auto',
-          lineHeight: 1.5,
-        }}>
-          Discover our most popular bedding sets, chosen by thousands of happy customers. Quality, comfort, and style in every piece.
-        </p>
-        
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-          gap: 30,
-          padding: '0 10px',
-        }}>
-          {products.map((product) => (
-            <div
-              key={product.id}
-              style={{
-                background: '#fff',
-                borderRadius: 16,
-                overflow: 'hidden',
-                boxShadow: hoveredCard === product.id ? '0 12px 32px rgba(0,0,0,0.12)' : '0 4px 16px rgba(0,0,0,0.08)',
-                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                transform: hoveredCard === product.id ? 'translateY(-8px)' : 'none',
-                position: 'relative',
-              }}
-              onMouseEnter={() => setHoveredCard(product.id)}
-              onMouseLeave={() => setHoveredCard(null)}
-            >
-              <div style={{
-                position: 'relative',
-                width: '100%',
-                paddingTop: '100%',
-                overflow: 'hidden',
-              }}>
-                <Image
-                  src={hoveredCard === product.id ? product.hoverImage : product.image}
-                  alt={product.name}
-                  width={280}
-                  height={280}
-                  style={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    width: '100%',
-                    height: '100%',
-                    objectFit: 'cover',
-                    transition: 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                    transform: hoveredCard === product.id ? 'scale(1.05)' : 'scale(1)',
-                  }}
-                />
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    toggleWishlist(product.id);
-                  }}
-                  style={{
-                    position: 'absolute',
-                    top: 16,
-                    right: 16,
-                    background: 'rgba(255, 255, 255, 0.95)',
-                    border: 'none',
-                    borderRadius: '50%',
-                    width: 44,
-                    height: 44,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    cursor: 'pointer',
-                    boxShadow: '0 2px 12px rgba(0,0,0,0.15)',
-                    transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                    transform: wishlist.includes(`best_${product.id}`) ? 'scale(1.1)' : 'scale(1)',
-                    backdropFilter: 'blur(4px)',
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.transform = wishlist.includes(`best_${product.id}`) 
-                      ? 'scale(1.15)' 
-                      : 'scale(1.05)';
-                    e.currentTarget.style.boxShadow = '0 4px 16px rgba(0,0,0,0.2)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.transform = wishlist.includes(`best_${product.id}`) 
-                      ? 'scale(1.1)' 
-                      : 'scale(1)';
-                    e.currentTarget.style.boxShadow = '0 2px 12px rgba(0,0,0,0.15)';
-                  }}
-                >
-                  <div style={{
-                    color: wishlist.includes(`best_${product.id}`) ? '#e53935' : '#e53935',
-                    transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                    transform: wishlist.includes(`best_${product.id}`) ? 'scale(1.1)' : 'scale(1)',
-                  }}>
-                    <svg 
-                      width="24" 
-                      height="24" 
-                      viewBox="0 0 24 24" 
-                      fill={wishlist.includes(`best_${product.id}`) ? '#e53935' : 'none'} 
-                      stroke="#e53935" 
-                      strokeWidth="2" 
-                      strokeLinecap="round" 
-                      strokeLinejoin="round"
-                    >
-                      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-                    </svg>
-                  </div>
-                </button>
-                <div style={{
-                  position: 'absolute',
-                  top: 16,
-                  left: 16,
-                  background: '#e53935',
-                  color: '#fff',
-                  fontWeight: 700,
-                  fontSize: 14,
-                  borderRadius: '50%',
-                  padding: '8px 10px',
-                  letterSpacing: 0.1,
-                  boxShadow: '0 1px 6px 0 rgba(229,57,53,0.10)',
-                  width: '50px',
-                  height: '50px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center'
-                }}>
-                  HOT
-                </div>
-                <div style={{
-                  position: 'absolute',
-                  top: 74,
-                  left: 16,
-                  background: '#000',
-                  color: '#fff',
-                  fontWeight: 700,
-                  fontSize: 14,
-                  borderRadius: '50%',
-                  padding: '8px 10px',
-                  letterSpacing: 0.1,
-                  boxShadow: '0 1px 6px 0 rgba(0,0,0,0.10)',
-                  width: '50px',
-                  height: '50px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center'
-                }}>
-                  {product.discount}
-                </div>
-              </div>
-              
-              <div style={{
-                padding: '20px',
-                textAlign: 'center',
-              }}>
-                <h3 
-                  onClick={() => handleProductClick(product.id)}
-                  style={{
-                    fontSize: 18,
-                    fontWeight: 600,
-                    marginBottom: 8,
-                    color: '#222',
-                    letterSpacing: 0.2,
-                    cursor: 'pointer',
-                  }}
-                >{product.name}</h3>
-                
-                <p style={{
-                  fontSize: 20,
-                  color: '#e53935',
-                  marginBottom: 16,
-                }}>{product.price}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-};
-
-const BestSellersSlider = () => {
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const checkMobile = () => {
-      if (typeof window !== 'undefined') {
-      setIsMobile(window.innerWidth <= 768);
+  const handleProductClick = (product: Product) => {
+    let route = '/shop';
+    
+    if (product.category === 'BEDDING') {
+      if (product.subcategory === 'Duvet Cover Sets') {
+        route = '/shop/duvet-set-by-type';
+      } else if (product.subcategory === 'Fitted Sheets') {
+        route = '/shop/fitted-sheets';
+      } else if (product.subcategory === 'Complete Bedding Sets') {
+        route = '/shop/complete-bedding-sets';
       }
-    };
+    } else if (product.category === 'RUGS & MATS') {
+      if (product.subcategory === 'Carved Rugs') {
+        route = '/shop/carved-rugs';
+      } else if (product.subcategory === 'Shaggy Rugs') {
+        route = '/shop/shaggy-rugs';
+      }
+    } else if (product.category === 'THROWS & TOWELS') {
+      route = '/shop/throws-towels';
+    } else if (product.category === 'OUTDOOR') {
+      route = '/shop/outdoor';
+    } else if (product.category === 'CURTAINS') {
+      route = '/shop/curtains';
+    } else if (product.category === 'CLOTHING') {
+      route = '/shop/clothing';
+    } else if (product.category === 'FOOTWEAR') {
+      route = '/shop/footwear';
+    }
     
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
+    window.location.href = route;
+  };
+
+  const productsPerPage = 8; // 4 products per row, 2 rows
+  const totalPages = Math.ceil(products.length / productsPerPage);
+  const currentProducts = products.slice(currentPage * productsPerPage, (currentPage + 1) * productsPerPage);
+
+  const nextPage = () => {
+    setCurrentPage(prev => (prev + 1) % totalPages);
+  };
+
+  const prevPage = () => {
+    setCurrentPage(prev => (prev - 1 + totalPages) % totalPages);
+  };
+
+  if (isLoading) {
+    return (
+      <section className="py-16 bg-gradient-to-br from-gray-50 to-white">
+        <div className="container mx-auto px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-12"
+          >
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">Best Sellers</h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Loading our most popular products...
+            </p>
+          </motion.div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[...Array(8)].map((_, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                className="bg-white rounded-2xl shadow-lg overflow-hidden group"
+              >
+                <div className="aspect-square bg-gray-200 animate-pulse"></div>
+                <div className="p-4 space-y-3">
+                  <div className="h-4 bg-gray-200 rounded animate-pulse"></div>
+                  <div className="h-6 bg-gray-200 rounded animate-pulse"></div>
+                  <div className="h-4 bg-gray-200 rounded w-1/2 animate-pulse"></div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (products.length === 0) {
+    return (
+      <section className="py-16 bg-gradient-to-br from-gray-50 to-white">
+        <div className="container mx-auto px-4 text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+          >
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">Best Sellers</h2>
+            <p className="text-lg text-gray-600 mb-4">No best sellers available at the moment.</p>
+            <p className="text-sm text-gray-500">Check back soon for our featured products!</p>
+          </motion.div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <>
-      {isMobile ? <MobileBestSellersSlider /> : <DesktopBestSellersSlider />}
-      {isMobile && <MobileBottomMenu />}
+      <section className="py-16 bg-gradient-to-br from-gray-50 to-white overflow-hidden">
+        <div className="container mx-auto px-4">
+          {/* Header */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-12"
+          >
+            <div className="flex items-center justify-center mb-4">
+              <Star className="w-8 h-8 text-yellow-400 mr-3" />
+              <h2 className="text-4xl font-bold text-gray-900">Best Sellers</h2>
+              <Star className="w-8 h-8 text-yellow-400 ml-3" />
+            </div>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Discover our most popular products loved by customers worldwide
+            </p>
+          </motion.div>
+
+          {/* Products Grid */}
+          <div className="relative">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={currentPage}
+                initial={{ opacity: 0, x: 50 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -50 }}
+                transition={{ duration: 0.5 }}
+                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
+              >
+                {currentProducts.map((product, index) => (
+                  <motion.div
+                    key={product._id}
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: index * 0.1 }}
+                    className="group relative bg-white rounded-2xl shadow-lg overflow-hidden transform transition-all duration-300 hover:shadow-2xl"
+                    onMouseEnter={() => setHoveredProduct(product._id)}
+                    onMouseLeave={() => setHoveredProduct(null)}
+                  >
+                    {/* Product Image */}
+                    <div className="relative aspect-square overflow-hidden bg-gray-100">
+                      {product.images && product.images.length > 0 && (
+                        <>
+                          <motion.img
+                            src={product.images[0]}
+                            alt={product.title}
+                            className="w-full h-full object-cover"
+                            animate={{
+                              opacity: hoveredProduct === product._id && product.images && product.images.length > 1 ? 0 : 1
+                            }}
+                            transition={{ duration: 0.3 }}
+                          />
+                          {product.images[1] && (
+                            <motion.img
+                              src={product.images[1]}
+                              alt={product.title}
+                              className="absolute inset-0 w-full h-full object-cover"
+                              initial={{ opacity: 0 }}
+                              animate={{
+                                opacity: hoveredProduct === product._id ? 1 : 0
+                              }}
+                              transition={{ duration: 0.3 }}
+                            />
+                          )}
+                        </>
+                      )}
+                      
+                      {/* Overlay with actions */}
+                      <motion.div
+                        className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300"
+                        initial={{ opacity: 0 }}
+                        animate={{
+                          opacity: hoveredProduct === product._id ? 1 : 0
+                        }}
+                      >
+                        <div className="absolute top-4 right-4 flex flex-col gap-2">
+                          <motion.button
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 0.9 }}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              toggleWishlist(product._id);
+                            }}
+                            className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 ${
+                              wishlist.has(product._id)
+                                ? 'bg-red-500 text-white'
+                                : 'bg-white text-gray-600 hover:bg-red-500 hover:text-white'
+                            }`}
+                          >
+                            <Heart className={`w-5 h-5 ${wishlist.has(product._id) ? 'fill-current' : ''}`} />
+                          </motion.button>
+                          
+                          <motion.button
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 0.9 }}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleQuickView(product);
+                            }}
+                            className="w-10 h-10 rounded-full bg-white text-gray-600 hover:bg-green-500 hover:text-white flex items-center justify-center transition-all duration-300"
+                          >
+                            <Eye className="w-5 h-5" />
+                          </motion.button>
+                        </div>
+                      </motion.div>
+
+                      {/* Discount badge */}
+                      {product.discount && (
+                        <motion.div
+                          initial={{ scale: 0 }}
+                          animate={{ scale: 1 }}
+                          transition={{ delay: 0.2 }}
+                          className="absolute top-4 left-4 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-semibold"
+                        >
+                          -{product.discount}%
+                        </motion.div>
+                      )}
+                    </div>
+
+                    {/* Product Info */}
+                    <div className="p-6">
+                      <motion.h3
+                        className="text-lg font-semibold text-gray-900 mb-2 line-clamp-2 group-hover:text-blue-600 transition-colors duration-300"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.1 }}
+                      >
+                        {product.title}
+                      </motion.h3>
+                      
+                      <motion.p
+                        className="text-sm text-gray-600 mb-3 line-clamp-2"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.2 }}
+                      >
+                        {product.description}
+                      </motion.p>
+                      
+                      <motion.div
+                        className="flex items-center justify-between"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.3 }}
+                      >
+                        <span className="text-xl font-bold text-gray-900">
+                          {formatPriceRange(product)}
+                        </span>
+                        
+                        <div className="flex items-center gap-1">
+                          {[...Array(5)].map((_, i) => (
+                            <Star
+                              key={i}
+                              className={`w-4 h-4 ${
+                                i < 4 ? 'text-yellow-400 fill-current' : 'text-gray-300'
+                              }`}
+                            />
+                          ))}
+                          <span className="text-sm text-gray-500 ml-1">(4.8)</span>
+                        </div>
+                      </motion.div>
+                    </div>
+                  </motion.div>
+                ))}
+              </motion.div>
+            </AnimatePresence>
+
+            {/* Navigation Buttons */}
+            {totalPages > 1 && (
+              <div className="flex justify-center mt-8 gap-4">
+                <motion.button
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                  onClick={prevPage}
+                  className="w-12 h-12 rounded-full bg-white shadow-lg flex items-center justify-center text-gray-600 hover:text-blue-600 hover:shadow-xl transition-all duration-300"
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                  </svg>
+                </motion.button>
+                
+                <div className="flex items-center gap-2">
+                  {[...Array(totalPages)].map((_, index) => (
+                    <motion.button
+                      key={index}
+                      whileHover={{ scale: 1.2 }}
+                      whileTap={{ scale: 0.9 }}
+                      onClick={() => setCurrentPage(index)}
+                      className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                        currentPage === index ? 'bg-blue-600 scale-125' : 'bg-gray-300 hover:bg-gray-400'
+                      }`}
+                    />
+                  ))}
+                </div>
+                
+                <motion.button
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                  onClick={nextPage}
+                  className="w-12 h-12 rounded-full bg-white shadow-lg flex items-center justify-center text-gray-600 hover:text-blue-600 hover:shadow-xl transition-all duration-300"
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </motion.button>
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* QuickView Modals */}
+      {quickViewProduct && (
+        isMobile ? (
+          <MobileQuickViewModal
+            product={quickViewProduct as any}
+            onClose={() => setQuickViewProduct(null)}
+          />
+        ) : (
+          <QuickViewModal
+            product={quickViewProduct as any}
+            onClose={() => setQuickViewProduct(null)}
+          />
+        )
+      )}
     </>
   );
 };

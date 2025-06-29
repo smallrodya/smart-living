@@ -28,6 +28,7 @@ interface FormData {
   images: string[];
   isSoldOut: boolean;
   isHot: boolean;
+  isBestSeller: boolean;
   // Bedding specific
   beddingSizes: SizePrice[];
   beddingStyles: string[];
@@ -408,6 +409,7 @@ export default function AddProductModal({ open, onClose, onProductAdded, validat
     images: [],
     isSoldOut: false,
     isHot: false,
+    isBestSeller: false,
     // Bedding specific
     beddingSizes: [],
     beddingStyles: [],
@@ -1947,6 +1949,15 @@ export default function AddProductModal({ open, onClose, onProductAdded, validat
                 className="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
               />
               <span className="ml-2 text-sm font-medium text-gray-700">Hot</span>
+            </label>
+            <label className="inline-flex items-center">
+              <input
+                type="checkbox"
+                checked={formData.isBestSeller}
+                onChange={(e) => setFormData(prev => ({ ...prev, isBestSeller: e.target.checked }))}
+                className="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
+              />
+              <span className="ml-2 text-sm font-medium text-gray-700">Best Seller</span>
             </label>
             <label className="inline-flex items-center">
               <input
