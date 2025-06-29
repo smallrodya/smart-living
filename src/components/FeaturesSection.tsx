@@ -11,12 +11,11 @@ const FeaturesSection = () => {
     {
       icon: <FaTruck className="w-8 h-8" />,
       title: 'FREE SHIPPING',
-      description: 'All over the United Kingdom space',
+      description: 'Free Shipping Across the UK Mainland',
       gradient: 'from-blue-500 to-blue-600',
       details: [
-        'Standard delivery 2-4 business days',
-        'Express delivery available',
-        'Free delivery over £50'
+        'Standard Delivery: 2–5 Working Days',
+        'Express Delivery: Available at checkout',
       ]
     },
     {

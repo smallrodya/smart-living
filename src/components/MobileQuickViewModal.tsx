@@ -845,6 +845,45 @@ export default function MobileQuickViewModal({ product, onClose }: MobileQuickVi
               </div>
             )}
 
+            {/* Size Guide Image for Bedding Category */}
+            {product.category === 'BEDDING' && (
+              <div style={{
+                margin: '16px',
+                padding: '16px',
+                background: '#f8f9fa',
+                borderRadius: '12px',
+                border: '1px solid #e9ecef'
+              }}>
+                <h4 style={{
+                  fontSize: '16px',
+                  fontWeight: 600,
+                  marginBottom: '12px',
+                  color: '#222',
+                  textAlign: 'center'
+                }}>
+                  Size Guide
+                </h4>
+                <div style={{
+                  width: '100%',
+                  borderRadius: '8px',
+                  overflow: 'hidden',
+                  boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
+                }}>
+                  <Image
+                    src="/SizesDuvetSets.jpg"
+                    alt="Duvet Set Size Guide"
+                    width={400}
+                    height={300}
+                    style={{
+                      width: '100%',
+                      height: 'auto',
+                      objectFit: 'contain'
+                    }}
+                  />
+                </div>
+              </div>
+            )}
+
             {/* Price and Add to Cart */}
             <div style={{
               padding: '16px',
