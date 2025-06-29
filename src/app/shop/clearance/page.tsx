@@ -88,6 +88,7 @@ export default function ClearancePage() {
   const [wishlist, setWishlist] = useState<string[]>([]);
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 1000]);
   const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
+  const [showCount, setShowCount] = useState<number>(30);
   const router = useRouter();
 
   useEffect(() => {
@@ -899,7 +900,7 @@ export default function ClearancePage() {
             gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
             gap: '32px'
           }}>
-            {filteredProducts.map((product) => (
+            {filteredProducts.slice(0, showCount).map((product) => (
               <div 
                 key={product._id} 
                 style={{
@@ -1131,6 +1132,59 @@ export default function ClearancePage() {
               </div>
             ))}
           </div>
+
+          {/* Show More Button */}
+          {filteredProducts.length > showCount && (
+            <div style={{
+              display: 'flex',
+              justifyContent: 'center',
+              marginTop: '60px',
+              marginBottom: '40px'
+            }}>
+              <button
+                onClick={() => setShowCount(prev => prev + 30)}
+                style={{
+                  padding: '16px 32px',
+                  background: '#222',
+                  color: '#fff',
+                  border: 'none',
+                  borderRadius: '12px',
+                  fontSize: '16px',
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '12px',
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = '#333';
+                  e.currentTarget.style.transform = 'translateY(-2px)';
+                  e.currentTarget.style.boxShadow = '0 6px 16px rgba(0,0,0,0.15)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = '#222';
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.1)';
+                }}
+              >
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M12 5v14M5 12l7 7 7-7"/>
+                </svg>
+                Show More 
+              </button>
+            </div>
+          )}
 
           {filteredProducts.length === 0 && (
             <div style={{

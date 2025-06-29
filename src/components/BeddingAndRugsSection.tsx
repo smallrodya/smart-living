@@ -134,7 +134,7 @@ const ThrowAndCurtainSection = () => {
           }}>
             <Image
               src="/carved_banner.jpg"
-              alt="Curtains"
+              alt="RUGS"
               fill
               style={{ objectFit: 'cover', borderRadius: 12 }}
               sizes="(max-width: 900px) 100vw, 500px"
@@ -170,7 +170,7 @@ const ThrowAndCurtainSection = () => {
               boxShadow: '0 2px 8px rgba(34,34,34,0.10)',
               transition: 'background 0.2s',
             }}
-            onClick={() => window.location.href = '/shop/shaggy-rugs'}
+            onClick={() => window.location.href = '/shop/all_rugs'}
             >SHOP NOW</button>
           </div>
         </div>

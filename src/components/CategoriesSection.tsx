@@ -29,7 +29,7 @@ const megaMenus: MegaMenu[] = [
           { label: 'Cushions', href: '/shop/cushions' },
           { label: 'Fleece Bedding', href: '/shop/fleece-bedding' },
           { label: 'Weighted Blankets', href: '/shop/weighted-blankets' },
-          { label: 'Kids Beding', href: '/shop/kids-bedding' },
+          { label: 'Kids Bedding', href: '/shop/kids-bedding' },
           { label: 'Bedspreads', href: '/shop/bedspreads' },
           { label: 'Electric Underblankets', href: '/shop/electric-underblankets' },
         ],
@@ -181,7 +181,7 @@ const megaMenus: MegaMenu[] = [
       },
       {
         items: [
-          { img: '/all-throws.jpg', label: 'Thows for every room', labelColor: 'red' },
+          { img: '/all-throws.jpg', label: 'Throws for every room', labelColor: 'red' },
           { img: '/10pc-towel-bale-set.jpg', label: 'Great towels to keep you cosy', labelColor: 'red' },
         ],
       },
@@ -279,7 +279,7 @@ const megaMenus: MegaMenu[] = [
       },
       {
         items: [
-          { img: '/slippers-footwear1.jpg', label: 'find your perfect footwear', labelColor: 'red' },
+          { img: '/slippers-footwear1.jpg', label: 'Find your perfect footwear', labelColor: 'red' },
         ],
       },
     ],

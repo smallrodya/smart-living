@@ -197,7 +197,7 @@ export default function ShaggyRugsPage() {
               zIndex: 10
             }}>
               <button
-                onClick={() => router.push('/category/rugs/rugtype')}
+                onClick={() => router.push('/')}
                 style={{
                   background: 'rgba(255, 255, 255, 0.9)',
                   border: 'none',

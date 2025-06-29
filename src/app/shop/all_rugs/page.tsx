@@ -24,9 +24,10 @@ interface Product {
   isSoldOut?: boolean;
   isHot?: boolean;
   additionalCategories?: Array<{ category: string; subcategory: string }>;
+  rugsMatsType: string;
 }
 
-export default function TablePlacematPage() {
+export default function AllRugsPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedSize, setSelectedSize] = useState<string>('');
@@ -36,6 +37,7 @@ export default function TablePlacematPage() {
   const [wishlist, setWishlist] = useState<string[]>([]);
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 200]);
   const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
+  const [showCount, setShowCount] = useState(30);
   const router = useRouter();
 
   useEffect(() => {
@@ -45,26 +47,23 @@ export default function TablePlacematPage() {
       const items = JSON.parse(savedWishlist);
       setWishlist(items.map((item: any) => item.id));
     }
+    setShowCount(30);
   }, []);
+
+  useEffect(() => {
+    setShowCount(30);
+  }, [selectedSize, selectedColor, priceRange]);
 
   const fetchProducts = async () => {
     try {
       const res = await fetch('/api/products');
       const data = await res.json();
-      console.log('All products:', data.products); // Для отладки
-      const tablePlacemats = data.products.filter(
+      const allRugs = data.products.filter(
         (product: Product) => 
-          (product.category === 'RUGS & MATS' && 
-          product.subcategory === 'Table Placemat') ||
-          (product.additionalCategories && 
-           product.additionalCategories.some(
-             (ac: { category: string; subcategory: string }) => 
-               ac.category === 'RUGS & MATS' && 
-               ac.subcategory === 'Table Placemat'
-           ))
+          product.category === 'RUGS & MATS' && 
+          product.rugsMatsType === 'RUGS'
       );
-      console.log('Filtered table placemats:', tablePlacemats); // Для отладки
-      setProducts(tablePlacemats);
+      setProducts(allRugs);
     } catch (error) {
       console.error('Error fetching products:', error);
     } finally {
@@ -110,7 +109,7 @@ export default function TablePlacematPage() {
 
   const toggleWishlist = (id: string) => {
     setWishlist(prev => {
-      const prefixedId = `placemat_${id}`;
+      const prefixedId = `all_rugs_${id}`;
       const newWishlist = prev.includes(prefixedId) 
         ? prev.filter(i => i !== prefixedId)
         : [...prev, prefixedId];
@@ -123,14 +122,14 @@ export default function TablePlacematPage() {
               typeof item === 'object' && 
               'id' in item && 
               typeof item.id === 'string' && 
-              !item.id.startsWith('placemat_')
+              !item.id.startsWith('all_rugs_')
             )
           : [];
         
         const newItems = products
-          .filter((p) => newWishlist.includes(`placemat_${p._id}`))
+          .filter((p) => newWishlist.includes(`all_rugs_${p._id}`))
           .map((item) => ({
-            id: `placemat_${item._id}`,
+            id: `all_rugs_${item._id}`,
             src: item.images?.[0] || '',
             hoverSrc: item.images?.[1] || item.images?.[0] || '',
             title: item.title,
@@ -169,8 +168,8 @@ export default function TablePlacematPage() {
           marginBottom: '60px'
         }}>
           <Image
-            src="/table-placemat.jpg"
-            alt="Table Placemat Category"
+            src="/reversible-mustard5.jpg"
+            alt="All Rugs Category"
             fill
             style={{
               objectFit: 'cover',
@@ -245,7 +244,7 @@ export default function TablePlacematPage() {
                 textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
                 lineHeight: '1.2',
                 marginBottom: '20px'
-              }}>Table Placemat</h1>
+              }}>All Rugs</h1>
               <p style={{
                 color: '#fff',
                 fontSize: '24px',
@@ -255,7 +254,7 @@ export default function TablePlacematPage() {
                 margin: '0 auto',
                 lineHeight: '1.5'
               }}>
-                Elevate your dining experience with our stylish and practical table placemats, perfect for protecting your table while adding a touch of elegance
+                Explore our complete collection of rugs, from reversible to shaggy, carved to runner styles
               </p>
             </div>
           </div>
@@ -567,7 +566,7 @@ export default function TablePlacematPage() {
             gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
             gap: '32px'
           }}>
-            {filteredProducts.map((product) => (
+            {filteredProducts.slice(0, showCount).map((product) => (
               <div 
                 key={product._id} 
                 style={{
@@ -634,7 +633,7 @@ export default function TablePlacematPage() {
                       cursor: 'pointer',
                       boxShadow: '0 2px 12px rgba(0,0,0,0.15)',
                       transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                      transform: wishlist.includes(`placemat_${product._id}`) ? 'scale(1.1)' : 'scale(1)',
+                      transform: wishlist.includes(`all_rugs_${product._id}`) ? 'scale(1.1)' : 'scale(1)',
                       backdropFilter: 'blur(4px)'
                     }}
                   >
@@ -642,7 +641,7 @@ export default function TablePlacematPage() {
                       width="24"
                       height="24"
                       viewBox="0 0 24 24"
-                      fill={wishlist.includes(`placemat_${product._id}`) ? '#e53935' : 'none'}
+                      fill={wishlist.includes(`all_rugs_${product._id}`) ? '#e53935' : 'none'}
                       stroke="#e53935"
                       strokeWidth="2"
                       strokeLinecap="round"
@@ -799,6 +798,30 @@ export default function TablePlacematPage() {
               </div>
             ))}
           </div>
+
+          {filteredProducts.length > showCount && (
+            <div style={{ textAlign: 'center', margin: '40px 0' }}>
+              <button
+                onClick={() => setShowCount(showCount + 30)}
+                style={{
+                  padding: '14px 38px',
+                  borderRadius: '8px',
+                  background: '#222',
+                  color: '#fff',
+                  fontWeight: 700,
+                  fontSize: '18px',
+                  border: 'none',
+                  cursor: 'pointer',
+                  boxShadow: '0 2px 8px rgba(34,34,34,0.10)',
+                  transition: 'background 0.2s, transform 0.2s',
+                }}
+                onMouseEnter={e => e.currentTarget.style.background = '#333'}
+                onMouseLeave={e => e.currentTarget.style.background = '#222'}
+              >
+                Show more
+              </button>
+            </div>
+          )}
 
           {filteredProducts.length === 0 && (
             <div style={{
