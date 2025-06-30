@@ -75,6 +75,24 @@ export default function ClothingMenPage() {
   };
 
   const allStyles = Array.from(new Set(products.flatMap(p => p.clothingStyles || [])));
+
+  // Сортировка: сначала числа, потом буквенные размеры, потом слова
+  const sortedStyles = allStyles.slice().sort((a, b) => {
+    const numA = /^\d+$/.test(a);
+    const numB = /^\d+$/.test(b);
+    if (numA && numB) return Number(a) - Number(b);
+    if (numA) return -1;
+    if (numB) return 1;
+    // Буквенные размеры (S, M, L, XL и т.д.)
+    const letterA = /^[A-Z]{1,3}$/.test(a);
+    const letterB = /^[A-Z]{1,3}$/.test(b);
+    if (letterA && letterB) return a.localeCompare(b);
+    if (letterA) return -1;
+    if (letterB) return 1;
+    // Остальные слова
+    return a.localeCompare(b);
+  });
+
   const allColors = Array.from(new Set(products.flatMap(p => p.clothingColors || [])));
 
   const formatPrice = (price: number) => {
@@ -431,7 +449,7 @@ export default function ClothingMenPage() {
                     flexWrap: 'wrap',
                     gap: '8px'
                   }}>
-                    {allStyles.map(style => (
+                    {sortedStyles.map(style => (
                       <button
                         key={style}
                         onClick={() => setSelectedStyle(style === selectedStyle ? '' : style)}
