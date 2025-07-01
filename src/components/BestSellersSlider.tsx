@@ -303,7 +303,7 @@ const BestSellersSlider = () => {
                 opacity: 1;
               }
               100% {
-                width: 250%;
+                width: 110%;
                 opacity: 1;
               }
             }

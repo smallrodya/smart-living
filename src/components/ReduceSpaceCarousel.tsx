@@ -140,7 +140,7 @@ const ReduceSpaceCarousel: React.FC = () => {
         ref={titleRef}
         className={titleVisible ? 'animated-title' : ''}
         style={{
-          fontSize: 28,
+          fontSize: mobile ? 20 : 28,
           fontWeight: 800,
           color: '#1a1a1a',
           marginBottom: 18,
