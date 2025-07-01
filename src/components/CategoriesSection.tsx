@@ -313,6 +313,7 @@ const CategoriesSection = () => {
   const closeTimeout = useRef<NodeJS.Timeout | null>(null);
   const menuRefs = useRef<(HTMLLIElement | null)[]>([]);
   const navRef = useRef<HTMLElement | null>(null);
+  const [show, setShow] = useState(true);
 
   const updateDropdownTop = () => {
     if (navRef.current) {
@@ -333,6 +334,15 @@ const CategoriesSection = () => {
     }
   }, [dropdownOpen]);
 
+  useEffect(() => {
+    const checkWidth = () => {
+      setShow(window.innerWidth > 1024);
+    };
+    checkWidth();
+    window.addEventListener('resize', checkWidth);
+    return () => window.removeEventListener('resize', checkWidth);
+  }, []);
+
   const handleMouseEnter = (idx: number) => {
     if (closeTimeout.current) clearTimeout(closeTimeout.current);
     setHoveredIdx(idx);
@@ -345,6 +355,8 @@ const CategoriesSection = () => {
       setHoveredIdx(null);
     }, 180);
   };
+
+  if (!show) return null;
 
   return (
     <nav className={styles.menuBar} aria-label="Main categories" ref={navRef}>

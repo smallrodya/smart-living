@@ -103,10 +103,12 @@ export default function MyAccountPage() {
           setUserData(data);
 
           // Получаем заказы пользователя
-          const ordersResponse = await fetch('/api/orders');
-          if (ordersResponse.ok) {
-            const ordersData = await ordersResponse.json();
-            setOrders(ordersData.orders || []);
+          if (data && data.email) {
+            const ordersResponse = await fetch(`/api/orders?email=${encodeURIComponent(data.email)}`);
+            if (ordersResponse.ok) {
+              const ordersData = await ordersResponse.json();
+              setOrders(ordersData.orders || []);
+            }
           }
 
           // Получаем избранные товары

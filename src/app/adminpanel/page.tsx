@@ -206,7 +206,7 @@ export default function AdminDashboard() {
               {isLoading ? (
                 <div className="animate-pulse bg-gray-300 h-10 w-20 rounded"></div>
               ) : (
-                `£${stats.revenue.toLocaleString()}`
+                `£${Number(stats.revenue).toFixed(2)}`
               )}
             </div>
             <p className="text-sm text-gray-600 font-medium">Total sales amount</p>
