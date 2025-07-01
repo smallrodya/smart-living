@@ -53,12 +53,14 @@ function SearchPageContent() {
   const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [totalResults, setTotalResults] = useState(0);
+  const [showCount, setShowCount] = useState(30);
   const router = useRouter();
   const searchParams = useSearchParams();
 
   useEffect(() => {
     const query = searchParams.get('q') || '';
     setSearchQuery(query);
+    setShowCount(30);
     
     if (query.trim()) {
       fetchSearchResults(query);
@@ -287,252 +289,277 @@ function SearchPageContent() {
 
           {/* Products Grid */}
           {products.length > 0 && (
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
-              gap: '32px'
-            }}>
-              {products.map((product) => (
-                <div 
-                  key={product._id} 
-                  style={{
-                    background: '#fff',
-                    borderRadius: '20px',
-                    boxShadow: hoveredProduct === product._id 
-                      ? '0 8px 32px rgba(34,34,34,0.12)' 
-                      : '0 2px 16px rgba(34,34,34,0.07)',
-                    overflow: 'hidden',
-                    position: 'relative',
-                    transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                    transform: hoveredProduct === product._id ? 'translateY(-4px)' : 'none',
-                    opacity: product.isSoldOut ? 0.75 : 1
-                  }}
-                  onMouseEnter={() => setHoveredProduct(product._id)}
-                  onMouseLeave={() => setHoveredProduct(null)}
-                >
-                  <div style={{
-                    width: '100%',
-                    aspectRatio: '4/3',
-                    position: 'relative',
-                    overflow: 'hidden'
-                  }}>
-                    {product.images && product.images.length > 0 ? (
-                      <Image
-                        src={hoveredProduct === product._id && product.images.length > 1 
-                          ? product.images[1] 
-                          : product.images[0]}
-                        alt={product.title}
-                        fill
-                        style={{
-                          objectFit: 'cover',
-                          transition: 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
-                          transform: hoveredProduct === product._id ? 'scale(1.05)' : 'scale(1)'
-                        }}
-                      />
-                    ) : (
-                      <div style={{
-                        width: '100%',
-                        height: '100%',
-                        background: '#f5f5f5',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        color: '#999'
-                      }}>
-                        No image
-                      </div>
-                    )}
-                    <button
-                      onClick={() => toggleWishlist(product._id)}
-                      style={{
-                        position: 'absolute',
-                        top: '12px',
-                        right: '12px',
-                        background: 'rgba(255, 255, 255, 0.95)',
-                        border: 'none',
-                        borderRadius: '50%',
-                        width: '44px',
-                        height: '44px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        cursor: 'pointer',
-                        boxShadow: '0 2px 12px rgba(0,0,0,0.15)',
-                        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                        transform: wishlist.includes(`search_${product._id}`) ? 'scale(1.1)' : 'scale(1)',
-                        backdropFilter: 'blur(4px)'
-                      }}
-                    >
-                      <svg
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill={wishlist.includes(`search_${product._id}`) ? '#e53935' : 'none'}
-                        stroke="#e53935"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-                      </svg>
-                    </button>
-                    {product.discount && (
-                      <span style={{
-                        position: 'absolute',
-                        top: '12px',
-                        left: '12px',
-                        background: '#e53935',
-                        color: '#fff',
-                        fontWeight: 700,
-                        fontSize: '14px',
-                        borderRadius: '50%',
-                        width: '47px',
-                        height: '47px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        boxShadow: '0 2px 8px rgba(229,57,53,0.2)',
-                        backdropFilter: 'blur(4px)'
-                      }}>
-                        -{product.discount}%
-                      </span>
-                    )}
-                    {product.isHot && (
-                      <span style={{
-                        position: 'absolute',
-                        top: product.discount ? '67px' : '12px',
-                        left: '12px',
-                        background: '#000',
-                        color: '#fff',
-                        fontWeight: 700,
-                        fontSize: '14px',
-                        borderRadius: '50%',
-                        width: '47px',
-                        height: '47px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        boxShadow: '0 2px 8px rgba(0,0,0,0.2)',
-                        backdropFilter: 'blur(4px)'
-                      }}>
-                        HOT
-                      </span>
-                    )}
-                    {product.isSoldOut && (
-                      <div style={{
-                        position: 'absolute',
-                        top: 0,
-                        left: 0,
-                        right: 0,
-                        bottom: 0,
-                        background: 'rgba(0,0,0,0.5)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        color: '#fff',
-                        fontSize: '18px',
-                        fontWeight: 600,
-                        backdropFilter: 'blur(2px)'
-                      }}>
-                        Sold Out
-                      </div>
-                    )}
-                  </div>
-                  <div style={{
-                    padding: '20px'
-                  }}>
+            <>
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
+                gap: '32px'
+              }}>
+                {products.slice(0, showCount).map((product) => (
+                  <div 
+                    key={product._id} 
+                    style={{
+                      background: '#fff',
+                      borderRadius: '20px',
+                      boxShadow: hoveredProduct === product._id 
+                        ? '0 8px 32px rgba(34,34,34,0.12)' 
+                        : '0 2px 16px rgba(34,34,34,0.07)',
+                      overflow: 'hidden',
+                      position: 'relative',
+                      transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                      transform: hoveredProduct === product._id ? 'translateY(-4px)' : 'none',
+                      opacity: product.isSoldOut ? 0.75 : 1
+                    }}
+                    onMouseEnter={() => setHoveredProduct(product._id)}
+                    onMouseLeave={() => setHoveredProduct(null)}
+                  >
                     <div style={{
-                      fontSize: '12px',
-                      color: '#999',
-                      marginBottom: '8px',
-                      textTransform: 'uppercase',
-                      fontWeight: 500
+                      width: '100%',
+                      aspectRatio: '4/3',
+                      position: 'relative',
+                      overflow: 'hidden'
                     }}>
-                      {product.category} {product.subcategory && `• ${product.subcategory}`}
-                    </div>
-                    <h3 style={{
-                      fontSize: '16px',
-                      fontWeight: 600,
-                      marginBottom: '8px',
-                      color: '#222',
-                      lineHeight: '1.4'
-                    }}>{product.title}</h3>
-                    <div style={{
-                      color: '#e53935',
-                      fontWeight: 700,
-                      fontSize: '20px',
-                      marginBottom: '20px'
-                    }}>
-                      {product.discount ? (
-                        <>
-                          {formatPriceRange(product)}
-                          <span style={{
-                            color: '#999',
-                            textDecoration: 'line-through',
-                            marginLeft: '8px',
-                            fontSize: '16px'
-                          }}>
-                            {formatPriceRange({ ...product, discount: undefined })}
-                          </span>
-                        </>
+                      {product.images && product.images.length > 0 ? (
+                        <Image
+                          src={hoveredProduct === product._id && product.images.length > 1 
+                            ? product.images[1] 
+                            : product.images[0]}
+                          alt={product.title}
+                          fill
+                          style={{
+                            objectFit: 'cover',
+                            transition: 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
+                            transform: hoveredProduct === product._id ? 'scale(1.05)' : 'scale(1)'
+                          }}
+                        />
                       ) : (
-                        formatPriceRange(product)
+                        <div style={{
+                          width: '100%',
+                          height: '100%',
+                          background: '#f5f5f5',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          color: '#999'
+                        }}>
+                          No image
+                        </div>
+                      )}
+                      <button
+                        onClick={() => toggleWishlist(product._id)}
+                        style={{
+                          position: 'absolute',
+                          top: '12px',
+                          right: '12px',
+                          background: 'rgba(255, 255, 255, 0.95)',
+                          border: 'none',
+                          borderRadius: '50%',
+                          width: '44px',
+                          height: '44px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          cursor: 'pointer',
+                          boxShadow: '0 2px 12px rgba(0,0,0,0.15)',
+                          transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                          transform: wishlist.includes(`search_${product._id}`) ? 'scale(1.1)' : 'scale(1)',
+                          backdropFilter: 'blur(4px)'
+                        }}
+                      >
+                        <svg
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill={wishlist.includes(`search_${product._id}`) ? '#e53935' : 'none'}
+                          stroke="#e53935"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                        </svg>
+                      </button>
+                      {product.discount && (
+                        <span style={{
+                          position: 'absolute',
+                          top: '12px',
+                          left: '12px',
+                          background: '#e53935',
+                          color: '#fff',
+                          fontWeight: 700,
+                          fontSize: '14px',
+                          borderRadius: '50%',
+                          width: '47px',
+                          height: '47px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          boxShadow: '0 2px 8px rgba(229,57,53,0.2)',
+                          backdropFilter: 'blur(4px)'
+                        }}>
+                          -{product.discount}%
+                        </span>
+                      )}
+                      {product.isHot && (
+                        <span style={{
+                          position: 'absolute',
+                          top: product.discount ? '67px' : '12px',
+                          left: '12px',
+                          background: '#000',
+                          color: '#fff',
+                          fontWeight: 700,
+                          fontSize: '14px',
+                          borderRadius: '50%',
+                          width: '47px',
+                          height: '47px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          boxShadow: '0 2px 8px rgba(0,0,0,0.2)',
+                          backdropFilter: 'blur(4px)'
+                        }}>
+                          HOT
+                        </span>
+                      )}
+                      {product.isSoldOut && (
+                        <div style={{
+                          position: 'absolute',
+                          top: 0,
+                          left: 0,
+                          right: 0,
+                          bottom: 0,
+                          background: 'rgba(0,0,0,0.5)',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          color: '#fff',
+                          fontSize: '18px',
+                          fontWeight: 600,
+                          backdropFilter: 'blur(2px)'
+                        }}>
+                          Sold Out
+                        </div>
                       )}
                     </div>
-                    {!product.isSoldOut && (
+                    <div style={{
+                      padding: '20px'
+                    }}>
                       <div style={{
-                        display: 'flex',
-                        gap: '12px',
-                        marginTop: '16px'
+                        fontSize: '12px',
+                        color: '#999',
+                        marginBottom: '8px',
+                        textTransform: 'uppercase',
+                        fontWeight: 500
                       }}>
-                        <button
-                          onClick={() => setQuickViewProduct(product)}
-                          style={{
-                            flex: 1,
-                            padding: '12px 24px',
-                            background: '#222',
-                            color: '#fff',
-                            border: 'none',
-                            borderRadius: '8px',
-                            fontSize: '14px',
-                            fontWeight: 600,
-                            cursor: 'pointer',
-                            transition: 'all 0.2s ease',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            gap: '8px'
-                          }}
-                          onMouseEnter={(e) => {
-                            e.currentTarget.style.background = '#333';
-                            e.currentTarget.style.transform = 'translateY(-2px)';
-                          }}
-                          onMouseLeave={(e) => {
-                            e.currentTarget.style.background = '#222';
-                            e.currentTarget.style.transform = 'translateY(0)';
-                          }}
-                        >
-                          <svg
-                            width="20"
-                            height="20"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          >
-                            <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                            <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
-                          </svg>
-                          View
-                        </button>
+                        {product.category} {product.subcategory && `• ${product.subcategory}`}
                       </div>
-                    )}
+                      <h3 style={{
+                        fontSize: '16px',
+                        fontWeight: 600,
+                        marginBottom: '8px',
+                        color: '#222',
+                        lineHeight: '1.4'
+                      }}>{product.title}</h3>
+                      <div style={{
+                        color: '#e53935',
+                        fontWeight: 700,
+                        fontSize: '20px',
+                        marginBottom: '20px'
+                      }}>
+                        {product.discount ? (
+                          <>
+                            {formatPriceRange(product)}
+                            <span style={{
+                              color: '#999',
+                              textDecoration: 'line-through',
+                              marginLeft: '8px',
+                              fontSize: '16px'
+                            }}>
+                              {formatPriceRange({ ...product, discount: undefined })}
+                            </span>
+                          </>
+                        ) : (
+                          formatPriceRange(product)
+                        )}
+                      </div>
+                      {!product.isSoldOut && (
+                        <div style={{
+                          display: 'flex',
+                          gap: '12px',
+                          marginTop: '16px'
+                        }}>
+                          <button
+                            onClick={() => setQuickViewProduct(product)}
+                            style={{
+                              flex: 1,
+                              padding: '12px 24px',
+                              background: '#222',
+                              color: '#fff',
+                              border: 'none',
+                              borderRadius: '8px',
+                              fontSize: '14px',
+                              fontWeight: 600,
+                              cursor: 'pointer',
+                              transition: 'all 0.2s ease',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              gap: '8px'
+                            }}
+                            onMouseEnter={(e) => {
+                              e.currentTarget.style.background = '#333';
+                              e.currentTarget.style.transform = 'translateY(-2px)';
+                            }}
+                            onMouseLeave={(e) => {
+                              e.currentTarget.style.background = '#222';
+                              e.currentTarget.style.transform = 'translateY(0)';
+                            }}
+                          >
+                            <svg
+                              width="20"
+                              height="20"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            >
+                              <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                              <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                            </svg>
+                            View
+                          </button>
+                        </div>
+                      )}
+                    </div>
                   </div>
+                ))}
+              </div>
+              {products.length > showCount && (
+                <div style={{ textAlign: 'center', margin: '40px 0' }}>
+                  <button
+                    onClick={() => setShowCount(showCount + 30)}
+                    style={{
+                      padding: '14px 38px',
+                      borderRadius: '8px',
+                      background: '#222',
+                      color: '#fff',
+                      fontWeight: 700,
+                      fontSize: '18px',
+                      border: 'none',
+                      cursor: 'pointer',
+                      boxShadow: '0 2px 8px rgba(34,34,34,0.10)',
+                      transition: 'background 0.2s, transform 0.2s',
+                    }}
+                    onMouseEnter={e => e.currentTarget.style.background = '#333'}
+                    onMouseLeave={e => e.currentTarget.style.background = '#222'}
+                  >
+                    Show more
+                  </button>
                 </div>
-              ))}
-            </div>
+              )}
+            </>
           )}
         </div>
       </main>
