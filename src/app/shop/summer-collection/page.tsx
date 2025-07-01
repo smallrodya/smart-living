@@ -261,7 +261,7 @@ export default function SummerCollectionPage() {
           marginBottom: '60px'
         }}>
           <Image
-            src="/banner.PNG"
+            src="/bannermain.png"
             alt="Summer Collection"
             fill
             style={{
@@ -331,13 +331,27 @@ export default function SummerCollectionPage() {
               padding: '0 20px'
             }}>
               <h1 style={{
-                color: '#fff',
                 fontSize: '72px',
                 fontWeight: 700,
-                textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
+                textShadow: '2px 2px 4px rgba(0,0,0,0.15)',
                 lineHeight: '1.2',
-                marginBottom: '20px'
-              }}>Summer Collection</h1>
+                marginBottom: '20px',
+                background: 'linear-gradient(270deg, #FFEE70, #FF6B6B, #4BE1EC, #70FFB8, #FFEE70)',
+                backgroundSize: '1000% 100%',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+                color: 'transparent',
+                animation: 'summerGradientMove 6s linear infinite',
+              }}>
+                Summer Collection
+              </h1>
+              <style>{`
+                @keyframes summerGradientMove {
+                  0% { background-position: 0% 50%; }
+                  100% { background-position: 100% 50%; }
+                }
+              `}</style>
               <p style={{
                 color: '#fff',
                 fontSize: '24px',

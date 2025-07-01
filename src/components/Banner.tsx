@@ -5,7 +5,11 @@ import Image from 'next/image';
 import Link from 'next/link';
 import MobileBanner from './MobileBanner';
 
-const Banner = () => {
+interface BannerProps {
+  isHomePage?: boolean;
+}
+
+const Banner: React.FC<BannerProps> = ({ isHomePage = false }) => {
   const [isMobile, setIsMobile] = useState(false);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
@@ -18,7 +22,7 @@ const Banner = () => {
 
   const slides = [
     {
-      image: '/banner.PNG',
+      image: '/bannermain.png',
       title: 'Summer Collection',
       subtitle: 'Discover our new arrivals',
       cta: 'Shop Now',
@@ -61,12 +65,12 @@ const Banner = () => {
   };
 
   if (isMobile) {
-    return <MobileBanner />;
+    return <MobileBanner isHomePage={isHomePage} />;
   }
 
   const bannerStyles: React.CSSProperties = {
     width: '100%',
-    height: '1000px',
+    height: '700px',
     position: 'relative' as const,
     overflow: 'hidden',
     marginBottom: '40px',
@@ -174,14 +178,30 @@ const Banner = () => {
           />
           <div style={overlayStyles} />
           <div style={contentStyles}>
-            <h1 style={{ 
-              fontSize: '48px', 
-              fontWeight: '700', 
-              marginBottom: '16px',
-              textShadow: '2px 2px 4px rgba(0,0,0,0.3)'
-            }}>
+            <h1
+              style={{
+                fontSize: '64px',
+                fontWeight: 700,
+                marginBottom: '16px',
+                textShadow: '2px 2px 4px rgba(0,0,0,0.15)',
+                background: 'linear-gradient(270deg, #FFEE70, #FF6B6B, #4BE1EC, #70FFB8, #FFEE70)',
+                backgroundSize: '1000% 100%',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+                color: 'transparent',
+                animation: 'summerGradientMove 6s linear infinite',
+              }}
+            >
               {slide.title}
             </h1>
+            {/* Анимация keyframes для градиента */}
+            <style>{`
+              @keyframes summerGradientMove {
+                0% { background-position: 0% 50%; }
+                100% { background-position: 100% 50%; }
+              }
+            `}</style>
             <p style={{ 
               fontSize: '24px', 
               marginBottom: '32px',

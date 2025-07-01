@@ -39,6 +39,8 @@ const ReduceSpaceCarousel: React.FC = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [showLeftHint, setShowLeftHint] = useState(false);
   const [showRightHint, setShowRightHint] = useState(false);
+  const titleRef = useRef<HTMLHeadingElement>(null);
+  const [titleVisible, setTitleVisible] = useState(false);
 
   useEffect(() => {
     const handleResize = () => setMobile(isMobile());
@@ -89,6 +91,22 @@ const ReduceSpaceCarousel: React.FC = () => {
     fetchProducts();
   }, []);
 
+  useEffect(() => {
+    const node = titleRef.current;
+    if (!node) return;
+    const observer = new window.IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setTitleVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.5 }
+    );
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
+
   // Функция для отображения звезд
   const renderStars = (rating: string) => {
     const value = parseFloat(rating);
@@ -118,17 +136,58 @@ const ReduceSpaceCarousel: React.FC = () => {
       alignItems: 'center',
       justifyContent: 'center',
     }}>
-      <h2 style={{
-        fontSize: 36,
-        fontWeight: 800,
-        color: '#1a1a1a',
-        marginBottom: 18,
-        textTransform: 'uppercase',
-        letterSpacing: 0.2,
-        fontFamily: 'Montserrat, sans-serif',
-        textAlign: 'center',
-      }}>
-        Outdoor Chairs Collection
+      <h2
+        ref={titleRef}
+        className={titleVisible ? 'animated-title' : ''}
+        style={{
+          fontSize: 28,
+          fontWeight: 800,
+          color: '#1a1a1a',
+          marginBottom: 18,
+          textTransform: 'uppercase',
+          letterSpacing: 0.2,
+          fontFamily: 'Montserrat, sans-serif',
+          textAlign: 'center',
+          position: 'relative',
+        }}
+      >
+        {Array.from('OUTDOOR CHAIRS COLLECTION').map((char, i) => (
+          <span
+            key={i}
+            className={titleVisible ? 'char-animate' : ''}
+            style={{
+              display: 'inline-block',
+              opacity: 0,
+              transform: 'translateY(50px) scale(0.5)',
+              animation: titleVisible
+                ? `charIn 0.8s cubic-bezier(0.23, 1, 0.32, 1) forwards ${i * 0.08 + 0.2}s`
+                : 'none',
+              backgroundImage: titleVisible 
+                ? 'linear-gradient(135deg, #1a1a1a 0%, #4a4a4a 50%, #1a1a1a 100%)'
+                : 'none',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+              textShadow: titleVisible ? '2px 2px 4px rgba(0,0,0,0.1)' : 'none',
+            }}
+          >
+            {char === ' ' ? '\u00A0' : char}
+          </span>
+        ))}
+        {titleVisible && (
+          <div
+            style={{
+              position: 'absolute',
+              bottom: -8,
+              left: '50%',
+              transform: 'translateX(-50%)',
+              width: 0,
+              height: 3,
+              background: 'linear-gradient(90deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4, #feca57)',
+              animation: 'reduceSpaceUnderline 1.2s ease-out 1.5s forwards',
+            }}
+          />
+        )}
       </h2>
       <p style={{
         fontSize: 20,
@@ -249,6 +308,8 @@ const ReduceSpaceCarousel: React.FC = () => {
               display: 'flex',
               gap: 16,
               paddingBottom: 8,
+              paddingLeft: 'calc(50vw - 150px)',
+              paddingRight: 'calc(50vw - 150px)',
               scrollbarWidth: 'none',
               msOverflowStyle: 'none',
               scrollSnapType: 'x mandatory',
@@ -287,7 +348,7 @@ const ReduceSpaceCarousel: React.FC = () => {
                 padding: 20,
                 cursor: 'default',
                 transition: 'box-shadow 0.2s',
-                scrollSnapAlign: mobile ? 'start' : undefined,
+                scrollSnapAlign: mobile ? 'center' : undefined,
                 marginRight: mobile ? 8 : undefined,
               }}
               >
@@ -374,6 +435,44 @@ const ReduceSpaceCarousel: React.FC = () => {
       {quickViewProduct && (
         <QuickViewModal product={quickViewProduct} onClose={() => setQuickViewProduct(null)} />
       )}
+      <style>{`
+        @keyframes charIn {
+          0% {
+            opacity: 0;
+            transform: translateY(50px) scale(0.5) rotateX(-90deg);
+            filter: blur(10px);
+          }
+          50% {
+            opacity: 0.7;
+            transform: translateY(-10px) scale(1.1) rotateX(10deg);
+            filter: blur(2px);
+          }
+          80% {
+            opacity: 1;
+            transform: translateY(5px) scale(1.05) rotateX(-2deg);
+            filter: blur(0px);
+          }
+          100% {
+            opacity: 1;
+            transform: translateY(0) scale(1) rotateX(0deg);
+            filter: blur(0px);
+          }
+        }
+        
+        @keyframes reduceSpaceUnderline {
+          0% {
+            width: 0;
+            opacity: 0;
+          }
+          50% {
+            opacity: 1;
+          }
+          100% {
+            width: 70%;
+            opacity: 1;
+          }
+        }
+      `}</style>
     </section>
   );
 };

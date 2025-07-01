@@ -5,6 +5,7 @@ import toast from 'react-hot-toast';
 import { useIsMobile } from '@/hooks/useIsMobile';
 import MobileQuickViewModal from './MobileQuickViewModal';
 import { usePathname } from 'next/navigation';
+import Link from 'next/link';
 
 interface BeddingSize {
   size: string;
@@ -205,7 +206,14 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
         size: 'One Size',
         clearanceDiscount: product.clearanceDiscount
       });
-      toast.success('Product added to cart');
+      toast.custom((t) => (
+        <div style={{ background: '#fff', borderRadius: 12, boxShadow: '0 2px 12px rgba(0,0,0,0.08)', padding: '18px 28px', display: 'flex', alignItems: 'center', gap: 18 }}>
+          <span style={{ color: '#222', fontWeight: 600 }}>Product added to cart</span>
+          <Link href="/basket" style={{ marginLeft: 16, background: '#222', color: '#fff', borderRadius: 8, padding: '8px 18px', fontWeight: 600, textDecoration: 'none', transition: 'background 0.2s' }} onClick={() => toast.dismiss(t.id)}>
+            Basket
+          </Link>
+        </div>
+      ));
       onClose();
     } else if (product.category === 'FOOTWEAR') {
       if (!selectedSize) {
@@ -235,7 +243,14 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
         stock: size.stock,
         clearanceDiscount: product.clearanceDiscount
       });
-      toast.success('Product added to cart');
+      toast.custom((t) => (
+        <div style={{ background: '#fff', borderRadius: 12, boxShadow: '0 2px 12px rgba(0,0,0,0.08)', padding: '18px 28px', display: 'flex', alignItems: 'center', gap: 18 }}>
+          <span style={{ color: '#222', fontWeight: 600 }}>Product added to cart</span>
+          <Link href="/basket" style={{ marginLeft: 16, background: '#222', color: '#fff', borderRadius: 8, padding: '8px 18px', fontWeight: 600, textDecoration: 'none', transition: 'background 0.2s' }} onClick={() => toast.dismiss(t.id)}>
+            Basket
+          </Link>
+        </div>
+      ));
       onClose();
     } else if (product.category === 'CLOTHING') {
       if (!selectedSize) {
@@ -265,7 +280,14 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
         stock: style.stock,
         clearanceDiscount: product.clearanceDiscount
       });
-      toast.success('Product added to cart');
+      toast.custom((t) => (
+        <div style={{ background: '#fff', borderRadius: 12, boxShadow: '0 2px 12px rgba(0,0,0,0.08)', padding: '18px 28px', display: 'flex', alignItems: 'center', gap: 18 }}>
+          <span style={{ color: '#222', fontWeight: 600 }}>Product added to cart</span>
+          <Link href="/basket" style={{ marginLeft: 16, background: '#222', color: '#fff', borderRadius: 8, padding: '8px 18px', fontWeight: 600, textDecoration: 'none', transition: 'background 0.2s' }} onClick={() => toast.dismiss(t.id)}>
+            Basket
+          </Link>
+        </div>
+      ));
       onClose();
     } else {
       if (!selectedSize) {
@@ -315,7 +337,14 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
           stock,
           clearanceDiscount: product.clearanceDiscount
         });
-        toast.success('Product added to cart');
+        toast.custom((t) => (
+          <div style={{ background: '#fff', borderRadius: 12, boxShadow: '0 2px 12px rgba(0,0,0,0.08)', padding: '18px 28px', display: 'flex', alignItems: 'center', gap: 18 }}>
+            <span style={{ color: '#222', fontWeight: 600 }}>Product added to cart</span>
+            <Link href="/basket" style={{ marginLeft: 16, background: '#222', color: '#fff', borderRadius: 8, padding: '8px 18px', fontWeight: 600, textDecoration: 'none', transition: 'background 0.2s' }} onClick={() => toast.dismiss(t.id)}>
+              Basket
+            </Link>
+          </div>
+        ));
         onClose();
       } else {
         console.error('Error adding to cart:', {

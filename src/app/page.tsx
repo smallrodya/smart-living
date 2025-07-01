@@ -11,17 +11,19 @@ import CookieBanner from "../components/CookieBanner";
 import Blog from "../components/Blog";
 import ThrowAndCurtainSection from "../components/BeddingAndRugsSection";
 import FeaturesSection from '@/components/FeaturesSection';
+import ClothingSection from "../components/ClothingSection";
 
 export default function Home() {
   return (
     <main>
       <Header />
       <CategoriesSection />
-      <Banner />
+      <Banner isHomePage={true} />
       <ReduceSpaceCarousel />
       <FeaturesSection />
       <ThrowAndCurtainSection />
       <BestSellersSlider />
+      <ClothingSection />
       <Blog />
       <SubscribeSection />
       <Footer />

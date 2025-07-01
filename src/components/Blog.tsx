@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 
@@ -238,6 +238,24 @@ Remember: Trends should enhance your personal style, not dictate it.`
 
 export default function Blog() {
   const [selectedPost, setSelectedPost] = useState<BlogPost | null>(null);
+  const [titleVisible, setTitleVisible] = useState(false);
+  const titleRef = useRef<HTMLHeadingElement>(null);
+
+  useEffect(() => {
+    const node = titleRef.current;
+    if (!node) return;
+    const observer = new window.IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setTitleVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.4 }
+    );
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
 
   const BlogCard = ({ post }: { post: BlogPost }) => (
     <div
@@ -313,16 +331,95 @@ export default function Blog() {
       position: 'relative',
       overflow: 'hidden',
     }}>
-      <h2 style={{
-        fontSize: 38,
-        fontWeight: 900,
-        marginBottom: 18,
-        letterSpacing: 0.2,
-        color: '#1a1a1a',
-        fontFamily: 'Montserrat, sans-serif',
-      }}>
-        Smart Living Blog
+      <h2
+        ref={titleRef}
+        id="blog-main-title"
+        style={{
+          fontSize: 38,
+          fontWeight: 900,
+          marginBottom: 18,
+          letterSpacing: 0.2,
+          color: '#1a1a1a',
+          fontFamily: 'Montserrat, sans-serif',
+          position: 'relative',
+        }}
+      >
+        {Array.from('Smart Living Blog').map((char, i) => (
+          <span
+            key={i}
+            className={titleVisible ? 'char-animate' : ''}
+            style={{
+              display: 'inline-block',
+              opacity: 0,
+              transform: 'translateY(50px) scale(0.5)',
+              animation: titleVisible
+                ? `charIn 0.8s cubic-bezier(0.23, 1, 0.32, 1) forwards ${i * 0.08 + 0.2}s`
+                : 'none',
+              backgroundImage: titleVisible 
+                ? 'linear-gradient(135deg, #1a1a1a 0%, #4a4a4a 50%, #1a1a1a 100%)'
+                : 'none',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+              textShadow: titleVisible ? '2px 2px 4px rgba(0,0,0,0.1)' : 'none',
+            }}
+          >
+            {char === ' ' ? '\u00A0' : char}
+          </span>
+        ))}
+        {titleVisible && (
+          <div
+            style={{
+              position: 'absolute',
+              bottom: -8,
+              left: '50%',
+              transform: 'translateX(-50%)',
+              width: 0,
+              height: 3,
+              background: 'linear-gradient(90deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4, #feca57)',
+              animation: 'blogUnderline 1.2s ease-out 1.5s forwards',
+            }}
+          />
+        )}
       </h2>
+      <style>{`
+        @keyframes charIn {
+          0% {
+            opacity: 0;
+            transform: translateY(50px) scale(0.5) rotateX(-90deg);
+            filter: blur(10px);
+          }
+          50% {
+            opacity: 0.7;
+            transform: translateY(-10px) scale(1.1) rotateX(10deg);
+            filter: blur(2px);
+          }
+          80% {
+            opacity: 1;
+            transform: translateY(5px) scale(1.05) rotateX(-2deg);
+            filter: blur(0px);
+          }
+          100% {
+            opacity: 1;
+            transform: translateY(0) scale(1) rotateX(0deg);
+            filter: blur(0px);
+          }
+        }
+        
+        @keyframes blogUnderline {
+          0% {
+            width: 0;
+            opacity: 0;
+          }
+          50% {
+            opacity: 1;
+          }
+          100% {
+            width: 70%;
+            opacity: 1;
+          }
+        }
+      `}</style>
       <p style={{
         fontSize: 21,
         color: '#444',

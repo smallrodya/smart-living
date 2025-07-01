@@ -78,6 +78,21 @@ function MobileTechSupport() {
     }
   }, [selectedCategory]);
 
+  const fetchTicketHistory = async () => {
+    try {
+      const response = await fetch('/api/support/tickets');
+      if (!response.ok) throw new Error('Failed to fetch tickets');
+      const tickets = await response.json();
+      const userTicket = tickets.find((ticket: Ticket) => 
+        ticket.userEmail === userData?.email && 
+        ticket.subject.toLowerCase().includes(selectedCategory?.toLowerCase() || '')
+      );
+      setCurrentTicket(userTicket || null);
+    } catch (error) {
+      setError('Failed to load messages');
+    }
+  };
+
   useEffect(() => {
     if (selectedCategory && userData) {
       fetchTicketHistory();
@@ -99,21 +114,6 @@ function MobileTechSupport() {
     { id: 'tech', label: 'Tech Support', icon: <FaTools className="w-5 h-5" /> },
     { id: 'other', label: 'Other', icon: <FaEllipsisH className="w-5 h-5" /> }
   ];
-
-  const fetchTicketHistory = async () => {
-    try {
-      const response = await fetch('/api/support/tickets');
-      if (!response.ok) throw new Error('Failed to fetch tickets');
-      const tickets = await response.json();
-      const userTicket = tickets.find((ticket: Ticket) => 
-        ticket.userEmail === userData?.email && 
-        ticket.subject.toLowerCase().includes(selectedCategory?.toLowerCase() || '')
-      );
-      setCurrentTicket(userTicket || null);
-    } catch (error) {
-      setError('Failed to load messages');
-    }
-  };
 
   const handleUserDataSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -193,9 +193,9 @@ function MobileTechSupport() {
 
       {/* Chat Window */}
       {isOpen && (
-        <div className="absolute bottom-[60px] right-0 w-80 max-w-[95vw] bg-white rounded-lg shadow-2xl overflow-hidden transition-all duration-300 md:hidden block">
+        <div className="fixed inset-0 z-[1200] bg-white md:hidden flex flex-col shadow-2xl transition-all duration-300">
           {/* Chat Header */}
-          <div className="bg-gradient-to-r from-gray-800 to-gray-900 p-4 text-white">
+          <div className="bg-gradient-to-r from-gray-800 to-gray-900 p-4 text-white flex items-center justify-between">
             <div className="flex items-center space-x-3">
               <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
                 <FaHeadset className="w-5 h-5 text-white" />
@@ -205,12 +205,15 @@ function MobileTechSupport() {
                 <p className="text-xs opacity-90">We're here to help!</p>
               </div>
             </div>
+            <button onClick={() => setIsOpen(false)} className="ml-4 p-2 rounded-full hover:bg-gray-700 transition" aria-label="Close chat">
+              <FaTimes className="w-6 h-6 text-white" />
+            </button>
           </div>
 
           {/* User Data Form */}
           {showUserForm && (
-            <div className="p-3 bg-white">
-              <form onSubmit={handleUserDataSubmit} className="space-y-3">
+            <div className="p-3 bg-white flex-1 flex flex-col justify-center">
+              <form onSubmit={handleUserDataSubmit} className="space-y-3 max-w-xs mx-auto w-full">
                 <div>
                   <label htmlFor="firstName" className="block text-xs font-medium text-gray-700">First Name</label>
                   <input
@@ -275,7 +278,7 @@ function MobileTechSupport() {
 
           {/* Chat Body */}
           {!showUserForm && (
-            <div className="h-64 overflow-y-auto p-3 bg-gray-50">
+            <div className="flex-1 overflow-y-auto p-3 bg-gray-50">
               <div className="space-y-3">
                 {error && (
                   <div className="bg-red-100 border border-red-400 text-red-700 px-3 py-2 rounded relative mb-3 text-xs">
@@ -290,13 +293,13 @@ function MobileTechSupport() {
                     <div className="flex flex-col max-w-[80%]">
                       <span className={`text-[10px] mb-1 ${msg.isAdmin ? 'text-gray-600' : 'text-indigo-600'}`}>{msg.isAdmin ? 'Manager' : 'User'}</span>
                       <div 
-                        className={`$${
+                        className={`p-3 shadow-sm text-sm font-medium break-words ${
                           msg.isAdmin 
                             ? 'bg-gray-800 text-white rounded-lg rounded-bl-none' 
                             : 'bg-indigo-600 text-white rounded-lg rounded-br-none'
-                        } p-3 shadow-sm`}
+                        }`}
                       >
-                        <p className="text-xs">{msg.text}</p>
+                        <p>{msg.text}</p>
                         <p className={`text-[10px] mt-1 ${msg.isAdmin ? 'text-gray-300' : 'text-indigo-100'}`}>{new Date(msg.createdAt).toLocaleString()}</p>
                       </div>
                     </div>
@@ -310,12 +313,12 @@ function MobileTechSupport() {
                       </div>
                     </div>
                     <div className="ml-2 max-w-[80%]">
-                      <div className="bg-white rounded-lg p-3 shadow-sm">
-                        <p className="text-xs text-gray-800">
+                      <div className="bg-gray-800 text-white rounded-lg p-3 shadow-sm">
+                        <p className="text-xs">
                           How can we help you with your {categories.find(c => c.id === selectedCategory)?.label.toLowerCase()}?
                         </p>
                       </div>
-                      <p className="text-[10px] text-gray-500 mt-1">{new Date().toLocaleString()}</p>
+                      <p className="text-[10px] text-gray-300 mt-1">{new Date().toLocaleString()}</p>
                     </div>
                   </div>
                 )}
@@ -333,6 +336,8 @@ function MobileTechSupport() {
                   onChange={(e) => setMessage(e.target.value)}
                   placeholder={selectedCategory ? "Type your message..." : "Please select a category first"}
                   disabled={!selectedCategory || isLoading}
+                  inputMode="text"
+                  style={{ fontSize: 16 }}
                   className={`flex-1 border border-gray-200 rounded-full px-4 py-2 focus:outline-none focus:border-gray-800 text-xs ${
                     !selectedCategory || isLoading ? 'bg-gray-50 cursor-not-allowed' : ''
                   }`}

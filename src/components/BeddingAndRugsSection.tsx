@@ -1,9 +1,27 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
 
 const ThrowAndCurtainSection = () => {
   const [hovered, setHovered] = useState<'bedding' | 'rugs' | null>(null);
+  const [titleVisible, setTitleVisible] = useState(false);
+  const titleRef = useRef<HTMLHeadingElement>(null);
+
+  useEffect(() => {
+    const node = titleRef.current;
+    if (!node) return;
+    const observer = new window.IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setTitleVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.4 }
+    );
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <section style={{
@@ -12,14 +30,69 @@ const ThrowAndCurtainSection = () => {
       background: '#fff',
       textAlign: 'center',
     }}>
-      <h2 style={{
-        fontSize: 28,
-        fontWeight: 700,
-        marginBottom: 12,
-        letterSpacing: 0.2,
-      }}>
-        Elevate Your Living Space with Elegance
+      <h2
+        ref={titleRef}
+        style={{
+          fontSize: 28,
+          fontWeight: 700,
+          marginBottom: 12,
+          letterSpacing: 0.2,
+          display: 'inline-block',
+          overflow: 'hidden',
+          whiteSpace: 'pre-wrap',
+        }}
+      >
+        {['Elevate', 'Your', 'Living', 'Space', 'with', 'Elegance'].map((word, wi) => (
+          <span
+            key={wi}
+            className="word"
+            style={word === 'with' ? { whiteSpace: 'nowrap', display: 'inline-block' } : { display: 'inline-block' }}
+          >
+            {Array.from(word).map((char, ci) => (
+              <span
+                key={ci}
+                className={titleVisible ? 'glass-animate' : ''}
+                style={{
+                  display: 'inline-block',
+                  opacity: 0,
+                  filter: 'blur(8px)',
+                  transform: 'scale(1.3) translateY(30px)',
+                  animation: titleVisible
+                    ? `glassIn 0.7s cubic-bezier(.4,2,.6,1) forwards ${(wi * 7 + ci) * 0.045 + 0.1}s`
+                    : 'none',
+                }}
+              >
+                {char}
+              </span>
+            ))}
+            {wi !== 5 && <span style={{ display: 'inline-block', width: 8 }}></span>}
+          </span>
+        ))}
       </h2>
+      <style>{`
+        @keyframes glassIn {
+          0% {
+            opacity: 0;
+            filter: blur(8px);
+            transform: scale(1.3) translateY(30px) rotate(-8deg);
+          }
+          60% {
+            opacity: 0.7;
+            filter: blur(2px);
+            transform: scale(1.05) translateY(-6px) rotate(2deg);
+          }
+          80% {
+            opacity: 1;
+            filter: blur(0.5px);
+            transform: scale(1.02) translateY(2px) rotate(-1deg);
+          }
+          100% {
+            opacity: 1;
+            filter: blur(0px);
+            transform: scale(1) translateY(0) rotate(0deg);
+          }
+        }
+      `}</style>
       <p style={{
         fontSize: 17,
         color: '#444',
