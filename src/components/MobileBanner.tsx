@@ -51,7 +51,7 @@ const MobileBanner: React.FC<MobileBannerProps> = ({ isHomePage = false }) => {
 
   const bannerStyles: React.CSSProperties = {
     width: '100%',
-    height: '400px',
+    height: '200px',
     position: 'relative' as const,
     overflow: 'hidden',
     marginBottom: '20px',
