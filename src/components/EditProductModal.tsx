@@ -2129,7 +2129,7 @@ export default function EditProductModal({ open, onClose, product, onProductEdit
                         {category === 'BEDDING' && beddingSubcategories.map(sub => (
                           <option key={sub} value={sub}>{sub}</option>
                         ))}
-                        {category === 'RUGS & MATS' && Object.values(rugsMatsSubcategories).flat().map(sub => (
+                        {category === 'RUGS & MATS' && [...new Set(Object.values(rugsMatsSubcategories).flat())].map(sub => (
                           <option key={sub} value={sub}>{sub}</option>
                         ))}
                         {category === 'THROWS & TOWELS' && throwsTowelsSubcategories.map(sub => (

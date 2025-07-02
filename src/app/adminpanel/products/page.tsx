@@ -417,8 +417,15 @@ export default function ProductsPage() {
     }
     
     // Для остальных категорий
-    const matchesCategory = !selectedCategory || product.category === selectedCategory;
-    const matchesSubcategory = !selectedSubcategory || product.subcategory === selectedSubcategory;
+    const matchesCategory =
+      !selectedCategory ||
+      product.category === selectedCategory ||
+      (product.additionalCategories && product.additionalCategories.some((ac: any) => ac.category === selectedCategory));
+
+    const matchesSubcategory =
+      !selectedSubcategory ||
+      product.subcategory === selectedSubcategory ||
+      (product.additionalCategories && product.additionalCategories.some((ac: any) => ac.subcategory === selectedSubcategory && ac.category === (selectedCategory || product.category)));
 
     return matchesSearch && matchesCategory && matchesSubcategory;
   });
@@ -875,7 +882,7 @@ export default function ProductsPage() {
               disabled={!selectedCategory || selectedCategory === 'CLEARANCE'}
             >
               <option value="">All Subcategories</option>
-              {getSubcategories(selectedCategory).map(subcategory => (
+              {[...new Set(getSubcategories(selectedCategory))].map(subcategory => (
                 <option key={subcategory} value={subcategory}>{subcategory}</option>
               ))}
             </select>
