@@ -129,7 +129,7 @@ const SubscribeSection = () => {
               opacity: 1;
             }
             100% {
-              width: 70%;
+              width: 30%;
               opacity: 1;
             }
           }

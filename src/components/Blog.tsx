@@ -415,7 +415,7 @@ export default function Blog() {
             opacity: 1;
           }
           100% {
-            width: 70%;
+            width: 40%;
             opacity: 1;
           }
         }

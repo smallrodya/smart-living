@@ -137,7 +137,7 @@ export default function ClothingSection() {
             opacity: 1;
           }
           100% {
-            width: 90%;
+            width: 120%;
             opacity: 1;
           }
         }
