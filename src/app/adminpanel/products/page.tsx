@@ -502,18 +502,22 @@ export default function ProductsPage() {
     const grouped: { [key: string]: { [key: string]: any[] } } = {};
     
     products.forEach(product => {
-      // Создаем группу для категории, если её нет
-      if (!grouped[product.category]) {
-        grouped[product.category] = {};
-      }
-      
-      // Создаем подгруппу для подкатегории, если её нет
-      if (!grouped[product.category][product.subcategory || 'Uncategorized']) {
-        grouped[product.category][product.subcategory || 'Uncategorized'] = [];
-      }
-      
-      // Добавляем товар в соответствующую подгруппу
+      // Основная категория/подкатегория
+      if (!grouped[product.category]) grouped[product.category] = {};
+      if (!grouped[product.category][product.subcategory || 'Uncategorized']) grouped[product.category][product.subcategory || 'Uncategorized'] = [];
       grouped[product.category][product.subcategory || 'Uncategorized'].push(product);
+
+      // Альтернативные категории
+      if (product.additionalCategories) {
+        product.additionalCategories.forEach((ac: any) => {
+          if (!grouped[ac.category]) grouped[ac.category] = {};
+          if (!grouped[ac.category][ac.subcategory || 'Uncategorized']) grouped[ac.category][ac.subcategory || 'Uncategorized'] = [];
+          // Не добавлять дубликаты
+          if (!grouped[ac.category][ac.subcategory || 'Uncategorized'].some((p: any) => p._id === product._id)) {
+            grouped[ac.category][ac.subcategory || 'Uncategorized'].push(product);
+          }
+        });
+      }
     });
     
     return grouped;
