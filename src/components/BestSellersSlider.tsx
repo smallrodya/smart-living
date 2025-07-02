@@ -50,6 +50,9 @@ const BestSellersSlider = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [titleVisible, setTitleVisible] = useState(false);
   const titleRef = useRef<HTMLDivElement>(null);
+  const [starParams, setStarParams] = useState<
+    { size: number; top: number; left: number; delay: number }[]
+  >([]);
 
   useEffect(() => {
     fetchBestSellers();
@@ -76,6 +79,19 @@ const BestSellersSlider = () => {
     console.log('Products state updated:', products);
     console.log('Products with isBestSeller:', products.filter(p => p.isBestSeller));
   }, [products]);
+
+  useEffect(() => {
+    const arr = [];
+    for (let i = 0; i < 50; i++) {
+      arr.push({
+        size: 4 + Math.random() * 4,
+        top: Math.random() * 100,
+        left: Math.random() * 100,
+        delay: Math.random() * 2.5,
+      });
+    }
+    setStarParams(arr);
+  }, []);
 
   const checkMobile = () => {
     setIsMobile(window.innerWidth < 768);
@@ -196,32 +212,6 @@ const BestSellersSlider = () => {
     setCurrentPage(prev => (prev - 1 + totalPages) % totalPages);
   };
 
-  // Генерация звезд для фонового div (теперь useMemo)
-  const stars = useMemo(() => {
-    const arr = [];
-    for (let i = 0; i < 50; i++) {
-      const size = Math.random() * 4 + 4; // 4-8px
-      const top = Math.random() * 100;
-      const left = Math.random() * 100;
-      const delay = Math.random() * 2.5;
-      arr.push(
-        <div
-          key={i}
-          className="star"
-          style={{
-            width: size,
-            height: size,
-            top: `${top}%`,
-            left: `${left}%`,
-            animationDelay: `${delay}s`,
-            pointerEvents: 'none',
-          }}
-        />
-      );
-    }
-    return arr;
-  }, []);
-
   return (
     <>
       <section 
@@ -242,7 +232,23 @@ const BestSellersSlider = () => {
           pointerEvents: 'none',
           overflow: 'hidden',
         }}>
-          {stars}
+          <div className="stars-container" style={{ position: "relative", height: "100%", width: "100%" }}>
+            {starParams.map((star, i) => (
+              <div
+                key={i}
+                className="star"
+                style={{
+                  width: star.size,
+                  height: star.size,
+                  top: `${star.top}%`,
+                  left: `${star.left}%`,
+                  animationDelay: `${star.delay}s`,
+                  pointerEvents: "none",
+                  position: "absolute",
+                }}
+              />
+            ))}
+          </div>
         </div>
         <div className="container mx-auto px-4" style={{ position: 'relative', zIndex: 1 }}>
           <motion.div
