@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { Heart, Star, Eye } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import QuickViewModal from './QuickViewModal';
@@ -196,11 +196,55 @@ const BestSellersSlider = () => {
     setCurrentPage(prev => (prev - 1 + totalPages) % totalPages);
   };
 
+  // Генерация звезд для фонового div (теперь useMemo)
+  const stars = useMemo(() => {
+    const arr = [];
+    for (let i = 0; i < 50; i++) {
+      const size = Math.random() * 4 + 4; // 4-8px
+      const top = Math.random() * 100;
+      const left = Math.random() * 100;
+      const delay = Math.random() * 2.5;
+      arr.push(
+        <div
+          key={i}
+          className="star"
+          style={{
+            width: size,
+            height: size,
+            top: `${top}%`,
+            left: `${left}%`,
+            animationDelay: `${delay}s`,
+            pointerEvents: 'none',
+          }}
+        />
+      );
+    }
+    return arr;
+  }, []);
+
   return (
     <>
-      <section className="py-16 bg-gradient-to-br from-gray-50 to-white overflow-hidden">
-        <div className="container mx-auto px-4">
-          {/* Header - теперь отображается всегда */}
+      <section 
+        className="py-16 overflow-hidden"
+        style={{
+          background: '#090b1a',
+          position: 'relative',
+        }}
+      >
+        {/* Звездный фон */}
+        <div id="bestseller-stars-bg" style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          zIndex: 0,
+          pointerEvents: 'none',
+          overflow: 'hidden',
+        }}>
+          {stars}
+        </div>
+        <div className="container mx-auto px-4" style={{ position: 'relative', zIndex: 1 }}>
           <motion.div
             ref={titleRef}
             initial={{ opacity: 0, y: 30 }}
@@ -218,7 +262,7 @@ const BestSellersSlider = () => {
                 <Star className="w-12 h-12 text-yellow-400 mr-3" />
               </motion.div>
               <motion.h2 
-                className="text-4xl font-bold text-gray-900 relative"
+                className="text-4xl font-bold text-white relative"
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={titleVisible ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
                 transition={{ duration: 0.6, delay: 0.4, ease: "easeOut" }}
@@ -249,7 +293,7 @@ const BestSellersSlider = () => {
               </motion.div>
             </div>
             <motion.p 
-              className="text-lg text-gray-600 max-w-2xl mx-auto"
+              className="text-lg text-white max-w-2xl mx-auto"
               initial={{ opacity: 0, y: 20 }}
               animate={titleVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
               transition={{ duration: 0.6, delay: 0.8, ease: "easeOut" }}
@@ -261,51 +305,34 @@ const BestSellersSlider = () => {
             .star-left, .star-right {
               animation: starGlow 2s ease-in-out infinite alternate;
             }
-            
-            .star-left {
-              animation-delay: 0s;
-            }
-            
-            .star-right {
-              animation-delay: 1s;
-            }
-            
+            .star-left { animation-delay: 0s; }
+            .star-right { animation-delay: 1s; }
             @keyframes starGlow {
-              0% {
-                filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.6)) 
-                        drop-shadow(0 0 15px rgba(255, 215, 0, 0.4))
-                        drop-shadow(0 0 20px rgba(255, 215, 0, 0.3))
-                        drop-shadow(0 0 25px rgba(255, 215, 0, 0.2));
-                transform: scale(1) rotate(0deg);
-              }
-              50% {
-                filter: drop-shadow(0 0 12px rgba(255, 215, 0, 0.9)) 
-                        drop-shadow(0 0 20px rgba(255, 215, 0, 0.7))
-                        drop-shadow(0 0 30px rgba(255, 215, 0, 0.5))
-                        drop-shadow(0 0 40px rgba(255, 215, 0, 0.3));
-                transform: scale(1.15) rotate(3deg);
-              }
-              100% {
-                filter: drop-shadow(0 0 18px rgba(255, 215, 0, 1)) 
-                        drop-shadow(0 0 30px rgba(255, 215, 0, 0.8))
-                        drop-shadow(0 0 45px rgba(255, 215, 0, 0.6))
-                        drop-shadow(0 0 60px rgba(255, 215, 0, 0.4));
-                transform: scale(1.25) rotate(-2deg);
-              }
+              0% { filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.6)) drop-shadow(0 0 15px rgba(255, 215, 0, 0.4)) drop-shadow(0 0 20px rgba(255, 215, 0, 0.3)) drop-shadow(0 0 25px rgba(255, 215, 0, 0.2)); transform: scale(1) rotate(0deg); }
+              50% { filter: drop-shadow(0 0 12px rgba(255, 215, 0, 0.9)) drop-shadow(0 0 20px rgba(255, 215, 0, 0.7)) drop-shadow(0 0 30px rgba(255, 215, 0, 0.5)) drop-shadow(0 0 40px rgba(255, 215, 0, 0.3)); transform: scale(1.15) rotate(3deg); }
+              100% { filter: drop-shadow(0 0 18px rgba(255, 215, 0, 1)) drop-shadow(0 0 30px rgba(255, 215, 0, 0.8)) drop-shadow(0 0 45px rgba(255, 215, 0, 0.6)) drop-shadow(0 0 60px rgba(255, 215, 0, 0.4)); transform: scale(1.25) rotate(-2deg); }
             }
-            
             @keyframes bestSellersUnderline {
-              0% {
-                width: 0;
-                opacity: 0;
-              }
-              50% {
-                opacity: 1;
-              }
-              100% {
-                width: 110%;
-                opacity: 1;
-              }
+              0% { width: 0; opacity: 0; }
+              50% { opacity: 1; }
+              100% { width: 110%; opacity: 1; }
+            }
+            #bestseller-stars-bg {
+              pointer-events: none;
+              z-index: 0;
+            }
+            #bestseller-stars-bg .star {
+              position: absolute;
+              border-radius: 50%;
+              background: white;
+              opacity: 0.85;
+              box-shadow: 0 0 12px 4px #fff, 0 0 32px 8px #fff2;
+              animation: twinkle 1.6s infinite alternate;
+            }
+            @keyframes twinkle {
+              0% { opacity: 0.45; filter: blur(0.5px); }
+              50% { opacity: 1; filter: blur(2.5px); }
+              100% { opacity: 0.7; filter: blur(0.5px); }
             }
           `}</style>
 
@@ -362,7 +389,14 @@ const BestSellersSlider = () => {
                       initial={{ opacity: 0, y: 30 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.5, delay: index * 0.1 }}
-                      className="group relative bg-white rounded-2xl shadow-lg overflow-hidden transform transition-all duration-300 hover:shadow-2xl"
+                      className="group relative rounded-2xl shadow-lg overflow-hidden transform transition-all duration-300 hover:shadow-2xl"
+                      style={{
+                        background: 'rgba(255,255,255,0.13)',
+                        backdropFilter: 'blur(12px)',
+                        WebkitBackdropFilter: 'blur(12px)',
+                        border: '1.5px solid rgba(255,255,255,0.18)',
+                        boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.10)',
+                      }}
                       onMouseEnter={() => setHoveredProduct(product._id)}
                       onMouseLeave={() => setHoveredProduct(null)}
                     >
@@ -449,33 +483,30 @@ const BestSellersSlider = () => {
                       {/* Product Info */}
                       <div className="p-6">
                         <motion.h3
-                          className="text-lg font-semibold text-gray-900 mb-2 line-clamp-2 group-hover:text-blue-600 transition-colors duration-300"
+                          className="text-lg font-semibold text-white mb-2 line-clamp-2 group-hover:text-blue-200 transition-colors duration-300"
                           initial={{ opacity: 0 }}
                           animate={{ opacity: 1 }}
                           transition={{ delay: 0.1 }}
                         >
                           {product.title}
                         </motion.h3>
-                        
                         <motion.p
-                          className="text-sm text-gray-600 mb-3 line-clamp-2"
+                          className="text-sm text-white/90 mb-3 line-clamp-2"
                           initial={{ opacity: 0 }}
                           animate={{ opacity: 1 }}
                           transition={{ delay: 0.2 }}
                         >
                           {product.description}
                         </motion.p>
-                        
                         <motion.div
                           className="flex items-center justify-between"
                           initial={{ opacity: 0 }}
                           animate={{ opacity: 1 }}
                           transition={{ delay: 0.3 }}
                         >
-                          <span className="text-xl font-bold text-gray-900">
+                          <span className="text-xl font-bold text-white">
                             {formatPriceRange(product)}
                           </span>
-                          
                           <div className="flex items-center gap-1">
                             {[...Array(5)].map((_, i) => (
                               <Star
@@ -485,7 +516,7 @@ const BestSellersSlider = () => {
                                 }`}
                               />
                             ))}
-                            <span className="text-sm text-gray-500 ml-1">(4.8)</span>
+                            <span className="text-sm text-white/70 ml-1">(4.8)</span>
                           </div>
                         </motion.div>
                       </div>

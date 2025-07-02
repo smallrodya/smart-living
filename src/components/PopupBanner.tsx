@@ -1,10 +1,24 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import MobilePopupBanner from './MobilePopupBanner';
+
+const isMobileDevice = () => {
+  if (typeof window === 'undefined') return false;
+  return window.innerWidth <= 600;
+};
 
 const PopupBanner = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    setIsMobile(isMobileDevice());
+    const handleResize = () => setIsMobile(isMobileDevice());
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   useEffect(() => {
     // Check if popup was closed in the last 2 hours
@@ -14,29 +28,21 @@ const PopupBanner = () => {
         const closedTime = parseInt(lastClosed);
         const currentTime = new Date().getTime();
         const twoHoursInMs = 2 * 60 * 60 * 1000;
-        
-        // Only show if more than 2 hours have passed
         if (currentTime - closedTime < twoHoursInMs) {
           return;
         }
       }
-      
-      // Show popup after 2 seconds if not recently closed
       const timer = setTimeout(() => {
         setIsVisible(true);
       }, 2000);
-
       return () => clearTimeout(timer);
     };
-
     checkPopupState();
   }, []);
 
   const handleClose = () => {
     setIsClosing(true);
-    // Save current time to localStorage
     localStorage.setItem('popupBannerClosed', new Date().getTime().toString());
-    
     setTimeout(() => {
       setIsVisible(false);
       setIsClosing(false);
@@ -44,6 +50,7 @@ const PopupBanner = () => {
   };
 
   if (!isVisible) return null;
+  if (isMobile) return <MobilePopupBanner onClose={handleClose} isClosing={isClosing} />;
 
   return (
     <div style={{
@@ -52,183 +59,163 @@ const PopupBanner = () => {
       left: 0,
       right: 0,
       bottom: 0,
-      backgroundColor: 'rgba(0, 0, 0, 0.7)',
+      zIndex: 1000,
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      zIndex: 1000,
+      background: 'rgba(0,0,0,0.7)',
       opacity: isClosing ? 0 : 1,
       transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
       backdropFilter: 'blur(8px)'
     }}>
       <div style={{
-        background: 'linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)',
-        padding: '50px 40px',
-        borderRadius: '32px',
-        maxWidth: '520px',
-        width: '90%',
         position: 'relative',
-        transform: isClosing ? 'scale(0.95) translateY(20px)' : 'scale(1) translateY(0)',
-        transition: 'all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)',
-        boxShadow: '0 25px 70px rgba(0,0,0,0.2)',
-        border: '1px solid rgba(255,255,255,0.3)',
-        overflow: 'hidden'
+        width: 'calc(100vw - 32px)',
+        maxWidth: 950,
+        minHeight: 440,
+        borderRadius: 40,
+        overflow: 'hidden',
+        boxShadow: '0 25px 70px rgba(0,0,0,0.25)',
+        border: '1px solid rgba(255,255,255,0.18)',
+        background: '#000',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 0
       }}>
-        {/* Decorative elements */}
-        <div style={{
-          position: 'absolute',
-          top: '-100px',
-          right: '-100px',
-          width: '200px',
-          height: '200px',
-          background: 'linear-gradient(135deg, rgba(76,175,80,0.1) 0%, rgba(69,160,73,0.05) 100%)',
-          borderRadius: '50%',
-          filter: 'blur(20px)'
-        }} />
-        <div style={{
-          position: 'absolute',
-          bottom: '-80px',
-          left: '-80px',
-          width: '160px',
-          height: '160px',
-          background: 'linear-gradient(135deg, rgba(76,175,80,0.1) 0%, rgba(69,160,73,0.05) 100%)',
-          borderRadius: '50%',
-          filter: 'blur(20px)'
-        }} />
-
-        <button
-          onClick={handleClose}
+        {/* Фоновое изображение */}
+        <img
+          src="/freeshiping.jpg"
+          alt="Free Shipping"
           style={{
             position: 'absolute',
-            top: '20px',
-            right: '20px',
-            background: 'rgba(0,0,0,0.03)',
-            border: 'none',
-            cursor: 'pointer',
-            padding: '10px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            borderRadius: '50%',
-            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-            zIndex: 2
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            zIndex: 1,
+            filter: 'brightness(0.55)'
           }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.background = 'rgba(0,0,0,0.08)';
-            e.currentTarget.style.transform = 'rotate(90deg) scale(1.1)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.background = 'rgba(0,0,0,0.03)';
-            e.currentTarget.style.transform = 'rotate(0deg) scale(1)';
-          }}
-        >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#666" strokeWidth="2">
-            <path d="M18 6L6 18M6 6l12 12"/>
-          </svg>
-        </button>
-
+        />
+        {/* Overlay для затемнения */}
         <div style={{
-          textAlign: 'center',
-          padding: '20px 0',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          background: 'linear-gradient(90deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.25) 100%)',
+          zIndex: 2
+        }} />
+        {/* Контент */}
+        <div style={{
           position: 'relative',
-          zIndex: 1
+          zIndex: 3,
+          width: '100%',
+          padding: '64px 48px',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          textAlign: 'center',
         }}>
-          <div style={{
-            width: '100px',
-            height: '100px',
-            margin: '0 auto 30px',
-            background: 'linear-gradient(135deg, #000000 0%, #333333 100%)',
-            borderRadius: '50%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            boxShadow: '0 15px 30px rgba(0,0,0,0.2)',
-            position: 'relative',
-            transform: 'translateY(0)',
-            animation: 'float 3s ease-in-out infinite',
-            flexDirection: 'column',
-            gap: '4px'
-          }}>
-            <span style={{
+          <button
+            onClick={handleClose}
+            style={{
+              position: 'absolute',
+              top: 18,
+              right: 18,
+              background: 'rgba(0,0,0,0.12)',
+              border: 'none',
+              cursor: 'pointer',
+              padding: 10,
+              borderRadius: '50%',
+              zIndex: 4,
               color: '#fff',
-              fontSize: '14px',
-              fontWeight: 600,
-              textDecoration: 'line-through',
-              opacity: 0.8
-            }}>
-              Shipping £5
-            </span>
-            <span style={{
-              color: '#fff',
-              fontSize: '16px',
-              fontWeight: 700
-            }}>
-              FREE
-            </span>
-          </div>
-
+              fontSize: 24,
+              transition: 'background 0.2s, transform 0.2s'
+            }}
+            onMouseEnter={e => {
+              e.currentTarget.style.background = 'rgba(0,0,0,0.25)';
+              e.currentTarget.style.transform = 'scale(1.1)';
+            }}
+            onMouseLeave={e => {
+              e.currentTarget.style.background = 'rgba(0,0,0,0.12)';
+              e.currentTarget.style.transform = 'scale(1)';
+            }}
+          >
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+          </button>
           <h2 style={{
-            fontSize: '36px',
-            fontWeight: 800,
-            color: '#1a1a1a',
-            marginBottom: '20px',
-            background: 'linear-gradient(135deg, #e53935 0%, #c62828 100%)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            letterSpacing: '-0.5px'
+            fontSize: 54,
+            fontWeight: 900,
+            color: '#fff',
+            marginBottom: 24,
+            letterSpacing: '-1px',
+            textShadow: '0 4px 24px rgba(0,0,0,0.25)',
+            lineHeight: 1.1,
+            maxWidth: 700
           }}>
-            Free Shipping Ends Soon
+            Free Shipping<br />
           </h2>
           <p style={{
-            fontSize: '20px',
-            color: '#666',
-            lineHeight: '1.6',
-            maxWidth: '400px',
-            margin: '0 auto 40px',
-            fontWeight: 500
+            fontSize: 28,
+            color: '#fff',
+            marginBottom: 40,
+            fontWeight: 500,
+            textShadow: '0 2px 8px rgba(0,0,0,0.18)',
+            maxWidth: 600
           }}>
-            No Minimum Spend — Shop Now & Save Big!
+            No minimum spend. Limited time only!<br />Shop now and save on delivery.
           </p>
           <button
             onClick={handleClose}
             style={{
-              background: 'linear-gradient(135deg, #000000 0%, #333333 100%)',
+              background: '#111',
               color: '#fff',
               border: 'none',
-              borderRadius: '16px',
-              padding: '18px 48px',
-              fontSize: '20px',
-              fontWeight: 600,
+              borderRadius: 20,
+              padding: '22px 64px',
+              fontSize: 28,
+              fontWeight: 700,
               cursor: 'pointer',
-              transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-              boxShadow: '0 15px 30px rgba(0,0,0,0.2)',
-              position: 'relative',
-              overflow: 'hidden'
+              boxShadow: '0 8px 32px rgba(0,0,0,0.18)',
+              transition: 'background 0.2s, transform 0.2s',
+              marginTop: 8
             }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = 'translateY(-4px)';
-              e.currentTarget.style.boxShadow = '0 20px 40px rgba(0,0,0,0.3)';
+            onMouseEnter={e => {
+              e.currentTarget.style.background = '#222';
+              e.currentTarget.style.transform = 'translateY(-2px) scale(1.04)';
             }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = 'translateY(0)';
-              e.currentTarget.style.boxShadow = '0 15px 30px rgba(0,0,0,0.2)';
+            onMouseLeave={e => {
+              e.currentTarget.style.background = '#111';
+              e.currentTarget.style.transform = 'none';
             }}
           >
             Shop Now
           </button>
         </div>
       </div>
-
-      <style jsx global>{`
-        @keyframes float {
-          0% {
-            transform: translateY(0px);
+      <style>{`
+        @media (max-width: 900px) {
+          .popup-banner-content h2 {
+            font-size: 32px !important;
           }
-          50% {
-            transform: translateY(-10px);
+          .popup-banner-content p {
+            font-size: 18px !important;
           }
-          100% {
-            transform: translateY(0px);
+          .popup-banner-content button {
+            font-size: 18px !important;
+            padding: 14px 32px !important;
+          }
+        }
+        @media (max-width: 600px) {
+          .popup-banner-content h2 {
+            font-size: 22px !important;
+          }
+          .popup-banner-content p {
+            font-size: 13px !important;
           }
         }
       `}</style>
