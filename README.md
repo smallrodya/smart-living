@@ -37,7 +37,7 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 
 # Добавить все изменения в индекс
-git add . && git commit -m "Исправление : исправил ошибку компонента Best seller" && git push origin main
+git add . && git commit -m "Исправление : поправил баги и текста" && git push origin main
 
 # Создать коммит с описанием изменений
 git commit -m "Update: Добавляем зум для продуктов."
