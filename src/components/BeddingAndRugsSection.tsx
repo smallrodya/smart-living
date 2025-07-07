@@ -17,7 +17,7 @@ const ThrowAndCurtainSection = () => {
           observer.disconnect();
         }
       },
-      { threshold: 0.4 }
+      { threshold: 0.5 }
     );
     observer.observe(node);
     return () => observer.disconnect();
@@ -34,63 +34,80 @@ const ThrowAndCurtainSection = () => {
         ref={titleRef}
         style={{
           fontSize: 28,
-          fontWeight: 700,
-          marginBottom: 12,
+          fontWeight: 800,
+          color: '#1a1a1a',
+          marginBottom: 18,
+          textTransform: 'uppercase',
           letterSpacing: 0.2,
-          display: 'inline-block',
-          overflow: 'hidden',
-          whiteSpace: 'pre-wrap',
+          fontFamily: 'Montserrat, sans-serif',
+          textAlign: 'center',
+          position: 'relative',
         }}
       >
-        {['Elevate', 'Your', 'Living', 'Space', 'with', 'Elegance'].map((word, wi) => (
+        {Array.from('Elevate Your Living Space').map((char, i) => (
           <span
-            key={wi}
-            className="word"
-            style={word === 'with' ? { whiteSpace: 'nowrap', display: 'inline-block' } : { display: 'inline-block' }}
+            key={i}
+            style={{
+              display: 'inline-block',
+              opacity: 0,
+              transform: 'translateY(50px) scale(0.5)',
+              animation: titleVisible
+                ? `charIn 0.8s cubic-bezier(0.23, 1, 0.32, 1) forwards ${i * 0.08 + 0.2}s`
+                : 'none',
+              backgroundImage: titleVisible 
+                ? 'linear-gradient(135deg, #1a1a1a 0%, #4a4a4a 50%, #1a1a1a 100%)'
+                : 'none',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+              textShadow: titleVisible ? '2px 2px 4px rgba(0,0,0,0.1)' : 'none',
+            }}
           >
-            {Array.from(word).map((char, ci) => (
-              <span
-                key={ci}
-                className={titleVisible ? 'glass-animate' : ''}
-                style={{
-                  display: 'inline-block',
-                  opacity: 0,
-                  filter: 'blur(8px)',
-                  transform: 'scale(1.3) translateY(30px)',
-                  animation: titleVisible
-                    ? `glassIn 0.7s cubic-bezier(.4,2,.6,1) forwards ${(wi * 7 + ci) * 0.045 + 0.1}s`
-                    : 'none',
-                }}
-              >
-                {char}
-              </span>
-            ))}
-            {wi !== 5 && <span style={{ display: 'inline-block', width: 8 }}></span>}
+            {char === ' ' ? '\u00A0' : char}
           </span>
         ))}
+        {titleVisible && (
+          <div
+            style={{
+              position: 'absolute',
+              bottom: -8,
+              left: '50%',
+              transform: 'translateX(-50%)',
+              width: 0,
+              height: 3,
+              background: 'linear-gradient(90deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4, #feca57)',
+              animation: 'beddingRugsUnderline 1.2s ease-out 1.5s forwards',
+            }}
+          />
+        )}
       </h2>
       <style>{`
-        @keyframes glassIn {
+        @keyframes charIn {
           0% {
             opacity: 0;
-            filter: blur(8px);
-            transform: scale(1.3) translateY(30px) rotate(-8deg);
+            transform: translateY(50px) scale(0.5) rotateX(-90deg);
+            filter: blur(10px);
           }
-          60% {
+          50% {
             opacity: 0.7;
+            transform: translateY(-10px) scale(1.1) rotateX(10deg);
             filter: blur(2px);
-            transform: scale(1.05) translateY(-6px) rotate(2deg);
           }
           80% {
             opacity: 1;
-            filter: blur(0.5px);
-            transform: scale(1.02) translateY(2px) rotate(-1deg);
+            transform: translateY(5px) scale(1.05) rotateX(-2deg);
+            filter: blur(0px);
           }
           100% {
             opacity: 1;
+            transform: translateY(0) scale(1) rotateX(0deg);
             filter: blur(0px);
-            transform: scale(1) translateY(0) rotate(0deg);
           }
+        }
+        @keyframes beddingRugsUnderline {
+          0% { width: 0; opacity: 0; }
+          50% { opacity: 1; }
+          100% { width: 30%; opacity: 1; }
         }
       `}</style>
       <p style={{
@@ -100,6 +117,7 @@ const ThrowAndCurtainSection = () => {
         maxWidth: 600,
         marginLeft: 'auto',
         marginRight: 'auto',
+        fontFamily: 'Montserrat, sans-serif',
       }}>
         Create a cozy and stylish atmosphere in every room with our bedding sets and rugs.
       </p>

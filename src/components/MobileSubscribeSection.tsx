@@ -10,6 +10,11 @@ const MobileSubscribeSection = () => {
   useEffect(() => {
     const node = titleRef.current;
     if (!node) return;
+    // Fallback: если элемент уже видим
+    if (node.getBoundingClientRect().top < window.innerHeight) {
+      setTitleVisible(true);
+      return;
+    }
     const observer = new window.IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -20,7 +25,15 @@ const MobileSubscribeSection = () => {
       { threshold: 0.4 }
     );
     observer.observe(node);
-    return () => observer.disconnect();
+    // Таймер-фолбэк
+    const timeout = setTimeout(() => {
+      setTitleVisible(true);
+      observer.disconnect();
+    }, 800);
+    return () => {
+      observer.disconnect();
+      clearTimeout(timeout);
+    };
   }, []);
 
   return (
