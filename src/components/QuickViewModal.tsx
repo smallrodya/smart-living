@@ -581,7 +581,12 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
           </div>
           <div style={{ display: 'flex', gap: 12, marginTop: 18 }}>
             <button onClick={onClose} style={{ flex: 1, background: '#f8bfc9', color: '#fff', fontWeight: 700, border: 'none', borderRadius: 8, padding: '14px 0', fontSize: 16 }}>Continue Shopping</button>
-            <button onClick={() => { setShowAddToCartModal(false); setAddedItem(null); router.push('/basket'); }} style={{ flex: 1, background: '#111', color: '#fff', fontWeight: 700, border: 'none', borderRadius: 8, padding: '14px 0', fontSize: 16 }}>Go to Basket</button>
+            <button onClick={() => {
+              setShowAddToCartModal(false);
+              setAddedItem(null);
+              if (typeof onClose === 'function') onClose();
+              setTimeout(() => { router.push('/basket'); }, 50);
+            }} style={{ flex: 1, background: '#111', color: '#fff', fontWeight: 700, border: 'none', borderRadius: 8, padding: '14px 0', fontSize: 16 }}>Go to Basket</button>
           </div>
         </div>
       </div>
