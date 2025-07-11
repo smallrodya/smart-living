@@ -96,6 +96,12 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
   const [showAddToCartModal, setShowAddToCartModal] = useState(false);
   const [addedItem, setAddedItem] = useState<any>(null);
 
+  // Сброс уведомления при смене продукта
+  useEffect(() => {
+    setShowAddToCartModal(false);
+    setAddedItem(null);
+  }, [product]);
+
   // Function to get the target size based on current page
   const getTargetSize = () => {
     if (pathname.includes('/shop/single')) return 'Single';
@@ -575,7 +581,7 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
           </div>
           <div style={{ display: 'flex', gap: 12, marginTop: 18 }}>
             <button onClick={onClose} style={{ flex: 1, background: '#f8bfc9', color: '#fff', fontWeight: 700, border: 'none', borderRadius: 8, padding: '14px 0', fontSize: 16 }}>Continue Shopping</button>
-            <button onClick={() => router.push('/basket')} style={{ flex: 1, background: '#111', color: '#fff', fontWeight: 700, border: 'none', borderRadius: 8, padding: '14px 0', fontSize: 16 }}>Go to Basket</button>
+            <button onClick={() => { setShowAddToCartModal(false); setAddedItem(null); router.push('/basket'); }} style={{ flex: 1, background: '#111', color: '#fff', fontWeight: 700, border: 'none', borderRadius: 8, padding: '14px 0', fontSize: 16 }}>Go to Basket</button>
           </div>
         </div>
       </div>
