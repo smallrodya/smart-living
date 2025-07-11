@@ -1,8 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
 import { useBasket } from '@/context/BasketContext';
-import toast from 'react-hot-toast';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
 
 interface BeddingSize {
@@ -94,6 +93,9 @@ export default function MobileQuickViewModal({ product, onClose }: MobileQuickVi
   const [quantity, setQuantity] = useState<number>(1);
   const modalRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
+  const router = useRouter();
+  const [showAddToCartModal, setShowAddToCartModal] = useState(false);
+  const [addedItem, setAddedItem] = useState<any>(null);
 
   // Function to get the target size based on current page
   const getTargetSize = () => {
@@ -228,13 +230,13 @@ export default function MobileQuickViewModal({ product, onClose }: MobileQuickVi
 
   const handleAddToCart = () => {
     if (product.isSoldOut || (product.category === 'OUTDOOR' && (!product.outdoorPrice || product.outdoorPrice.stock === 0)) || (product.category !== 'OUTDOOR' && isSelectedSizeOutOfStock())) {
-      toast.error('This product is out of stock');
       return;
     }
 
+    let itemToAdd = null;
+
     if (product.category === 'OUTDOOR') {
       if (!product.outdoorPrice) {
-        toast.error('Product data is incomplete');
         return;
       }
 
@@ -242,7 +244,7 @@ export default function MobileQuickViewModal({ product, onClose }: MobileQuickVi
         ? product.outdoorPrice.salePrice * (1 - product.discount / 100)
         : product.outdoorPrice.salePrice;
 
-      addItem({
+      itemToAdd = {
         id: product._id,
         title: product.title,
         price,
@@ -253,25 +255,14 @@ export default function MobileQuickViewModal({ product, onClose }: MobileQuickVi
         stock: product.outdoorPrice.stock,
         size: 'One Size',
         clearanceDiscount: product.clearanceDiscount
-      });
-      toast.custom((t) => (
-        <div style={{ background: '#fff', borderRadius: 12, boxShadow: '0 2px 12px rgba(0,0,0,0.08)', padding: '18px 28px', display: 'flex', alignItems: 'center', gap: 18 }}>
-          <span style={{ color: '#222', fontWeight: 600 }}>Product added to cart</span>
-          <Link href="/basket" style={{ marginLeft: 16, background: '#222', color: '#fff', borderRadius: 8, padding: '8px 18px', fontWeight: 600, textDecoration: 'none', transition: 'background 0.2s' }} onClick={() => toast.dismiss(t.id)}>
-            Basket
-          </Link>
-        </div>
-      ));
-      onClose();
+      };
     } else if (product.category === 'FOOTWEAR') {
       if (!selectedSize) {
-        toast.error('Please select a size');
         return;
       }
 
       const size = product.footwearSizes?.find(s => s.size === selectedSize);
       if (!size) {
-        toast.error('Selected size not found');
         return;
       }
 
@@ -279,7 +270,7 @@ export default function MobileQuickViewModal({ product, onClose }: MobileQuickVi
         ? size.salePrice * (1 - product.discount / 100)
         : size.salePrice;
 
-      addItem({
+      itemToAdd = {
         id: `${product._id}-${selectedSize}`,
         title: product.title,
         size: selectedSize,
@@ -290,25 +281,14 @@ export default function MobileQuickViewModal({ product, onClose }: MobileQuickVi
         quantity: quantity,
         stock: size.stock,
         clearanceDiscount: product.clearanceDiscount
-      });
-      toast.custom((t) => (
-        <div style={{ background: '#fff', borderRadius: 12, boxShadow: '0 2px 12px rgba(0,0,0,0.08)', padding: '18px 28px', display: 'flex', alignItems: 'center', gap: 18 }}>
-          <span style={{ color: '#222', fontWeight: 600 }}>Product added to cart</span>
-          <Link href="/basket" style={{ marginLeft: 16, background: '#222', color: '#fff', borderRadius: 8, padding: '8px 18px', fontWeight: 600, textDecoration: 'none', transition: 'background 0.2s' }} onClick={() => toast.dismiss(t.id)}>
-            Basket
-          </Link>
-        </div>
-      ));
-      onClose();
+      };
     } else if (product.category === 'CLOTHING') {
       if (!selectedSize) {
-        toast.error('Please select a style');
         return;
       }
 
       const style = product.clothingStylePrices?.find(s => s.size === selectedSize);
       if (!style) {
-        toast.error('Selected style not found');
         return;
       }
 
@@ -316,7 +296,7 @@ export default function MobileQuickViewModal({ product, onClose }: MobileQuickVi
         ? style.salePrice * (1 - product.discount / 100)
         : style.salePrice;
 
-      addItem({
+      itemToAdd = {
         id: `${product._id}-${selectedSize}`,
         title: product.title,
         size: selectedSize,
@@ -327,19 +307,9 @@ export default function MobileQuickViewModal({ product, onClose }: MobileQuickVi
         quantity: quantity,
         stock: style.stock,
         clearanceDiscount: product.clearanceDiscount
-      });
-      toast.custom((t) => (
-        <div style={{ background: '#fff', borderRadius: 12, boxShadow: '0 2px 12px rgba(0,0,0,0.08)', padding: '18px 28px', display: 'flex', alignItems: 'center', gap: 18 }}>
-          <span style={{ color: '#222', fontWeight: 600 }}>Product added to cart</span>
-          <Link href="/basket" style={{ marginLeft: 16, background: '#222', color: '#fff', borderRadius: 8, padding: '8px 18px', fontWeight: 600, textDecoration: 'none', transition: 'background 0.2s' }} onClick={() => toast.dismiss(t.id)}>
-            Basket
-          </Link>
-        </div>
-      ));
-      onClose();
+      };
     } else {
       if (!selectedSize) {
-        toast.error('Please select a style');
         return;
       }
 
@@ -373,7 +343,7 @@ export default function MobileQuickViewModal({ product, onClose }: MobileQuickVi
       }
 
       if (price > 0) {
-        addItem({
+        itemToAdd = {
           id: `${product._id}-${selectedSize}`,
           title: product.title,
           size: selectedSize,
@@ -384,16 +354,7 @@ export default function MobileQuickViewModal({ product, onClose }: MobileQuickVi
           quantity: quantity,
           stock,
           clearanceDiscount: product.clearanceDiscount
-        });
-        toast.custom((t) => (
-          <div style={{ background: '#fff', borderRadius: 12, boxShadow: '0 2px 12px rgba(0,0,0,0.08)', padding: '18px 28px', display: 'flex', alignItems: 'center', gap: 18 }}>
-            <span style={{ color: '#222', fontWeight: 600 }}>Product added to cart</span>
-            <Link href="/basket" style={{ marginLeft: 16, background: '#222', color: '#fff', borderRadius: 8, padding: '8px 18px', fontWeight: 600, textDecoration: 'none', transition: 'background 0.2s' }} onClick={() => toast.dismiss(t.id)}>
-              Basket
-            </Link>
-          </div>
-        ));
-        onClose();
+        };
       } else {
         console.error('Error adding to cart:', {
           price,
@@ -401,9 +362,13 @@ export default function MobileQuickViewModal({ product, onClose }: MobileQuickVi
           product,
           style: product.throwsTowelsStylePrices?.find(s => s.size === selectedSize)
         });
-        toast.error('Unable to add product to cart. Please try again.');
+        return;
       }
     }
+
+    addItem(itemToAdd);
+    setAddedItem(itemToAdd);
+    setShowAddToCartModal(true);
   };
 
   const toggleSection = (section: string) => {
@@ -645,6 +610,35 @@ export default function MobileQuickViewModal({ product, onClose }: MobileQuickVi
     }
     return 0;
   };
+
+  function AddToCartModal({ item, onClose }: { item: any, onClose: () => void }) {
+    if (!item) return null;
+    return (
+      <div style={{
+        position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+        background: 'rgba(0,0,0,0.45)', zIndex: 2000, display: 'flex', alignItems: 'center', justifyContent: 'center',
+      }}>
+        <div style={{ background: '#fff', borderRadius: 18, maxWidth: 480, width: '100%', padding: 32, boxShadow: '0 8px 32px rgba(0,0,0,0.18)', position: 'relative' }}>
+          <button onClick={onClose} style={{ position: 'absolute', top: 18, right: 18, background: 'none', border: 'none', fontSize: 22, cursor: 'pointer' }}>&times;</button>
+          <h2 style={{ fontSize: 22, fontWeight: 700, marginBottom: 18 }}>Added to Bag</h2>
+          <div style={{ display: 'flex', gap: 18, alignItems: 'center', marginBottom: 18 }}>
+            <Image src={item.image} alt={item.title} width={90} height={90} style={{ borderRadius: 8, objectFit: 'cover' }} />
+            <div>
+              <div style={{ fontWeight: 600 }}>{item.title}</div>
+              {item.size && <div style={{ fontSize: 15, color: '#666' }}>Size: {item.size}</div>}
+              {item.color && <div style={{ fontSize: 15, color: '#666' }}>Colour: {item.color}</div>}
+              <div style={{ fontSize: 15, color: '#666' }}>Qty: {item.quantity}</div>
+              <div style={{ fontWeight: 600, marginTop: 4 }}>£{item.price?.toFixed(2)}</div>
+            </div>
+          </div>
+          <div style={{ display: 'flex', gap: 12, marginTop: 18 }}>
+            <button onClick={onClose} style={{ flex: 1, background: '#f8bfc9', color: '#fff', fontWeight: 700, border: 'none', borderRadius: 8, padding: '14px 0', fontSize: 16 }}>Continue Shopping</button>
+            <button onClick={() => router.push('/basket')} style={{ flex: 1, background: '#111', color: '#fff', fontWeight: 700, border: 'none', borderRadius: 8, padding: '14px 0', fontSize: 16 }}>Go to Basket</button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -1583,6 +1577,7 @@ export default function MobileQuickViewModal({ product, onClose }: MobileQuickVi
           </div>
         </div>
       )}
+      {showAddToCartModal && <AddToCartModal item={addedItem} onClose={() => setShowAddToCartModal(false)} />}
     </>
   );
 } 
