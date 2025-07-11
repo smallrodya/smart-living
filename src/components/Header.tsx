@@ -5,6 +5,7 @@ import MobileHeader from './MobileHeader';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import SearchSuggestions from './SearchSuggestions';
+import { useBasket } from '@/context/BasketContext';
 
 const styles = {
   logoImage: {
@@ -21,6 +22,7 @@ const Header = () => {
   const [showSuggestions, setShowSuggestions] = useState(false);
   const router = useRouter();
   const searchInputRef = useRef<HTMLInputElement>(null);
+  const { items } = useBasket();
 
   useEffect(() => {
     const checkMobile = () => {
@@ -289,7 +291,8 @@ const Header = () => {
               justifyContent: 'center',
               background: 'transparent',
               width: 44,
-              height: 44
+              height: 44,
+              position: 'relative',
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.background = 'rgba(0,0,0,0.05)';
@@ -314,6 +317,27 @@ const Header = () => {
               <circle cx="20" cy="21" r="1"/>
               <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
             </svg>
+            {items.length > 0 && (
+              <span style={{
+                position: 'absolute',
+                top: 6,
+                right: 6,
+                minWidth: 18,
+                height: 18,
+                background: '#e53935',
+                color: '#fff',
+                borderRadius: '50%',
+                fontSize: 12,
+                fontWeight: 700,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: '0 5px',
+                boxShadow: '0 2px 6px rgba(229,57,53,0.15)',
+                zIndex: 2,
+                lineHeight: 1,
+              }}>{items.length}</span>
+            )}
           </Link>
           <Link 
             href="/wishlist" 
