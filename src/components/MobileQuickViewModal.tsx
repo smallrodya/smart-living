@@ -78,9 +78,10 @@ interface Product {
 interface MobileQuickViewModalProps {
   product: Product | null;
   onClose: () => void;
+  onGoToBasket?: () => void;
 }
 
-export default function MobileQuickViewModal({ product, onClose }: MobileQuickViewModalProps) {
+export default function MobileQuickViewModal({ product, onClose, onGoToBasket }: MobileQuickViewModalProps) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [selectedSize, setSelectedSize] = useState<string>('');
   const [selectedColor, setSelectedColor] = useState<string>('');
@@ -617,7 +618,7 @@ export default function MobileQuickViewModal({ product, onClose }: MobileQuickVi
     return 0;
   };
 
-  function AddToCartModal({ item, onClose }: { item: any, onClose: () => void }) {
+  function AddToCartModal({ item, onClose, onGoToBasket }: { item: any, onClose: () => void, onGoToBasket?: () => void }) {
     if (!item) return null;
     return (
       <div style={{
@@ -639,12 +640,7 @@ export default function MobileQuickViewModal({ product, onClose }: MobileQuickVi
           </div>
           <div style={{ display: 'flex', gap: 12, marginTop: 18 }}>
             <button onClick={onClose} style={{ flex: 1, background: '#f8bfc9', color: '#fff', fontWeight: 700, border: 'none', borderRadius: 8, padding: '14px 0', fontSize: 16 }}>Continue Shopping</button>
-            <button onClick={() => {
-              setShowAddToCartModal(false);
-              setAddedItem(null);
-              if (typeof onClose === 'function') onClose();
-              setTimeout(() => { router.push('/basket'); }, 50);
-            }} style={{ flex: 1, background: '#111', color: '#fff', fontWeight: 700, border: 'none', borderRadius: 8, padding: '14px 0', fontSize: 16 }}>Go to Basket</button>
+            <button onClick={onGoToBasket} style={{ flex: 1, background: '#111', color: '#fff', fontWeight: 700, border: 'none', borderRadius: 8, padding: '14px 0', fontSize: 16 }}>Go to Basket</button>
           </div>
         </div>
       </div>
@@ -1588,7 +1584,7 @@ export default function MobileQuickViewModal({ product, onClose }: MobileQuickVi
           </div>
         </div>
       )}
-      {showAddToCartModal && <AddToCartModal item={addedItem} onClose={() => setShowAddToCartModal(false)} />}
+      {showAddToCartModal && <AddToCartModal item={addedItem} onClose={() => setShowAddToCartModal(false)} onGoToBasket={onGoToBasket} />}
     </>
   );
 } 

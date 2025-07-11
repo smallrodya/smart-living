@@ -187,6 +187,13 @@ function SearchPageContent() {
     return min === max ? formatPrice(min) : `${formatPrice(min)} - ${formatPrice(max)}`;
   };
 
+  const handleGoToBasket = () => {
+    setQuickViewProduct(null);
+    setTimeout(() => {
+      router.push('/basket');
+    }, 50);
+  };
+
   if (loading) {
     return (
       <>
@@ -568,6 +575,7 @@ function SearchPageContent() {
       <QuickViewModal 
         product={quickViewProduct} 
         onClose={() => setQuickViewProduct(null)} 
+        onGoToBasket={handleGoToBasket}
       />
     </>
   );

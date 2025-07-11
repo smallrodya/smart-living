@@ -145,6 +145,13 @@ export default function SinglePage() {
     });
   };
 
+  const handleGoToBasket = () => {
+    setQuickViewProduct(null);
+    setTimeout(() => {
+      router.push('/basket');
+    }, 50);
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -905,6 +912,7 @@ export default function SinglePage() {
       <QuickViewModal 
         product={quickViewProduct} 
         onClose={() => setQuickViewProduct(null)} 
+        onGoToBasket={handleGoToBasket}
       />
       <style jsx global>{`
         @keyframes slideDown {

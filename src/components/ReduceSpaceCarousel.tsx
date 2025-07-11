@@ -1,6 +1,7 @@
 // 'use client';
 import React, { useEffect, useState, useRef } from 'react';
 import QuickViewModal from './QuickViewModal';
+import { useRouter } from 'next/router';
 
 interface Product {
   _id: string;
@@ -41,6 +42,7 @@ const ReduceSpaceCarousel: React.FC = () => {
   const [showRightHint, setShowRightHint] = useState(false);
   const titleRef = useRef<HTMLHeadingElement>(null);
   const [titleVisible, setTitleVisible] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     const handleResize = () => setMobile(isMobile());
@@ -123,6 +125,13 @@ const ReduceSpaceCarousel: React.FC = () => {
       stars.push(<span key={stars.length + 'empty'} style={{ color: '#e0e0e0', fontSize: 18 }}>★</span>);
     }
     return stars;
+  };
+
+  const handleGoToBasket = () => {
+    setQuickViewProduct(null);
+    setTimeout(() => {
+      router.push('/basket');
+    }, 50);
   };
 
   return (
@@ -433,7 +442,7 @@ const ReduceSpaceCarousel: React.FC = () => {
         </div>
       )}
       {quickViewProduct && (
-        <QuickViewModal product={quickViewProduct} onClose={() => setQuickViewProduct(null)} />
+        <QuickViewModal product={quickViewProduct} onClose={() => setQuickViewProduct(null)} onGoToBasket={handleGoToBasket} />
       )}
       <style>{`
         @keyframes charIn {

@@ -110,6 +110,14 @@ const WishlistPage = () => {
     setSelectedProduct(null);
   };
 
+  const handleGoToBasket = () => {
+    setIsModalOpen(false);
+    setSelectedProduct(null);
+    setTimeout(() => {
+      router.push('/basket');
+    }, 50);
+  };
+
   return (
     <>
       <Header />
@@ -345,6 +353,7 @@ const WishlistPage = () => {
         <QuickViewModal 
           product={selectedProduct} 
           onClose={closeModal} 
+          onGoToBasket={handleGoToBasket}
         />
       )}
       
