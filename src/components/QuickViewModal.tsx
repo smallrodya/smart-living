@@ -444,6 +444,12 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
     return 0;
   };
 
+  const handleClose = () => {
+    setShowAddToBag(false);
+    setAddedProduct(null);
+    onClose();
+  };
+
   return (
     <div style={{
       position: 'fixed',
@@ -1756,8 +1762,9 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
       <AddToBagModal
         open={showAddToBag}
         onClose={() => setShowAddToBag(false)}
-        onGoToBasket={() => { setShowAddToBag(false); onClose(); router.push('/basket'); }}
-        product={addedProduct}
+        onGoToBasket={handleClose}
+        product={{ ...addedProduct, category: product?.category }}
+        productId={product?._id}
       />
     </div>
   );
