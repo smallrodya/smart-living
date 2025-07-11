@@ -4,8 +4,6 @@ import { Heart, Star, Eye } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import QuickViewModal from './QuickViewModal';
 import MobileQuickViewModal from './MobileQuickViewModal';
-import { useRouter } from 'next/router';
-import { useIsMobile } from '../hooks/useIsMobile';
 
 interface Product {
   _id: string;
@@ -55,7 +53,6 @@ const BestSellersSlider = () => {
   const [starParams, setStarParams] = useState<
     { size: number; top: number; left: number; delay: number }[]
   >([]);
-  const router = useRouter();
 
   useEffect(() => {
     fetchBestSellers();
@@ -213,13 +210,6 @@ const BestSellersSlider = () => {
 
   const prevPage = () => {
     setCurrentPage(prev => (prev - 1 + totalPages) % totalPages);
-  };
-
-  const handleGoToBasket = () => {
-    setQuickViewProduct(null);
-    setTimeout(() => {
-      router.push('/basket');
-    }, 50);
   };
 
   return (
@@ -592,13 +582,11 @@ const BestSellersSlider = () => {
           <MobileQuickViewModal
             product={quickViewProduct as any}
             onClose={() => setQuickViewProduct(null)}
-            onGoToBasket={handleGoToBasket}
           />
         ) : (
           <QuickViewModal
             product={quickViewProduct as any}
             onClose={() => setQuickViewProduct(null)}
-            onGoToBasket={handleGoToBasket}
           />
         )
       )}
