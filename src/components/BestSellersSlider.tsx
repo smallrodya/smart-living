@@ -93,6 +93,23 @@ const BestSellersSlider = () => {
     setStarParams(arr);
   }, []);
 
+  // Wishlist: загрузка из localStorage при монтировании
+  useEffect(() => {
+    const stored = typeof window !== 'undefined' ? window.localStorage.getItem('wishlist') : null;
+    if (stored) {
+      try {
+        setWishlist(new Set(JSON.parse(stored)));
+      } catch {}
+    }
+  }, []);
+
+  // Wishlist: сохранять в localStorage при изменении
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      window.localStorage.setItem('wishlist', JSON.stringify(Array.from(wishlist)));
+    }
+  }, [wishlist]);
+
   const checkMobile = () => {
     setIsMobile(window.innerWidth < 768);
   };
@@ -407,7 +424,11 @@ const BestSellersSlider = () => {
                       onMouseLeave={() => setHoveredProduct(null)}
                     >
                       {/* Product Image */}
-                      <div className="relative aspect-square overflow-hidden bg-gray-100">
+                      <div
+                        className="relative aspect-square overflow-hidden bg-gray-100"
+                        onClick={() => handleQuickView(product)}
+                        style={{ cursor: 'pointer' }}
+                      >
                         {product.images && product.images.length > 0 && (
                           <>
                             <motion.img
@@ -493,6 +514,8 @@ const BestSellersSlider = () => {
                           initial={{ opacity: 0 }}
                           animate={{ opacity: 1 }}
                           transition={{ delay: 0.1 }}
+                          onClick={() => handleQuickView(product)}
+                          style={{ cursor: 'pointer' }}
                         >
                           {product.title}
                         </motion.h3>
