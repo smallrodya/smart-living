@@ -67,11 +67,6 @@ export default function BasketPage() {
     }
   }, [items]);
 
-  const getStockInfo = (item: any) => {
-    if (!item.stock) return 'Out of Stock';
-    return `In Stock (${item.stock})`;
-  };
-
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
@@ -98,7 +93,6 @@ export default function BasketPage() {
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Size</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">SKU</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Availability</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quantity</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
@@ -128,13 +122,6 @@ export default function BasketPage() {
                       </td>
                       <td className="px-6 py-4 text-sm text-gray-500">{item.size}</td>
                       <td className="px-6 py-4 text-sm text-gray-500">{item.sku}</td>
-                      <td className="px-6 py-4 text-sm text-gray-500">
-                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium whitespace-nowrap ${
-                          item.stock && item.stock > 0 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
-                        }`}>
-                          {getStockInfo(item)}
-                        </span>
-                      </td>
                       <td className="px-6 py-4 text-sm text-gray-900">
                         £{item.price ? item.price.toFixed(2) : '0.00'}
                       </td>
@@ -207,14 +194,6 @@ export default function BasketPage() {
                         </button>
                       </div>
                       
-                      <div className="mt-2">
-                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium whitespace-nowrap ${
-                          item.stock && item.stock > 0 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
-                        }`}>
-                          {getStockInfo(item)}
-                        </span>
-                      </div>
-
                       <div className="mt-3 flex items-center justify-between">
                         <div className="flex items-center space-x-2">
                           <button
