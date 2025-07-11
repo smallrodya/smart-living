@@ -2,9 +2,8 @@ import { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
 import { useBasket } from '@/context/BasketContext';
 import toast from 'react-hot-toast';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import Link from 'next/link';
-import AddToBagModal from './AddToBagModal';
 
 interface BeddingSize {
   size: string;
@@ -95,9 +94,6 @@ export default function MobileQuickViewModal({ product, onClose }: MobileQuickVi
   const [quantity, setQuantity] = useState<number>(1);
   const modalRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
-  const router = useRouter();
-  const [showAddToBag, setShowAddToBag] = useState(false);
-  const [addedProduct, setAddedProduct] = useState<any>(null);
 
   // Function to get the target size based on current page
   const getTargetSize = () => {
@@ -235,41 +231,179 @@ export default function MobileQuickViewModal({ product, onClose }: MobileQuickVi
       toast.error('This product is out of stock');
       return;
     }
-    let price = 0;
-    if (product.category === 'OUTDOOR' && product.outdoorPrice) {
-      price = product.discount
+
+    if (product.category === 'OUTDOOR') {
+      if (!product.outdoorPrice) {
+        toast.error('Product data is incomplete');
+        return;
+      }
+
+      const price = product.discount 
         ? product.outdoorPrice.salePrice * (1 - product.discount / 100)
         : product.outdoorPrice.salePrice;
-    } else if (selectedSize) {
-      let sizeObj = null;
-      if (product.footwearSizes) sizeObj = product.footwearSizes.find(s => s.size === selectedSize);
-      if (product.clothingStylePrices) sizeObj = product.clothingStylePrices.find(s => s.size === selectedSize);
-      if (product.throwsTowelsStylePrices) sizeObj = product.throwsTowelsStylePrices.find(s => s.size === selectedSize);
-      if (product.rugsMatsSizes) sizeObj = product.rugsMatsSizes.find(s => s.size === selectedSize);
-      if (product.beddingSizes) sizeObj = product.beddingSizes.find(s => s.size === selectedSize);
-      if (sizeObj) price = product.discount ? sizeObj.salePrice * (1 - product.discount / 100) : sizeObj.salePrice;
+
+      addItem({
+        id: product._id,
+        title: product.title,
+        price,
+        image: product.images?.[0] || '/placeholder.jpg',
+        category: product.category,
+        sku: product.outdoorPrice.sku,
+        quantity: quantity,
+        stock: product.outdoorPrice.stock,
+        size: 'One Size',
+        clearanceDiscount: product.clearanceDiscount
+      });
+      toast.custom((t) => (
+        <div style={{ background: '#fff', borderRadius: 12, boxShadow: '0 2px 12px rgba(0,0,0,0.08)', padding: '18px 28px', display: 'flex', alignItems: 'center', gap: 18 }}>
+          <span style={{ color: '#222', fontWeight: 600 }}>Product added to cart</span>
+          <Link href="/basket" style={{ marginLeft: 16, background: '#222', color: '#fff', borderRadius: 8, padding: '8px 18px', fontWeight: 600, textDecoration: 'none', transition: 'background 0.2s' }} onClick={() => toast.dismiss(t.id)}>
+            Basket
+          </Link>
+        </div>
+      ));
+      onClose();
+    } else if (product.category === 'FOOTWEAR') {
+      if (!selectedSize) {
+        toast.error('Please select a size');
+        return;
+      }
+
+      const size = product.footwearSizes?.find(s => s.size === selectedSize);
+      if (!size) {
+        toast.error('Selected size not found');
+        return;
+      }
+
+      const price = product.discount 
+        ? size.salePrice * (1 - product.discount / 100)
+        : size.salePrice;
+
+      addItem({
+        id: `${product._id}-${selectedSize}`,
+        title: product.title,
+        size: selectedSize,
+        price,
+        image: product.images?.[0] || '/placeholder.jpg',
+        category: product.category,
+        sku: size.sku,
+        quantity: quantity,
+        stock: size.stock,
+        clearanceDiscount: product.clearanceDiscount
+      });
+      toast.custom((t) => (
+        <div style={{ background: '#fff', borderRadius: 12, boxShadow: '0 2px 12px rgba(0,0,0,0.08)', padding: '18px 28px', display: 'flex', alignItems: 'center', gap: 18 }}>
+          <span style={{ color: '#222', fontWeight: 600 }}>Product added to cart</span>
+          <Link href="/basket" style={{ marginLeft: 16, background: '#222', color: '#fff', borderRadius: 8, padding: '8px 18px', fontWeight: 600, textDecoration: 'none', transition: 'background 0.2s' }} onClick={() => toast.dismiss(t.id)}>
+            Basket
+          </Link>
+        </div>
+      ));
+      onClose();
+    } else if (product.category === 'CLOTHING') {
+      if (!selectedSize) {
+        toast.error('Please select a style');
+        return;
+      }
+
+      const style = product.clothingStylePrices?.find(s => s.size === selectedSize);
+      if (!style) {
+        toast.error('Selected style not found');
+        return;
+      }
+
+      const price = product.discount 
+        ? style.salePrice * (1 - product.discount / 100)
+        : style.salePrice;
+
+      addItem({
+        id: `${product._id}-${selectedSize}`,
+        title: product.title,
+        size: selectedSize,
+        price,
+        image: product.images?.[0] || '/placeholder.jpg',
+        category: product.category,
+        sku: style.sku,
+        quantity: quantity,
+        stock: style.stock,
+        clearanceDiscount: product.clearanceDiscount
+      });
+      toast.custom((t) => (
+        <div style={{ background: '#fff', borderRadius: 12, boxShadow: '0 2px 12px rgba(0,0,0,0.08)', padding: '18px 28px', display: 'flex', alignItems: 'center', gap: 18 }}>
+          <span style={{ color: '#222', fontWeight: 600 }}>Product added to cart</span>
+          <Link href="/basket" style={{ marginLeft: 16, background: '#222', color: '#fff', borderRadius: 8, padding: '8px 18px', fontWeight: 600, textDecoration: 'none', transition: 'background 0.2s' }} onClick={() => toast.dismiss(t.id)}>
+            Basket
+          </Link>
+        </div>
+      ));
+      onClose();
+    } else {
+      if (!selectedSize) {
+        toast.error('Please select a style');
+        return;
+      }
+
+      let price = 0;
+      let sku = '';
+      let stock = 0;
+
+      if (product.category === 'RUGS & MATS') {
+        const size = product.rugsMatsSizes?.find(s => s.size === selectedSize);
+        if (size) {
+          price = size.salePrice;
+          sku = size.sku || `${product.sku}-${selectedSize}`;
+          stock = size.stock || 0;
+        }
+      } else if (product.category === 'THROWS & TOWELS') {
+        const style = product.throwsTowelsStylePrices?.find(s => s.size === selectedSize);
+        if (style) {
+          price = product.discount 
+            ? style.salePrice * (1 - product.discount / 100)
+            : style.salePrice;
+          sku = style.sku;
+          stock = style.stock;
+        }
+      } else if (product.beddingSizes) {
+        const size = product.beddingSizes.find(s => s.size === selectedSize);
+        if (size) {
+          price = size.salePrice;
+          sku = size.sku || `${product.sku}-${selectedSize}`;
+          stock = size.stock || 0;
+        }
+      }
+
+      if (price > 0) {
+        addItem({
+          id: `${product._id}-${selectedSize}`,
+          title: product.title,
+          size: selectedSize,
+          price,
+          image: product.images?.[0] || '/placeholder.jpg',
+          category: product.category,
+          sku,
+          quantity: quantity,
+          stock,
+          clearanceDiscount: product.clearanceDiscount
+        });
+        toast.custom((t) => (
+          <div style={{ background: '#fff', borderRadius: 12, boxShadow: '0 2px 12px rgba(0,0,0,0.08)', padding: '18px 28px', display: 'flex', alignItems: 'center', gap: 18 }}>
+            <span style={{ color: '#222', fontWeight: 600 }}>Product added to cart</span>
+            <Link href="/basket" style={{ marginLeft: 16, background: '#222', color: '#fff', borderRadius: 8, padding: '8px 18px', fontWeight: 600, textDecoration: 'none', transition: 'background 0.2s' }} onClick={() => toast.dismiss(t.id)}>
+              Basket
+            </Link>
+          </div>
+        ));
+        onClose();
+      } else {
+        console.error('Error adding to cart:', {
+          price,
+          selectedSize,
+          product,
+          style: product.throwsTowelsStylePrices?.find(s => s.size === selectedSize)
+        });
+        toast.error('Unable to add product to cart. Please try again.');
+      }
     }
-    addItem({
-      id: product._id,
-      title: product.title,
-      price,
-      image: product.images?.[0] || '/placeholder.jpg',
-      category: product.category,
-      sku: product.outdoorPrice?.sku || `${product.sku}-${selectedSize}`,
-      quantity: quantity,
-      stock: product.outdoorPrice?.stock || 0,
-      size: selectedSize,
-      clearanceDiscount: product.clearanceDiscount
-    });
-    setAddedProduct({
-      title: product.title,
-      image: product.images?.[0] || '/placeholder.jpg',
-      size: selectedSize,
-      color: selectedColor,
-      quantity,
-      price
-    });
-    setShowAddToBag(true);
   };
 
   const toggleSection = (section: string) => {
@@ -1449,14 +1583,6 @@ export default function MobileQuickViewModal({ product, onClose }: MobileQuickVi
           </div>
         </div>
       )}
-
-      {/* AddToBagModal поверх */}
-      <AddToBagModal
-        open={showAddToBag}
-        onClose={() => setShowAddToBag(false)}
-        onGoToBasket={() => { setShowAddToBag(false); onClose(); router.push('/basket'); }}
-        product={addedProduct}
-      />
     </>
   );
 } 
