@@ -358,34 +358,34 @@ export default function ReturnsPage() {
                 <span className="w-8 h-8 bg-pink-600 text-white rounded-full flex items-center justify-center mr-3 text-sm">15</span>
                 Summary Table
               </h2>
-              <div className="bg-white rounded-xl p-4 border border-pink-100">
-                <table className="w-full border-collapse">
+              <div style={{ overflowX: 'auto', width: '100%' }}>
+                <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: 600, margin: '16px 0', fontSize: 16 }}>
                   <thead>
-                    <tr className="bg-pink-50">
-                      <th className="border border-pink-100 px-4 py-2">Situation</th>
-                      <th className="border border-pink-100 px-4 py-2">Notify Us By</th>
-                      <th className="border border-pink-100 px-4 py-2">Return Window</th>
-                      <th className="border border-pink-100 px-4 py-2">Cost of Return / Refund Timing</th>
+                    <tr style={{ background: '#f5f5f5' }}>
+                      <th style={{ border: '1px solid #ddd', padding: 8, whiteSpace: 'nowrap' }}>Situation</th>
+                      <th style={{ border: '1px solid #ddd', padding: 8, whiteSpace: 'nowrap' }}>Notify Us By</th>
+                      <th style={{ border: '1px solid #ddd', padding: 8, whiteSpace: 'nowrap' }}>Return Window</th>
+                      <th style={{ border: '1px solid #ddd', padding: 8, whiteSpace: 'nowrap' }}>Cost of Return / Refund Timing</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr>
-                      <td className="border border-pink-100 px-4 py-2">Change of mind</td>
-                      <td className="border border-pink-100 px-4 py-2">Within 14 days of delivery</td>
-                      <td className="border border-pink-100 px-4 py-2">Return within 30 days</td>
-                      <td className="border border-pink-100 px-4 py-2">Customers pay return; Refund within 14 days of return</td>
+                      <td style={{ border: '1px solid #ddd', padding: 8, whiteSpace: 'nowrap' }}>Change of mind</td>
+                      <td style={{ border: '1px solid #ddd', padding: 8, whiteSpace: 'nowrap' }}>Within 14 days of delivery</td>
+                      <td style={{ border: '1px solid #ddd', padding: 8, whiteSpace: 'nowrap' }}>Return within 30 days</td>
+                      <td style={{ border: '1px solid #ddd', padding: 8, wordBreak: 'break-word' }}>Customers pay return; Refund within 14 days of return</td>
                     </tr>
                     <tr>
-                      <td className="border border-pink-100 px-4 py-2">Faulty/damaged/wrong item</td>
-                      <td className="border border-pink-100 px-4 py-2">Within 30 days</td>
-                      <td className="border border-pink-100 px-4 py-2">As agreed,</td>
-                      <td className="border border-pink-100 px-4 py-2">Free return; Refund or replacement within 14 days</td>
+                      <td style={{ border: '1px solid #ddd', padding: 8, whiteSpace: 'nowrap' }}>Faulty/damaged/wrong item</td>
+                      <td style={{ border: '1px solid #ddd', padding: 8, whiteSpace: 'nowrap' }}>Within 30 days</td>
+                      <td style={{ border: '1px solid #ddd', padding: 8, whiteSpace: 'nowrap' }}>As agreed,</td>
+                      <td style={{ border: '1px solid #ddd', padding: 8, wordBreak: 'break-word' }}>Free return; Refund or replacement within 14 days</td>
                     </tr>
                     <tr>
-                      <td className="border border-pink-100 px-4 py-2">Pre-dispatch cancellation</td>
-                      <td className="border border-pink-100 px-4 py-2">Before dispatch</td>
-                      <td className="border border-pink-100 px-4 py-2">n/a</td>
-                      <td className="border border-pink-100 px-4 py-2">Full refund (no dispatch)</td>
+                      <td style={{ border: '1px solid #ddd', padding: 8, whiteSpace: 'nowrap' }}>Pre-dispatch cancellation</td>
+                      <td style={{ border: '1px solid #ddd', padding: 8, whiteSpace: 'nowrap' }}>Before dispatch</td>
+                      <td style={{ border: '1px solid #ddd', padding: 8, whiteSpace: 'nowrap' }}>n/a</td>
+                      <td style={{ border: '1px solid #ddd', padding: 8, wordBreak: 'break-word' }}>Full refund (no dispatch)</td>
                     </tr>
                   </tbody>
                 </table>
