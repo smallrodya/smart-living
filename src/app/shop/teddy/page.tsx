@@ -141,6 +141,16 @@ export default function TeddyPage() {
     });
   };
 
+  const getMinPrices = (product: Product) => {
+    if (!product.beddingSizes || product.beddingSizes.length === 0) return { sale: 0, regular: 0 };
+    const salePrices = product.beddingSizes.map(s => typeof s.salePrice === 'number' ? s.salePrice : (typeof s.price === 'number' ? s.price : 0));
+    const regularPrices = product.beddingSizes.map(s => typeof (s as any).regularPrice === 'number' ? (s as any).regularPrice : (typeof s.price === 'number' ? s.price : 0));
+    return {
+      sale: Math.min(...salePrices),
+      regular: Math.min(...regularPrices),
+    };
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -790,21 +800,33 @@ export default function TeddyPage() {
                     fontSize: '20px',
                     marginBottom: '20px'
                   }}>
-                    {product.discount ? (
-                      <>
-                        {formatPriceRange(product)}
-                        <span style={{
-                          color: '#999',
-                          textDecoration: 'line-through',
-                          marginLeft: '8px',
-                          fontSize: '16px'
-                        }}>
-                          {formatPriceRange({ ...product, discount: undefined })}
-                        </span>
-                      </>
-                    ) : (
-                      formatPriceRange(product)
-                    )}
+                    {(() => {
+                      const { sale, regular } = getMinPrices(product);
+                      if (sale < regular) {
+                        return (
+                          <>
+                            <span style={{ color: '#e53935', fontWeight: 700 }}>
+                              £{sale.toFixed(2)}
+                            </span>
+                            <span style={{
+                              color: '#999',
+                              textDecoration: 'line-through',
+                              marginLeft: '8px',
+                              fontSize: '16px',
+                              fontWeight: 500
+                            }}>
+                              £{regular.toFixed(2)}
+                            </span>
+                          </>
+                        );
+                      } else {
+                        return (
+                          <span style={{ color: '#222', fontWeight: 700 }}>
+                            £{regular.toFixed(2)}
+                          </span>
+                        );
+                      }
+                    })()}
                   </div>
                   {!product.isSoldOut && (
                     <div style={{

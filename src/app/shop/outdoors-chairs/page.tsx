@@ -98,6 +98,26 @@ export default function OutdoorChairsPage() {
     return min === max ? formatPrice(min) : `${formatPrice(min)} - ${formatPrice(max)}`;
   };
 
+  const getMinPrices = (product: Product) => {
+    if (product.category === 'OUTDOOR' && product.outdoorPrice) {
+      const sale = typeof product.outdoorPrice.salePrice === 'number' ? product.outdoorPrice.salePrice : 0;
+      const regular = typeof product.outdoorPrice.regularPrice === 'number' ? product.outdoorPrice.regularPrice : 0;
+      return { sale, regular };
+    }
+    if (!product.beddingSizes || product.beddingSizes.length === 0) {
+      return { sale: 0, regular: 0 };
+    }
+    let minSale = Infinity;
+    let minRegular = Infinity;
+    for (const size of product.beddingSizes) {
+      if (typeof size.salePrice === 'number' && size.salePrice < minSale) minSale = size.salePrice;
+      if (typeof size.price === 'number' && size.price < minRegular) minRegular = size.price;
+    }
+    if (!isFinite(minSale)) minSale = 0;
+    if (!isFinite(minRegular)) minRegular = 0;
+    return { sale: minSale, regular: minRegular };
+  };
+
   const filteredProducts = products.filter(product => {
     const matchesSize = !selectedSize || product.beddingSizes?.some(s => s.size === selectedSize);
     const matchesColor = !selectedColor || 
@@ -817,21 +837,27 @@ export default function OutdoorChairsPage() {
                     fontSize: '20px',
                     marginBottom: '20px'
                   }}>
-                    {product.discount ? (
-                      <>
-                        {formatPriceRange(product)}
-                        <span style={{
-                          color: '#999',
-                          textDecoration: 'line-through',
-                          marginLeft: '8px',
-                          fontSize: '16px'
-                        }}>
-                          {formatPriceRange({ ...product, discount: undefined })}
-                        </span>
-                      </>
-                    ) : (
-                      formatPriceRange(product)
-                    )}
+                    {(() => {
+                      const { sale, regular } = getMinPrices(product);
+                      if (sale < regular) {
+                        return (
+                          <>
+                            <span style={{ color: '#e53935', fontWeight: 700 }}>
+                              £{sale.toFixed(2)}
+                            </span>
+                            <span style={{ color: '#999', textDecoration: 'line-through', marginLeft: '8px', fontSize: '16px', fontWeight: 500 }}>
+                              £{regular.toFixed(2)}
+                            </span>
+                          </>
+                        );
+                      } else {
+                        return (
+                          <span style={{ color: '#222', fontWeight: 700 }}>
+                            £{regular.toFixed(2)}
+                          </span>
+                        );
+                      }
+                    })()}
                   </div>
                   {!product.isSoldOut && (
                     <div style={{

@@ -137,6 +137,50 @@ export default function SummerCollectionPage() {
     return `£${price.toFixed(2)}`;
   };
 
+  const getMinPrices = (product: Product) => {
+    // OUTDOOR
+    if (product.category === 'OUTDOOR' && product.outdoorPrice) {
+      const sale = product.discount ? product.outdoorPrice.salePrice * (1 - product.discount / 100) : product.outdoorPrice.salePrice;
+      const regular = product.outdoorPrice.regularPrice;
+      return { minSale: sale, minRegular: regular };
+    }
+    // FOOTWEAR
+    if (product.category === 'FOOTWEAR' && product.footwearSizes?.length) {
+      const salePrices = product.footwearSizes.map(s => product.discount ? s.salePrice * (1 - product.discount / 100) : s.salePrice);
+      const regularPrices = product.footwearSizes.map(s => s.regularPrice);
+      return { minSale: Math.min(...salePrices), minRegular: Math.min(...regularPrices) };
+    }
+    // THROWS & TOWELS
+    if (product.category === 'THROWS & TOWELS' && product.throwsTowelsStylePrices?.length) {
+      const salePrices = product.throwsTowelsStylePrices.map(s => product.discount ? s.salePrice * (1 - product.discount / 100) : s.salePrice);
+      const regularPrices = product.throwsTowelsStylePrices.map(s => s.regularPrice);
+      return { minSale: Math.min(...salePrices), minRegular: Math.min(...regularPrices) };
+    }
+    // BEDDING
+    if (product.category === 'BEDDING' && product.beddingSizes?.length) {
+      const salePrices = product.beddingSizes.map(s => product.discount ? s.salePrice * (1 - product.discount / 100) : s.salePrice);
+      const regularPrices = product.beddingSizes.map(s => s.regularPrice);
+      return { minSale: Math.min(...salePrices), minRegular: Math.min(...regularPrices) };
+    }
+    // RUGS & MATS
+    if (product.category === 'RUGS & MATS' && product.rugsMatsSizes?.length) {
+      const salePrices = product.rugsMatsSizes.map(s => product.discount ? s.salePrice * (1 - product.discount / 100) : s.salePrice);
+      const regularPrices = product.rugsMatsSizes.map(s => s.regularPrice);
+      return { minSale: Math.min(...salePrices), minRegular: Math.min(...regularPrices) };
+    }
+    // CLOTHING
+    if (product.category === 'CLOTHING' && product.clothingStylePrices?.length) {
+      const salePrices = product.clothingStylePrices.map(s => product.discount ? s.salePrice * (1 - product.discount / 100) : s.salePrice);
+      const regularPrices = product.clothingStylePrices.map(s => s.regularPrice);
+      return { minSale: Math.min(...salePrices), minRegular: Math.min(...regularPrices) };
+    }
+    // Fallback
+    if (product.price && !isNaN(Number(product.price))) {
+      return { minSale: Number(product.price), minRegular: Number(product.price) };
+    }
+    return { minSale: 0, minRegular: 0 };
+  };
+
   const formatPriceRange = (product: Product) => {
     // OUTDOOR
     if (product.category === 'OUTDOOR' && product.outdoorPrice) {
@@ -834,21 +878,14 @@ export default function SummerCollectionPage() {
                     fontSize: '20px',
                     marginBottom: '20px'
                   }}>
-                    {product.discount ? (
-                      <>
-                        {formatPriceRange(product)}
-                        <span style={{
-                          color: '#999',
-                          textDecoration: 'line-through',
-                          marginLeft: '8px',
-                          fontSize: '16px'
-                        }}>
-                          {formatPriceRange({ ...product, discount: undefined })}
-                        </span>
-                      </>
-                    ) : (
-                      formatPriceRange(product)
-                    )}
+                    {(() => {
+                      const { minSale, minRegular } = getMinPrices(product);
+                      if (minSale < minRegular) {
+                        return <><span style={{ color: '#e53935' }}>{formatPrice(minSale)}</span> <span style={{ color: '#999', textDecoration: 'line-through', marginLeft: 8, fontSize: 16 }}>{formatPrice(minRegular)}</span></>;
+                      } else {
+                        return <span style={{ color: '#222' }}>{formatPrice(minRegular)}</span>;
+                      }
+                    })()}
                   </div>
                   {!product.isSoldOut && (
                     <div style={{

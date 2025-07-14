@@ -74,10 +74,10 @@ const WishlistPage = () => {
   };
 
   // Function to clean price string (remove double £ symbols)
-  const cleanPrice = (price: string) => {
-    // Remove all £ symbols and add only one at the beginning
-    const cleanPrice = price.replace(/£/g, '');
-    return `£${cleanPrice}`;
+  const cleanPrice = (price: string | undefined | null) => {
+    if (typeof price !== 'string') return '£0';
+    const clean = price.replace(/£/g, '');
+    return `£${clean}`;
   };
 
   // Function to open QuickView modal

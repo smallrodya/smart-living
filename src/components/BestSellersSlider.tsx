@@ -42,7 +42,7 @@ interface WishlistItem {
 
 const BestSellersSlider = () => {
   const [products, setProducts] = useState<Product[]>([]);
-  const [wishlist, setWishlist] = useState<Set<string>>(new Set());
+  const [wishlist, setWishlist] = useState<any[]>([]);
   const [hoveredProduct, setHoveredProduct] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(0);
@@ -93,20 +93,29 @@ const BestSellersSlider = () => {
     setStarParams(arr);
   }, []);
 
-  // Wishlist: загрузка из localStorage при монтировании
+  // Wishlist: загрузка из localStorage при монтировании (safe)
   useEffect(() => {
-    const stored = typeof window !== 'undefined' ? window.localStorage.getItem('wishlist') : null;
-    if (stored) {
+    if (typeof window !== 'undefined') {
       try {
-        setWishlist(new Set(JSON.parse(stored)));
-      } catch {}
+        const stored = window.localStorage.getItem('wishlist');
+        if (stored) {
+          const arr = JSON.parse(stored);
+          if (Array.isArray(arr)) {
+            setWishlist(arr);
+          } else {
+            setWishlist([]);
+          }
+        }
+      } catch {
+        setWishlist([]);
+      }
     }
   }, []);
 
   // Wishlist: сохранять в localStorage при изменении
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      window.localStorage.setItem('wishlist', JSON.stringify(Array.from(wishlist)));
+      window.localStorage.setItem('wishlist', JSON.stringify(wishlist));
     }
   }, [wishlist]);
 
@@ -169,15 +178,28 @@ const BestSellersSlider = () => {
     return minPrice === maxPrice ? `£${minPrice}` : `£${minPrice} - £${maxPrice}`;
   };
 
-  const toggleWishlist = (productId: string) => {
+  const toggleWishlist = (product: Product) => {
     setWishlist(prev => {
-      const newWishlist = new Set(prev);
-      if (newWishlist.has(productId)) {
-        newWishlist.delete(productId);
+      const exists = prev.find((item: any) => item.id === product._id);
+      let newArr;
+      if (exists) {
+        newArr = prev.filter((item: any) => item.id !== product._id);
       } else {
-        newWishlist.add(productId);
+        newArr = [
+          ...prev,
+          {
+            id: product._id,
+            title: product.title,
+            price: formatPriceRange(product),
+            image: product.images?.[0] || '',
+            discount: product.discount ? `-${product.discount}%` : '',
+          }
+        ];
       }
-      return newWishlist;
+      if (typeof window !== 'undefined') {
+        window.localStorage.setItem('wishlist', JSON.stringify(newArr));
+      }
+      return newArr;
     });
   };
 
@@ -469,15 +491,15 @@ const BestSellersSlider = () => {
                               whileTap={{ scale: 0.9 }}
                               onClick={(e) => {
                                 e.stopPropagation();
-                                toggleWishlist(product._id);
+                                toggleWishlist(product);
                               }}
                               className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 ${
-                                wishlist.has(product._id)
+                                wishlist.find((item: any) => item.id === product._id)
                                   ? 'bg-red-500 text-white'
                                   : 'bg-white text-gray-600 hover:bg-red-500 hover:text-white'
                               }`}
                             >
-                              <Heart className={`w-5 h-5 ${wishlist.has(product._id) ? 'fill-current' : ''}`} />
+                              <Heart className={`w-5 h-5 ${wishlist.find((item: any) => item.id === product._id) ? 'fill-current' : ''}`} />
                             </motion.button>
                             
                             <motion.button

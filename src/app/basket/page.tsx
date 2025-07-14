@@ -193,7 +193,7 @@ export default function BasketPage() {
                           </svg>
                         </button>
                       </div>
-                      
+
                       <div className="mt-3 flex items-center justify-between">
                         <div className="flex items-center space-x-2">
                           <button

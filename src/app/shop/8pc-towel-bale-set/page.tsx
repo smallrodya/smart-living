@@ -86,6 +86,21 @@ export default function TowelBaleSetPage() {
     return min === max ? formatPrice(min) : `${formatPrice(min)} - ${formatPrice(max)}`;
   };
 
+  const getMinPrices = (product: Product) => {
+    if (!product.throwsTowelsStylePrices || product.throwsTowelsStylePrices.length === 0) {
+      return { sale: 0, regular: 0 };
+    }
+    let minSale = Infinity;
+    let minRegular = Infinity;
+    for (const style of product.throwsTowelsStylePrices) {
+      if (typeof style.salePrice === 'number' && style.salePrice < minSale) minSale = style.salePrice;
+      if (typeof style.regularPrice === 'number' && style.regularPrice < minRegular) minRegular = style.regularPrice;
+    }
+    if (!isFinite(minSale)) minSale = 0;
+    if (!isFinite(minRegular)) minRegular = 0;
+    return { sale: minSale, regular: minRegular };
+  };
+
   const filteredProducts = products.filter(product => {
     const matchesStyle = !selectedStyle || product.throwsTowelsStyles?.includes(selectedStyle);
     const matchesColor = !selectedColor || product.throwsTowelsColors?.includes(selectedColor);
@@ -722,21 +737,27 @@ export default function TowelBaleSetPage() {
                     fontSize: '20px',
                     marginBottom: '20px'
                   }}>
-                    {product.discount ? (
-                      <>
-                        {formatPriceRange(product)}
-                        <span style={{
-                          color: '#999',
-                          textDecoration: 'line-through',
-                          marginLeft: '8px',
-                          fontSize: '16px'
-                        }}>
-                          {formatPriceRange({ ...product, discount: undefined })}
-                        </span>
-                      </>
-                    ) : (
-                      formatPriceRange(product)
-                    )}
+                    {(() => {
+                      const { sale, regular } = getMinPrices(product);
+                      if (sale < regular) {
+                        return (
+                          <>
+                            <span style={{ color: '#e53935', fontWeight: 700 }}>
+                              £{sale.toFixed(2)}
+                            </span>
+                            <span style={{ color: '#999', textDecoration: 'line-through', marginLeft: '8px', fontSize: '16px', fontWeight: 500 }}>
+                              £{regular.toFixed(2)}
+                            </span>
+                          </>
+                        );
+                      } else {
+                        return (
+                          <span style={{ color: '#222', fontWeight: 700 }}>
+                            £{regular.toFixed(2)}
+                          </span>
+                        );
+                      }
+                    })()}
                   </div>
                   {!product.isSoldOut && (
                     <div style={{

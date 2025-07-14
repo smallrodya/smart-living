@@ -98,6 +98,18 @@ export default function OutdoorCushionsPage() {
     return min === max ? formatPrice(min) : `${formatPrice(min)} - ${formatPrice(max)}`;
   };
 
+  const getMinPrices = (product: Product) => {
+    if (product.category === 'OUTDOOR' && product.outdoorPrice) {
+      const sale = product.outdoorPrice.salePrice;
+      const regular = product.outdoorPrice.regularPrice;
+      return { minSale: sale, minRegular: regular };
+    }
+    if (!product.beddingSizes || product.beddingSizes.length === 0) return { minSale: 0, minRegular: 0 };
+    const salePrices = product.beddingSizes.map(s => s.salePrice);
+    const regularPrices = product.beddingSizes.map(s => s.price);
+    return { minSale: Math.min(...salePrices), minRegular: Math.min(...regularPrices) };
+  };
+
   const filteredProducts = products.filter(product => {
     const matchesSize = !selectedSize || product.beddingSizes?.some(s => s.size === selectedSize);
     const matchesColor = !selectedColor || 
@@ -817,21 +829,14 @@ export default function OutdoorCushionsPage() {
                     fontSize: '20px',
                     marginBottom: '20px'
                   }}>
-                    {product.discount ? (
-                      <>
-                        {formatPriceRange(product)}
-                        <span style={{
-                          color: '#999',
-                          textDecoration: 'line-through',
-                          marginLeft: '8px',
-                          fontSize: '16px'
-                        }}>
-                          {formatPriceRange({ ...product, discount: undefined })}
-                        </span>
-                      </>
-                    ) : (
-                      formatPriceRange(product)
-                    )}
+                    {(() => {
+                      const { minSale, minRegular } = getMinPrices(product);
+                      if (minSale < minRegular) {
+                        return <><span style={{ color: '#e53935' }}>{formatPrice(minSale)}</span> <span style={{ color: '#999', textDecoration: 'line-through', marginLeft: 8, fontSize: 16 }}>{formatPrice(minRegular)}</span></>;
+                      } else {
+                        return <span style={{ color: '#222' }}>{formatPrice(minRegular)}</span>;
+                      }
+                    })()}
                   </div>
                   {!product.isSoldOut && (
                     <div style={{

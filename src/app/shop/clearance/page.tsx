@@ -310,6 +310,40 @@ export default function ClearancePage() {
     return min === max ? formatPrice(min) : `${formatPrice(min)} - ${formatPrice(max)}`;
   };
 
+  const getMinPrices = (product: Product) => {
+    if (product.category === 'THROWS & TOWELS' && product.throwsTowelsStylePrices?.length) {
+      const salePrices = product.throwsTowelsStylePrices.map(style => product.clearanceDiscount ? style.salePrice * (1 - product.clearanceDiscount / 100) : style.salePrice);
+      const regularPrices = product.throwsTowelsStylePrices.map(style => style.regularPrice ?? style.salePrice);
+      return { minSale: Math.min(...salePrices), minRegular: Math.min(...regularPrices) };
+    }
+    if (product.category === 'RUGS & MATS' && product.rugsMatsSizes?.length) {
+      const salePrices = product.rugsMatsSizes.map(size => product.clearanceDiscount ? size.salePrice * (1 - product.clearanceDiscount / 100) : size.salePrice);
+      const regularPrices = product.rugsMatsSizes.map(size => size.price ?? size.salePrice);
+      return { minSale: Math.min(...salePrices), minRegular: Math.min(...regularPrices) };
+    }
+    if (product.category === 'OUTDOOR' && product.outdoorPrice) {
+      const sale = product.clearanceDiscount ? product.outdoorPrice.salePrice * (1 - product.clearanceDiscount / 100) : product.outdoorPrice.salePrice;
+      const regular = product.outdoorPrice.regularPrice;
+      return { minSale: sale, minRegular: regular };
+    }
+    if (product.category === 'CLOTHING' && product.clothingStylePrices?.length) {
+      const salePrices = product.clothingStylePrices.map(style => product.clearanceDiscount ? style.salePrice * (1 - product.clearanceDiscount / 100) : style.salePrice);
+      const regularPrices = product.clothingStylePrices.map(style => style.regularPrice ?? style.salePrice);
+      return { minSale: Math.min(...salePrices), minRegular: Math.min(...regularPrices) };
+    }
+    if (product.category === 'FOOTWEAR' && product.footwearSizes?.length) {
+      const salePrices = product.footwearSizes.map(size => product.clearanceDiscount ? size.salePrice * (1 - product.clearanceDiscount / 100) : size.salePrice);
+      const regularPrices = product.footwearSizes.map(size => size.regularPrice ?? size.salePrice);
+      return { minSale: Math.min(...salePrices), minRegular: Math.min(...regularPrices) };
+    }
+    if (product.beddingSizes?.length) {
+      const salePrices = product.beddingSizes.map(size => product.clearanceDiscount ? size.salePrice * (1 - product.clearanceDiscount / 100) : size.salePrice);
+      const regularPrices = product.beddingSizes.map(size => size.regularPrice ?? size.salePrice);
+      return { minSale: Math.min(...salePrices), minRegular: Math.min(...regularPrices) };
+    }
+    return { minSale: 0, minRegular: 0 };
+  };
+
   const filteredProducts = products.filter(product => {
     const matchesSize = !selectedSize || 
       (product.category === 'THROWS & TOWELS' 
@@ -1062,21 +1096,14 @@ export default function ClearancePage() {
                     fontSize: '20px',
                     marginBottom: '20px'
                   }}>
-                    {product.clearanceDiscount ? (
-                      <>
-                        {formatPriceRange(product)}
-                        <span style={{
-                          color: '#999',
-                          textDecoration: 'line-through',
-                          marginLeft: '8px',
-                          fontSize: '16px'
-                        }}>
-                          {getOriginalPriceRange(product)}
-                        </span>
-                      </>
-                    ) : (
-                      formatPriceRange(product)
-                    )}
+                    {(() => {
+                      const { minSale, minRegular } = getMinPrices(product);
+                      if (minSale < minRegular) {
+                        return <><span style={{ color: '#e53935' }}>{formatPrice(minSale)}</span> <span style={{ color: '#999', textDecoration: 'line-through', marginLeft: 8, fontSize: 16 }}>{formatPrice(minRegular)}</span></>;
+                      } else {
+                        return <span style={{ color: '#222' }}>{formatPrice(minRegular)}</span>;
+                      }
+                    })()}
                   </div>
                   {!product.isSoldOut && (
                     <div style={{
