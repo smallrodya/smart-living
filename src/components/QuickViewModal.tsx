@@ -6,6 +6,7 @@ import { useIsMobile } from '@/hooks/useIsMobile';
 import MobileQuickViewModal from './MobileQuickViewModal';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
+import { useSession } from 'next-auth/react';
 
 interface BeddingSize {
   size: string;
@@ -93,6 +94,13 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
   const [quantity, setQuantity] = useState<number>(1);
   const modalRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
+  const [reviews, setReviews] = useState<any[]>([]);
+  const [reviewText, setReviewText] = useState('');
+  const [reviewRating, setReviewRating] = useState(5);
+  const [reviewName, setReviewName] = useState('');
+  const [reviewLoading, setReviewLoading] = useState(false);
+  const [reviewError, setReviewError] = useState<string | null>(null);
+  const [reviewSuccess, setReviewSuccess] = useState(false);
 
   // Function to get the target size based on current page
   const getTargetSize = () => {
@@ -171,6 +179,43 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [onClose, isFullscreen]);
+
+  // Загрузка отзывов
+  useEffect(() => {
+    if (!product?._id) return;
+    fetch(`/api/products/${product._id}/reviews`)
+      .then(res => res.json())
+      .then(setReviews)
+      .catch(() => setReviews([]));
+  }, [product?._id, reviewSuccess]);
+
+  // Отправка отзыва
+  const handleReviewSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setReviewLoading(true);
+    setReviewError(null);
+    setReviewSuccess(false);
+    try {
+      const res = await fetch(`/api/products/${product._id}/reviews`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          rating: reviewRating,
+          text: reviewText,
+          userName: reviewName
+        })
+      });
+      if (!res.ok) throw new Error('Failed to submit review');
+      setReviewText('');
+      setReviewRating(5);
+      setReviewName('');
+      setReviewSuccess(true);
+    } catch (e: any) {
+      setReviewError(e.message || 'Failed to submit review');
+    } finally {
+      setReviewLoading(false);
+    }
+  };
 
   if (isMobile) {
     return <MobileQuickViewModal product={product} onClose={onClose} />;
@@ -1666,6 +1711,41 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
                   </div>
                 </div>
               )}
+            </div>
+
+            {/* Секция отзывов */}
+            <div style={{ marginBottom: 32, background: '#f8f9fa', borderRadius: 16, boxShadow: '0 2px 8px rgba(0,0,0,0.04)', padding: '28px 32px', border: '1px solid #f0f0f0' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 18 }}>
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#e53935" strokeWidth="2.2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                <h3 style={{ fontSize: 22, fontWeight: 700, color: '#222', margin: 0, letterSpacing: 0.2 }}>Reviews</h3>
+              </div>
+              {/* Форма отзыва */}
+              <form onSubmit={handleReviewSubmit} style={{ marginBottom: 24 }}>
+                <div style={{ display: 'flex', gap: 12, marginBottom: 8 }}>
+                  <input type="text" placeholder="Your name (optional)" value={reviewName} onChange={e => setReviewName(e.target.value)} style={{ flex: 1, padding: 8, borderRadius: 6, border: '1px solid #ddd' }} />
+                  <select value={reviewRating} onChange={e => setReviewRating(Number(e.target.value))} style={{ padding: 8, borderRadius: 6, border: '1px solid #ddd' }}>
+                    {[5,4,3,2,1].map(r => <option key={r} value={r}>{'★'.repeat(r)}</option>)}
+                  </select>
+                </div>
+                <textarea required minLength={5} maxLength={1000} placeholder="Your review..." value={reviewText} onChange={e => setReviewText(e.target.value)} style={{ width: '100%', padding: 8, borderRadius: 6, border: '1px solid #ddd', minHeight: 60, marginBottom: 8 }} />
+                <button type="submit" disabled={reviewLoading} style={{ background: '#222', color: '#fff', border: 'none', borderRadius: 8, padding: '8px 24px', fontWeight: 600, cursor: 'pointer' }}>Submit review</button>
+                {reviewError && <div style={{ color: 'red', marginTop: 8 }}>{reviewError}</div>}
+                {reviewSuccess && <div style={{ color: 'green', marginTop: 8 }}>Review submitted for moderation!</div>}
+              </form>
+              {/* Список отзывов */}
+              <div>
+                {reviews.length === 0 && <div style={{ color: '#888' }}>No reviews yet.</div>}
+                {reviews.map((r, i) => (
+                  <div key={r._id || i} style={{ marginBottom: 18, paddingBottom: 12, borderBottom: '1px solid #eee' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
+                      <span style={{ color: '#e53935', fontWeight: 700 }}>{'★'.repeat(r.rating)}</span>
+                      <span style={{ color: '#222', fontWeight: 600 }}>{r.userName || 'Anonymous'}</span>
+                      <span style={{ color: '#888', fontSize: 13, marginLeft: 8 }}>{new Date(r.createdAt).toLocaleDateString()}</span>
+                    </div>
+                    <div style={{ color: '#444', fontSize: 16 }}>{r.text}</div>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
