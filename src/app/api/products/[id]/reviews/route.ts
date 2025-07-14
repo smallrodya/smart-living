@@ -8,7 +8,7 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   try {
-    const { id } = params;
+    const { id } = await params;
     const { db } = await connectToDatabase();
     const reviews = await db.collection('reviews')
       .find({ productId: new ObjectId(id), approved: true })

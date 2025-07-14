@@ -183,7 +183,7 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
   // Загрузка отзывов
   useEffect(() => {
     if (!product?._id) return;
-    fetch(`/api/products/${product._id}/reviews`)
+    fetch(`/api/products/${product!._id}/reviews`)
       .then(res => res.json())
       .then(setReviews)
       .catch(() => setReviews([]));
@@ -196,7 +196,7 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
     setReviewError(null);
     setReviewSuccess(false);
     try {
-      const res = await fetch(`/api/products/${product._id}/reviews`, {
+      const res = await fetch(`/api/products/${product!._id}/reviews`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -788,7 +788,7 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
                     }}
                   >
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#222" strokeWidth="2">
-                      <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+                      <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-1.61L23 6H6"/>
                     </svg>
                   </button>
                   {product.images && product.images.length > 1 && (
@@ -998,69 +998,56 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
               alignItems: 'center',
               gap: '12px'
             }}>
-              {product.category === 'OUTDOOR' && product.outdoorPrice ? (
-                <>
-                  {product.discount ? (
+              {(() => {
+                function getMinPrices(product: Product) {
+                  let sale = 0, regular = 0;
+                  if (product!.category === 'OUTDOOR' && product!.outdoorPrice) {
+                    sale = product!.outdoorPrice.salePrice;
+                    regular = product!.outdoorPrice.regularPrice;
+                  } else if (product!.category === 'FOOTWEAR' && product!.footwearSizes?.length) {
+                    sale = Math.min(...product!.footwearSizes.map((s: any) => s.salePrice));
+                    regular = Math.min(...product!.footwearSizes.map((s: any) => s.regularPrice ?? s.price ?? s.salePrice));
+                  } else if (product!.category === 'THROWS & TOWELS' && product!.throwsTowelsStylePrices?.length) {
+                    sale = Math.min(...product!.throwsTowelsStylePrices.map((s: any) => s.salePrice));
+                    regular = Math.min(...product!.throwsTowelsStylePrices.map((s: any) => s.regularPrice ?? s.price ?? s.salePrice));
+                  } else if (product!.category === 'CLOTHING' && product!.clothingStylePrices?.length) {
+                    sale = Math.min(...product!.clothingStylePrices.map((s: any) => s.salePrice));
+                    regular = Math.min(...product!.clothingStylePrices.map((s: any) => s.regularPrice ?? s.price ?? s.salePrice));
+                  } else if (product!.category === 'RUGS & MATS' && product!.rugsMatsSizes?.length) {
+                    sale = Math.min(...product!.rugsMatsSizes.map((s: any) => s.salePrice));
+                    regular = Math.min(...product!.rugsMatsSizes.map((s: any) => s.regularPrice ?? s.price ?? s.salePrice));
+                  } else if (product!.beddingSizes?.length) {
+                    sale = Math.min(...product!.beddingSizes.map((s: any) => s.salePrice));
+                    regular = Math.min(...product!.beddingSizes.map((s: any) => s.regularPrice ?? s.price ?? s.salePrice));
+                  }
+                  return { sale, regular };
+                }
+                const { sale, regular } = getMinPrices(product!);
+                if (sale < regular && sale > 0) {
+                  return (
                     <>
-                      <span style={{
-                        color: '#999',
-                        textDecoration: 'line-through',
-                        fontSize: '20px'
-                      }}>
-                        {formatPrice(product.outdoorPrice.regularPrice)}
+                      <span style={{ fontWeight: 500, color: '#222', marginRight: 8 }}>From:</span>
+                      <span style={{ color: '#999', textDecoration: 'line-through', fontSize: '20px', marginRight: 8 }}>
+                        £{regular.toFixed(2)}
                       </span>
-                      <span style={{
-                        color: '#e53935',
-                        fontSize: '28px'
-                      }}>
-                        {formatPrice(product.outdoorPrice.salePrice)}
-                      </span>
-                      <span style={{
-                        background: '#e53935',
-                        color: '#fff',
-                        padding: '4px 8px',
-                        borderRadius: '4px',
-                        fontSize: '14px',
-                        fontWeight: 600
-                      }}>
-                        {product.discount}% OFF
+                      <span style={{ color: '#e53935', fontWeight: 700, fontSize: '28px' }}>
+                        £{sale.toFixed(2)}
                       </span>
                     </>
-                  ) : (
-                    <span>{formatPrice(product.outdoorPrice.salePrice)}</span>
-                  )}
-                </>
-              ) : (
-                product.clearanceDiscount ? (
-                  <>
-                    <span style={{
-                      color: '#999',
-                      textDecoration: 'line-through',
-                      fontSize: '20px'
-                    }}>
-                      {getOriginalPriceRange(product)}
-                    </span>
-                    <span style={{
-                      color: '#e53935',
-                      fontSize: '28px'
-                    }}>
-                      {formatPriceRange(product)}
-                    </span>
-                    <span style={{
-                      background: '#e53935',
-                      color: '#fff',
-                      padding: '4px 8px',
-                      borderRadius: '4px',
-                      fontSize: '14px',
-                      fontWeight: 600
-                    }}>
-                      {product.clearanceDiscount}% OFF
-                    </span>
-                  </>
-                ) : (
-                  formatPriceRange(product)
-                )
-              )}
+                  );
+                } else if (sale > 0) {
+                  return (
+                    <>
+                      <span style={{ fontWeight: 500, color: '#222', marginRight: 8 }}>From:</span>
+                      <span style={{ color: '#222', fontWeight: 700, fontSize: '28px' }}>
+                        £{regular.toFixed(2)}
+                      </span>
+                    </>
+                  );
+                } else {
+                  return null;
+                }
+              })()}
             </div>
 
             {/* Sizes */}
@@ -1126,13 +1113,6 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
                     >
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
                         <span>{size.size}</span>
-                        <span style={{ 
-                          fontSize: '12px', 
-                          color: size.stock > 0 ? '#4CAF50' : '#e53935',
-                          fontWeight: 500
-                        }}>
-                          {size.stock > 0 ? `${size.stock} in stock` : 'Out of stock'}
-                        </span>
                       </div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                         <span style={{ color: '#e53935', fontWeight: 600 }}>
@@ -1199,13 +1179,6 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
                     >
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
                         <span>{style.size}</span>
-                        <span style={{ 
-                          fontSize: '12px', 
-                          color: style.stock > 0 ? '#4CAF50' : '#e53935',
-                          fontWeight: 500
-                        }}>
-                          {style.stock > 0 ? `${style.stock} in stock` : 'Out of stock'}
-                        </span>
                       </div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                         <span style={{ color: '#e53935', fontWeight: 600 }}>
@@ -1274,13 +1247,6 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
                     >
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
                         <span>{size.size}</span>
-                        <span style={{ 
-                          fontSize: '12px', 
-                          color: (size.stock || 0) > 0 ? '#4CAF50' : '#e53935',
-                          fontWeight: 500
-                        }}>
-                          {(size.stock || 0) > 0 ? `${size.stock} in stock` : 'Out of stock'}
-                        </span>
                       </div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                         <span style={{ color: '#e53935', fontWeight: 600 }}>
@@ -1347,13 +1313,6 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
                     >
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
                         <span>{size.size}</span>
-                        <span style={{ 
-                          fontSize: '12px', 
-                          color: (size.stock || 0) > 0 ? '#4CAF50' : '#e53935',
-                          fontWeight: 500
-                        }}>
-                          {(size.stock || 0) > 0 ? `${size.stock} in stock` : 'Out of stock'}
-                        </span>
                       </div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                         <span style={{ color: '#e53935', fontWeight: 600 }}>
@@ -1420,13 +1379,6 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
                     >
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
                         <span>{size.size}</span>
-                        <span style={{ 
-                          fontSize: '12px', 
-                          color: size.stock > 0 ? '#4CAF50' : '#e53935',
-                          fontWeight: 500
-                        }}>
-                          {size.stock > 0 ? `${size.stock} in stock` : 'Out of stock'}
-                        </span>
                       </div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                         <span style={{ color: '#e53935', fontWeight: 600 }}>
@@ -1505,9 +1457,6 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
                 >
                   +
                 </button>
-                <span style={{ color: '#888', fontSize: 14, marginLeft: 8 }}>
-                  in stock: {product.category === 'OUTDOOR' ? product.outdoorPrice?.stock : getSelectedStock()}
-                </span>
               </div>
             )}
 
@@ -1718,7 +1667,7 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
               <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 18 }}>
                 <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#e53935" strokeWidth="2.2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
                 <h3 style={{ fontSize: 22, fontWeight: 700, color: '#222', margin: 0, letterSpacing: 0.2 }}>Reviews</h3>
-              </div>
+          </div>
               {/* Форма отзыва */}
               <form onSubmit={handleReviewSubmit} style={{ marginBottom: 24 }}>
                 <div style={{ display: 'flex', gap: 12, marginBottom: 8 }}>
