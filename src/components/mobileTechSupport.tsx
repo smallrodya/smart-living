@@ -111,7 +111,7 @@ function MobileTechSupport() {
   const categories = [
     { id: 'order', label: 'Order', icon: <FaShoppingBag className="w-5 h-5" /> },
     { id: 'delivery', label: 'Delivery', icon: <FaTruck className="w-5 h-5" /> },
-    { id: 'tech', label: 'Tech Support', icon: <FaTools className="w-5 h-5" /> },
+    { id: 'tech', label: 'Customer Support', icon: <FaTools className="w-5 h-5" /> },
     { id: 'other', label: 'Other', icon: <FaEllipsisH className="w-5 h-5" /> }
   ];
 
@@ -201,7 +201,7 @@ function MobileTechSupport() {
                 <FaHeadset className="w-5 h-5 text-white" />
               </div>
               <div>
-                <h3 className="text-lg font-semibold">Tech Support</h3>
+                <h3 className="text-lg font-semibold">Customer Support</h3>
                 <p className="text-xs opacity-90">We're here to help!</p>
               </div>
             </div>
