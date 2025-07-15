@@ -111,6 +111,10 @@ function CheckoutPage() {
   const [stripeError, setStripeError] = useState<string | null>(null);
   const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [tooltip, setTooltip] = useState<string | null>(null);
+  const [promocode, setPromocode] = useState("");
+  const [promocodeChecked, setPromocodeChecked] = useState(false);
+  const [promocodeDiscount, setPromocodeDiscount] = useState<number>(0);
+  const [promocodeError, setPromocodeError] = useState<string | null>(null);
 
   const [form, setForm] = useState({
     email: "",
@@ -143,7 +147,8 @@ function CheckoutPage() {
 
   const subtotal = items.reduce((sum, item) => sum + (item.clearanceDiscount ? item.price * (1 - item.clearanceDiscount / 100) : item.price) * item.quantity, 0);
   const shippingPrice = SHIPPING_OPTIONS.find(opt => opt.value === shipping)?.price || 0;
-  const totalWithShipping = subtotal + shippingPrice;
+  const discountAmount = promocodeDiscount > 0 ? subtotal * (promocodeDiscount / 100) : 0;
+  const totalWithShipping = subtotal - discountAmount + shippingPrice;
 
   useEffect(() => {
     const checkAuthAndBalance = async () => {
@@ -330,6 +335,27 @@ function CheckoutPage() {
     };
     createIntent();
   }, [items, form.email, form.firstName, form.lastName, form.address, form.city, form.postcode, form.phone, totalWithShipping]);
+
+  // Fetch and check promocode
+  useEffect(() => {
+    if (!promocode) {
+      setPromocodeDiscount(0);
+      setPromocodeError(null);
+      return;
+    }
+    fetch("/api/promocodes")
+      .then(res => res.json())
+      .then((codes) => {
+        const found = codes.find((c: any) => c.code.toLowerCase() === promocode.trim().toLowerCase());
+        if (found) {
+          setPromocodeDiscount(found.discount);
+          setPromocodeError(null);
+        } else {
+          setPromocodeDiscount(0);
+          setPromocodeError("Invalid promocode");
+        }
+      });
+  }, [promocode]);
 
   const validate = () => {
     const newErrors: any = {};
@@ -622,6 +648,28 @@ function CheckoutPage() {
                   <div className="text-right text-gray-900">£{((item.clearanceDiscount ? item.price * (1 - item.clearanceDiscount / 100) : item.price) * item.quantity).toFixed(2)}</div>
                 </div>
               ))}
+              <div className="mb-4">
+                <label className="block text-sm font-medium mb-1">Promocode</label>
+                <div className="flex items-center gap-2">
+                  <input
+                    className="border rounded px-3 py-2 w-40"
+                    value={promocode}
+                    onChange={e => setPromocode(e.target.value)}
+                    placeholder="Enter promocode"
+                  />
+                  <input
+                    type="checkbox"
+                    checked={promocodeChecked}
+                    onChange={e => setPromocodeChecked(e.target.checked)}
+                    className="accent-blue-600"
+                  />
+                  <span className="text-xs text-gray-500">Apply</span>
+                </div>
+                {promocodeError && <div className="text-xs text-red-600 mt-1">{promocodeError}</div>}
+                {promocodeDiscount > 0 && !promocodeError && (
+                  <div className="text-xs text-green-700 mt-1">Discount: -{promocodeDiscount}%</div>
+                )}
+              </div>
               <div className="grid grid-cols-2 font-semibold py-3 border-b border-gray-200">
                 <span>Subtotal</span>
                 <span className="text-right">£{subtotal.toFixed(2)}</span>
@@ -672,6 +720,12 @@ function CheckoutPage() {
                   ))}
                 </div>
               </div>
+              {promocodeDiscount > 0 && !promocodeError && (
+                <div className="grid grid-cols-2 py-2 border-b border-gray-200 text-green-700">
+                  <span>Promocode</span>
+                  <span className="text-right">-£{discountAmount.toFixed(2)}</span>
+                </div>
+              )}
               <div className="grid grid-cols-2 font-bold text-lg py-3 border-b border-gray-200">
                 <span>Total</span>
                 <span className="text-right">£{totalWithShipping.toFixed(2)}</span>

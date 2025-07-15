@@ -209,7 +209,7 @@ function TechSupportContent() {
                 <FaHeadset className="w-5 h-5 text-white" />
               </div>
               <div>
-                <h3 className="text-xl font-semibold">Technical Support</h3>
+                <h3 className="text-xl font-semibold">Customer Support</h3>
                 <p className="text-sm opacity-90">We're here to help!</p>
               </div>
             </div>

@@ -167,7 +167,7 @@ export default function ContactPage() {
                   <option value="general">General Inquiry</option>
                   <option value="order">Order Status</option>
                   <option value="returns">Returns & Refunds</option>
-                  <option value="technical">Technical Support</option>
+                  <option value="technical">Customer Support</option>
                   <option value="other">Other</option>
                 </select>
               </div>

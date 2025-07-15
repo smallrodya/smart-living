@@ -19,6 +19,7 @@ const menuItems = [
   { name: 'Support', path: '/adminpanel/support', icon: '💬', key: 'support' },
   { name: 'Reviews', path: '/adminpanel/reviews', icon: '⭐' },
   { name: 'Reduce Space Section', path: '/adminpanel/reduce-space-section', icon: '⚙️'},
+  { name: 'Promocodes', path: '/adminpanel/promocodes', icon: '🏷️' },
 ];
 
 export default function AdminLayout({
@@ -182,7 +183,7 @@ export default function AdminLayout({
                 </div>
               </div>
 
-              <nav className="space-y-3">
+              <nav className="space-y-2">
                 {menuItems.map((item) => {
                   const count = item.key ? counters[item.key as keyof Counters] : null;
                   const counterStyles = item.key ? getCounterStyles(item.key) : null;
@@ -192,7 +193,7 @@ export default function AdminLayout({
                     <Link
                       key={item.path}
                       href={item.path}
-                      className={`group relative flex items-center justify-between p-4 rounded-2xl transition-all duration-300 ${
+                      className={`group relative flex items-center justify-between p-2 rounded-xl transition-all duration-300 text-sm min-h-[40px] ${
                         isActive
                           ? 'bg-gradient-to-r from-indigo-500/10 to-purple-500/10 border border-indigo-200/50 shadow-lg'
                           : 'hover:bg-white/60 hover:shadow-lg border border-transparent'
@@ -200,20 +201,20 @@ export default function AdminLayout({
                     >
                       {/* Active indicator */}
                       {isActive && (
-                        <div className="absolute left-0 top-1/2 transform -translate-y-1/2 w-1 h-8 bg-gradient-to-b from-indigo-500 to-purple-600 rounded-r-full"></div>
+                        <div className="absolute left-0 top-1/2 transform -translate-y-1/2 w-1 h-6 bg-gradient-to-b from-indigo-500 to-purple-600 rounded-r-full"></div>
                       )}
                       
                       <div className="flex items-center">
-                        <div className={`p-3 rounded-xl transition-all duration-300 ${
+                        <div className={`p-2 rounded-lg transition-all duration-300 ${
                           isActive 
                             ? 'bg-gradient-to-r from-indigo-500 to-purple-600 shadow-lg' 
                             : 'bg-gray-100 group-hover:bg-gradient-to-r group-hover:from-gray-200 group-hover:to-gray-300'
                         }`}>
-                          <span className={`text-xl ${isActive ? 'text-white' : 'text-gray-600'}`}>
+                          <span className={`text-base ${isActive ? 'text-white' : 'text-gray-600'}`}>
                             {item.icon}
                           </span>
                         </div>
-                        <span className={`ml-4 font-semibold transition-all duration-300 ${
+                        <span className={`ml-3 font-semibold transition-all duration-300 ${
                           isActive 
                             ? 'text-indigo-700' 
                             : 'text-gray-700 group-hover:text-gray-900'
@@ -225,21 +226,21 @@ export default function AdminLayout({
                       {count !== null && counterStyles && (
                         <div className="relative">
                           {/* Background glow */}
-                          <div className={`absolute inset-0 ${counterStyles.bg} rounded-2xl blur-lg opacity-50 group-hover:opacity-75 transition-opacity duration-300`}></div>
+                          <div className={`absolute inset-0 ${counterStyles.bg} rounded-xl blur-md opacity-50 group-hover:opacity-75 transition-opacity duration-300`}></div>
                           
                           {/* Main counter */}
                           <div 
                             className={`
                               relative flex items-center justify-center 
-                              w-10 h-10 
+                              w-7 h-7 
                               ${counterStyles.bg}
                               text-white 
-                              text-sm font-bold 
-                              rounded-2xl
+                              text-xs font-bold 
+                              rounded-xl
                               shadow-lg ${counterStyles.shadow}
                               group-hover:shadow-xl ${counterStyles.glow}
                               transform transition-all duration-300
-                              group-hover:scale-110
+                              group-hover:scale-105
                               border ${counterStyles.border}
                               overflow-hidden
                             `}
@@ -249,7 +250,7 @@ export default function AdminLayout({
                             }}
                           >
                             {/* Animated gradient overlay */}
-                            <div className="absolute inset-0 bg-gradient-to-br from-white/30 via-transparent to-transparent rounded-2xl animate-pulse"></div>
+                            <div className="absolute inset-0 bg-gradient-to-br from-white/30 via-transparent to-transparent rounded-xl animate-pulse"></div>
                             
                             {/* Sparkle effect */}
                             <div className="absolute top-1 right-1 w-1 h-1 bg-white/60 rounded-full animate-ping"></div>
@@ -265,27 +266,27 @@ export default function AdminLayout({
                 })}
               </nav>
 
-              <div className="absolute bottom-6 left-6 right-6 space-y-3">
+              <div className="absolute bottom-4 left-4 right-4 space-y-2">
                 <Link
                   href="/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full flex items-center p-4 rounded-2xl text-blue-600 hover:bg-blue-50/80 transition-all duration-300 border border-blue-200/50 hover:border-blue-300/50 hover:shadow-lg group"
+                  className="w-full flex items-center p-2 rounded-xl text-blue-600 hover:bg-blue-50/80 transition-all duration-300 border border-blue-200/50 hover:border-blue-300/50 hover:shadow-lg group text-sm"
                 >
-                  <div className="p-3 rounded-xl bg-blue-100 group-hover:bg-blue-200 transition-colors duration-300">
-                    <span className="text-lg">🏠</span>
+                  <div className="p-2 rounded-lg bg-blue-100 group-hover:bg-blue-200 transition-colors duration-300">
+                    <span className="text-base">🏠</span>
                   </div>
-                  <span className="ml-4 font-semibold">Go to Home Page</span>
+                  <span className="ml-3 font-semibold">Go to Home Page</span>
                 </Link>
                 
                 <button
                   onClick={handleLogout}
-                  className="w-full flex items-center p-4 rounded-2xl text-red-600 hover:bg-red-50/80 transition-all duration-300 border border-red-200/50 hover:border-red-300/50 hover:shadow-lg group"
+                  className="w-full flex items-center p-2 rounded-xl text-red-600 hover:bg-red-50/80 transition-all duration-300 border border-red-200/50 hover:border-red-300/50 hover:shadow-lg group text-sm"
                 >
-                  <div className="p-3 rounded-xl bg-red-100 group-hover:bg-red-200 transition-colors duration-300">
-                    <span className="text-lg">🚪</span>
+                  <div className="p-2 rounded-lg bg-red-100 group-hover:bg-red-200 transition-colors duration-300">
+                    <span className="text-base">🚪</span>
                   </div>
-                  <span className="ml-4 font-semibold">Logout</span>
+                  <span className="ml-3 font-semibold">Logout</span>
                 </button>
               </div>
             </div>
