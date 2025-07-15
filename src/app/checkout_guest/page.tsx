@@ -478,7 +478,9 @@ function GuestCheckoutPage() {
                 </label>
               </div>
               {clientSecret && (
-                <StripeCardForm clientSecret={clientSecret} onSuccess={handleSuccess} amount={Math.round(totalWithShipping * 100)} />
+                <Elements stripe={stripePromise} options={{ clientSecret }}>
+                  <StripeCardForm clientSecret={clientSecret} onSuccess={handleSuccess} amount={Math.round(totalWithShipping * 100)} />
+                </Elements>
               )}
             </div>
             <div className="space-y-4">
@@ -503,16 +505,8 @@ function GuestCheckoutPage() {
 }
 
 export default function GuestCheckoutPageWrapper() {
-  const [clientSecret, setClientSecret] = React.useState<string | null>(null);
-  // ... перенести useEffect для clientSecret сюда ...
-  // ... перенести subtotal, shippingPrice, totalWithShipping сюда ...
-  // ... перенести form, items, и т.д. сюда ...
-  // ... перенести handleChange, validate, и т.д. сюда ...
-  // ... перенести useEffect для clientSecret сюда ...
-  // ... если clientSecret нет, показывать лоадер ...
-  if (!clientSecret) return <div>Loading...</div>;
   return (
-    <Elements stripe={stripePromise} options={{ clientSecret }}>
+    <Elements stripe={stripePromise}>
       <GuestCheckoutPage />
     </Elements>
   );

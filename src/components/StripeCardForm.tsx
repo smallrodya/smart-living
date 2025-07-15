@@ -25,12 +25,16 @@ export default function StripeCardForm({ clientSecret, onSuccess, amount }: Stri
         requestPayerEmail: true,
       });
       pr.canMakePayment().then(result => {
+        console.log('Stripe paymentRequest canMakePayment result:', result);
         if (result) {
           setPrSupported(true);
           setPaymentRequest(pr);
         } else {
           setPrSupported(false);
         }
+      }).catch(err => {
+        console.error('Stripe paymentRequest canMakePayment error:', err);
+        setPrSupported(false);
       });
     }
   }, [stripe, amount]);
@@ -58,6 +62,12 @@ export default function StripeCardForm({ clientSecret, onSuccess, amount }: Stri
       {paymentRequest && prSupported && (
         <div className="mb-4">
           <PaymentRequestButtonElement options={{ paymentRequest }} />
+        </div>
+      )}
+      {!prSupported && (
+        <div className="text-sm text-gray-500 mb-2">
+          Apple Pay / Google Pay не поддерживаются на этом устройстве или браузере, либо Stripe не может их инициализировать.<br />
+          Проверьте, что у вас есть карта в Wallet (Apple Pay) или Google Pay-аккаунт, и что сайт открыт по HTTPS.
         </div>
       )}
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
