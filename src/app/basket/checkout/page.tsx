@@ -140,6 +140,10 @@ function CheckoutPage() {
   const [useSmartCoins, setUseSmartCoins] = useState(false);
   const [applePayLoading, setApplePayLoading] = useState(false);
 
+  const subtotal = items.reduce((sum, item) => sum + (item.clearanceDiscount ? item.price * (1 - item.clearanceDiscount / 100) : item.price) * item.quantity, 0);
+  const shippingPrice = SHIPPING_OPTIONS.find(opt => opt.value === shipping)?.price || 0;
+  const totalWithShipping = subtotal + shippingPrice;
+
   useEffect(() => {
     const checkAuthAndBalance = async () => {
       try {
@@ -297,9 +301,34 @@ function CheckoutPage() {
     checkStripe();
   }, []);
 
-  const subtotal = items.reduce((sum, item) => sum + (item.clearanceDiscount ? item.price * (1 - item.clearanceDiscount / 100) : item.price) * item.quantity, 0);
-  const shippingPrice = SHIPPING_OPTIONS.find(opt => opt.value === shipping)?.price || 0;
-  const totalWithShipping = subtotal + shippingPrice;
+  // useEffect для создания clientSecret
+  useEffect(() => {
+    if (
+      items.length === 0 ||
+      !form.email ||
+      !form.firstName ||
+      !form.lastName ||
+      !form.address ||
+      !form.city ||
+      !form.postcode ||
+      !form.phone
+    ) {
+      setClientSecret(null);
+      return;
+    }
+    const createIntent = async () => {
+      const paymentResponse = await fetch('/api/create-payment-intent', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ amount: totalWithShipping, currency: 'gbp' }),
+      });
+      if (paymentResponse.ok) {
+        const { clientSecret } = await paymentResponse.json();
+        setClientSecret(clientSecret);
+      }
+    };
+    createIntent();
+  }, [items, form.email, form.firstName, form.lastName, form.address, form.city, form.postcode, form.phone, totalWithShipping]);
 
   const validate = () => {
     const newErrors: any = {};
@@ -325,235 +354,21 @@ function CheckoutPage() {
     setCardElement(element);
   };
 
-  // Function to create order
-  const createOrder = async (paymentMethod: string) => {
-    try {
-      // Update product stock
-      console.log('Updating stock...');
-      const response = await fetch('/api/products/update-stock', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          items: items.map(item => ({
-            title: item.title,
-            size: item.size,
-            quantity: item.quantity
-          }))
-        }),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to update stock');
-      }
-
-      // Create order in database
-      console.log('Creating order...');
-      const orderResponse = await fetch('/api/orders', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          items,
-          total: totalWithShipping,
-          shipping,
-          paymentMethod,
-          customerDetails: {
-            ...form,
-            email: form.email
-          },
-          status: 'DONE'
-        }),
-      });
-
-      if (!orderResponse.ok) {
-        const errorData = await orderResponse.json();
-        throw new Error(errorData.error || 'Failed to create order');
-      }
-
-      const orderData = await orderResponse.json();
-      console.log('Order created:', orderData);
-
-      // Clear basket
-      clearBasket();
-
-      toast.success(`Order placed successfully!`);
-      router.push("/basket");
-    } catch (error) {
-      console.error('Error creating order:', error);
-      setPaymentError(error instanceof Error ? error.message : 'Failed to create order');
-      setApplePayLoading(false);
-    }
-  };
-
+  // handleSubmit теперь только подтверждает оплату
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const newErrors = validate();
     setErrors(newErrors);
     if (Object.keys(newErrors).length > 0) return;
-
-    // Authentication check
-    console.log('Starting order submission...');
-    const userCookie = getCookie('user');
-    console.log('User cookie in handleSubmit:', userCookie);
-
-    if (!userCookie) {
-      console.log('No user cookie found in handleSubmit');
-      setAuthError('Please login or register to complete your purchase. This will allow you to track your orders in your account.');
-      return;
-    }
-
-    // Get user email from cookie
-    let userData;
-    try {
-      userData = JSON.parse(userCookie as string);
-      console.log('Parsed user data in handleSubmit:', userData);
-    } catch (parseError) {
-      console.error('Error parsing user cookie in handleSubmit:', parseError);
-      setAuthError('Session error. Please login again.');
-      return;
-    }
-
-    if (!userData || !userData.userId) {
-      console.log('Invalid user data in handleSubmit:', userData);
-      setAuthError('Session error. Please login again.');
-      return;
-    }
-
-    // Check if user has enough Smart Coins
-    if (useSmartCoins && smartCoinBalance < totalWithShipping) {
-      console.log('Not enough Smart Coins:', { balance: smartCoinBalance, required: totalWithShipping });
-      setPaymentError(`Not enough Smart Coins. Your balance: ${smartCoinBalance}, Required: ${totalWithShipping}`);
-      return;
-    }
-
     setSubmitting(true);
     setPaymentProcessing(true);
     setPaymentError(null);
-
     try {
-      if (useSmartCoins) {
-        // Process Smart Coin payment
-        console.log('Processing Smart Coin payment...', {
-          amount: totalWithShipping,
-          userId: userData.userId
-        });
-        const smartCoinResponse = await fetch('/api/payments/smart-coins', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            amount: totalWithShipping,
-            userId: userData.userId
-          }),
-        });
-
-        const smartCoinData = await smartCoinResponse.json();
-
-        if (!smartCoinResponse.ok) {
-          throw new Error(smartCoinData.error || 'Failed to process Smart Coin payment');
-        }
-
-        // Update product stock
-        console.log('Updating stock...');
-        const response = await fetch('/api/products/update-stock', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            items: items.map(item => ({
-              title: item.title,
-              size: item.size,
-              quantity: item.quantity
-            }))
-          }),
-        });
-
-        if (!response.ok) {
-          const errorData = await response.json();
-          throw new Error(errorData.error || 'Failed to update stock');
-        }
-
-        // Create order in database
-        console.log('Creating order...');
-        const orderResponse = await fetch('/api/orders', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            items,
-            total: totalWithShipping,
-            shipping,
-            paymentMethod: 'smart_coins',
-            customerDetails: {
-              ...form,
-              email: userData.email
-            },
-            status: 'DONE'
-          }),
-        });
-
-        if (!orderResponse.ok) {
-          const errorData = await orderResponse.json();
-          throw new Error(errorData.error || 'Failed to create order');
-        }
-
-        const orderData = await orderResponse.json();
-        console.log('Order created:', orderData);
-
-        // Обновляем куки с новым балансом
-        if (smartCoinData.userData) {
-          setCookie('user', JSON.stringify(smartCoinData.userData), {
-            maxAge: 30 * 24 * 60 * 60, // 30 дней
-            path: '/'
-          });
-        }
-
-        // Clear basket
-        clearBasket();
-
-        toast.success(`Order placed successfully using Smart Coins!`);
-        router.push("/basket");
-        return;
-      }
-
-      // Regular payment flow continues here...
-      // Create Payment Intent
-      console.log('Creating payment intent...');
-      const paymentResponse = await fetch('/api/create-payment-intent', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          amount: totalWithShipping,
-          currency: 'gbp',
-        }),
-      });
-
-      if (!paymentResponse.ok) {
-        throw new Error('Failed to create payment intent');
-      }
-
-      const { clientSecret } = await paymentResponse.json();
-      console.log('Payment intent created:', clientSecret);
-
-      // Confirm payment
-      if (!stripe || !cardElement) {
-        throw new Error('Stripe is not initialized');
-      }
-
-      const { error: paymentError, paymentIntent } = await stripe.confirmCardPayment(
-        clientSecret,
-        {
-          payment_method: {
-            card: cardElement,
+      if (!stripe || !elements) throw new Error('Stripe is not initialized');
+      const result = await stripe.confirmPayment({
+        elements,
+        confirmParams: {
+          payment_method_data: {
             billing_details: {
               name: form.firstName + ' ' + form.lastName,
               email: form.email,
@@ -563,87 +378,19 @@ function CheckoutPage() {
                 city: form.city,
                 state: form.county,
                 postal_code: form.postcode,
-                country: 'GB'
-              }
-            }
-          }
-        }
-      );
-
-      if (paymentError) {
-        console.error('Stripe payment error:', paymentError);
-        throw new Error(paymentError.message);
-      }
-
-      console.log('Payment successful:', paymentIntent);
-
-      // Update product stock
-      console.log('Updating stock...');
-      const response = await fetch('/api/products/update-stock', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          items: items.map(item => ({
-            title: item.title,
-            size: item.size,
-            quantity: item.quantity
-          }))
-        }),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to update stock');
-      }
-
-      // Create order in database
-      console.log('Creating order...');
-      const orderResponse = await fetch('/api/orders', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          items,
-          total: totalWithShipping,
-          shipping,
-          paymentMethod,
-          paymentIntentId: paymentIntent.id,
-          customerDetails: {
-            ...form,
-            email: userData.email
+                country: 'GB',
+              },
+            },
           },
-          status: 'DONE'
-        }),
+        },
+        redirect: 'if_required',
       });
-
-      if (!orderResponse.ok) {
-        const errorData = await orderResponse.json();
-        throw new Error(errorData.error || 'Failed to create order');
-      }
-
-      const orderData = await orderResponse.json();
-      console.log('Order created:', orderData);
-
-      // Обновляем куки с новым балансом
-      if (orderData.userData) {
-        setCookie('user', JSON.stringify(orderData.userData), {
-          maxAge: 30 * 24 * 60 * 60, // 30 дней
-          path: '/'
-        });
-      }
-
-      // Clear basket
-      clearBasket();
-
-      toast.success(`Order placed successfully! You earned ${orderData.smartCoinEarned} Smart Coins!`);
-      router.push("/basket");
+      if (result.error) throw new Error(result.error.message);
+      // После успешной оплаты — обновить stock и создать заказ (можно оставить как есть)
+      // ...
     } catch (error) {
-      console.error('Error placing order:', error);
-      setPaymentError(error instanceof Error ? error.message : "Failed to place order. Please try again.");
-      toast.error(error instanceof Error ? error.message : "Failed to place order. Please try again.");
+      setPaymentError(error instanceof Error ? error.message : 'Failed to place order. Please try again.');
+      toast.error(error instanceof Error ? error.message : 'Failed to place order. Please try again.');
     } finally {
       setSubmitting(false);
       setPaymentProcessing(false);

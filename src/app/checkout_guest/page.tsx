@@ -51,6 +51,10 @@ function GuestCheckoutPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [clientSecret, setClientSecret] = useState<string | null>(null);
 
+  const subtotal = items.reduce((sum, item) => sum + (item.clearanceDiscount ? item.price * (1 - item.clearanceDiscount / 100) : item.price) * item.quantity, 0);
+  const shippingPrice = SHIPPING_OPTIONS.find(opt => opt.value === shipping)?.price || 0;
+  const totalWithShipping = subtotal + shippingPrice;
+
   useEffect(() => {
     const checkStripe = async () => {
       try {
@@ -67,9 +71,33 @@ function GuestCheckoutPage() {
     checkStripe();
   }, []);
 
-  const subtotal = items.reduce((sum, item) => sum + (item.clearanceDiscount ? item.price * (1 - item.clearanceDiscount / 100) : item.price) * item.quantity, 0);
-  const shippingPrice = SHIPPING_OPTIONS.find(opt => opt.value === shipping)?.price || 0;
-  const totalWithShipping = subtotal + shippingPrice;
+  useEffect(() => {
+    if (
+      items.length === 0 ||
+      !form.email ||
+      !form.firstName ||
+      !form.lastName ||
+      !form.address ||
+      !form.city ||
+      !form.postcode ||
+      !form.phone
+    ) {
+      setClientSecret(null);
+      return;
+    }
+    const createIntent = async () => {
+      const paymentResponse = await fetch('/api/create-payment-intent', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ amount: totalWithShipping, currency: 'gbp' }),
+      });
+      if (paymentResponse.ok) {
+        const { clientSecret } = await paymentResponse.json();
+        setClientSecret(clientSecret);
+      }
+    };
+    createIntent();
+  }, [items, form.email, form.firstName, form.lastName, form.address, form.city, form.postcode, form.phone, totalWithShipping]);
 
   const validate = () => {
     const newErrors: any = {};
@@ -104,21 +132,11 @@ function GuestCheckoutPage() {
     setPaymentProcessing(true);
     setPaymentError(null);
     try {
-      // Create Payment Intent
-      const paymentResponse = await fetch('/api/create-payment-intent', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ amount: totalWithShipping, currency: 'gbp' }),
-      });
-      if (!paymentResponse.ok) throw new Error('Failed to create payment intent');
-      const { clientSecret } = await paymentResponse.json();
-      setClientSecret(clientSecret);
-      if (!stripe || !cardElement) throw new Error('Stripe is not initialized');
-      const { error: paymentError, paymentIntent } = await stripe.confirmCardPayment(
-        clientSecret,
-        {
-          payment_method: {
-            card: cardElement,
+      if (!stripe || !elements) throw new Error('Stripe is not initialized');
+      const result = await stripe.confirmPayment({
+        elements,
+        confirmParams: {
+          payment_method_data: {
             billing_details: {
               name: form.firstName + ' ' + form.lastName,
               email: form.email,
@@ -128,13 +146,14 @@ function GuestCheckoutPage() {
                 city: form.city,
                 state: form.county,
                 postal_code: form.postcode,
-                country: 'GB'
-              }
-            }
-          }
-        }
-      );
-      if (paymentError) throw new Error(paymentError.message);
+                country: 'GB',
+              },
+            },
+          },
+        },
+        redirect: 'if_required',
+      });
+      if (result.error) throw new Error(result.error.message);
       // Update product stock
       const response = await fetch('/api/products/update-stock', {
         method: 'POST',
@@ -151,7 +170,7 @@ function GuestCheckoutPage() {
           total: totalWithShipping,
           shipping,
           paymentMethod,
-          paymentIntentId: paymentIntent.id,
+          paymentIntentId: result.paymentIntentId,
           customerDetails: { ...form, email: form.email },
           status: 'DONE'
         }),
@@ -162,8 +181,8 @@ function GuestCheckoutPage() {
       toast.success(`Order placed successfully!`);
       router.push("/basket");
     } catch (error) {
-      setPaymentError(error instanceof Error ? error.message : "Failed to place order. Please try again.");
-      toast.error(error instanceof Error ? error.message : "Failed to place order. Please try again.");
+      setPaymentError(error instanceof Error ? error.message : 'Failed to place order. Please try again.');
+      toast.error(error instanceof Error ? error.message : 'Failed to place order. Please try again.');
     } finally {
       setSubmitting(false);
       setPaymentProcessing(false);
