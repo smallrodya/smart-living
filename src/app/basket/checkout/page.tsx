@@ -12,63 +12,7 @@ import { loadStripe } from '@stripe/stripe-js';
 import StripeCardForm from '@/components/StripeCardForm';
 
 // Инициализация Stripe с fallback
-const stripePromise = (async () => {
-  try {
-    console.log('Loading Stripe...');
-    const { loadStripe } = await import('@stripe/stripe-js');
-    
-    if (!process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY) {
-      console.error('Stripe publishable key is not configured');
-      return null;
-    }
-    
-    console.log('Stripe publishable key found, loading Stripe...');
-    const stripe = await loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
-    console.log('Stripe loaded successfully:', stripe ? 'Yes' : 'No');
-    return stripe;
-  } catch (error) {
-    console.error('Failed to load Stripe from npm package:', error);
-    
-    // Try alternative loading method
-    try {
-      console.log('Trying alternative Stripe loading method...');
-      
-      // Check if Stripe is already loaded globally
-      if (typeof window !== 'undefined' && (window as any).Stripe) {
-        console.log('Stripe found globally, using it');
-        return (window as any).Stripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
-      }
-      
-      // Try to load from CDN
-      if (typeof window !== 'undefined') {
-        console.log('Loading Stripe from CDN...');
-        const script = document.createElement('script');
-        script.src = 'https://js.stripe.com/v3/';
-        script.async = true;
-        
-        return new Promise((resolve, reject) => {
-          script.onload = () => {
-            console.log('Stripe loaded from CDN');
-            if ((window as any).Stripe) {
-              resolve((window as any).Stripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY));
-            } else {
-              reject(new Error('Stripe not found after CDN load'));
-            }
-          };
-          script.onerror = () => {
-            console.error('Failed to load Stripe from CDN');
-            reject(new Error('Failed to load Stripe from CDN'));
-          };
-          document.head.appendChild(script);
-        });
-      }
-    } catch (alternativeError) {
-      console.error('Alternative Stripe loading also failed:', alternativeError);
-    }
-    
-    return null;
-  }
-})();
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
 // Apple Pay Domain ID
 const APPLE_PAY_DOMAIN_ID = 'pmd_1NbX8hITL54KWsfnQ2r2oVNU';
@@ -93,47 +37,13 @@ const SHIPPING_OPTIONS = [
 
 // Wrap the main component with Stripe Elements
 export default function CheckoutPageWrapper() {
-  return (
-    <Elements stripe={stripePromise}>
-      <CheckoutPage />
-    </Elements>
-  );
-}
-
-function CheckoutPage() {
-  const stripe = useStripe();
-  const elements = useElements();
+  const [clientSecret, setClientSecret] = React.useState<string | null>(null);
   const { items, total, clearBasket } = useBasket();
   const router = useRouter();
   const [authError, setAuthError] = useState('');
   const [cardElement, setCardElement] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [stripeError, setStripeError] = useState<string | null>(null);
-  const [clientSecret, setClientSecret] = useState<string | null>(null);
-
-  const [form, setForm] = useState({
-    email: "",
-    newsletter: false,
-    firstName: "",
-    lastName: "",
-    company: "",
-    country: "United Kingdom (UK)",
-    address: "",
-    address2: "",
-    city: "",
-    county: "",
-    postcode: "",
-    phone: "",
-    subscribe: false,
-    deliverDifferent: false,
-    orderNotes: "",
-  });
-  const [errors, setErrors] = useState<any>({});
-  const [submitting, setSubmitting] = useState(false);
-  const [shipping, setShipping] = useState("free");
-  const [paymentMethod, setPaymentMethod] = useState("card");
-  const [saveCard, setSaveCard] = useState(false);
-  const [cardComplete, setCardComplete] = useState(false);
   const [paymentProcessing, setPaymentProcessing] = useState(false);
   const [paymentError, setPaymentError] = useState<string | null>(null);
   const [smartCoinBalance, setSmartCoinBalance] = useState<number>(0);
@@ -141,7 +51,7 @@ function CheckoutPage() {
   const [applePayLoading, setApplePayLoading] = useState(false);
 
   const subtotal = items.reduce((sum, item) => sum + (item.clearanceDiscount ? item.price * (1 - item.clearanceDiscount / 100) : item.price) * item.quantity, 0);
-  const shippingPrice = SHIPPING_OPTIONS.find(opt => opt.value === shipping)?.price || 0;
+  const shippingPrice = SHIPPING_OPTIONS.find(opt => opt.value === "free")?.price || 0;
   const totalWithShipping = subtotal + shippingPrice;
 
   useEffect(() => {
@@ -360,7 +270,6 @@ function CheckoutPage() {
     const newErrors = validate();
     setErrors(newErrors);
     if (Object.keys(newErrors).length > 0) return;
-    setSubmitting(true);
     setPaymentProcessing(true);
     setPaymentError(null);
     try {
@@ -392,7 +301,126 @@ function CheckoutPage() {
       setPaymentError(error instanceof Error ? error.message : 'Failed to place order. Please try again.');
       toast.error(error instanceof Error ? error.message : 'Failed to place order. Please try again.');
     } finally {
-      setSubmitting(false);
+      setPaymentProcessing(false);
+    }
+  };
+
+  const handleSuccess = () => {
+    // Действия при успешной оплате (например, редирект или показ сообщения)
+  };
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!clientSecret) return <div>Loading...</div>;
+  return (
+    <Elements stripe={stripePromise} options={{ clientSecret }}>
+      <CheckoutPage />
+    </Elements>
+  );
+}
+
+function CheckoutPage() {
+  const stripe = useStripe();
+  const elements = useElements();
+  const { items, total, clearBasket } = useBasket();
+  const router = useRouter();
+  const [authError, setAuthError] = useState('');
+  const [cardElement, setCardElement] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [stripeError, setStripeError] = useState<string | null>(null);
+  const [clientSecret, setClientSecret] = useState<string | null>(null);
+
+  const [form, setForm] = useState({
+    email: "",
+    newsletter: false,
+    firstName: "",
+    lastName: "",
+    company: "",
+    country: "United Kingdom (UK)",
+    address: "",
+    address2: "",
+    city: "",
+    county: "",
+    postcode: "",
+    phone: "",
+    subscribe: false,
+    deliverDifferent: false,
+    orderNotes: "",
+  });
+  const [errors, setErrors] = useState<any>({});
+  const [submitting, setSubmitting] = useState(false);
+  const [shipping, setShipping] = useState("free");
+  const [paymentMethod, setPaymentMethod] = useState("card");
+  const [saveCard, setSaveCard] = useState(false);
+  const [cardComplete, setCardComplete] = useState(false);
+  const [paymentProcessing, setPaymentProcessing] = useState(false);
+  const [paymentError, setPaymentError] = useState<string | null>(null);
+  const [smartCoinBalance, setSmartCoinBalance] = useState<number>(0);
+  const [useSmartCoins, setUseSmartCoins] = useState(false);
+  const [applePayLoading, setApplePayLoading] = useState(false);
+
+  const subtotal = items.reduce((sum, item) => sum + (item.clearanceDiscount ? item.price * (1 - item.clearanceDiscount / 100) : item.price) * item.quantity, 0);
+  const shippingPrice = SHIPPING_OPTIONS.find(opt => opt.value === shipping)?.price || 0;
+  const totalWithShipping = subtotal + shippingPrice;
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value, type } = e.target;
+    setForm((prev) => ({
+      ...prev,
+      [name]: type === "checkbox" && e.target instanceof HTMLInputElement ? e.target.checked : value,
+    }));
+  };
+
+  const handleCardElementReady = (element: any) => {
+    setCardElement(element);
+  };
+
+  // handleSubmit теперь только подтверждает оплату
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const newErrors = validate();
+    setErrors(newErrors);
+    if (Object.keys(newErrors).length > 0) return;
+    setPaymentProcessing(true);
+    setPaymentError(null);
+    try {
+      if (!stripe || !elements) throw new Error('Stripe is not initialized');
+      const result = await stripe.confirmPayment({
+        elements,
+        confirmParams: {
+          payment_method_data: {
+            billing_details: {
+              name: form.firstName + ' ' + form.lastName,
+              email: form.email,
+              phone: form.phone,
+              address: {
+                line1: form.address,
+                city: form.city,
+                state: form.county,
+                postal_code: form.postcode,
+                country: 'GB',
+              },
+            },
+          },
+        },
+        redirect: 'if_required',
+      });
+      if (result.error) throw new Error(result.error.message);
+      // После успешной оплаты — обновить stock и создать заказ (можно оставить как есть)
+      // ...
+    } catch (error) {
+      setPaymentError(error instanceof Error ? error.message : 'Failed to place order. Please try again.');
+      toast.error(error instanceof Error ? error.message : 'Failed to place order. Please try again.');
+    } finally {
       setPaymentProcessing(false);
     }
   };
@@ -788,9 +816,7 @@ function CheckoutPage() {
               {paymentMethod === "card" && (
                 <div className="space-y-4 bg-gray-50 rounded-lg p-6 border mb-4">
                   {clientSecret && (
-                    <Elements stripe={stripePromise} options={{ clientSecret }}>
-                      <StripeCardForm clientSecret={clientSecret} onSuccess={handleSuccess} amount={Math.round(totalWithShipping * 100)} />
-                    </Elements>
+                    <StripeCardForm clientSecret={clientSecret} onSuccess={handleSuccess} amount={Math.round(totalWithShipping * 100)} />
                   )}
                   {paymentError && (
                     <div className="text-red-600 text-sm mt-2">
