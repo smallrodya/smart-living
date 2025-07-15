@@ -1023,30 +1023,53 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
                   return { sale, regular };
                 }
                 const { sale, regular } = getMinPrices(product!);
-                if (sale < regular && sale > 0) {
-                  return (
-                    <>
-                      <span style={{ fontWeight: 500, color: '#222', marginRight: 8 }}>From:</span>
-                      <span style={{ color: '#999', textDecoration: 'line-through', fontSize: '20px', marginRight: 8 }}>
-                        £{regular.toFixed(2)}
-                      </span>
-                      <span style={{ color: '#e53935', fontWeight: 700, fontSize: '28px' }}>
-                        £{sale.toFixed(2)}
-                      </span>
-                    </>
-                  );
-                } else if (sale > 0) {
-                  return (
-                    <>
-                      <span style={{ fontWeight: 500, color: '#222', marginRight: 8 }}>From:</span>
-                      <span style={{ color: '#222', fontWeight: 700, fontSize: '28px' }}>
-                        £{regular.toFixed(2)}
-                      </span>
-                    </>
-                  );
-                } else {
-                  return null;
+                let priceBlock = null;
+                if (selectedSize) {
+                  // Найти выбранный объект размера/стиля
+                  let selectedObj = null;
+                  if (product.beddingSizes) selectedObj = product.beddingSizes.find(s => s.size === selectedSize);
+                  if (!selectedObj && product.throwsTowelsStylePrices) selectedObj = product.throwsTowelsStylePrices.find(s => s.size === selectedSize);
+                  if (!selectedObj && product.rugsMatsSizes) selectedObj = product.rugsMatsSizes.find(s => s.size === selectedSize);
+                  if (!selectedObj && product.clothingStylePrices) selectedObj = product.clothingStylePrices.find(s => s.size === selectedSize);
+                  if (!selectedObj && product.footwearSizes) selectedObj = product.footwearSizes.find(s => s.size === selectedSize);
+                  if (selectedObj) {
+                    let sale = 0;
+                    let regular = 0;
+                    if ('salePrice' in selectedObj && typeof selectedObj.salePrice === 'number') sale = selectedObj.salePrice;
+                    if ('regularPrice' in selectedObj && typeof selectedObj.regularPrice === 'number') regular = selectedObj.regularPrice;
+                    if (!regular && 'price' in selectedObj && typeof selectedObj.price === 'number') regular = selectedObj.price;
+                    if (!sale && 'price' in selectedObj && typeof selectedObj.price === 'number') sale = selectedObj.price;
+                    if (!regular) regular = sale;
+                    if (sale < regular) {
+                      priceBlock = <>
+                        <span style={{ fontWeight: 500, color: '#222', marginRight: 8 }}>From:</span>
+                        <span style={{ color: '#999', textDecoration: 'line-through', fontSize: '20px', marginRight: 8 }}>£{regular.toFixed(2)}</span>
+                        <span style={{ color: '#e53935', fontWeight: 700, fontSize: '28px' }}>£{sale.toFixed(2)}</span>
+                      </>;
+                    } else {
+                      priceBlock = <>
+                        <span style={{ fontWeight: 500, color: '#222', marginRight: 8 }}>From:</span>
+                        <span style={{ color: '#222', fontWeight: 700, fontSize: '28px' }}>£{regular.toFixed(2)}</span>
+                      </>;
+                    }
+                  }
                 }
+                if (!priceBlock) {
+                  // fallback: минимальная цена (как сейчас)
+                  if (sale < regular && sale > 0) {
+                    priceBlock = <>
+                      <span style={{ fontWeight: 500, color: '#222', marginRight: 8 }}>From:</span>
+                      <span style={{ color: '#999', textDecoration: 'line-through', fontSize: '20px', marginRight: 8 }}>£{regular.toFixed(2)}</span>
+                      <span style={{ color: '#e53935', fontWeight: 700, fontSize: '28px' }}>£{sale.toFixed(2)}</span>
+                    </>;
+                  } else if (sale > 0) {
+                    priceBlock = <>
+                      <span style={{ fontWeight: 500, color: '#222', marginRight: 8 }}>From:</span>
+                      <span style={{ color: '#222', fontWeight: 700, fontSize: '28px' }}>£{regular.toFixed(2)}</span>
+                    </>;
+                  }
+                }
+                return priceBlock;
               })()}
             </div>
 

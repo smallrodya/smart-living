@@ -37,30 +37,25 @@ export async function PATCH(
   try {
     const { id } = await params;
     const { db } = await connectToDatabase();
-    const { status } = await request.json();
-
+    const body = await request.json();
+    const update: any = { updatedAt: new Date().toISOString() };
+    if (body.status) update.status = body.status;
+    if (body.trackNumber !== undefined) update.trackNumber = body.trackNumber;
     const result = await db.collection('orders').updateOne(
       { _id: new ObjectId(id) },
-      { 
-        $set: { 
-          status,
-          updatedAt: new Date().toISOString()
-        } 
-      }
+      { $set: update }
     );
-
     if (result.matchedCount === 0) {
       return NextResponse.json(
         { error: 'Order not found' },
         { status: 404 }
       );
     }
-
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error('Error updating order status:', error);
+    console.error('Error updating order:', error);
     return NextResponse.json(
-      { error: 'Failed to update order status' },
+      { error: 'Failed to update order' },
       { status: 500 }
     );
   }

@@ -49,6 +49,7 @@ interface Order {
   status: string;
   createdAt: string;
   updatedAt: string;
+  trackNumber?: string;
 }
 
 export default function OrdersPage() {
@@ -57,6 +58,8 @@ export default function OrdersPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedStatus, setSelectedStatus] = useState('');
   const [expandedOrders, setExpandedOrders] = useState<Set<string>>(new Set());
+  const [editingTrack, setEditingTrack] = useState<{ [orderId: string]: boolean }>({});
+  const [trackInputs, setTrackInputs] = useState<{ [orderId: string]: string }>({});
 
   const fetchOrders = async () => {
     setLoading(true);
@@ -190,6 +193,28 @@ export default function OrdersPage() {
 
     // Генерируем файл и скачиваем его
     XLSX.writeFile(wb, `order_${order._id.slice(-6)}.xlsx`);
+  };
+
+  const handleTrackEdit = (orderId: string, currentTrack: string) => {
+    setEditingTrack(prev => ({ ...prev, [orderId]: true }));
+    setTrackInputs(prev => ({ ...prev, [orderId]: currentTrack || '' }));
+  };
+
+  const handleTrackSave = async (orderId: string) => {
+    try {
+      const trackNumber = trackInputs[orderId] || '';
+      const response = await fetch(`/api/orders/${orderId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ trackNumber }),
+      });
+      if (!response.ok) throw new Error('Failed to update track number');
+      toast.success('Track number updated');
+      setEditingTrack(prev => ({ ...prev, [orderId]: false }));
+      fetchOrders();
+    } catch (e) {
+      toast.error('Failed to update track number');
+    }
   };
 
   const filteredOrders = orders.filter(order => {
@@ -340,6 +365,46 @@ export default function OrdersPage() {
                       }`}>
                         {order.status}
                       </span>
+                    </div>
+
+                    {/* Track Number */}
+                    <div className="flex items-center gap-2 mt-2">
+                      <span className="text-sm text-gray-600">Track Number:</span>
+                      {editingTrack[order._id] ? (
+                        <>
+                          <input
+                            type="text"
+                            value={trackInputs[order._id] || ''}
+                            onChange={e => setTrackInputs(prev => ({ ...prev, [order._id]: e.target.value }))}
+                            className="px-2 py-1 border rounded text-sm"
+                            style={{ minWidth: 120 }}
+                          />
+                          <button
+                            onClick={e => { e.stopPropagation(); handleTrackSave(order._id); }}
+                            className="ml-1 text-green-600 hover:text-green-800"
+                            title="Save"
+                          >
+                            ✓
+                          </button>
+                          <button
+                            onClick={e => { e.stopPropagation(); setEditingTrack(prev => ({ ...prev, [order._id]: false })); }}
+                            className="ml-1 text-gray-400 hover:text-gray-600"
+                            title="Cancel"
+                          >
+                            ✕
+                          </button>
+                        </>
+                      ) : (
+                        <>
+                          <span className="text-sm font-medium text-gray-900">{order.trackNumber || <span className="text-gray-400">(not set)</span>}</span>
+                          <button
+                            onClick={e => { e.stopPropagation(); handleTrackEdit(order._id, order.trackNumber || ''); }}
+                            className="ml-2 px-2 py-1 text-blue-600 hover:text-blue-800 border border-blue-200 rounded text-xs"
+                          >
+                            {order.trackNumber ? 'Edit' : 'Add Track'}
+                          </button>
+                        </>
+                      )}
                     </div>
 
                     {/* Expandable Content */}

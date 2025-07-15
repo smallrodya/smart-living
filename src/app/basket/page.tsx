@@ -239,6 +239,12 @@ export default function BasketPage() {
                   >
                     Proceed to Checkout
                   </button>
+                  <button
+                    onClick={() => router.push('/checkout_guest')}
+                    className="w-full md:w-auto bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+                  >
+                    Checkout as Guest
+                  </button>
                 </div>
               </div>
             </div>

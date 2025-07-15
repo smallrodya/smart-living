@@ -977,55 +977,40 @@ export default function MobileQuickViewModal({ product, onClose }: MobileQuickVi
                 overflow: 'hidden',
               }}>
                 {(() => {
-                  function getMinPrices(product: Product) {
-                    let sale = 0, regular = 0;
-                    if (!product) return { sale, regular };
-                    if (product.category === 'OUTDOOR' && product.outdoorPrice) {
-                      sale = product.outdoorPrice.salePrice;
-                      regular = product.outdoorPrice.regularPrice;
-                    } else if (product.category === 'FOOTWEAR' && product.footwearSizes?.length) {
-                      sale = Math.min(...product.footwearSizes.map((s: any) => s.salePrice));
-                      regular = Math.min(...product.footwearSizes.map((s: any) => s.regularPrice ?? s.price ?? s.salePrice));
-                    } else if (product.category === 'THROWS & TOWELS' && product.throwsTowelsStylePrices?.length) {
-                      sale = Math.min(...product.throwsTowelsStylePrices.map((s: any) => s.salePrice));
-                      regular = Math.min(...product.throwsTowelsStylePrices.map((s: any) => s.regularPrice ?? s.price ?? s.salePrice));
-                    } else if (product.category === 'CLOTHING' && product.clothingStylePrices?.length) {
-                      sale = Math.min(...product.clothingStylePrices.map((s: any) => s.salePrice));
-                      regular = Math.min(...product.clothingStylePrices.map((s: any) => s.regularPrice ?? s.price ?? s.salePrice));
-                    } else if (product.category === 'RUGS & MATS' && product.rugsMatsSizes?.length) {
-                      sale = Math.min(...product.rugsMatsSizes.map((s: any) => s.salePrice));
-                      regular = Math.min(...product.rugsMatsSizes.map((s: any) => s.regularPrice ?? s.price ?? s.salePrice));
-                    } else if (product.beddingSizes?.length) {
-                      sale = Math.min(...product.beddingSizes.map((s: any) => s.salePrice));
-                      regular = Math.min(...product.beddingSizes.map((s: any) => s.regularPrice ?? s.price ?? s.salePrice));
+                  if (selectedSize) {
+                    let selectedObj = null;
+                    if (product.beddingSizes) selectedObj = product.beddingSizes.find(s => s.size === selectedSize);
+                    if (!selectedObj && product.throwsTowelsStylePrices) selectedObj = product.throwsTowelsStylePrices.find(s => s.size === selectedSize);
+                    if (!selectedObj && product.rugsMatsSizes) selectedObj = product.rugsMatsSizes.find(s => s.size === selectedSize);
+                    if (!selectedObj && product.clothingStylePrices) selectedObj = product.clothingStylePrices.find(s => s.size === selectedSize);
+                    if (!selectedObj && product.footwearSizes) selectedObj = product.footwearSizes.find(s => s.size === selectedSize);
+                    if (selectedObj) {
+                      let sale = 0;
+                      let regular = 0;
+                      if ('salePrice' in selectedObj && typeof selectedObj.salePrice === 'number') sale = selectedObj.salePrice;
+                      if ('regularPrice' in selectedObj && typeof selectedObj.regularPrice === 'number') regular = selectedObj.regularPrice;
+                      if (!regular && 'price' in selectedObj && typeof selectedObj.price === 'number') regular = selectedObj.price;
+                      if (!sale && 'price' in selectedObj && typeof selectedObj.price === 'number') sale = selectedObj.price;
+                      if (!regular) regular = sale;
+                      if (sale < regular) {
+                        return (
+                          <>
+                            <span style={{ fontWeight: 500, color: '#222', marginRight: 8 }}>From:</span>
+                            <span style={{ color: '#999', textDecoration: 'line-through', fontSize: '16px', marginRight: 8 }}>£{regular.toFixed(2)}</span>
+                            <span style={{ color: '#e53935', fontWeight: 700, fontSize: '24px' }}>£{sale.toFixed(2)}</span>
+                          </>
+                        );
+                      } else {
+                        return (
+                          <>
+                            <span style={{ fontWeight: 500, color: '#222', marginRight: 8 }}>From:</span>
+                            <span style={{ color: '#222', fontWeight: 700, fontSize: '24px' }}>£{regular.toFixed(2)}</span>
+                          </>
+                        );
+                      }
                     }
-                    return { sale, regular };
                   }
-                  const { sale, regular } = getMinPrices(product as Product);
-                  if (sale < regular && sale > 0) {
-                    return (
-                      <>
-                        <span style={{ fontWeight: 500, color: '#222', marginRight: 8 }}>From:</span>
-                        <span style={{ color: '#999', textDecoration: 'line-through', fontSize: '16px', marginRight: 8 }}>
-                          £{regular.toFixed(2)}
-                        </span>
-                        <span style={{ color: '#e53935', fontWeight: 700, fontSize: '24px' }}>
-                          £{sale.toFixed(2)}
-                        </span>
-                      </>
-                    );
-                  } else if (sale > 0) {
-                    return (
-                      <>
-                        <span style={{ fontWeight: 500, color: '#222', marginRight: 8 }}>From:</span>
-                        <span style={{ color: '#222', fontWeight: 700, fontSize: '24px' }}>
-                          £{regular.toFixed(2)}
-                        </span>
-                      </>
-                    );
-                  } else {
-                    return null;
-                  }
+                  return null;
                 })()}
               </div>
 

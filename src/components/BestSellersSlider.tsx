@@ -148,6 +148,38 @@ const BestSellersSlider = () => {
     }
   };
 
+  const getMinPrices = (product: Product) => {
+    let salePrices: number[] = [];
+    let regularPrices: number[] = [];
+    if (product.beddingSizes && product.beddingSizes.length > 0) {
+      salePrices = product.beddingSizes.map(s => typeof s.salePrice === 'number' ? s.salePrice : (typeof s.price === 'number' ? s.price : 0));
+      regularPrices = product.beddingSizes.map(s => typeof (s as any).regularPrice === 'number' ? (s as any).regularPrice : (typeof s.price === 'number' ? s.price : 0));
+    } else if (product.rugsMatsSizes && product.rugsMatsSizes.length > 0) {
+      salePrices = product.rugsMatsSizes.map(s => typeof s.salePrice === 'number' ? s.salePrice : (typeof s.price === 'number' ? s.price : 0));
+      regularPrices = product.rugsMatsSizes.map(s => typeof (s as any).regularPrice === 'number' ? (s as any).regularPrice : (typeof s.price === 'number' ? s.price : 0));
+    } else if (product.throwsTowelsStylePrices && product.throwsTowelsStylePrices.length > 0) {
+      salePrices = product.throwsTowelsStylePrices.map(s => typeof s.salePrice === 'number' ? s.salePrice : (typeof s.price === 'number' ? s.price : 0));
+      regularPrices = product.throwsTowelsStylePrices.map(s => typeof (s as any).regularPrice === 'number' ? (s as any).regularPrice : (typeof s.price === 'number' ? s.price : 0));
+    } else if (product.curtainsSizes && product.curtainsSizes.length > 0) {
+      salePrices = product.curtainsSizes.map(s => typeof s.salePrice === 'number' ? s.salePrice : (typeof s.price === 'number' ? s.price : 0));
+      regularPrices = product.curtainsSizes.map(s => typeof (s as any).regularPrice === 'number' ? (s as any).regularPrice : (typeof s.price === 'number' ? s.price : 0));
+    } else if (product.clothingStylePrices && product.clothingStylePrices.length > 0) {
+      salePrices = product.clothingStylePrices.map(s => typeof s.salePrice === 'number' ? s.salePrice : (typeof s.price === 'number' ? s.price : 0));
+      regularPrices = product.clothingStylePrices.map(s => typeof (s as any).regularPrice === 'number' ? (s as any).regularPrice : (typeof s.price === 'number' ? s.price : 0));
+    } else if (product.footwearSizes && product.footwearSizes.length > 0) {
+      salePrices = product.footwearSizes.map(s => typeof s.salePrice === 'number' ? s.salePrice : (typeof s.price === 'number' ? s.price : 0));
+      regularPrices = product.footwearSizes.map(s => typeof (s as any).regularPrice === 'number' ? (s as any).regularPrice : (typeof s.price === 'number' ? s.price : 0));
+    } else if (product.outdoorPrice) {
+      salePrices = [product.outdoorPrice.salePrice];
+      regularPrices = [product.outdoorPrice.regularPrice];
+    }
+    if (salePrices.length === 0) return { sale: 0, regular: 0 };
+    return {
+      sale: Math.min(...salePrices),
+      regular: Math.min(...regularPrices.length ? regularPrices : salePrices),
+    };
+  };
+
   const formatPriceRange = (product: Product) => {
     if (product.price) return product.price;
     
@@ -556,7 +588,17 @@ const BestSellersSlider = () => {
                           transition={{ delay: 0.3 }}
                         >
                           <span className="text-xl font-bold text-white">
-                            {formatPriceRange(product)}
+                            {(() => {
+                              const { sale, regular } = getMinPrices(product);
+                              if (sale < regular) {
+                                return <>
+                                  <span style={{ color: '#e53935', fontWeight: 700 }}>£{sale.toFixed(2)}</span>
+                                  <span style={{ color: '#bbb', textDecoration: 'line-through', marginLeft: 8, fontSize: 16, fontWeight: 500 }}>£{regular.toFixed(2)}</span>
+                                </>;
+                              } else {
+                                return <span style={{ color: '#fff', fontWeight: 700 }}>£{regular.toFixed(2)}</span>;
+                              }
+                            })()}
                           </span>
                           <div className="flex items-center gap-1">
                             {[...Array(5)].map((_, i) => (
