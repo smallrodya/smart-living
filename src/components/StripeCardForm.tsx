@@ -66,8 +66,7 @@ export default function StripeCardForm({ clientSecret, onSuccess, amount }: Stri
       )}
       {!prSupported && (
         <div className="text-sm text-gray-500 mb-2">
-          Apple Pay / Google Pay не поддерживаются на этом устройстве или браузере, либо Stripe не может их инициализировать.<br />
-          Проверьте, что у вас есть карта в Wallet (Apple Pay) или Google Pay-аккаунт, и что сайт открыт по HTTPS.
+          Apple Pay / Google Pay are not supported on this device or browser
         </div>
       )}
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
