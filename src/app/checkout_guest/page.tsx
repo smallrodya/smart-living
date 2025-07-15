@@ -479,7 +479,7 @@ function GuestCheckoutPage() {
               </div>
               {clientSecret && (
                 <Elements stripe={stripePromise} options={{ clientSecret }}>
-                  <StripeCardForm clientSecret={clientSecret} onSuccess={handleSuccess} />
+                  <StripeCardForm clientSecret={clientSecret} onSuccess={handleSuccess} amount={Math.round(totalWithShipping * 100)} />
                 </Elements>
               )}
             </div>

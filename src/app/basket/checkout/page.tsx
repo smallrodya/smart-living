@@ -789,7 +789,7 @@ function CheckoutPage() {
                 <div className="space-y-4 bg-gray-50 rounded-lg p-6 border mb-4">
                   {clientSecret && (
                     <Elements stripe={stripePromise} options={{ clientSecret }}>
-                      <StripeCardForm clientSecret={clientSecret} onSuccess={handleSuccess} />
+                      <StripeCardForm clientSecret={clientSecret} onSuccess={handleSuccess} amount={Math.round(totalWithShipping * 100)} />
                     </Elements>
                   )}
                   {paymentError && (

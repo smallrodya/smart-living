@@ -4,9 +4,10 @@ import { PaymentElement, useStripe, useElements, PaymentRequestButtonElement } f
 interface StripeCardFormProps {
   clientSecret: string;
   onSuccess: () => void;
+  amount: number; // сумма в пенсах
 }
 
-export default function StripeCardForm({ clientSecret, onSuccess }: StripeCardFormProps) {
+export default function StripeCardForm({ clientSecret, onSuccess, amount }: StripeCardFormProps) {
   const stripe = useStripe();
   const elements = useElements();
   const [loading, setLoading] = useState(false);
@@ -15,11 +16,11 @@ export default function StripeCardForm({ clientSecret, onSuccess }: StripeCardFo
   const [prSupported, setPrSupported] = useState(false);
 
   useEffect(() => {
-    if (stripe) {
+    if (stripe && amount > 0) {
       const pr = stripe.paymentRequest({
         country: 'GB',
         currency: 'gbp',
-        total: { label: 'Total', amount: 1000 }, // TODO: заменить на реальную сумму
+        total: { label: 'Total', amount },
         requestPayerName: true,
         requestPayerEmail: true,
       });
@@ -32,7 +33,7 @@ export default function StripeCardForm({ clientSecret, onSuccess }: StripeCardFo
         }
       });
     }
-  }, [stripe]);
+  }, [stripe, amount]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
