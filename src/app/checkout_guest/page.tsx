@@ -50,6 +50,7 @@ function GuestCheckoutPage() {
   const [cardElement, setCardElement] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [clientSecret, setClientSecret] = useState<string | null>(null);
+  const [tooltip, setTooltip] = useState<string | null>(null);
 
   const subtotal = items.reduce((sum, item) => sum + (item.clearanceDiscount ? item.price * (1 - item.clearanceDiscount / 100) : item.price) * item.quantity, 0);
   const shippingPrice = SHIPPING_OPTIONS.find(opt => opt.value === shipping)?.price || 0;
@@ -410,7 +411,6 @@ function GuestCheckoutPage() {
                     <span className="font-medium text-gray-900">{item.title} <span className="font-normal text-gray-500">× {item.quantity}</span></span>
                     {item.size && <span className="text-xs text-gray-400">Size: {item.size}</span>}
                     {item.sku && <span className="text-xs text-gray-400">SKU: {item.sku}</span>}
-                    {item.stock !== undefined && <span className="text-xs text-gray-400">Stock: {item.stock}</span>}
                   </div>
                   <div className="text-right text-gray-900">£{((item.clearanceDiscount ? item.price * (1 - item.clearanceDiscount / 100) : item.price) * item.quantity).toFixed(2)}</div>
                 </div>
@@ -423,7 +423,7 @@ function GuestCheckoutPage() {
                 <span className="font-semibold">Shipping</span>
                 <div className="flex flex-col gap-2 text-right">
                   {SHIPPING_OPTIONS.map(opt => (
-                    <label key={opt.value} className="flex items-center justify-end gap-2 text-sm font-normal cursor-pointer">
+                    <label key={opt.value} className="flex items-center justify-end gap-2 text-sm font-normal cursor-pointer relative">
                       <input
                         type="radio"
                         name="shipping"
@@ -432,7 +432,35 @@ function GuestCheckoutPage() {
                         onChange={() => setShipping(opt.value)}
                         className="accent-blue-600"
                       />
-                      <span className={opt.value === "express" ? "font-bold" : ""}>{opt.label}{opt.price > 0 && <span> <b>£{opt.price.toFixed(2)}</b></span>}</span>
+                      <span
+                        className="font-normal"
+                        onMouseEnter={() => setTooltip(opt.value)}
+                        onMouseLeave={() => setTooltip(null)}
+                        style={{ position: 'relative' }}
+                      >
+                        {opt.label}{opt.price > 0 && <span> <b>£{opt.price.toFixed(2)}</b></span>}
+                        {tooltip === opt.value && (
+                          <span style={{
+                            position: 'absolute',
+                            right: 0,
+                            top: '100%',
+                            zIndex: 10,
+                            background: 'white',
+                            border: '1px solid #e5e7eb',
+                            borderRadius: '0.5rem',
+                            padding: '0.5rem 1rem',
+                            boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+                            fontSize: '0.85rem',
+                            color: '#374151',
+                            marginTop: '0.25rem',
+                            minWidth: '140px',
+                            textAlign: 'left',
+                            fontWeight: 400,
+                          }}>
+                            {opt.value === 'free' ? '2-5 working days' : '1-2 working days'}
+                          </span>
+                        )}
+                      </span>
                     </label>
                   ))}
                 </div>
