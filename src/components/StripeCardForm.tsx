@@ -1,56 +1,46 @@
-import React, { useEffect } from 'react';
-import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
+import React, { useEffect, useState } from 'react';
+import { PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js';
 
 interface StripeCardFormProps {
-  onCardChange: (isComplete: boolean) => void;
-  onCardElementReady: (element: any) => void;
+  clientSecret: string;
+  onSuccess: () => void;
 }
 
-const CARD_ELEMENT_OPTIONS = {
-  style: {
-    base: {
-      fontSize: '16px',
-      color: '#424770',
-      '::placeholder': {
-        color: '#aab7c4',
-      },
-    },
-    invalid: {
-      color: '#9e2146',
-    },
-  },
-};
-
-export default function StripeCardForm({ onCardChange, onCardElementReady }: StripeCardFormProps) {
+export default function StripeCardForm({ clientSecret, onSuccess }: StripeCardFormProps) {
   const stripe = useStripe();
   const elements = useElements();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (elements) {
-      const cardElement = elements.getElement(CardElement);
-      if (cardElement) {
-        onCardElementReady(cardElement);
-      }
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!stripe || !elements) return;
+    setLoading(true);
+    setError(null);
+    const result = await stripe.confirmPayment({
+      elements,
+      confirmParams: {},
+      redirect: 'if_required',
+    });
+    setLoading(false);
+    if (result.error) {
+      setError(result.error.message || 'Payment failed');
+    } else if (result.paymentIntent && result.paymentIntent.status === 'succeeded') {
+      onSuccess();
     }
-  }, [elements, onCardElementReady]);
-
-  const handleCardChange = (event: any) => {
-    onCardChange(event.complete);
   };
 
   return (
-    <div className="space-y-4">
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          Card details
-        </label>
-        <div className="w-full px-4 py-2 border border-gray-300 rounded-lg focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-blue-500">
-          <CardElement
-            options={CARD_ELEMENT_OPTIONS}
-            onChange={handleCardChange}
-          />
-        </div>
-      </div>
-    </div>
+    <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+      <PaymentElement options={{ layout: 'tabs' }} />
+      {error && <div className="text-red-500 text-sm">{error}</div>}
+      <button
+        type="submit"
+        disabled={!stripe || loading}
+        className="bg-black text-white px-6 py-2 rounded-lg hover:bg-gray-800 transition-colors font-semibold mt-2"
+      >
+        {loading ? 'Processing...' : 'Pay'}
+      </button>
+    </form>
   );
 } 

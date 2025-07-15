@@ -8,16 +8,9 @@ import Image from "next/image";
 import { toast } from 'react-hot-toast';
 import { Elements, useStripe, useElements } from '@stripe/react-stripe-js';
 import StripeCardForm from '@/components/StripeCardForm';
+import { loadStripe } from '@stripe/stripe-js';
 
-const stripePromise = (async () => {
-  try {
-    const { loadStripe } = await import('@stripe/stripe-js');
-    if (!process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY) return null;
-    return await loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
-  } catch {
-    return null;
-  }
-})();
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
 const SHIPPING_OPTIONS = [
   { label: "Free Shipping", value: "free", price: 0 },
@@ -56,6 +49,7 @@ function GuestCheckoutPage() {
   const [stripeError, setStripeError] = useState<string | null>(null);
   const [cardElement, setCardElement] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [clientSecret, setClientSecret] = useState<string | null>(null);
 
   useEffect(() => {
     const checkStripe = async () => {
@@ -118,6 +112,7 @@ function GuestCheckoutPage() {
       });
       if (!paymentResponse.ok) throw new Error('Failed to create payment intent');
       const { clientSecret } = await paymentResponse.json();
+      setClientSecret(clientSecret);
       if (!stripe || !cardElement) throw new Error('Stripe is not initialized');
       const { error: paymentError, paymentIntent } = await stripe.confirmCardPayment(
         clientSecret,
@@ -173,6 +168,11 @@ function GuestCheckoutPage() {
       setSubmitting(false);
       setPaymentProcessing(false);
     }
+  };
+
+  const handleSuccess = () => {
+    // Handle successful payment
+    console.log("Payment succeeded!");
   };
 
   if (isLoading) {
@@ -458,18 +458,10 @@ function GuestCheckoutPage() {
                   </div>
                 </label>
               </div>
-              {paymentMethod === "card" && (
-                <div className="space-y-4 bg-gray-50 rounded-lg p-6 border mb-4">
-                  <StripeCardForm 
-                    onCardChange={setCardComplete} 
-                    onCardElementReady={handleCardElementReady}
-                  />
-                  {paymentError && (
-                    <div className="text-red-600 text-sm mt-2">
-                      {paymentError}
-                    </div>
-                  )}
-                </div>
+              {clientSecret && (
+                <Elements stripe={stripePromise} options={{ clientSecret }}>
+                  <StripeCardForm clientSecret={clientSecret} onSuccess={handleSuccess} />
+                </Elements>
               )}
             </div>
             <div className="space-y-4">

@@ -7,7 +7,8 @@ import Footer from "@/components/Footer";
 import Image from "next/image";
 import { getCookie, setCookie } from 'cookies-next';
 import { toast } from 'react-hot-toast';
-import { Elements, useStripe, useElements, CardElement } from '@stripe/react-stripe-js';
+import { Elements, useStripe, useElements } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
 import StripeCardForm from '@/components/StripeCardForm';
 
 // Инициализация Stripe с fallback
@@ -108,6 +109,7 @@ function CheckoutPage() {
   const [cardElement, setCardElement] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [stripeError, setStripeError] = useState<string | null>(null);
+  const [clientSecret, setClientSecret] = useState<string | null>(null);
 
   const [form, setForm] = useState({
     email: "",
@@ -648,6 +650,10 @@ function CheckoutPage() {
     }
   };
 
+  const handleSuccess = () => {
+    // Действия при успешной оплате (например, редирект или показ сообщения)
+  };
+
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -1034,10 +1040,11 @@ function CheckoutPage() {
 
               {paymentMethod === "card" && (
                 <div className="space-y-4 bg-gray-50 rounded-lg p-6 border mb-4">
-                  <StripeCardForm 
-                    onCardChange={setCardComplete} 
-                    onCardElementReady={handleCardElementReady}
-                  />
+                  {clientSecret && (
+                    <Elements stripe={stripePromise} options={{ clientSecret }}>
+                      <StripeCardForm clientSecret={clientSecret} onSuccess={handleSuccess} />
+                    </Elements>
+                  )}
                   {paymentError && (
                     <div className="text-red-600 text-sm mt-2">
                       {paymentError}
