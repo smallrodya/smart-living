@@ -733,12 +733,12 @@ function CheckoutPage() {
                   />
                   <div className="flex-1">
                     <div className="flex items-center justify-between">
-                      <span className="font-medium">Credit/Debit Card</span>
+                      <span className="font-medium">Card</span>
                       <div className="flex gap-2">
-                        <img src="/Visa_2021.svg.png" alt="Visa" className="h-6 object-contain" />
-                        <img src="/Mastercard-logo.svg.png" alt="MasterCard" className="h-6 object-contain" />
-                        <img src="/American_Express_logo_(2018).svg.png" alt="Amex" className="h-6 object-contain" />
-                        <img src="/UnionPay_logo.svg.png" alt="UnionPay" className="h-6 object-contain" />
+                      <img src="/Visa_2021.svg.png" alt="Visa" style={{ height: 10, width: 'auto', marginRight: 8 }} />
+                        <img src="/Mastercard-logo.svg.png" alt="MasterCard" style={{ height: 10, width: 'auto', marginRight: 8 }} />
+                        <img src="/American_Express_logo_(2018).svg.png" alt="Amex" style={{ height: 16, width: 'auto', marginRight: 8 }} />
+                        <img src="/UnionPay_logo.svg.png" alt="UnionPay" style={{ height: 16, width: 'auto', marginRight: 0 }} />
                       </div>
                     </div>
                   </div>

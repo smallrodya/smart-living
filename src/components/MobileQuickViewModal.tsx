@@ -273,7 +273,7 @@ export default function MobileQuickViewModal({ product, onClose }: MobileQuickVi
       });
       toast.custom((t) => (
         <div style={{ background: '#fff', borderRadius: 12, boxShadow: '0 2px 12px rgba(0,0,0,0.08)', padding: '18px 28px', display: 'flex', alignItems: 'center', gap: 18 }}>
-          <span style={{ color: '#222', fontWeight: 600 }}>Product added to cart</span>
+          <span style={{ color: '#222', fontWeight: 600 }}>Product added to basket</span>
           <Link href="/basket" style={{ marginLeft: 16, background: '#222', color: '#fff', borderRadius: 8, padding: '8px 18px', fontWeight: 600, textDecoration: 'none', transition: 'background 0.2s' }} onClick={() => toast.dismiss(t.id)}>
             Basket
           </Link>
@@ -310,7 +310,7 @@ export default function MobileQuickViewModal({ product, onClose }: MobileQuickVi
       });
       toast.custom((t) => (
         <div style={{ background: '#fff', borderRadius: 12, boxShadow: '0 2px 12px rgba(0,0,0,0.08)', padding: '18px 28px', display: 'flex', alignItems: 'center', gap: 18 }}>
-          <span style={{ color: '#222', fontWeight: 600 }}>Product added to cart</span>
+          <span style={{ color: '#222', fontWeight: 600 }}>Product added to basket</span>
           <Link href="/basket" style={{ marginLeft: 16, background: '#222', color: '#fff', borderRadius: 8, padding: '8px 18px', fontWeight: 600, textDecoration: 'none', transition: 'background 0.2s' }} onClick={() => toast.dismiss(t.id)}>
             Basket
           </Link>
@@ -347,7 +347,7 @@ export default function MobileQuickViewModal({ product, onClose }: MobileQuickVi
       });
       toast.custom((t) => (
         <div style={{ background: '#fff', borderRadius: 12, boxShadow: '0 2px 12px rgba(0,0,0,0.08)', padding: '18px 28px', display: 'flex', alignItems: 'center', gap: 18 }}>
-          <span style={{ color: '#222', fontWeight: 600 }}>Product added to cart</span>
+          <span style={{ color: '#222', fontWeight: 600 }}>Product added to basket</span>
           <Link href="/basket" style={{ marginLeft: 16, background: '#222', color: '#fff', borderRadius: 8, padding: '8px 18px', fontWeight: 600, textDecoration: 'none', transition: 'background 0.2s' }} onClick={() => toast.dismiss(t.id)}>
             Basket
           </Link>
@@ -404,7 +404,7 @@ export default function MobileQuickViewModal({ product, onClose }: MobileQuickVi
         });
         toast.custom((t) => (
           <div style={{ background: '#fff', borderRadius: 12, boxShadow: '0 2px 12px rgba(0,0,0,0.08)', padding: '18px 28px', display: 'flex', alignItems: 'center', gap: 18 }}>
-            <span style={{ color: '#222', fontWeight: 600 }}>Product added to cart</span>
+            <span style={{ color: '#222', fontWeight: 600 }}>Product added to basket</span>
             <Link href="/basket" style={{ marginLeft: 16, background: '#222', color: '#fff', borderRadius: 8, padding: '8px 18px', fontWeight: 600, textDecoration: 'none', transition: 'background 0.2s' }} onClick={() => toast.dismiss(t.id)}>
               Basket
             </Link>
@@ -412,13 +412,13 @@ export default function MobileQuickViewModal({ product, onClose }: MobileQuickVi
         ));
         onClose();
       } else {
-        console.error('Error adding to cart:', {
+        console.error('Error adding to basket:', {
           price,
           selectedSize,
           product,
           style: product.throwsTowelsStylePrices?.find(s => s.size === selectedSize)
         });
-        toast.error('Unable to add product to cart. Please try again.');
+        toast.error('Unable to add product to basket. Please try again.');
       }
     }
   };
@@ -958,7 +958,7 @@ export default function MobileQuickViewModal({ product, onClose }: MobileQuickVi
               </div>
             )}
 
-            {/* Price and Add to Cart */}
+            {/* Price and Add to Basket */}
             <div style={{
               padding: '16px',
               background: '#fff',
@@ -1290,7 +1290,7 @@ export default function MobileQuickViewModal({ product, onClose }: MobileQuickVi
                 </div>
               )}
 
-              {/* Quantity and Add to Cart */}
+              {/* Quantity and Add to Basket */}
               {(
                 (product.category === 'OUTDOOR' && product.outdoorPrice && product.outdoorPrice.stock > 0) ||
                 (product.category !== 'OUTDOOR' && selectedSize && getSelectedStock() > 0)
@@ -1381,7 +1381,7 @@ export default function MobileQuickViewModal({ product, onClose }: MobileQuickVi
                     <circle cx="20" cy="21" r="1"/>
                     <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
                   </svg>
-                  {product.isSoldOut ? 'Out of Stock' : (product.category === 'OUTDOOR' ? 'Add to Cart' : (selectedSize ? 'Add to Cart' : (product.category === 'THROWS & TOWELS' ? 'Select Style' : 'Select Size')))}
+                  {product.isSoldOut ? 'Out of Stock' : (product.category === 'OUTDOOR' ? 'Add to Basket' : (selectedSize ? 'Add to Basket' : (product.category === 'THROWS & TOWELS' ? 'Select Style' : 'Select Size')))}
                 </button>
               )}
             </div>

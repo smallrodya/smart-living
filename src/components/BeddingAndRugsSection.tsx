@@ -33,7 +33,7 @@ const ThrowAndCurtainSection = () => {
       <h2
         ref={titleRef}
         style={{
-          fontSize: 28,
+          fontSize: 24,
           fontWeight: 800,
           color: '#1a1a1a',
           marginBottom: 18,
