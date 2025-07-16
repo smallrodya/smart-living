@@ -576,23 +576,28 @@ export default function KitchenMatPage() {
               <div 
                 key={product._id} 
                 style={{
-                  background: '#fff',
+                  background: 'rgba(255,255,255,0.13)',
+                  backdropFilter: 'blur(12px)',
+                  WebkitBackdropFilter: 'blur(12px)',
+                  border: '1.5px solid rgba(255,255,255,0.18)',
                   borderRadius: '20px',
                   boxShadow: hoveredProduct === product._id 
-                    ? '0 8px 32px rgba(34,34,34,0.12)' 
+                    ? '0 8px 32px 0 rgba(31, 38, 135, 0.10)' 
                     : '0 2px 16px rgba(34,34,34,0.07)',
                   overflow: 'hidden',
                   position: 'relative',
                   transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
                   transform: hoveredProduct === product._id ? 'translateY(-4px)' : 'none',
-                  opacity: product.isSoldOut ? 0.75 : 1
+                  opacity: product.isSoldOut ? 0.75 : 1,
+                  cursor: 'pointer'
                 }}
                 onMouseEnter={() => setHoveredProduct(product._id)}
                 onMouseLeave={() => setHoveredProduct(null)}
+                onClick={() => setQuickViewProduct(product)}
               >
                 <div style={{
                   width: '100%',
-                  aspectRatio: '4/3',
+                  aspectRatio: '1/1',
                   position: 'relative',
                   overflow: 'hidden'
                 }}>
@@ -622,40 +627,59 @@ export default function KitchenMatPage() {
                       No image
                     </div>
                   )}
-                  <button
-                    onClick={() => toggleWishlist(product._id)}
+                  
+                  {/* Overlay with actions */}
+                  <div
                     style={{
                       position: 'absolute',
-                      top: '12px',
-                      right: '12px',
-                      background: 'rgba(255, 255, 255, 0.95)',
-                      border: 'none',
-                      borderRadius: '50%',
-                      width: '44px',
-                      height: '44px',
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      bottom: 0,
+                      background: hoveredProduct === product._id ? 'rgba(0,0,0,0.2)' : 'rgba(0,0,0,0)',
+                      transition: 'all 0.3s ease',
                       display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      cursor: 'pointer',
-                      boxShadow: '0 2px 12px rgba(0,0,0,0.15)',
-                      transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                      transform: wishlist.includes(`kitchen_${product._id}`) ? 'scale(1.1)' : 'scale(1)',
-                      backdropFilter: 'blur(4px)'
+                      alignItems: 'flex-start',
+                      justifyContent: 'flex-end',
+                      padding: '16px'
                     }}
                   >
-                    <svg
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill={wishlist.includes(`kitchen_${product._id}`) ? '#e53935' : 'none'}
-                      stroke="#e53935"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toggleWishlist(product._id);
+                      }}
+                      style={{
+                        background: 'rgba(255, 255, 255, 0.95)',
+                        border: 'none',
+                        borderRadius: '50%',
+                        width: '44px',
+                        height: '44px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        cursor: 'pointer',
+                        boxShadow: '0 2px 12px rgba(0,0,0,0.15)',
+                        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                        transform: wishlist.includes(`kitchen_${product._id}`) ? 'scale(1.1)' : 'scale(1)',
+                        backdropFilter: 'blur(4px)'
+                      }}
                     >
-                      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-                    </svg>
-                  </button>
+                      <svg
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill={wishlist.includes(`kitchen_${product._id}`) ? '#e53935' : 'none'}
+                        stroke="#e53935"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                      </svg>
+                    </button>
+                  </div>
+                  
                   {product.discount && (
                     <span style={{
                       position: 'absolute',
@@ -719,26 +743,26 @@ export default function KitchenMatPage() {
                   )}
                 </div>
                 <div style={{
-                  padding: '20px'
+                  padding: '24px'
                 }}>
                   <h3 style={{
-                    fontSize: '16px',
+                    fontSize: '18px',
                     fontWeight: 600,
-                    marginBottom: '8px',
-                    color: '#222',
+                    marginBottom: '12px',
+                    color: '#000',
                     lineHeight: '1.4'
                   }}>{product.title}</h3>
                   <div style={{
                     color: '#e53935',
                     fontWeight: 700,
-                    fontSize: '20px',
-                    marginBottom: '20px'
+                    fontSize: '20px'
                   }}>
                     {(() => {
                       const { sale, regular } = getMinPrices(product);
                       if (sale < regular) {
                         return (
                           <>
+                            <span style={{ color: '#000', fontWeight: 400 }}>From: </span>
                             <span style={{ color: '#e53935', fontWeight: 700 }}>
                               £{sale.toFixed(2)}
                             </span>
@@ -755,63 +779,16 @@ export default function KitchenMatPage() {
                         );
                       } else {
                         return (
-                          <span style={{ color: '#222', fontWeight: 700 }}>
-                            £{regular.toFixed(2)}
-                          </span>
+                          <>
+                            <span style={{ color: '#000', fontWeight: 400 }}>From: </span>
+                            <span style={{ color: '#000', fontWeight: 700 }}>
+                              £{regular.toFixed(2)}
+                            </span>
+                          </>
                         );
                       }
                     })()}
                   </div>
-                  {!product.isSoldOut && (
-                    <div style={{
-                      display: 'flex',
-                      gap: '12px',
-                      marginTop: '16px'
-                    }}>
-                      <button
-                        onClick={() => setQuickViewProduct(product)}
-                        style={{
-                          flex: 1,
-                          padding: '12px 24px',
-                          background: '#222',
-                          color: '#fff',
-                          border: 'none',
-                          borderRadius: '8px',
-                          fontSize: '14px',
-                          fontWeight: 600,
-                          cursor: 'pointer',
-                          transition: 'all 0.2s ease',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          gap: '8px'
-                        }}
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.background = '#333';
-                          e.currentTarget.style.transform = 'translateY(-2px)';
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.background = '#222';
-                          e.currentTarget.style.transform = 'translateY(0)';
-                        }}
-                      >
-                        <svg
-                          width="20"
-                          height="20"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        >
-                          <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                          <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
-                        </svg>
-                        View
-                      </button>
-                    </div>
-                  )}
                 </div>
               </div>
             ))}
