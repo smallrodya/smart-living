@@ -37,6 +37,7 @@ export default function TowelBaleSetPage() {
   const [wishlist, setWishlist] = useState<string[]>([]);
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 1000]);
   const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
+  const [showCount, setShowCount] = useState(30);
   const router = useRouter();
 
   useEffect(() => {
@@ -110,6 +111,8 @@ export default function TowelBaleSetPage() {
     const productMaxPrice = Math.max(...productPrices);
     return matchesStyle && matchesColor && productMinPrice >= minPrice && productMaxPrice <= maxPrice;
   });
+
+  const sortedProducts = [...filteredProducts].sort((a, b) => a.title.localeCompare(b.title));
 
   const clearFilters = () => {
     setSelectedStyle('');
@@ -381,33 +384,44 @@ export default function TowelBaleSetPage() {
                     }}>Price Range</span>
                   </div>
                   <div style={{
-                    padding: '0 10px'
+                    display: 'flex',
+                    gap: '10px',
+                    alignItems: 'center',
+                    padding: '0 10px',
+                    marginBottom: '15px'
                   }}>
                     <input
-                      type="range"
-                      min="0"
-                      max="1000"
-                      value={priceRange[1]}
-                      onChange={(e) => setPriceRange([priceRange[0], parseInt(e.target.value)])}
+                      type="number"
+                      min={0}
+                      max={priceRange[1]}
+                      value={priceRange[0]}
+                      onChange={e => setPriceRange([Number(e.target.value), priceRange[1]])}
                       style={{
-                        width: '100%',
-                        height: '2px',
-                        WebkitAppearance: 'none',
-                        background: '#ddd',
-                        outline: 'none',
-                        marginBottom: '15px'
+                        width: '80px',
+                        padding: '6px',
+                        borderRadius: '6px',
+                        border: '1px solid #eee',
+                        fontSize: '15px'
                       }}
+                      placeholder="Min"
                     />
-                    <div style={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                      color: '#666',
-                      fontSize: '15px'
-                    }}>
-                      <span>£{priceRange[0]}</span>
-                      <span>£{priceRange[1]}</span>
-                    </div>
+                    <span style={{ color: '#888' }}>—</span>
+                    <input
+                      type="number"
+                      min={priceRange[0]}
+                      max={10000}
+                      value={priceRange[1]}
+                      onChange={e => setPriceRange([priceRange[0], Number(e.target.value)])}
+                      style={{
+                        width: '80px',
+                        padding: '6px',
+                        borderRadius: '6px',
+                        border: '1px solid #eee',
+                        fontSize: '15px'
+                      }}
+                      placeholder="Max"
+                    />
+                    <span style={{ color: '#666', fontSize: '15px' }}>£</span>
                   </div>
                 </div>
 
@@ -565,7 +579,7 @@ export default function TowelBaleSetPage() {
               color: '#666',
               fontWeight: 500
             }}>
-              {filteredProducts.length} products
+              {sortedProducts.length} products
             </div>
           </div>
 
@@ -575,7 +589,7 @@ export default function TowelBaleSetPage() {
             gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
             gap: '32px'
           }}>
-            {filteredProducts.map((product) => (
+            {sortedProducts.slice(0, showCount).map((product) => (
               <div 
                 key={product._id} 
                 style={{
@@ -814,13 +828,31 @@ export default function TowelBaleSetPage() {
             ))}
           </div>
 
-          {filteredProducts.length === 0 && (
+          {sortedProducts.length > showCount && (
             <div style={{
               textAlign: 'center',
               padding: '40px 0',
               color: '#666'
             }}>
-              No products found
+              <button
+                onClick={() => setShowCount(showCount + 30)}
+                style={{
+                  padding: '14px 38px',
+                  borderRadius: '8px',
+                  background: '#222',
+                  color: '#fff',
+                  fontWeight: 700,
+                  fontSize: '18px',
+                  border: 'none',
+                  cursor: 'pointer',
+                  boxShadow: '0 2px 8px rgba(34,34,34,0.10)',
+                  transition: 'background 0.2s, transform 0.2s',
+                }}
+                onMouseEnter={e => e.currentTarget.style.background = '#333'}
+                onMouseLeave={e => e.currentTarget.style.background = '#222'}
+              >
+                Show more
+              </button>
             </div>
           )}
         </div>

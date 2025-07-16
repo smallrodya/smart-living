@@ -94,6 +94,8 @@ export default function FittedSheetsPage() {
     return matchesSize && matchesColor && productMinPrice >= minPrice && productMaxPrice <= maxPrice;
   });
 
+  const sortedProducts = [...filteredProducts].sort((a, b) => a.title.localeCompare(b.title));
+
   const getProductPrice = (product: Product) => {
     if (!product.beddingSizes || product.beddingSizes.length === 0) return 0;
     return product.beddingSizes[0].salePrice;
@@ -364,33 +366,44 @@ export default function FittedSheetsPage() {
                     }}>Price Range</span>
                   </div>
                   <div style={{
-                    padding: '0 10px'
+                    display: 'flex',
+                    gap: '10px',
+                    alignItems: 'center',
+                    padding: '0 10px',
+                    marginBottom: '15px'
                   }}>
                     <input
-                      type="range"
+                      type="number"
                       min="0"
-                      max="200"
-                      value={priceRange[1]}
-                      onChange={(e) => setPriceRange([priceRange[0], parseInt(e.target.value)])}
+                      max={priceRange[1]}
+                      value={priceRange[0]}
+                      onChange={(e) => setPriceRange([Number(e.target.value), priceRange[1]])}
                       style={{
-                        width: '100%',
-                        height: '2px',
-                        WebkitAppearance: 'none',
-                        background: '#ddd',
-                        outline: 'none',
-                        marginBottom: '15px'
+                        width: '80px',
+                        padding: '6px',
+                        borderRadius: '6px',
+                        border: '1px solid #eee',
+                        fontSize: '15px'
                       }}
+                      placeholder="Min"
                     />
-                    <div style={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                      color: '#666',
-                      fontSize: '15px'
-                    }}>
-                      <span>£{priceRange[0]}</span>
-                      <span>£{priceRange[1]}</span>
-                    </div>
+                    <span style={{ color: '#888' }}>—</span>
+                    <input
+                      type="number"
+                      min={priceRange[0]}
+                      max="10000"
+                      value={priceRange[1]}
+                      onChange={(e) => setPriceRange([priceRange[0], Number(e.target.value)])}
+                      style={{
+                        width: '80px',
+                        padding: '6px',
+                        borderRadius: '6px',
+                        border: '1px solid #eee',
+                        fontSize: '15px'
+                      }}
+                      placeholder="Max"
+                    />
+                    <span style={{ color: '#666', fontSize: '15px' }}>£</span>
                   </div>
                 </div>
 
@@ -559,7 +572,7 @@ export default function FittedSheetsPage() {
             gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
             gap: '32px'
           }}>
-            {filteredProducts.slice(0, showCount).map((product) => (
+            {sortedProducts.slice(0, showCount).map((product) => (
               <div 
                 key={product._id} 
                 style={{

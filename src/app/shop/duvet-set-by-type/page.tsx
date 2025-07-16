@@ -107,6 +107,9 @@ export default function DuvetSetPage() {
     return matchesSize && matchesColor && matchesStyle && productMinPrice >= minPrice && productMaxPrice <= maxPrice;
   });
 
+  // Alphabetical sort for filteredProducts
+  const sortedProducts = [...filteredProducts].sort((a, b) => a.title.localeCompare(b.title));
+
   useEffect(() => {
     setShowCount(30);
   }, [selectedSize, selectedColor, selectedStyle, priceRange]);
@@ -375,50 +378,31 @@ export default function DuvetSetPage() {
                 animation: 'slideDown 0.3s ease'
               }}>
                 {/* Price Range Filter */}
-                <div style={{
-                  flex: '1',
-                  minWidth: '300px'
-                }}>
-                  <div style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '12px',
-                    marginBottom: '20px'
-                  }}>
-                    <span style={{
-                      fontSize: '16px',
-                      fontWeight: 500,
-                      color: '#444'
-                    }}>Price Range</span>
+                <div style={{ flex: '1', minWidth: '300px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
+                    <span style={{ fontSize: '16px', fontWeight: 500, color: '#444' }}>Price Range</span>
                   </div>
-                  <div style={{
-                    padding: '0 10px'
-                  }}>
+                  <div style={{ display: 'flex', gap: '10px', alignItems: 'center', padding: '0 10px', marginBottom: '15px' }}>
                     <input
-                      type="range"
-                      min="0"
-                      max="1000"
-                      value={priceRange[1]}
-                      onChange={(e) => setPriceRange([priceRange[0], parseInt(e.target.value)])}
-                      style={{
-                        width: '100%',
-                        height: '2px',
-                        WebkitAppearance: 'none',
-                        background: '#ddd',
-                        outline: 'none',
-                        marginBottom: '15px'
-                      }}
+                      type="number"
+                      min={0}
+                      max={priceRange[1]}
+                      value={priceRange[0]}
+                      onChange={e => setPriceRange([Number(e.target.value), priceRange[1]])}
+                      style={{ width: '80px', padding: '6px', borderRadius: '6px', border: '1px solid #eee', fontSize: '15px' }}
+                      placeholder="Min"
                     />
-                    <div style={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                      color: '#666',
-                      fontSize: '15px'
-                    }}>
-                      <span>£{priceRange[0]}</span>
-                      <span>£{priceRange[1]}</span>
-                    </div>
+                    <span style={{ color: '#888' }}>—</span>
+                    <input
+                      type="number"
+                      min={priceRange[0]}
+                      max={10000}
+                      value={priceRange[1]}
+                      onChange={e => setPriceRange([priceRange[0], Number(e.target.value)])}
+                      style={{ width: '80px', padding: '6px', borderRadius: '6px', border: '1px solid #eee', fontSize: '15px' }}
+                      placeholder="Max"
+                    />
+                    <span style={{ color: '#666', fontSize: '15px' }}>£</span>
                   </div>
                 </div>
 
@@ -655,7 +639,7 @@ export default function DuvetSetPage() {
             gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
             gap: '32px'
           }}>
-            {filteredProducts.slice(0, showCount).map((product) => (
+            {sortedProducts.slice(0, showCount).map((product) => (
               <div 
                 key={product._id} 
                 style={{

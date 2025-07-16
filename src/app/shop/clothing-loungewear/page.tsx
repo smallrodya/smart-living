@@ -36,6 +36,7 @@ export default function ClothingLoungewearPage() {
   const [wishlist, setWishlist] = useState<string[]>([]);
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 1000]);
   const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
+  const [showCount, setShowCount] = useState(30);
   const router = useRouter();
 
   useEffect(() => {
@@ -120,6 +121,9 @@ export default function ClothingLoungewearPage() {
     const productMaxPrice = Math.max(...productPrices);
     return matchesStyle && matchesColor && productMinPrice >= minPrice && productMaxPrice <= maxPrice;
   });
+
+  // Alphabetical sort for filteredProducts
+  const sortedProducts = [...filteredProducts].sort((a, b) => a.title.localeCompare(b.title));
 
   const clearFilters = () => {
     setSelectedStyle('');
@@ -394,30 +398,20 @@ export default function ClothingLoungewearPage() {
                     padding: '0 10px'
                   }}>
                     <input
-                      type="range"
-                      min="0"
-                      max="1000"
-                      value={priceRange[1]}
-                      onChange={(e) => setPriceRange([priceRange[0], parseInt(e.target.value)])}
-                      style={{
-                        width: '100%',
-                        height: '2px',
-                        WebkitAppearance: 'none',
-                        background: '#ddd',
-                        outline: 'none',
-                        marginBottom: '15px'
-                      }}
+                      type="number"
+                      min={0}
+                      value={priceRange[0]}
+                      onChange={e => setPriceRange([Number(e.target.value), priceRange[1]])}
+                      style={{ width: 80, marginRight: 8 }}
                     />
-                    <div style={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                      color: '#666',
-                      fontSize: '15px'
-                    }}>
-                      <span>£{priceRange[0]}</span>
-                      <span>£{priceRange[1]}</span>
-                    </div>
+                    <span> - </span>
+                    <input
+                      type="number"
+                      min={0}
+                      value={priceRange[1]}
+                      onChange={e => setPriceRange([priceRange[0], Number(e.target.value)])}
+                      style={{ width: 80, marginLeft: 8 }}
+                    />
                   </div>
                 </div>
 
@@ -585,7 +579,7 @@ export default function ClothingLoungewearPage() {
             gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
             gap: '32px'
           }}>
-            {filteredProducts.map((product) => (
+            {sortedProducts.slice(0, showCount).map((product) => (
               <div 
                 key={product._id} 
                 style={{
@@ -837,10 +831,9 @@ export default function ClothingLoungewearPage() {
       </main>
       <Footer />
       <CookieBanner />
-      <QuickViewModal 
-        product={quickViewProduct} 
-        onClose={() => setQuickViewProduct(null)} 
-      />
+      {quickViewProduct && (
+        <QuickViewModal product={quickViewProduct} onClose={() => setQuickViewProduct(null)} />
+      )}
       <style jsx global>{`
         @keyframes slideDown {
           from {

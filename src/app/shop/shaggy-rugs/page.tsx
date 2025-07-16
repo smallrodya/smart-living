@@ -38,6 +38,7 @@ export default function ShaggyRugsPage() {
   const [wishlist, setWishlist] = useState<string[]>([]);
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 200]);
   const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
+  const [showCount, setShowCount] = useState(30);
   const router = useRouter();
 
   useEffect(() => {
@@ -103,6 +104,9 @@ export default function ShaggyRugsPage() {
     const productMaxPrice = Math.max(...productPrices);
     return matchesSize && matchesColor && productMinPrice >= minPrice && productMaxPrice <= maxPrice;
   });
+
+  // Alphabetical sort for filteredProducts
+  const sortedProducts = [...filteredProducts].sort((a, b) => a.title.localeCompare(b.title));
 
   const clearFilters = () => {
     setSelectedSize('');
@@ -387,30 +391,22 @@ export default function ShaggyRugsPage() {
                     padding: '0 10px'
                   }}>
                     <input
-                      type="range"
-                      min="0"
-                      max="200"
-                      value={priceRange[1]}
-                      onChange={(e) => setPriceRange([priceRange[0], parseInt(e.target.value)])}
-                      style={{
-                        width: '100%',
-                        height: '2px',
-                        WebkitAppearance: 'none',
-                        background: '#ddd',
-                        outline: 'none',
-                        marginBottom: '15px'
-                      }}
+                      type="number"
+                      value={priceRange[0]}
+                      min={0}
+                      max={priceRange[1]}
+                      onChange={e => setPriceRange([Number(e.target.value), priceRange[1]])}
+                      style={{ width: 70, marginRight: 8 }}
                     />
-                    <div style={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                      color: '#666',
-                      fontSize: '15px'
-                    }}>
-                      <span>£{priceRange[0]}</span>
-                      <span>£{priceRange[1]}</span>
-                    </div>
+                    <span> - </span>
+                    <input
+                      type="number"
+                      value={priceRange[1]}
+                      min={priceRange[0]}
+                      max={1000}
+                      onChange={e => setPriceRange([priceRange[0], Number(e.target.value)])}
+                      style={{ width: 70, marginLeft: 8 }}
+                    />
                   </div>
                 </div>
 
@@ -569,7 +565,7 @@ export default function ShaggyRugsPage() {
               color: '#666',
               fontWeight: 500
             }}>
-              {filteredProducts.length} products
+              {sortedProducts.length} products
             </div>
           </div>
 
@@ -579,7 +575,7 @@ export default function ShaggyRugsPage() {
             gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
             gap: '32px'
           }}>
-            {filteredProducts.map((product) => (
+            {sortedProducts.slice(0, showCount).map((product) => (
               <div 
                 key={product._id} 
                 style={{
@@ -824,7 +820,7 @@ export default function ShaggyRugsPage() {
             ))}
           </div>
 
-          {filteredProducts.length === 0 && (
+          {sortedProducts.length === 0 && (
             <div style={{
               textAlign: 'center',
               padding: '40px 0',

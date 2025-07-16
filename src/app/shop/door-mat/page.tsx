@@ -74,7 +74,7 @@ export default function DoorMatPage() {
     }
   };
 
-  const allSizes = Array.from(new Set(products.flatMap(p => p.rugsMatsSizes?.map(s => s.size) || [])));
+  const allSizes = Array.from(new Set(products.flatMap(p => p.rugsMatsSizes?.map((s: { size: string; price: number; salePrice: number }) => s.size) || [])));
   const allColors = Array.from(new Set(products.flatMap(p => p.rugsMatsColors || [])));
 
   const getProductPrice = (product: Product) => {
@@ -88,21 +88,23 @@ export default function DoorMatPage() {
 
   const formatPriceRange = (product: Product) => {
     if (!product.rugsMatsSizes || product.rugsMatsSizes.length === 0) return '£0.00';
-    const prices = product.rugsMatsSizes.map(size => size.salePrice);
+    const prices = product.rugsMatsSizes.map((s: { size: string; price: number; salePrice: number }) => s.salePrice);
     const min = Math.min(...prices);
     const max = Math.max(...prices);
     return min === max ? formatPrice(min) : `${formatPrice(min)} - ${formatPrice(max)}`;
   };
 
   const filteredProducts = products.filter(product => {
-    const matchesSize = !selectedSize || product.rugsMatsSizes?.some(s => s.size === selectedSize);
+    const matchesSize = !selectedSize || product.rugsMatsSizes?.some((s: { size: string; price: number; salePrice: number }) => s.size === selectedSize);
     const matchesColor = !selectedColor || product.rugsMatsColors?.includes(selectedColor);
     const [minPrice, maxPrice] = priceRange;
-    const productPrices = product.rugsMatsSizes?.map(s => s.salePrice) || [];
+    const productPrices = product.rugsMatsSizes?.map((s: { size: string; price: number; salePrice: number }) => s.salePrice) || [];
     const productMinPrice = Math.min(...productPrices);
     const productMaxPrice = Math.max(...productPrices);
     return matchesSize && matchesColor && productMinPrice >= minPrice && productMaxPrice <= maxPrice;
   });
+
+  const sortedProducts = [...filteredProducts].sort((a, b) => a.title.localeCompare(b.title));
 
   const clearFilters = () => {
     setSelectedSize('');
@@ -152,8 +154,8 @@ export default function DoorMatPage() {
 
   const getMinPrices = (product: any) => {
     if (!product.rugsMatsSizes || product.rugsMatsSizes.length === 0) return { sale: 0, regular: 0 };
-    const salePrices = product.rugsMatsSizes.map(s => typeof s.salePrice === 'number' ? s.salePrice : (typeof s.price === 'number' ? s.price : 0));
-    const regularPrices = product.rugsMatsSizes.map(s => typeof (s as any).regularPrice === 'number' ? (s as any).regularPrice : (typeof s.price === 'number' ? s.price : 0));
+    const salePrices = product.rugsMatsSizes.map((s: { size: string; price: number; salePrice: number }) => typeof s.salePrice === 'number' ? s.salePrice : (typeof s.price === 'number' ? s.price : 0));
+    const regularPrices = product.rugsMatsSizes.map((s: { size: string; price: number; salePrice: number }) => typeof (s as any).regularPrice === 'number' ? (s as any).regularPrice : (typeof s.price === 'number' ? s.price : 0));
     return {
       sale: Math.min(...salePrices),
       regular: Math.min(...regularPrices),
@@ -387,30 +389,23 @@ export default function DoorMatPage() {
                     padding: '0 10px'
                   }}>
                     <input
-                      type="range"
-                      min="0"
-                      max="1000"
-                      value={priceRange[1]}
-                      onChange={(e) => setPriceRange([priceRange[0], parseInt(e.target.value)])}
-                      style={{
-                        width: '100%',
-                        height: '2px',
-                        WebkitAppearance: 'none',
-                        background: '#ddd',
-                        outline: 'none',
-                        marginBottom: '15px'
-                      }}
+                      type="number"
+                      min={0}
+                      max={priceRange[1]}
+                      value={priceRange[0]}
+                      onChange={e => setPriceRange([Number(e.target.value), priceRange[1]])}
+                      style={{ width: 70, marginRight: 8 }}
                     />
-                    <div style={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                      color: '#666',
-                      fontSize: '15px'
-                    }}>
-                      <span>£{priceRange[0]}</span>
-                      <span>£{priceRange[1]}</span>
-                    </div>
+                    <span> - </span>
+                    <input
+                      type="number"
+                      min={priceRange[0]}
+                      max={1000}
+                      value={priceRange[1]}
+                      onChange={e => setPriceRange([priceRange[0], Number(e.target.value)])}
+                      style={{ width: 70, marginLeft: 8 }}
+                    />
+                    <span style={{ color: '#666', fontSize: '15px', marginLeft: 8 }}>£</span>
                   </div>
                 </div>
 
@@ -569,7 +564,7 @@ export default function DoorMatPage() {
               color: '#666',
               fontWeight: 500
             }}>
-              {filteredProducts.length} products
+              {sortedProducts.length} products
             </div>
           </div>
 
@@ -579,7 +574,7 @@ export default function DoorMatPage() {
             gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
             gap: '32px'
           }}>
-            {filteredProducts.slice(0, showCount).map((product) => (
+            {sortedProducts.slice(0, showCount).map((product) => (
               <div 
                 key={product._id} 
                 style={{
@@ -824,7 +819,7 @@ export default function DoorMatPage() {
             ))}
           </div>
 
-          {filteredProducts.length > showCount && (
+          {sortedProducts.length > showCount && (
             <div style={{ textAlign: 'center', margin: '40px 0' }}>
               <button
                 onClick={() => setShowCount(showCount + 30)}
@@ -848,7 +843,7 @@ export default function DoorMatPage() {
             </div>
           )}
 
-          {filteredProducts.length === 0 && (
+          {sortedProducts.length === 0 && (
             <div style={{
               textAlign: 'center',
               padding: '40px 0',

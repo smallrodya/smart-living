@@ -90,6 +90,8 @@ export default function MediumSizePage() {
     return matchesColor && productPrice >= minPrice && productPrice <= maxPrice;
   });
 
+  const sortedProducts = [...filteredProducts].sort((a, b) => a.title.localeCompare(b.title));
+
   const clearFilters = () => {
     setSelectedColor('');
     setPriceRange([0, 1000]);
@@ -137,8 +139,8 @@ export default function MediumSizePage() {
 
   const getMinPrices = (product: any) => {
     if (!product.rugsMatsSizes || product.rugsMatsSizes.length === 0) return { sale: 0, regular: 0 };
-    const salePrices = product.rugsMatsSizes.map(s => typeof s.salePrice === 'number' ? s.salePrice : (typeof s.price === 'number' ? s.price : 0));
-    const regularPrices = product.rugsMatsSizes.map(s => typeof (s as any).regularPrice === 'number' ? (s as any).regularPrice : (typeof s.price === 'number' ? s.price : 0));
+    const salePrices = product.rugsMatsSizes.map((s: { salePrice: number; price: number }) => typeof s.salePrice === 'number' ? s.salePrice : (typeof s.price === 'number' ? s.price : 0));
+    const regularPrices = product.rugsMatsSizes.map((s: { regularPrice?: number; price: number }) => typeof (s as any).regularPrice === 'number' ? (s as any).regularPrice : (typeof s.price === 'number' ? s.price : 0));
     return {
       sale: Math.min(...salePrices),
       regular: Math.min(...regularPrices),
@@ -369,33 +371,32 @@ export default function MediumSizePage() {
                     }}>Price Range</span>
                   </div>
                   <div style={{
-                    padding: '0 10px'
+                    display: 'flex',
+                    gap: '10px',
+                    alignItems: 'center',
+                    padding: '0 10px',
+                    marginBottom: '15px'
                   }}>
                     <input
-                      type="range"
-                      min="0"
-                      max="1000"
-                      value={priceRange[1]}
-                      onChange={(e) => setPriceRange([priceRange[0], parseInt(e.target.value)])}
-                      style={{
-                        width: '100%',
-                        height: '2px',
-                        WebkitAppearance: 'none',
-                        background: '#ddd',
-                        outline: 'none',
-                        marginBottom: '15px'
-                      }}
+                      type="number"
+                      min={0}
+                      max={priceRange[1]}
+                      value={priceRange[0]}
+                      onChange={e => setPriceRange([Number(e.target.value), priceRange[1]])}
+                      style={{ width: '80px', padding: '6px', borderRadius: '6px', border: '1px solid #eee', fontSize: '15px' }}
+                      placeholder="Min"
                     />
-                    <div style={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                      color: '#666',
-                      fontSize: '15px'
-                    }}>
-                      <span>£{priceRange[0]}</span>
-                      <span>£{priceRange[1]}</span>
-                    </div>
+                    <span style={{ color: '#888' }}>—</span>
+                    <input
+                      type="number"
+                      min={priceRange[0]}
+                      max={10000}
+                      value={priceRange[1]}
+                      onChange={e => setPriceRange([priceRange[0], Number(e.target.value)])}
+                      style={{ width: '80px', padding: '6px', borderRadius: '6px', border: '1px solid #eee', fontSize: '15px' }}
+                      placeholder="Max"
+                    />
+                    <span style={{ color: '#666', fontSize: '15px' }}>£</span>
                   </div>
                 </div>
 
@@ -485,7 +486,7 @@ export default function MediumSizePage() {
               color: '#666',
               fontWeight: 500
             }}>
-              {filteredProducts.length} products
+              {sortedProducts.length} products
             </div>
           </div>
 
@@ -495,7 +496,7 @@ export default function MediumSizePage() {
             gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
             gap: '32px'
           }}>
-            {filteredProducts.slice(0, showCount).map((product) => (
+            {sortedProducts.slice(0, showCount).map((product) => (
               <div 
                 key={product._id} 
                 style={{
@@ -740,7 +741,7 @@ export default function MediumSizePage() {
             ))}
           </div>
 
-          {filteredProducts.length > showCount && (
+          {sortedProducts.length > showCount && (
             <div style={{ textAlign: 'center', margin: '40px 0' }}>
               <button
                 onClick={() => setShowCount(showCount + 30)}
@@ -764,7 +765,7 @@ export default function MediumSizePage() {
             </div>
           )}
 
-          {filteredProducts.length === 0 && (
+          {sortedProducts.length === 0 && (
             <div style={{
               textAlign: 'center',
               padding: '40px 0',
