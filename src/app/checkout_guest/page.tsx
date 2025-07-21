@@ -55,6 +55,7 @@ function GuestCheckoutPage() {
   const [promocodeChecked, setPromocodeChecked] = useState(false);
   const [promocodeDiscount, setPromocodeDiscount] = useState<number>(0);
   const [promocodeError, setPromocodeError] = useState<string | null>(null);
+  const [smartCoinBalance, setSmartCoinBalance] = useState(0);
 
   const subtotal = items.reduce((sum, item) => sum + (item.clearanceDiscount ? item.price * (1 - item.clearanceDiscount / 100) : item.price) * item.quantity, 0);
   const shippingPrice = SHIPPING_OPTIONS.find(opt => opt.value === shipping)?.price || 0;
@@ -157,37 +158,41 @@ function GuestCheckoutPage() {
     setSubmitting(true);
     setPaymentProcessing(true);
     setPaymentError(null);
+    let result = null;
     try {
-      if (!stripe || !elements) throw new Error('Stripe не инициализирован');
-      const result = await stripe.confirmPayment({
-        elements,
-        confirmParams: {
-          payment_method_data: {
-            billing_details: {
-              name: form.firstName + ' ' + form.lastName,
-              email: form.email,
-              phone: form.phone,
-              address: {
-                line1: form.address,
-                city: form.city,
-                state: form.county,
-                postal_code: form.postcode,
-                country: 'GB',
+      if (paymentMethod === "card") {
+        if (!stripe || !elements) throw new Error('Stripe не инициализирован');
+        result = await stripe.confirmPayment({
+          elements,
+          confirmParams: {
+            payment_method_data: {
+              billing_details: {
+                name: form.firstName + ' ' + form.lastName,
+                email: form.email,
+                phone: form.phone,
+                address: {
+                  line1: form.address,
+                  city: form.city,
+                  state: form.county,
+                  postal_code: form.postcode,
+                  country: 'GB',
+                },
               },
             },
           },
-        },
-        redirect: 'if_required',
-      });
-      if (result.error) throw new Error(result.error.message);
-      // После успешной оплаты — обновить stock и создать заказ
+          redirect: 'if_required',
+        });
+        if (result.error) throw new Error(result.error.message);
+      }
+      if (paymentMethod === "smart_coins" && smartCoinBalance < totalWithShipping) {
+        throw new Error("Недостаточно Smart Coins для оплаты.");
+      }
       const response = await fetch('/api/products/update-stock', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ items: items.map(item => ({ title: item.title, size: item.size, quantity: item.quantity })) }),
       });
       if (!response.ok) throw new Error('Не удалось обновить остатки товаров');
-      // Создать заказ в базе данных
       const orderResponse = await fetch('/api/orders', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -196,7 +201,7 @@ function GuestCheckoutPage() {
           total: totalWithShipping,
           shipping,
           paymentMethod,
-          paymentIntentId: result.paymentIntent?.id,
+          paymentIntentId: paymentMethod === "card" ? (result?.paymentIntent?.id || null) : null,
           customerDetails: { ...form, email: form.email },
           status: 'DONE'
         }),

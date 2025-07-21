@@ -12,10 +12,8 @@ export async function GET(request: Request) {
     const userCookie = await cookieStore.get('user');
 
     if (!userCookie) {
-      return NextResponse.json(
-        { message: 'Unauthorized' },
-        { status: 401 }
-      );
+      // Гостевой режим: возвращаем пустой профиль, но не 401
+      return NextResponse.json({ guest: true }, { status: 200 });
     }
 
     const userData = JSON.parse(userCookie.value);
