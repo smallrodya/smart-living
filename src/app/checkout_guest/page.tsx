@@ -96,7 +96,7 @@ function GuestCheckoutPage() {
       const paymentResponse = await fetch('/api/create-payment-intent', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ amount: totalWithShipping, currency: 'gbp' }),
+        body: JSON.stringify({ amount: totalWithShipping, currency: 'gbp', email: form.email }),
       });
       if (paymentResponse.ok) {
         const { clientSecret } = await paymentResponse.json();
