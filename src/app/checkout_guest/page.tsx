@@ -158,7 +158,7 @@ function GuestCheckoutPage() {
     setPaymentProcessing(true);
     setPaymentError(null);
     try {
-      if (!stripe || !elements) throw new Error('Stripe is not initialized');
+      if (!stripe || !elements) throw new Error('Stripe не инициализирован');
       const result = await stripe.confirmPayment({
         elements,
         confirmParams: {
@@ -180,14 +180,14 @@ function GuestCheckoutPage() {
         redirect: 'if_required',
       });
       if (result.error) throw new Error(result.error.message);
-      // Update product stock
+      // После успешной оплаты — обновить stock и создать заказ
       const response = await fetch('/api/products/update-stock', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ items: items.map(item => ({ title: item.title, size: item.size, quantity: item.quantity })) }),
       });
-      if (!response.ok) throw new Error('Failed to update stock');
-      // Create order in database
+      if (!response.ok) throw new Error('Не удалось обновить остатки товаров');
+      // Создать заказ в базе данных
       const orderResponse = await fetch('/api/orders', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -201,23 +201,25 @@ function GuestCheckoutPage() {
           status: 'DONE'
         }),
       });
-      if (!orderResponse.ok) throw new Error('Failed to create order');
+      if (!orderResponse.ok) throw new Error('Не удалось создать заказ');
       const orderData = await orderResponse.json();
-      clearBasket();
-      toast.success(`Order placed successfully!`);
-      router.push("/basket");
+      handleSuccess(orderData._id);
     } catch (error) {
-      setPaymentError(error instanceof Error ? error.message : 'Failed to place order. Please try again.');
-      toast.error(error instanceof Error ? error.message : 'Failed to place order. Please try again.');
+      setPaymentError(error instanceof Error ? error.message : 'Не удалось оформить заказ. Попробуйте еще раз.');
+      toast.error(error instanceof Error ? error.message : 'Не удалось оформить заказ. Попробуйте еще раз.');
     } finally {
       setSubmitting(false);
       setPaymentProcessing(false);
     }
   };
 
-  const handleSuccess = () => {
-    // Handle successful payment
-    console.log("Payment succeeded!");
+  const handleSuccess = (orderId?: string) => {
+    clearBasket();
+    if (orderId) {
+      router.push(`/ordercomplete?orderId=${orderId}`);
+    } else {
+      router.push('/ordercomplete');
+    }
   };
 
   if (isLoading) {
