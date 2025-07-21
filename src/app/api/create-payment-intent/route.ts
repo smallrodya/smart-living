@@ -7,9 +7,9 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 
 export async function POST(req: Request) {
   try {
-    const { amount, currency = 'gbp' } = await req.json();
+    const { amount, currency = 'gbp', email, orderDraftId } = await req.json();
     
-    console.log('Creating payment intent with:', { amount, currency });
+    console.log('Creating payment intent with:', { amount, currency, email, orderDraftId });
     
     // Преобразуем сумму в центы (Stripe ожидает целые числа)
     const amountInCents = Math.round(amount * 100);
@@ -21,7 +21,9 @@ export async function POST(req: Request) {
       amount: amountInCents, // amount в центах
       currency,
       metadata: {
-        integration_check: 'accept_a_payment'
+        integration_check: 'accept_a_payment',
+        ...(email ? { email } : {}),
+        ...(orderDraftId ? { orderDraftId } : {})
       },
       automatic_payment_methods: { enabled: true }
     };
