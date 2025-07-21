@@ -29,19 +29,30 @@ export async function POST(req: Request) {
       case 'payment_intent.succeeded':
         const paymentIntent = event.data.object as Stripe.PaymentIntent;
         console.log('Payment succeeded:', paymentIntent.id);
-        // Создаём заказ в базе, если ещё не создан
         try {
           const { db } = await connectToDatabase();
-          // Проверяем, есть ли уже заказ с этим paymentIntentId
-          const existingOrder = await db.collection('orders').findOne({ paymentIntentId: paymentIntent.id });
-          if (!existingOrder) {
-            // Собираем данные для заказа из metadata
+          const orderDraftId = paymentIntent.metadata?.orderDraftId;
+          if (orderDraftId) {
+            // Обновляем черновик заказа
+            const updateResult = await db.collection('orders').updateOne(
+              { _id: new (require('mongodb').ObjectId)(orderDraftId) },
+              { $set: {
+                  status: 'DONE',
+                  paymentIntentId: paymentIntent.id,
+                  updatedAt: new Date().toISOString()
+                }
+              }
+            );
+            if (updateResult.matchedCount > 0) {
+              console.log('Order draft updated to DONE for paymentIntent:', paymentIntent.id);
+            } else {
+              console.log('Order draft not found for paymentIntent:', paymentIntent.id);
+            }
+          } else {
+            // fallback: создать минимальный заказ, если нет orderDraftId
             const email = paymentIntent.metadata?.email || '';
-            const orderDraftId = paymentIntent.metadata?.orderDraftId || null;
-            // Здесь можно доработать: если orderDraftId есть — подтянуть черновик заказа
-            // Сейчас создаём минимальный заказ
             const orderData = {
-              items: [], // Можно доработать: подтянуть из черновика
+              items: [],
               total: paymentIntent.amount / 100,
               shipping: '',
               paymentMethod: 'card',
@@ -53,11 +64,9 @@ export async function POST(req: Request) {
             };
             await db.collection('orders').insertOne(orderData);
             console.log('Order created from webhook for paymentIntent:', paymentIntent.id);
-          } else {
-            console.log('Order already exists for paymentIntent:', paymentIntent.id);
           }
         } catch (err) {
-          console.error('Error creating order from webhook:', err);
+          console.error('Error creating/updating order from webhook:', err);
         }
         break;
 

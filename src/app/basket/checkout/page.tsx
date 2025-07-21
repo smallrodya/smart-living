@@ -323,10 +323,30 @@ function CheckoutPage() {
       return;
     }
     const createIntent = async () => {
+      // 1. Создать черновик заказа
+      const draftOrderResponse = await fetch('/api/orders', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          items,
+          total: totalWithShipping,
+          shipping,
+          paymentMethod,
+          paymentIntentId: null,
+          customerDetails: { ...form, email: form.email },
+          status: 'DRAFT'
+        }),
+      });
+      let orderDraftId = undefined;
+      if (draftOrderResponse.ok) {
+        const draftData = await draftOrderResponse.json();
+        orderDraftId = draftData._id || draftData.orderId;
+      }
+      // 2. Создать PaymentIntent с orderDraftId
       const paymentResponse = await fetch('/api/create-payment-intent', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ amount: totalWithShipping, currency: 'gbp', email: form.email }),
+        body: JSON.stringify({ amount: totalWithShipping, currency: 'gbp', email: form.email, orderDraftId }),
       });
       if (paymentResponse.ok) {
         const { clientSecret } = await paymentResponse.json();
