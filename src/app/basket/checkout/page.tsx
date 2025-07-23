@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useBasket } from "@/context/BasketContext";
 import { useRouter } from "next/navigation";
 import Header from "@/components/Header";
@@ -115,6 +115,7 @@ function CheckoutPage() {
   const [promocodeChecked, setPromocodeChecked] = useState(false);
   const [promocodeDiscount, setPromocodeDiscount] = useState<number>(0);
   const [promocodeError, setPromocodeError] = useState<string | null>(null);
+  const [showLoader, setShowLoader] = useState(false);
 
   const [form, setForm] = useState({
     email: "",
@@ -144,6 +145,8 @@ function CheckoutPage() {
   const [smartCoinBalance, setSmartCoinBalance] = useState<number>(0);
   const [useSmartCoins, setUseSmartCoins] = useState(false);
   const [applePayLoading, setApplePayLoading] = useState(false);
+
+  const orderDraftIdRef = useRef<string | undefined>(undefined);
 
   const subtotal = items.reduce((sum, item) => sum + (item.clearanceDiscount ? item.price * (1 - item.clearanceDiscount / 100) : item.price) * item.quantity, 0);
   const shippingPrice = SHIPPING_OPTIONS.find(opt => opt.value === shipping)?.price || 0;
@@ -341,6 +344,7 @@ function CheckoutPage() {
       if (draftOrderResponse.ok) {
         const draftData = await draftOrderResponse.json();
         orderDraftId = draftData._id || draftData.orderId;
+        orderDraftIdRef.current = orderDraftId;
       }
       // 2. Создать PaymentIntent с orderDraftId
       const paymentResponse = await fetch('/api/create-payment-intent', {
@@ -410,6 +414,7 @@ function CheckoutPage() {
     setSubmitting(true);
     setPaymentProcessing(true);
     setPaymentError(null);
+    setShowLoader(true);
     let result = null;
     try {
       if (paymentMethod === "card") {
@@ -445,28 +450,17 @@ function CheckoutPage() {
         body: JSON.stringify({ items: items.map(item => ({ title: item.title, size: item.size, quantity: item.quantity })) }),
       });
       if (!response.ok) throw new Error('Не удалось обновить остатки товаров');
-      const orderResponse = await fetch('/api/orders', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          items,
-          total: totalWithShipping,
-          shipping,
-          paymentMethod,
-          paymentIntentId: paymentMethod === "card" ? (result?.paymentIntent?.id || null) : null,
-          customerDetails: { ...form, email: form.email },
-          status: 'DONE'
-        }),
-      });
-      if (!orderResponse.ok) throw new Error('Не удалось создать заказ');
-      const orderData = await orderResponse.json();
-      handleSuccess(orderData._id);
+      // НЕ создаём новый заказ! Просто редиректим на order-status с orderDraftId
+      if (!orderDraftIdRef.current) throw new Error('Order ID не найден. Попробуйте ещё раз.');
+      router.push(`/order-status?orderId=${orderDraftIdRef.current}`);
     } catch (error) {
       setPaymentError(error instanceof Error ? error.message : 'Не удалось оформить заказ. Попробуйте еще раз.');
       toast.error(error instanceof Error ? error.message : 'Не удалось оформить заказ. Попробуйте еще раз.');
+      // Не очищаем корзину и не редиректим
     } finally {
       setSubmitting(false);
       setPaymentProcessing(false);
+      setShowLoader(false);
     }
   };
 
@@ -986,6 +980,20 @@ function CheckoutPage() {
         </div>
       </main>
       <Footer />
+      {showLoader && (
+        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-8 shadow-lg flex flex-col items-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mb-4"></div>
+            <p className="text-lg font-semibold text-gray-800">Processing payment...</p>
+          </div>
+        </div>
+      )}
+      {paymentError && (
+        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-4">
+          <p className="font-medium">Payment Error</p>
+          <p className="text-sm mt-1">{paymentError}</p>
+        </div>
+      )}
     </div>
   );
 } 

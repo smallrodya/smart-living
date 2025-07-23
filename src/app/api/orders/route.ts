@@ -5,9 +5,24 @@ import { ObjectId } from 'mongodb';
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
+    const orderId = searchParams.get('orderId');
     const email = searchParams.get('email');
 
     const { db } = await connectToDatabase();
+    if (orderId) {
+      // Новый функционал: получить статус заказа по orderId
+      let objectId;
+      try {
+        objectId = new ObjectId(orderId);
+      } catch {
+        return NextResponse.json({ error: 'Invalid orderId' }, { status: 400 });
+      }
+      const order = await db.collection('orders').findOne({ _id: objectId });
+      if (!order) {
+        return NextResponse.json({ error: 'Order not found' }, { status: 404 });
+      }
+      return NextResponse.json({ status: order.status, orderId });
+    }
     const query = email ? { 'customerDetails.email': email } : {};
     
     const orders = await db.collection('orders')
