@@ -108,7 +108,16 @@ export default function DuvetSetPage() {
   });
 
   // Alphabetical sort for filteredProducts
-  const sortedProducts = [...filteredProducts].sort((a, b) => a.title.localeCompare(b.title));
+  const sortedProducts = [...filteredProducts].sort((a, b) => {
+    // Проверяем, начинается ли с буквы
+    const aIsLetter = /^[A-Za-z]/.test(a.title);
+    const bIsLetter = /^[A-Za-z]/.test(b.title);
+
+    if (aIsLetter && !bIsLetter) return -1;
+    if (!aIsLetter && bIsLetter) return 1;
+    // Если оба либо буквы, либо оба не буквы — обычная сортировка (игнорируем регистр)
+    return a.title.localeCompare(b.title, 'en', { sensitivity: 'base' });
+  });
 
   useEffect(() => {
     setShowCount(30);
