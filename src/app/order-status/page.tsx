@@ -1,9 +1,10 @@
 "use client";
+import { Suspense } from "react";
 import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useBasket } from '@/context/BasketContext';
 
-export default function OrderStatusPage() {
+function OrderStatusPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const orderId = searchParams ? searchParams.get('orderId') : null;
@@ -22,7 +23,7 @@ export default function OrderStatusPage() {
     let timeout: NodeJS.Timeout;
     const poll = async () => {
       try {
-        const res = await fetch(`/api/orders/status?orderId=${orderId}`);
+        const res = await fetch(`/api/orders?orderId=${orderId}`);
         if (res.ok) {
           const data = await res.json();
           if (data.status === 'DONE') {
@@ -76,5 +77,13 @@ export default function OrderStatusPage() {
       <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
       <div className="mt-6 text-gray-400 text-sm">Ожидание подтверждения: {waited} сек.</div>
     </div>
+  );
+}
+
+export default function OrderStatusPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <OrderStatusPageContent />
+    </Suspense>
   );
 } 
