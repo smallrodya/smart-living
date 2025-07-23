@@ -47,20 +47,29 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const { db } = await connectToDatabase();
         const orderDraftId = paymentIntent.metadata?.orderDraftId;
         if (orderDraftId) {
-          // Обновляем черновик заказа
-          const updateResult = await db.collection('orders').updateOne(
-            { _id: new ObjectId(orderDraftId) },
-            { $set: {
-                status: 'DONE',
-                paymentIntentId: paymentIntent.id,
-                updatedAt: new Date().toISOString()
+          console.log('Trying to update order with _id:', orderDraftId);
+          let objectId = null;
+          try {
+            objectId = new ObjectId(orderDraftId);
+          } catch (e) {
+            console.error('Invalid ObjectId for orderDraftId:', orderDraftId, e);
+          }
+          if (objectId) {
+            const updateResult = await db.collection('orders').updateOne(
+              { _id: objectId },
+              { $set: {
+                  status: 'DONE',
+                  paymentIntentId: paymentIntent.id,
+                  updatedAt: new Date().toISOString()
+                }
               }
+            );
+            console.log('Update result:', updateResult);
+            if (updateResult.matchedCount > 0) {
+              console.log('Order draft updated to DONE for paymentIntent:', paymentIntent.id);
+            } else {
+              console.log('Order draft not found for paymentIntent:', paymentIntent.id);
             }
-          );
-          if (updateResult.matchedCount > 0) {
-            console.log('Order draft updated to DONE for paymentIntent:', paymentIntent.id);
-          } else {
-            console.log('Order draft not found for paymentIntent:', paymentIntent.id);
           }
         } else {
           // fallback: создать минимальный заказ, если нет orderDraftId

@@ -415,26 +415,26 @@ function CheckoutPage() {
       if (paymentMethod === "card") {
         if (!stripe || !elements) throw new Error('Stripe не инициализирован');
         result = await stripe.confirmPayment({
-          elements,
-          confirmParams: {
-            payment_method_data: {
-              billing_details: {
-                name: form.firstName + ' ' + form.lastName,
-                email: form.email,
-                phone: form.phone,
-                address: {
-                  line1: form.address,
-                  city: form.city,
-                  state: form.county,
-                  postal_code: form.postcode,
-                  country: 'GB',
-                },
+        elements,
+        confirmParams: {
+          payment_method_data: {
+            billing_details: {
+              name: form.firstName + ' ' + form.lastName,
+              email: form.email,
+              phone: form.phone,
+              address: {
+                line1: form.address,
+                city: form.city,
+                state: form.county,
+                postal_code: form.postcode,
+                country: 'GB',
               },
             },
           },
-          redirect: 'if_required',
-        });
-        if (result.error) throw new Error(result.error.message);
+        },
+        redirect: 'if_required',
+      });
+      if (result.error) throw new Error(result.error.message);
       }
       if (paymentMethod === "smart_coins" && smartCoinBalance < totalWithShipping) {
         throw new Error("Недостаточно Smart Coins для оплаты.");

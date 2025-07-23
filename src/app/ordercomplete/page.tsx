@@ -12,6 +12,7 @@ function OrderCompleteContent() {
   const searchParams = useSearchParams();
   const [orderDetails, setOrderDetails] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [polling, setPolling] = useState(false);
 
   useEffect(() => {
     // Получаем ID заказа из URL
@@ -21,23 +22,28 @@ function OrderCompleteContent() {
       return;
     }
 
-    // Загружаем детали заказа
+    let pollInterval: any = null;
+    let stopped = false;
+
     const fetchOrderDetails = async () => {
       try {
         const response = await fetch(`/api/orders/${orderId}`);
         if (response.ok) {
           const data = await response.json();
-          console.log('Order details from API:', data);
-          console.log('Order ID:', data._id);
-          console.log('Order Total:', data.total);
-          console.log('Payment Method:', data.paymentMethod);
-          console.log('Customer Details:', data.customerDetails);
           setOrderDetails(data);
+          // Если заказ в статусе DRAFT, запускаем polling
+          if (data.status === 'DRAFT' && !polling) {
+            setPolling(true);
+            pollInterval = setInterval(fetchOrderDetails, 3000);
+          } else if (data.status === 'DONE' && polling) {
+            setPolling(false);
+            if (pollInterval) clearInterval(pollInterval);
+          }
         } else {
-          console.error('Failed to fetch order details:', await response.text());
+          setOrderDetails(null);
         }
       } catch (error) {
-        console.error('Error fetching order details:', error);
+        setOrderDetails(null);
       } finally {
         setLoading(false);
       }
@@ -76,7 +82,11 @@ function OrderCompleteContent() {
       });
     }, 250);
 
-    return () => clearInterval(interval);
+    return () => {
+      stopped = true;
+      if (pollInterval) clearInterval(pollInterval);
+      clearInterval(interval);
+    };
   }, [router, searchParams]);
 
   if (loading) {
@@ -85,6 +95,18 @@ function OrderCompleteContent() {
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
           <p className="mt-4 text-gray-600">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (orderDetails?.status === 'DRAFT') {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto"></div>
+          <p className="mt-4 text-gray-700 text-lg font-semibold">Ожидание подтверждения оплаты...</p>
+          <p className="mt-2 text-gray-500">Ваш платёж обрабатывается. Страница обновится автоматически.</p>
         </div>
       </div>
     );
