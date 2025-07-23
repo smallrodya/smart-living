@@ -1,3 +1,4 @@
+"use client";
 import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useBasket } from '@/context/BasketContext';
@@ -5,7 +6,7 @@ import { useBasket } from '@/context/BasketContext';
 export default function OrderStatusPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const orderId = searchParams.get('orderId');
+  const orderId = searchParams ? searchParams.get('orderId') : null;
   const { clearBasket } = useBasket();
   const [status, setStatus] = useState<'pending'|'done'|'error'>('pending');
   const [error, setError] = useState('');
