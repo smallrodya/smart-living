@@ -12,18 +12,17 @@ function OrderCompleteContent() {
   const searchParams = useSearchParams();
   const [orderDetails, setOrderDetails] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const [polling, setPolling] = useState(false);
+  const [status, setStatus] = useState<string | null>(null);
 
   useEffect(() => {
-    // Получаем ID заказа из URL
-    const orderId = searchParams.get('orderId');
+    const orderId = searchParams ? searchParams.get('orderId') : null;
     if (!orderId) {
       router.push('/');
       return;
     }
 
-    let pollInterval: any = null;
     let stopped = false;
+    let pollTimeout: any = null;
 
     const fetchOrderDetails = async () => {
       try {
@@ -31,13 +30,9 @@ function OrderCompleteContent() {
         if (response.ok) {
           const data = await response.json();
           setOrderDetails(data);
-          // Если заказ в статусе DRAFT, запускаем polling
-          if (data.status === 'DRAFT' && !polling) {
-            setPolling(true);
-            pollInterval = setInterval(fetchOrderDetails, 3000);
-          } else if (data.status === 'DONE' && polling) {
-            setPolling(false);
-            if (pollInterval) clearInterval(pollInterval);
+          setStatus(data.status);
+          if (data.status !== 'DONE' && !stopped) {
+            pollTimeout = setTimeout(fetchOrderDetails, 2000);
           }
         } else {
           setOrderDetails(null);
@@ -51,40 +46,26 @@ function OrderCompleteContent() {
 
     fetchOrderDetails();
 
-    // Запускаем анимацию салюта
+    // Салют только при первом открытии
     const duration = 3 * 1000;
     const animationEnd = Date.now() + duration;
     const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
-
     function randomInRange(min: number, max: number) {
       return Math.random() * (max - min) + min;
     }
-
     const interval: any = setInterval(function() {
       const timeLeft = animationEnd - Date.now();
-
       if (timeLeft <= 0) {
         return clearInterval(interval);
       }
-
       const particleCount = 50 * (timeLeft / duration);
-      
-      // Создаем салют
-      confetti({
-        ...defaults,
-        particleCount,
-        origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 }
-      });
-      confetti({
-        ...defaults,
-        particleCount,
-        origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 }
-      });
+      confetti({ ...defaults, particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } });
+      confetti({ ...defaults, particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } });
     }, 250);
 
     return () => {
       stopped = true;
-      if (pollInterval) clearInterval(pollInterval);
+      if (pollTimeout) clearTimeout(pollTimeout);
       clearInterval(interval);
     };
   }, [router, searchParams]);
@@ -100,13 +81,25 @@ function OrderCompleteContent() {
     );
   }
 
-  if (orderDetails?.status === 'DRAFT') {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto"></div>
-          <p className="mt-4 text-gray-700 text-lg font-semibold">Ожидание подтверждения оплаты...</p>
-          <p className="mt-2 text-gray-500">Ваш платёж обрабатывается. Страница обновится автоматически.</p>
+  // UI для статуса заказа
+  let statusBlock = null;
+  if (status === 'DRAFT') {
+    statusBlock = (
+      <div className="flex items-center gap-3 bg-yellow-50 border border-yellow-200 text-yellow-700 px-4 py-3 rounded-lg mb-6">
+        <FiClock className="w-6 h-6" />
+        <div>
+          <div className="font-semibold">Waiting for payment confirmation...</div>
+          <div className="text-sm">Your payment is being processed. This page will update automatically.</div>
+        </div>
+      </div>
+    );
+  } else if (status === 'DONE') {
+    statusBlock = (
+      <div className="flex items-center gap-3 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg mb-6">
+        <FiCheckCircle className="w-6 h-6" />
+        <div>
+          <div className="font-semibold">Payment confirmed!</div>
+          <div className="text-sm">Your order has been received and is being processed.</div>
         </div>
       </div>
     );
@@ -126,15 +119,16 @@ function OrderCompleteContent() {
                   <FiCheckCircle className="w-12 h-12" />
                 </div>
               </div>
-              <h1 className="text-4xl font-bold text-center mb-4">Order Confirmed!</h1>
+              <h1 className="text-4xl font-bold text-center mb-4">Order Complete</h1>
               <p className="text-xl text-center text-blue-100">
-                Thank you for your purchase. Your order has been successfully placed.
+                Thank you for your purchase. Your order has been created and is being processed.
               </p>
             </div>
           </div>
 
           {/* Основной контент */}
           <div className="p-8">
+            {statusBlock}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {/* Информация о заказе */}
               <div className="space-y-6">
@@ -161,6 +155,10 @@ function OrderCompleteContent() {
                     <div className="flex justify-between">
                       <span className="text-gray-600">Payment Method:</span>
                       <span className="font-medium capitalize">{orderDetails?.paymentMethod || 'Not specified'}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Status:</span>
+                      <span className="font-medium capitalize">{status}</span>
                     </div>
                   </div>
                 </div>

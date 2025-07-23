@@ -229,7 +229,7 @@ function GuestCheckoutPage() {
     }
   };
 
-  const handleSuccess = (orderId?: string) => {
+  const handleSuccess = async (orderId?: string) => {
     clearBasket();
     if (orderId) {
       router.push(`/ordercomplete?orderId=${orderId}`);
@@ -584,7 +584,7 @@ function GuestCheckoutPage() {
               </div>
               {clientSecret && (
                 <Elements stripe={stripePromise} options={{ clientSecret }}>
-                  <StripeCardForm clientSecret={clientSecret} onSuccess={handleSuccess} amount={Math.round(totalWithShipping * 100)} />
+                  <StripeCardForm clientSecret={clientSecret} onSuccess={() => handleSuccess(orderDraftIdRef.current)} amount={Math.round(totalWithShipping * 100)} />
                 </Elements>
               )}
             </div>
