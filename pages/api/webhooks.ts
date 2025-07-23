@@ -4,24 +4,17 @@ import { connectToDatabase } from '@/lib/mongodb';
 import { ObjectId } from 'mongodb';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: (process.env.STRIPE_API_VERSION as any) || '2025-05-28.basil',
+  apiVersion: (process.env.STRIPE_API_VERSION as any) || '2022-11-15',
 });
 
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
+export const config = { api: { bodyParser: false } };
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method !== 'POST') {
-    res.setHeader('Allow', 'POST');
-    return res.status(405).end('Method Not Allowed');
-  }
+  if (req.method !== 'POST') return res.status(405).end();
 
   const buf = await new Promise<Buffer>((resolve, reject) => {
-    const chunks: Buffer[] = [];
-    req.on('data', (chunk) => chunks.push(chunk));
+    const chunks: Uint8Array[] = [];
+    req.on('data', (chunk) => chunks.push(typeof chunk === 'string' ? Buffer.from(chunk) : chunk));
     req.on('end', () => resolve(Buffer.concat(chunks)));
     req.on('error', reject);
   });
@@ -37,8 +30,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(400).json({ error: 'Invalid signature' });
   }
 
-  console.log('Received webhook event:', event.type);
+  // Быстро возвращаем 200 OK, потом обрабатываем
+  res.status(200).json({ received: true });
 
+  // Асинхронная обработка событий
   switch (event.type) {
     case 'payment_intent.succeeded': {
       const paymentIntent = event.data.object as Stripe.PaymentIntent;
@@ -101,6 +96,4 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     default:
       console.log(`Unhandled event type: ${event.type}`);
   }
-
-  res.json({ received: true });
 } 
